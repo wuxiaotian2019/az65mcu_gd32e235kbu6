@@ -11,8 +11,12 @@ int lcd_display(void)
     /* 1.lcd init */
     lcd_init();
 
-    /* 2.draw logo image */
-    lcd_draw_image(0, 0, 240, 320, logo_buffer);
+    /* 2.clear lcd with white */
+    lcd_clear(WHITE);
+
+    /* 3.draw logo image 在windows中的rgb565图片大小是38472KB，需要偏移72字节, 才以需要从logo_buffer+72开始绘制
+    */
+    lcd_draw_image(0, (Y_MAX_PIXEL - 80) / 2, 240, 80, logo_buffer + 72);
 
     printf("exit %s\n", __func__);
     return 0;

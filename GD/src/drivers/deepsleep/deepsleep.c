@@ -10,6 +10,8 @@ void mcu_enter_deepsleep(void)
 {
   printf("start to enter deepsleep\n");
 
+  /* 1.set lcd high resistance */
+  Set_Lcd_High_Resistance();
   /* 2.reset PA14 for note spl bootup success */
   MCU_Set_Led_Down();
 

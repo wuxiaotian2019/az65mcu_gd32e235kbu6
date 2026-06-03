@@ -36,15 +36,6 @@ OF SUCH DAMAGE.
 #include "gd32e235c_lcd_eval.h"
 #include "systick.h"
 
-
-#ifdef H_VIEW
-#define X_MAX_PIXEL         320
-#define Y_MAX_PIXEL         240
-#else
-#define X_MAX_PIXEL         240
-#define Y_MAX_PIXEL         320
-#endif
-
 static uint8_t spi_write_byte(uint32_t spi_periph, uint8_t byte);
 static void spi1_init(void);
 static void lcd_write_index(uint8_t index);
@@ -87,18 +78,23 @@ static void spi1_init(void)
     rcu_periph_clock_enable(RCU_SPI1);
 
     /* GPIOA config, PA13(LCD RS/DC), PA14(LCD_SPI1_MOSI) */
-    gpio_af_set(GPIOA, GPIO_AF_0, GPIO_PIN_13 | GPIO_PIN_14);
-    gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO_PIN_13 | GPIO_PIN_14);
-    gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13 | GPIO_PIN_14);
+    gpio_af_set(GPIOA, GPIO_AF_6, GPIO_PIN_14);
+    gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO_PIN_14);
+    gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_14);
 
     /* GPIOA config, PA15(LCD_SPI1_CS) */
+    gpio_af_set(GPIOA, GPIO_AF_6, GPIO_PIN_15);
     gpio_mode_set(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_15);
     gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_15);
 
     /* GPIOB config, PB1(SPI1_SCK) */
-    gpio_af_set(GPIOB, GPIO_AF_0, GPIO_PIN_1);
+    gpio_af_set(GPIOB, GPIO_AF_6, GPIO_PIN_1);
     gpio_mode_set(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO_PIN_1);
     gpio_output_options_set(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_1);
+
+    /* GPIOA config, PA13(SPI1_MISO) -> Unisoc MISO CD pin gpio109 */
+    gpio_mode_set(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_13);
+    gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13);
 
     /* GPIOB config, PB2(LCD_RST) */
     gpio_mode_set(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_2);
@@ -163,13 +159,14 @@ static void lcd_write_data_16bit(uint8_t datah, uint8_t datal)
 */
 static void lcd_reset(void)
 {
-    LCD_RST_CLR;
+    LCD_RST_SET;
+    delay_1ms(10);
 
-    delay_1ms(100);
+    LCD_RST_CLR;
+    delay_1ms(10);
 
     LCD_RST_SET;
-
-    delay_1ms(50);
+    delay_1ms(120);
 }
 
 
@@ -995,7 +992,7 @@ void lcd_draw_font_num32(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint1
 */
 void lcd_draw_image(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *image_data)
 {
-    uint32_t i;
+    uint32_t i, j;
     uint16_t color;
     
     /* set lcd display region */
@@ -1005,12 +1002,27 @@ void lcd_draw_image(uint16_t x, uint16_t y, uint16_t width, uint16_t height, con
     LCD_RS_SET;  /* data mode */
     
     /* write pixel data */
-    for(i = 0; i < width * height; i++) {
-        /* RGB565 format: high byte first, then low byte */
-        color = (image_data[i * 2] << 8) | image_data[i * 2 + 1];
-        spi_write_byte(SPI1, color >> 8);   /* high byte */
-        spi_write_byte(SPI1, color & 0xFF); /* low byte */
+    /* Fix vertical flip by writing rows in reverse order */
+    for(j = 0; j < height; j++) {
+        uint32_t row_offset = (height - 1 - j) * width * 2; /* Calculate row offset in reverse order */
+        for(i = 0; i < width; i++) {
+            /* RGB565 format: high byte first, then low byte */
+            color = image_data[row_offset + i * 2] | (image_data[row_offset + i * 2 + 1] << 8);
+            // Swap red and blue components (BBBBBGGGGGGRRRRR to RRRRRGGGGGGBBBBB)
+            //color = ((color & 0x1F) << 11) | (color & 0x07E0) | ((color >> 11) & 0x1F);
+
+            spi_write_byte(SPI1, color >> 8);   /* high byte */
+            spi_write_byte(SPI1, color & 0xFF); /* low byte */
+        }
     }
-    
+
     LCD_CS_SET;
+}
+
+void Set_Lcd_High_Resistance(void)
+{
+    rcu_periph_clock_enable(RCU_GPIOA);
+    rcu_periph_clock_enable(RCU_GPIOB);
+    gpio_mode_set(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+    gpio_mode_set(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4);
 }

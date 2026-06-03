@@ -54,6 +54,14 @@ extern "C" {
 #define GRAY1           0x8410
 #define GRAY2           0x4208
 
+#ifdef H_VIEW
+#define X_MAX_PIXEL         320
+#define Y_MAX_PIXEL         240
+#else
+#define X_MAX_PIXEL         240
+#define Y_MAX_PIXEL         320
+#endif
+
 /* PB0 tft cs */
 #define LCD_CS_SET      ((uint32_t)(GPIO_BOP(GPIOA) = GPIO_PIN_15))
 #define LCD_CS_CLR      ((uint32_t)(GPIO_BC(GPIOA) = GPIO_PIN_15))
@@ -103,6 +111,10 @@ void lcd_draw_font_num32(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint1
 void lcd_region_set(uint16_t StartX, uint16_t StartY, uint16_t EndX, uint16_t EndY);
 
 void lcd_draw_image(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *image_data);
+/* display enter deepsleep */
+void Set_Lcd_High_Resistance(void);
+/* display logo on LCD */
+int lcd_display(void);
 
 #ifdef __cplusplus
 }
