@@ -1,0 +1,16 @@
+buildtools.path=.\\Tools\\Build Tools\\2.10-20180103-1919\\bin
+eclipse.preferences.version=1
+ldfile.code.location=FLASH
+ldfile.flash.Origin=0x08000000
+ldfile.flash.length=128
+ldfile.ram.Origin=0x20000000
+ldfile.ram.length=16
+ldfile.src.path=D\:/software/GD32EmbeddedBuilder_v1.5.6_Rel/GD32EmbeddedBuilder/plugins/com.gigadevice.templatefwlib.arm.gd32e23x_1.0.0.202512031723/Firmware\\gd32e23x_flash.ld
+ldfile.stack.Origin=0x20002000
+ldfile.stack.length=2
+ldfile.target.path=\\\\TJAND17\\sen.he\\project\\unc_linux_rls_25d\\source\\bsp\\mcu\\GD\\ldscripts\\gd32e23x_flash.ld
+mcu.target=GD32E235KBU6
+mcu.target.svd=GD32E23x.svd
+toolchain.name=GNU Tools for ARM Embedded Processors
+toolchain.path.1287942917=.\\Tools\\GNU Tools ARM Embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1.1\\bin
+toolchain.prefix=arm-none-eabi-

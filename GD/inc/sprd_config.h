@@ -1,0 +1,17 @@
+#ifndef _SPRD_CONFIG_H
+#define _SPRD_CONFIG_H
+
+#define KEYPRESS_CHECKTIME  3500
+#define KEYPRESS_TIME  (KEYPRESS_CHECKTIME - 500)
+
+#define CONFIG_BAUDRATE    115200U
+// #define DEBUG_DATA
+#define UART_SPEED_UP
+#ifdef UART_SPEED_UP
+#define CONFIG_BAUDRATE_SPEEDUP    921600U
+#endif
+#define CONFIG_WAKEUP_FROM_DEEPSLEEP
+#define MCU_SUPPORT_LCD_DISPLAY
+
+extern void system_clock_config(void);
+#endif

@@ -1,0 +1,1461 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Spi_nand_driver.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.spi_nand_cs_sel,"ax",%progbits
+  16              		.align	1
+  17              		.arch armv8-m.base
+  18              		.syntax unified
+  19              		.code	16
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	spi_nand_cs_sel:
+  24              	.LFB58:
+  25              		.file 1 "../inc/Spi_nand_driver.h"
+   1:../inc/Spi_nand_driver.h **** /*
+   2:../inc/Spi_nand_driver.h ****  * SPDX-FileCopyrightText: 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   3:../inc/Spi_nand_driver.h ****  * SPDX-License-Identifier: LicenseRef-Unisoc-General-1.0
+   4:../inc/Spi_nand_driver.h ****  *
+   5:../inc/Spi_nand_driver.h ****  * Copyright 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   6:../inc/Spi_nand_driver.h ****  * Licensed under the Unisoc General Software License, version 1.0 (the License);
+   7:../inc/Spi_nand_driver.h ****  * you may not use this file except in compliance with the License.
+   8:../inc/Spi_nand_driver.h ****  * You may obtain a copy of the License at
+   9:../inc/Spi_nand_driver.h ****  * https://www.unisoc.com/en_us/license/UNISOC_GENERAL_LICENSE_V1.0-EN_US
+  10:../inc/Spi_nand_driver.h ****  * Software distributed under the License is distributed on an "AS IS" BASIS,
+  11:../inc/Spi_nand_driver.h ****  * WITHOUT WARRANTIES OF ANY KIND, either express or implied.
+  12:../inc/Spi_nand_driver.h ****  * See the Unisoc General Software License, version 1.0 for more details.
+  13:../inc/Spi_nand_driver.h ****  */
+  14:../inc/Spi_nand_driver.h **** 
+  15:../inc/Spi_nand_driver.h **** #ifndef _SPI_NAND_DRIVER_H
+  16:../inc/Spi_nand_driver.h **** #define _SPI_NAND_DRIVER_H
+  17:../inc/Spi_nand_driver.h **** 
+  18:../inc/Spi_nand_driver.h **** #include "gd32e23x.h"
+  19:../inc/Spi_nand_driver.h **** //#include "gd32e235c_eval.h"
+  20:../inc/Spi_nand_driver.h **** #include <stdint.h>
+  21:../inc/Spi_nand_driver.h **** 
+  22:../inc/Spi_nand_driver.h **** /* NAND memory command */
+  23:../inc/Spi_nand_driver.h **** #define NAND_WRITEENABLE				0x06
+  24:../inc/Spi_nand_driver.h **** #define NAND_WEITEDISABLE				0x04
+  25:../inc/Spi_nand_driver.h **** #define NAND_GETREGS					0x0F
+  26:../inc/Spi_nand_driver.h **** #define NAND_SETREGS					0x1F
+  27:../inc/Spi_nand_driver.h **** #define NAND_PAGEREADTOCATCH				0x13
+  28:../inc/Spi_nand_driver.h **** #define NAND_NEXTPAGECACHEREAD				0x31
+  29:../inc/Spi_nand_driver.h **** #define NAND_LASTPAGECACHEREAD				0x3F
+  30:../inc/Spi_nand_driver.h **** #define NAND_READFROMCATCH				0x03
+  31:../inc/Spi_nand_driver.h **** #define NAND_READID					0x9F
+  32:../inc/Spi_nand_driver.h **** #define NAND_PROGRAMLOAD				0x02
+  33:../inc/Spi_nand_driver.h **** #define NAND_PROGRAMEXECUTE				0x10
+  34:../inc/Spi_nand_driver.h **** #define NAND_PROGRAMLOADRANDOMDATA			0x84
+  35:../inc/Spi_nand_driver.h **** #define NAND_BLOCKERASE					0xD8
+  36:../inc/Spi_nand_driver.h **** #define NAND_RESET					0xFF
+  37:../inc/Spi_nand_driver.h **** #define DUMMY_BYTE					0xA5
+  38:../inc/Spi_nand_driver.h **** 
+  39:../inc/Spi_nand_driver.h **** #define NAND_OK	0
+  40:../inc/Spi_nand_driver.h **** #define NAND_FAIL 1
+  41:../inc/Spi_nand_driver.h **** 
+  42:../inc/Spi_nand_driver.h **** #ifndef READ_NANDFLASH_ECC_ERROR
+  43:../inc/Spi_nand_driver.h **** #define READ_NANDFLASH_ECC_ERROR			0x9A
+  44:../inc/Spi_nand_driver.h **** #endif
+  45:../inc/Spi_nand_driver.h **** /* NAND regs add */
+  46:../inc/Spi_nand_driver.h **** #define NAND_REGS_PROTECTION				0xA0
+  47:../inc/Spi_nand_driver.h **** #define NAND_REGS_FEATURE				0xB0
+  48:../inc/Spi_nand_driver.h **** #define NAND_REGS_STATUS				0xC0
+  49:../inc/Spi_nand_driver.h **** 
+  50:../inc/Spi_nand_driver.h **** #define SPI_NANDFLASH_CS_LOW()		gpio_bit_reset(GPIOA,GPIO_PIN_4)
+  51:../inc/Spi_nand_driver.h **** #define SPI_NANDFLASH_CS_HIGH()		while(RESET != spi_i2s_flag_get(SPI0,SPI_FLAG_TRANS));\
+  52:../inc/Spi_nand_driver.h **** 				gpio_bit_set(GPIOA,GPIO_PIN_4) //
+  53:../inc/Spi_nand_driver.h **** 
+  54:../inc/Spi_nand_driver.h **** extern int NAND_PAGE_SIZE;
+  55:../inc/Spi_nand_driver.h **** extern int NAND_PAGE_PER_BLK;
+  56:../inc/Spi_nand_driver.h **** /* NAND Status */
+  57:../inc/Spi_nand_driver.h **** /* ECC results: */
+  58:../inc/Spi_nand_driver.h **** /* 00 No errors	*/
+  59:../inc/Spi_nand_driver.h **** /* 01 Bit error detected and corrected, error bit number = 1~7 */
+  60:../inc/Spi_nand_driver.h **** /* 10 Bit errors greater than 8 bits detected and not corrected	*/
+  61:../inc/Spi_nand_driver.h **** /* 11 Bit error detected and corrected, error bit number = 8 */
+  62:../inc/Spi_nand_driver.h **** #define NAND_STATUS_ECCS2				0x40
+  63:../inc/Spi_nand_driver.h **** #define NAND_STATUS_ECCS1				0x20
+  64:../inc/Spi_nand_driver.h **** #define NAND_STATUS_ECCS0				0x10
+  65:../inc/Spi_nand_driver.h **** #define NAND_STATUS_PROGRAMFAIL				0x08	/* program fail */
+  66:../inc/Spi_nand_driver.h **** #define NAND_STATUS_ERASEFAIL				0x04	/* erase fail */
+  67:../inc/Spi_nand_driver.h **** #define NAND_STATUS_WEL					0x02	/* write enable */
+  68:../inc/Spi_nand_driver.h **** /* Busy:PROGRAM EXECUTE, PAGE READ, BLOCK ERASE, RESET */
+  69:../inc/Spi_nand_driver.h **** #define NAND_STATUS_QIP					0x01
+  70:../inc/Spi_nand_driver.h **** 
+  71:../inc/Spi_nand_driver.h **** typedef struct __SPARE_AREA {
+  72:../inc/Spi_nand_driver.h ****  uint16_t BlockStatus;
+  73:../inc/Spi_nand_driver.h ****  uint16_t LogicalIndex;
+  74:../inc/Spi_nand_driver.h **** }SPARE_AREA;
+  75:../inc/Spi_nand_driver.h **** 
+  76:../inc/Spi_nand_driver.h **** typedef struct
+  77:../inc/Spi_nand_driver.h **** {
+  78:../inc/Spi_nand_driver.h ****  uint16_t Block;
+  79:../inc/Spi_nand_driver.h ****  uint16_t Page;
+  80:../inc/Spi_nand_driver.h ****  uint16_t Area;
+  81:../inc/Spi_nand_driver.h **** } NAND_ADDRESS;
+  82:../inc/Spi_nand_driver.h **** 
+  83:../inc/Spi_nand_driver.h **** typedef struct
+  84:../inc/Spi_nand_driver.h **** {
+  85:../inc/Spi_nand_driver.h ****  uint8_t Maker_ID;
+  86:../inc/Spi_nand_driver.h ****  uint8_t Device_ID;
+  87:../inc/Spi_nand_driver.h **** }NAND_IDTypeDef;
+  88:../inc/Spi_nand_driver.h **** 
+  89:../inc/Spi_nand_driver.h **** typedef struct{
+  90:../inc/Spi_nand_driver.h **** 	void (*spinand_setregs)(uint8_t regs, uint8_t data);
+  91:../inc/Spi_nand_driver.h **** 	uint8_t (*spinand_getregs)(uint8_t regs);
+  92:../inc/Spi_nand_driver.h **** 	void (*spinand_readfromcatch)(uint8_t *pBuffer, NAND_ADDRESS Address, uint32_t length);
+  93:../inc/Spi_nand_driver.h **** 	void (*spinand_readtocatch)(NAND_ADDRESS Address);
+  94:../inc/Spi_nand_driver.h **** 	void (*spinand_writeenable)(void);
+  95:../inc/Spi_nand_driver.h **** 	uint8_t (*spinand_blockerase)(uint32_t BlockID);
+  96:../inc/Spi_nand_driver.h **** 	void (*spinand_eccenable)(void);
+  97:../inc/Spi_nand_driver.h **** 	void (*spinand_eccdisable)(void);
+  98:../inc/Spi_nand_driver.h **** 	uint8_t (*spinand_checkecc)(void);
+  99:../inc/Spi_nand_driver.h **** 	void (*spinand_config)(void);
+ 100:../inc/Spi_nand_driver.h **** 	void (*spinand_recovery)(void);
+ 101:../inc/Spi_nand_driver.h **** 	void (*spinand_check_blockstatus)(NAND_ADDRESS address,SPARE_AREA *block_statue);
+ 102:../inc/Spi_nand_driver.h **** }SPINAND_OPERATIONS_T;
+ 103:../inc/Spi_nand_driver.h **** 
+ 104:../inc/Spi_nand_driver.h **** typedef struct{
+ 105:../inc/Spi_nand_driver.h **** 	uint8_t dev_id[5];	// ID of spinand driver product ic
+ 106:../inc/Spi_nand_driver.h **** 	SPINAND_OPERATIONS_T *spinnad_operation;	//spi nand operation
+ 107:../inc/Spi_nand_driver.h **** 	uint32_t pagesize;
+ 108:../inc/Spi_nand_driver.h **** 	uint32_t page_per_blk;
+ 109:../inc/Spi_nand_driver.h **** }SPINAND_CFG_INFO_T;
+ 110:../inc/Spi_nand_driver.h **** 
+ 111:../inc/Spi_nand_driver.h **** int spi_nandflash_init(uint32_t polarity_phase_clock);
+ 112:../inc/Spi_nand_driver.h **** uint8_t spi_nand_rw_byte(uint8_t byte);
+ 113:../inc/Spi_nand_driver.h **** #define true 1
+ 114:../inc/Spi_nand_driver.h **** #define false 0
+ 115:../inc/Spi_nand_driver.h **** static inline void spi_nand_cs_sel(uint8_t sel)
+ 116:../inc/Spi_nand_driver.h **** {
+  26              		.loc 1 116 1
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 1, uses_anonymous_args = 0
+  30 0000 80B5     		push	{r7, lr}
+  31              		.cfi_def_cfa_offset 8
+  32              		.cfi_offset 7, -8
+  33              		.cfi_offset 14, -4
+  34 0002 82B0     		sub	sp, sp, #8
+  35              		.cfi_def_cfa_offset 16
+  36 0004 00AF     		add	r7, sp, #0
+  37              		.cfi_def_cfa_register 7
+  38 0006 0200     		movs	r2, r0
+  39 0008 FB1D     		adds	r3, r7, #7
+  40 000a 1A70     		strb	r2, [r3]
+ 117:../inc/Spi_nand_driver.h **** 	if (sel) {
+  41              		.loc 1 117 5
+  42 000c FB1D     		adds	r3, r7, #7
+  43 000e 1B78     		ldrb	r3, [r3]
+  44 0010 33B1     		cbz	r3, .L5
+ 118:../inc/Spi_nand_driver.h **** 		SPI_NANDFLASH_CS_LOW();
+  45              		.loc 1 118 3
+  46 0012 9023     		movs	r3, #144
+  47 0014 DB05     		lsls	r3, r3, #23
+  48 0016 1021     		movs	r1, #16
+  49 0018 1800     		movs	r0, r3
+  50 001a FFF7FEFF 		bl	gpio_bit_reset
+ 119:../inc/Spi_nand_driver.h **** 		return;
+  51              		.loc 1 119 3
+  52 001e 11E0     		b	.L1
+  53              	.L5:
+ 120:../inc/Spi_nand_driver.h **** 	}
+ 121:../inc/Spi_nand_driver.h **** 	SPI_NANDFLASH_CS_HIGH();
+  54              		.loc 1 121 2
+  55 0020 C046     		nop
+  56              	.L4:
+  57              		.loc 1 121 2 is_stmt 0 discriminator 1
+  58 0022 43F20003 		movw	r3, #12288
+  59 0026 C4F20103 		movt	r3, 16385
+  60 002a 8021     		movs	r1, #128
+  61 002c 1800     		movs	r0, r3
+  62 002e FFF7FEFF 		bl	spi_i2s_flag_get
+  63 0032 0300     		movs	r3, r0
+  64 0034 002B     		cmp	r3, #0
+  65 0036 F4D1     		bne	.L4
+  66              		.loc 1 121 2 discriminator 2
+  67 0038 9023     		movs	r3, #144
+  68 003a DB05     		lsls	r3, r3, #23
+  69 003c 1021     		movs	r1, #16
+  70 003e 1800     		movs	r0, r3
+  71 0040 FFF7FEFF 		bl	gpio_bit_set
+  72              	.L1:
+ 122:../inc/Spi_nand_driver.h **** }
+  73              		.loc 1 122 1 is_stmt 1
+  74 0044 BD46     		mov	sp, r7
+  75 0046 02B0     		add	sp, sp, #8
+  76              		@ sp needed
+  77 0048 80BD     		pop	{r7, pc}
+  78              		.cfi_endproc
+  79              	.LFE58:
+  81              		.global	s_spinand_spec_info_ptr
+  82              		.section	.bss.s_spinand_spec_info_ptr,"aw",%nobits
+  83              		.align	2
+  86              	s_spinand_spec_info_ptr:
+  87 0000 00000000 		.space	4
+  88              		.global	spi_nand_id
+  89              		.section	.bss.spi_nand_id,"aw",%nobits
+  90              		.align	2
+  93              	spi_nand_id:
+  94 0000 00000000 		.space	5
+  94      00
+  95              		.global	NAND_PAGE_SIZE
+  96              		.section	.data.NAND_PAGE_SIZE,"aw"
+  97              		.align	2
+ 100              	NAND_PAGE_SIZE:
+ 101 0000 00080000 		.word	2048
+ 102              		.global	NAND_PAGE_PER_BLK
+ 103              		.section	.data.NAND_PAGE_PER_BLK,"aw"
+ 104              		.align	2
+ 107              	NAND_PAGE_PER_BLK:
+ 108 0000 40000000 		.word	64
+ 109              		.section	.data.s_apinand_cfg_tab,"aw"
+ 110              		.align	2
+ 113              	s_apinand_cfg_tab:
+ 114 0000 C1C8C1C8 		.ascii	"\301\310\301\310\301"
+ 114      C1
+ 115 0005 000000   		.space	3
+ 116 0008 00000000 		.word	g_spinand_gd
+ 117 000c 00080000 		.word	2048
+ 118 0010 40000000 		.word	64
+ 119 0014 C2C80000 		.ascii	"\302\310\000\000\000"
+ 119      00
+ 120 0019 000000   		.space	3
+ 121 001c 00000000 		.word	g_spinand_gd
+ 122 0020 00080000 		.word	2048
+ 123 0024 40000000 		.word	64
+ 124 0028 8C610000 		.ascii	"\214a\000\000\000"
+ 124      00
+ 125 002d 000000   		.space	3
+ 126 0030 00000000 		.word	g_spinand_esmt
+ 127 0034 00080000 		.word	2048
+ 128 0038 40000000 		.word	64
+ 129 003c C8110000 		.ascii	"\310\021\000\000\000"
+ 129      00
+ 130 0041 000000   		.space	3
+ 131 0044 00000000 		.word	g_spinand_gd
+ 132 0048 00080000 		.word	2048
+ 133 004c 40000000 		.word	64
+ 134 0050 C8420000 		.ascii	"\310B\000\000\000"
+ 134      00
+ 135 0055 000000   		.space	3
+ 136 0058 00000000 		.word	g_spinand_gd
+ 137 005c 00080000 		.word	2048
+ 138 0060 40000000 		.word	64
+ 139 0064 C8510000 		.ascii	"\310Q\000\000\000"
+ 139      00
+ 140 0069 000000   		.space	3
+ 141 006c 00000000 		.word	g_spinand_gd
+ 142 0070 00080000 		.word	2048
+ 143 0074 40000000 		.word	64
+ 144 0078 C8410000 		.ascii	"\310A\000\000\000"
+ 144      00
+ 145 007d 000000   		.space	3
+ 146 0080 00000000 		.word	g_spinand_gd
+ 147 0084 00080000 		.word	2048
+ 148 0088 40000000 		.word	64
+ 149 008c E5210000 		.ascii	"\345!\000\000\000"
+ 149      00
+ 150 0091 000000   		.space	3
+ 151 0094 00000000 		.word	g_spinand_gd
+ 152 0098 00080000 		.word	2048
+ 153 009c 40000000 		.word	64
+ 154 00a0 E5220000 		.ascii	"\345\"\000\000\000"
+ 154      00
+ 155 00a5 000000   		.space	3
+ 156 00a8 00000000 		.word	g_spinand_ds
+ 157 00ac 00080000 		.word	2048
+ 158 00b0 40000000 		.word	64
+ 159 00b4 E5640000 		.ascii	"\345d\000\000\000"
+ 159      00
+ 160 00b9 000000   		.space	3
+ 161 00bc 00000000 		.word	g_spinand_ds
+ 162 00c0 00080000 		.word	2048
+ 163 00c4 40000000 		.word	64
+ 164 00c8 CD434300 		.ascii	"\315CC\000\000"
+ 164      00
+ 165 00cd 000000   		.space	3
+ 166 00d0 00000000 		.word	g_spinand_foresee
+ 167 00d4 00100000 		.word	4096
+ 168 00d8 40000000 		.word	64
+ 169 00dc 0B530000 		.ascii	"\013S\000\000\000"
+ 169      00
+ 170 00e1 000000   		.space	3
+ 171 00e4 00000000 		.word	g_spinand_ds
+ 172 00e8 00100000 		.word	4096
+ 173 00ec 40000000 		.word	64
+ 174 00f0 B0350000 		.ascii	"\2605\000\000\000"
+ 174      00
+ 175 00f5 000000   		.space	3
+ 176 00f8 00000000 		.word	g_spinand_ds
+ 177 00fc 00100000 		.word	4096
+ 178 0100 80000000 		.word	128
+ 179              		.section	.text.spi_nandflash_init,"ax",%progbits
+ 180              		.align	1
+ 181              		.global	spi_nandflash_init
+ 182              		.syntax unified
+ 183              		.code	16
+ 184              		.thumb_func
+ 185              		.fpu softvfp
+ 187              	spi_nandflash_init:
+ 188              	.LFB62:
+ 189              		.file 2 "../src/drivers/nand/Spi_nand_driver.c"
+   1:../src/drivers/nand/Spi_nand_driver.c **** /*
+   2:../src/drivers/nand/Spi_nand_driver.c ****  * SPDX-FileCopyrightText: 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   3:../src/drivers/nand/Spi_nand_driver.c ****  * SPDX-License-Identifier: LicenseRef-Unisoc-General-1.0
+   4:../src/drivers/nand/Spi_nand_driver.c ****  *
+   5:../src/drivers/nand/Spi_nand_driver.c ****  * Copyright 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   6:../src/drivers/nand/Spi_nand_driver.c ****  * Licensed under the Unisoc General Software License, version 1.0 (the License);
+   7:../src/drivers/nand/Spi_nand_driver.c ****  * you may not use this file except in compliance with the License.
+   8:../src/drivers/nand/Spi_nand_driver.c ****  * You may obtain a copy of the License at
+   9:../src/drivers/nand/Spi_nand_driver.c ****  * https://www.unisoc.com/en_us/license/UNISOC_GENERAL_LICENSE_V1.0-EN_US
+  10:../src/drivers/nand/Spi_nand_driver.c ****  * Software distributed under the License is distributed on an "AS IS" BASIS,
+  11:../src/drivers/nand/Spi_nand_driver.c ****  * WITHOUT WARRANTIES OF ANY KIND, either express or implied.
+  12:../src/drivers/nand/Spi_nand_driver.c ****  * See the Unisoc General Software License, version 1.0 for more details.
+  13:../src/drivers/nand/Spi_nand_driver.c ****  */
+  14:../src/drivers/nand/Spi_nand_driver.c **** 
+  15:../src/drivers/nand/Spi_nand_driver.c **** #include "Spi_nand_driver.h"
+  16:../src/drivers/nand/Spi_nand_driver.c **** //#include "Process_Packet.h"
+  17:../src/drivers/nand/Spi_nand_driver.c **** //#include "Uart_init.h"
+  18:../src/drivers/nand/Spi_nand_driver.c **** #include <stdio.h>
+  19:../src/drivers/nand/Spi_nand_driver.c **** //#include "Spl_stdio.h"
+  20:../src/drivers/nand/Spi_nand_driver.c **** 
+  21:../src/drivers/nand/Spi_nand_driver.c **** // Device ID definitions
+  22:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_ID_GD5F1GQ4R_1G		{0xc1, 0xc8, 0xc1, 0xc8, 0xc1}	// GD spi nand 1Gbit 1.8v
+  23:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_ID_GD5F1GQ4R_2G		{0xc2, 0xc8, 0x00, 0x00, 0x00}	// GD spi nand 2Gbit 1.8v
+  24:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_ID_ESMTF50D1G41MYB	{0x8c, 0x61, 0x00, 0x00, 0x00}	// ESMT spi nand 1Gbit 1.8v
+  25:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_ID_ESMTF50D1G41LB	{0xc8, 0x11, 0x00, 0x00, 0x00}	// ESMT spi nand 1Gbit 1.8v
+  26:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_ID_GD5F2GQ5		{0xc8, 0x42, 0x00, 0x00, 0x00}	// GD spi nand 1Gbit 1.8v
+  27:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_ID_GD5F1GQ5UE		{0xc8, 0x51, 0x00, 0x00, 0x00}	// GD spi nand 1Gbit 1.8v
+  28:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_ID_GD5F1GQ5RE		{0xc8, 0x41, 0x00, 0x00, 0x00}	// GD spi nand 1Gbit 1.8v
+  29:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_DS35X1GA		{0xE5, 0x21, 0x00, 0x00, 0x00}
+  30:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_DS35X2GA		{0xE5, 0x22, 0x00, 0x00, 0x00}
+  31:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_DS35X4GBXXX		{0xE5, 0x64, 0x00, 0x00, 0x00}
+  32:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_FORESEE_F35UQB004G	{0xCD, 0x43, 0x43, 0x00, 0x00}
+  33:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_XTX_XT26Q04D		{0x0B, 0x53, 0x00, 0x00, 0x00}
+  34:../src/drivers/nand/Spi_nand_driver.c **** #define SPINAND_UNIM_UM19B2LISH		{0xB0,0x35,0x00,0x00,0x00}
+  35:../src/drivers/nand/Spi_nand_driver.c **** 
+  36:../src/drivers/nand/Spi_nand_driver.c **** // External operation structures
+  37:../src/drivers/nand/Spi_nand_driver.c **** extern SPINAND_OPERATIONS_T g_spinand_gd;		// Support continue read
+  38:../src/drivers/nand/Spi_nand_driver.c **** extern SPINAND_OPERATIONS_T g_spinand_esmt;
+  39:../src/drivers/nand/Spi_nand_driver.c **** extern SPINAND_OPERATIONS_T g_spinand_ds;
+  40:../src/drivers/nand/Spi_nand_driver.c **** extern SPINAND_OPERATIONS_T g_spinand_foresee;
+  41:../src/drivers/nand/Spi_nand_driver.c **** 
+  42:../src/drivers/nand/Spi_nand_driver.c **** // Global variables
+  43:../src/drivers/nand/Spi_nand_driver.c **** SPINAND_CFG_INFO_T *s_spinand_spec_info_ptr = NULL;
+  44:../src/drivers/nand/Spi_nand_driver.c **** uint8_t spi_nand_id[5] = {0};
+  45:../src/drivers/nand/Spi_nand_driver.c **** int NAND_PAGE_SIZE = 2048;
+  46:../src/drivers/nand/Spi_nand_driver.c **** int NAND_PAGE_PER_BLK = 64;
+  47:../src/drivers/nand/Spi_nand_driver.c **** 
+  48:../src/drivers/nand/Spi_nand_driver.c **** // Device configuration table
+  49:../src/drivers/nand/Spi_nand_driver.c **** static SPINAND_CFG_INFO_T s_apinand_cfg_tab[] = {
+  50:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_ID_GD5F1GQ4R_1G, (SPINAND_OPERATIONS_T *)&g_spinand_gd, 2048, 64},
+  51:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_ID_GD5F1GQ4R_2G, (SPINAND_OPERATIONS_T *)&g_spinand_gd, 2048, 64},
+  52:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_ID_ESMTF50D1G41MYB, (SPINAND_OPERATIONS_T *)&g_spinand_esmt, 2048, 64},
+  53:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_ID_ESMTF50D1G41LB, (SPINAND_OPERATIONS_T *)&g_spinand_gd, 2048, 64},
+  54:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_ID_GD5F2GQ5, (SPINAND_OPERATIONS_T *)&g_spinand_gd, 2048, 64},
+  55:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_ID_GD5F1GQ5UE, (SPINAND_OPERATIONS_T *)&g_spinand_gd, 2048, 64},
+  56:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_ID_GD5F1GQ5RE, (SPINAND_OPERATIONS_T *)&g_spinand_gd, 2048, 64},
+  57:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_DS35X1GA, (SPINAND_OPERATIONS_T *)&g_spinand_gd, 2048, 64},
+  58:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_DS35X2GA, (SPINAND_OPERATIONS_T *)&g_spinand_ds, 2048, 64},
+  59:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_DS35X4GBXXX, (SPINAND_OPERATIONS_T *)&g_spinand_ds, 2048, 64},
+  60:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_FORESEE_F35UQB004G, (SPINAND_OPERATIONS_T *)&g_spinand_foresee, 4096, 64},
+  61:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_XTX_XT26Q04D, (SPINAND_OPERATIONS_T *)&g_spinand_ds, 4096, 64},
+  62:../src/drivers/nand/Spi_nand_driver.c **** 	{SPINAND_UNIM_UM19B2LISH,(SPINAND_OPERATIONS_T *)&g_spinand_ds, 4096, 128},
+  63:../src/drivers/nand/Spi_nand_driver.c **** };
+  64:../src/drivers/nand/Spi_nand_driver.c **** 
+  65:../src/drivers/nand/Spi_nand_driver.c **** /**
+  66:../src/drivers/nand/Spi_nand_driver.c ****  * @brief Initialize SPI NAND flash
+  67:../src/drivers/nand/Spi_nand_driver.c ****  * @param polarity_phase_clock SPI clock polarity and phase settings
+  68:../src/drivers/nand/Spi_nand_driver.c ****  * @return 0 on success, -1 on error
+  69:../src/drivers/nand/Spi_nand_driver.c ****  */
+  70:../src/drivers/nand/Spi_nand_driver.c **** int spi_nandflash_init(uint32_t polarity_phase_clock)
+  71:../src/drivers/nand/Spi_nand_driver.c **** {
+ 190              		.loc 2 71 1
+ 191              		.cfi_startproc
+ 192              		@ args = 0, pretend = 0, frame = 40
+ 193              		@ frame_needed = 1, uses_anonymous_args = 0
+ 194 0000 80B5     		push	{r7, lr}
+ 195              		.cfi_def_cfa_offset 8
+ 196              		.cfi_offset 7, -8
+ 197              		.cfi_offset 14, -4
+ 198 0002 8AB0     		sub	sp, sp, #40
+ 199              		.cfi_def_cfa_offset 48
+ 200 0004 00AF     		add	r7, sp, #0
+ 201              		.cfi_def_cfa_register 7
+ 202 0006 7860     		str	r0, [r7, #4]
+  72:../src/drivers/nand/Spi_nand_driver.c **** 	spi_parameter_struct spi_init_struct;
+  73:../src/drivers/nand/Spi_nand_driver.c **** 
+  74:../src/drivers/nand/Spi_nand_driver.c **** 	// Disable SPI first
+  75:../src/drivers/nand/Spi_nand_driver.c **** 	spi_disable(SPI0);
+ 203              		.loc 2 75 2
+ 204 0008 43F20003 		movw	r3, #12288
+ 205 000c C4F20103 		movt	r3, 16385
+ 206 0010 1800     		movs	r0, r3
+ 207 0012 FFF7FEFF 		bl	spi_disable
+  76:../src/drivers/nand/Spi_nand_driver.c **** 
+  77:../src/drivers/nand/Spi_nand_driver.c **** 	// Enable clocks
+  78:../src/drivers/nand/Spi_nand_driver.c **** 	rcu_periph_clock_enable(RCU_GPIOA);
+ 208              		.loc 2 78 2
+ 209 0016 40F21150 		movw	r0, #1297
+ 210 001a FFF7FEFF 		bl	rcu_periph_clock_enable
+  79:../src/drivers/nand/Spi_nand_driver.c **** 	rcu_periph_clock_enable(RCU_SPI0);
+ 211              		.loc 2 79 2
+ 212 001e 40F20C60 		movw	r0, #1548
+ 213 0022 FFF7FEFF 		bl	rcu_periph_clock_enable
+  80:../src/drivers/nand/Spi_nand_driver.c **** 
+  81:../src/drivers/nand/Spi_nand_driver.c **** 	// Configure GPIO pins for SPI
+  82:../src/drivers/nand/Spi_nand_driver.c **** 	gpio_af_set(GPIOA, GPIO_AF_0, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
+ 214              		.loc 2 82 2
+ 215 0026 9023     		movs	r3, #144
+ 216 0028 DB05     		lsls	r3, r3, #23
+ 217 002a E022     		movs	r2, #224
+ 218 002c 0021     		movs	r1, #0
+ 219 002e 1800     		movs	r0, r3
+ 220 0030 FFF7FEFF 		bl	gpio_af_set
+  83:../src/drivers/nand/Spi_nand_driver.c **** 	gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE,
+ 221              		.loc 2 83 2
+ 222 0034 9023     		movs	r3, #144
+ 223 0036 D805     		lsls	r0, r3, #23
+ 224 0038 E023     		movs	r3, #224
+ 225 003a 0022     		movs	r2, #0
+ 226 003c 0221     		movs	r1, #2
+ 227 003e FFF7FEFF 		bl	gpio_mode_set
+  84:../src/drivers/nand/Spi_nand_driver.c **** 		      GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
+  85:../src/drivers/nand/Spi_nand_driver.c **** 	gpio_output_options_set(GPIOA, GPIO_OTYPE_PP,
+ 228              		.loc 2 85 2
+ 229 0042 9023     		movs	r3, #144
+ 230 0044 D805     		lsls	r0, r3, #23
+ 231 0046 E023     		movs	r3, #224
+ 232 0048 0322     		movs	r2, #3
+ 233 004a 0021     		movs	r1, #0
+ 234 004c FFF7FEFF 		bl	gpio_output_options_set
+  86:../src/drivers/nand/Spi_nand_driver.c **** 				GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
+  87:../src/drivers/nand/Spi_nand_driver.c **** 
+  88:../src/drivers/nand/Spi_nand_driver.c **** 	// Configure chip select pin
+  89:../src/drivers/nand/Spi_nand_driver.c **** 	gpio_mode_set(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_4);
+ 235              		.loc 2 89 2
+ 236 0050 9023     		movs	r3, #144
+ 237 0052 D805     		lsls	r0, r3, #23
+ 238 0054 1023     		movs	r3, #16
+ 239 0056 0022     		movs	r2, #0
+ 240 0058 0121     		movs	r1, #1
+ 241 005a FFF7FEFF 		bl	gpio_mode_set
+  90:../src/drivers/nand/Spi_nand_driver.c **** 	gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_4);
+ 242              		.loc 2 90 2
+ 243 005e 9023     		movs	r3, #144
+ 244 0060 D805     		lsls	r0, r3, #23
+ 245 0062 1023     		movs	r3, #16
+ 246 0064 0322     		movs	r2, #3
+ 247 0066 0021     		movs	r1, #0
+ 248 0068 FFF7FEFF 		bl	gpio_output_options_set
+  91:../src/drivers/nand/Spi_nand_driver.c **** 
+  92:../src/drivers/nand/Spi_nand_driver.c **** 	// Configure SPI parameters
+  93:../src/drivers/nand/Spi_nand_driver.c **** 	spi_init_struct.trans_mode				= SPI_TRANSMODE_FULLDUPLEX;
+ 249              		.loc 2 93 32
+ 250 006c 0C21     		movs	r1, #12
+ 251 006e 7B18     		adds	r3, r7, r1
+ 252 0070 0022     		movs	r2, #0
+ 253 0072 5A60     		str	r2, [r3, #4]
+  94:../src/drivers/nand/Spi_nand_driver.c **** 	spi_init_struct.device_mode				= SPI_MASTER;
+ 254              		.loc 2 94 33
+ 255 0074 7B18     		adds	r3, r7, r1
+ 256 0076 40F20412 		movw	r2, #260
+ 257 007a 1A60     		str	r2, [r3]
+  95:../src/drivers/nand/Spi_nand_driver.c **** 	spi_init_struct.frame_size				= SPI_FRAMESIZE_8BIT;
+ 258              		.loc 2 95 32
+ 259 007c 7B18     		adds	r3, r7, r1
+ 260 007e 40F20072 		movw	r2, #1792
+ 261 0082 9A60     		str	r2, [r3, #8]
+  96:../src/drivers/nand/Spi_nand_driver.c **** 	spi_init_struct.clock_polarity_phase			= polarity_phase_clock;
+ 262              		.loc 2 96 41
+ 263 0084 7B18     		adds	r3, r7, r1
+ 264 0086 7A68     		ldr	r2, [r7, #4]
+ 265 0088 5A61     		str	r2, [r3, #20]
+  97:../src/drivers/nand/Spi_nand_driver.c **** 	spi_init_struct.nss					= SPI_NSS_SOFT;
+ 266              		.loc 2 97 26
+ 267 008a 7B18     		adds	r3, r7, r1
+ 268 008c 40F20022 		movw	r2, #512
+ 269 0090 DA60     		str	r2, [r3, #12]
+  98:../src/drivers/nand/Spi_nand_driver.c **** 	spi_init_struct.prescale				= SPI_PSC_4;
+ 270              		.loc 2 98 30
+ 271 0092 7B18     		adds	r3, r7, r1
+ 272 0094 0822     		movs	r2, #8
+ 273 0096 9A61     		str	r2, [r3, #24]
+  99:../src/drivers/nand/Spi_nand_driver.c **** 	spi_init_struct.endian					= SPI_ENDIAN_MSB;
+ 274              		.loc 2 99 29
+ 275 0098 7B18     		adds	r3, r7, r1
+ 276 009a 0022     		movs	r2, #0
+ 277 009c 1A61     		str	r2, [r3, #16]
+ 100:../src/drivers/nand/Spi_nand_driver.c **** 	spi_init(SPI0, &spi_init_struct);
+ 278              		.loc 2 100 2
+ 279 009e 7A18     		adds	r2, r7, r1
+ 280 00a0 43F20003 		movw	r3, #12288
+ 281 00a4 C4F20103 		movt	r3, 16385
+ 282 00a8 1100     		movs	r1, r2
+ 283 00aa 1800     		movs	r0, r3
+ 284 00ac FFF7FEFF 		bl	spi_init
+ 101:../src/drivers/nand/Spi_nand_driver.c **** 
+ 102:../src/drivers/nand/Spi_nand_driver.c **** 	// Enable SPI
+ 103:../src/drivers/nand/Spi_nand_driver.c **** 	spi_enable(SPI0);
+ 285              		.loc 2 103 2
+ 286 00b0 43F20003 		movw	r3, #12288
+ 287 00b4 C4F20103 		movt	r3, 16385
+ 288 00b8 1800     		movs	r0, r3
+ 289 00ba FFF7FEFF 		bl	spi_enable
+ 104:../src/drivers/nand/Spi_nand_driver.c **** 
+ 105:../src/drivers/nand/Spi_nand_driver.c **** 	return 0;
+ 290              		.loc 2 105 9
+ 291 00be 0023     		movs	r3, #0
+ 106:../src/drivers/nand/Spi_nand_driver.c **** }
+ 292              		.loc 2 106 1
+ 293 00c0 1800     		movs	r0, r3
+ 294 00c2 BD46     		mov	sp, r7
+ 295 00c4 0AB0     		add	sp, sp, #40
+ 296              		@ sp needed
+ 297 00c6 80BD     		pop	{r7, pc}
+ 298              		.cfi_endproc
+ 299              	.LFE62:
+ 301              		.section	.text.spi_nand_rw_byte,"ax",%progbits
+ 302              		.align	1
+ 303              		.global	spi_nand_rw_byte
+ 304              		.syntax unified
+ 305              		.code	16
+ 306              		.thumb_func
+ 307              		.fpu softvfp
+ 309              	spi_nand_rw_byte:
+ 310              	.LFB63:
+ 107:../src/drivers/nand/Spi_nand_driver.c **** 
+ 108:../src/drivers/nand/Spi_nand_driver.c **** /**
+ 109:../src/drivers/nand/Spi_nand_driver.c ****  * @brief Read/write a byte via SPI
+ 110:../src/drivers/nand/Spi_nand_driver.c ****  * @param byte Byte to transmit
+ 111:../src/drivers/nand/Spi_nand_driver.c ****  * @return Received byte
+ 112:../src/drivers/nand/Spi_nand_driver.c ****  */
+ 113:../src/drivers/nand/Spi_nand_driver.c **** uint8_t spi_nand_rw_byte(uint8_t byte)
+ 114:../src/drivers/nand/Spi_nand_driver.c **** {
+ 311              		.loc 2 114 1
+ 312              		.cfi_startproc
+ 313              		@ args = 0, pretend = 0, frame = 8
+ 314              		@ frame_needed = 1, uses_anonymous_args = 0
+ 315 0000 80B5     		push	{r7, lr}
+ 316              		.cfi_def_cfa_offset 8
+ 317              		.cfi_offset 7, -8
+ 318              		.cfi_offset 14, -4
+ 319 0002 82B0     		sub	sp, sp, #8
+ 320              		.cfi_def_cfa_offset 16
+ 321 0004 00AF     		add	r7, sp, #0
+ 322              		.cfi_def_cfa_register 7
+ 323 0006 0200     		movs	r2, r0
+ 324 0008 FB1D     		adds	r3, r7, #7
+ 325 000a 1A70     		strb	r2, [r3]
+ 115:../src/drivers/nand/Spi_nand_driver.c **** 	// Wait for transmit buffer empty
+ 116:../src/drivers/nand/Spi_nand_driver.c **** 	while(RESET == spi_i2s_flag_get(SPI0, SPI_FLAG_TBE));
+ 326              		.loc 2 116 7
+ 327 000c C046     		nop
+ 328              	.L9:
+ 329              		.loc 2 116 17 discriminator 1
+ 330 000e 43F20003 		movw	r3, #12288
+ 331 0012 C4F20103 		movt	r3, 16385
+ 332 0016 0221     		movs	r1, #2
+ 333 0018 1800     		movs	r0, r3
+ 334 001a FFF7FEFF 		bl	spi_i2s_flag_get
+ 335 001e 0300     		movs	r3, r0
+ 336              		.loc 2 116 7 discriminator 1
+ 337 0020 002B     		cmp	r3, #0
+ 338 0022 F4D0     		beq	.L9
+ 117:../src/drivers/nand/Spi_nand_driver.c **** 
+ 118:../src/drivers/nand/Spi_nand_driver.c **** 	// Transmit byte
+ 119:../src/drivers/nand/Spi_nand_driver.c **** 	spi_i2s_data_transmit(SPI0, byte);
+ 339              		.loc 2 119 2
+ 340 0024 FB1D     		adds	r3, r7, #7
+ 341 0026 1B78     		ldrb	r3, [r3]
+ 342 0028 9AB2     		uxth	r2, r3
+ 343 002a 43F20003 		movw	r3, #12288
+ 344 002e C4F20103 		movt	r3, 16385
+ 345 0032 1100     		movs	r1, r2
+ 346 0034 1800     		movs	r0, r3
+ 347 0036 FFF7FEFF 		bl	spi_i2s_data_transmit
+ 120:../src/drivers/nand/Spi_nand_driver.c **** 
+ 121:../src/drivers/nand/Spi_nand_driver.c **** 	// Wait for receive buffer not empty
+ 122:../src/drivers/nand/Spi_nand_driver.c **** 	while(RESET == spi_i2s_flag_get(SPI0, SPI_FLAG_RBNE));
+ 348              		.loc 2 122 7
+ 349 003a C046     		nop
+ 350              	.L10:
+ 351              		.loc 2 122 17 discriminator 1
+ 352 003c 43F20003 		movw	r3, #12288
+ 353 0040 C4F20103 		movt	r3, 16385
+ 354 0044 0121     		movs	r1, #1
+ 355 0046 1800     		movs	r0, r3
+ 356 0048 FFF7FEFF 		bl	spi_i2s_flag_get
+ 357 004c 0300     		movs	r3, r0
+ 358              		.loc 2 122 7 discriminator 1
+ 359 004e 002B     		cmp	r3, #0
+ 360 0050 F4D0     		beq	.L10
+ 123:../src/drivers/nand/Spi_nand_driver.c **** 
+ 124:../src/drivers/nand/Spi_nand_driver.c **** 	// Return received byte
+ 125:../src/drivers/nand/Spi_nand_driver.c **** 	return spi_i2s_data_receive(SPI0);
+ 361              		.loc 2 125 9
+ 362 0052 43F20003 		movw	r3, #12288
+ 363 0056 C4F20103 		movt	r3, 16385
+ 364 005a 1800     		movs	r0, r3
+ 365 005c FFF7FEFF 		bl	spi_i2s_data_receive
+ 366 0060 0300     		movs	r3, r0
+ 367 0062 DBB2     		uxtb	r3, r3
+ 126:../src/drivers/nand/Spi_nand_driver.c **** }
+ 368              		.loc 2 126 1
+ 369 0064 1800     		movs	r0, r3
+ 370 0066 BD46     		mov	sp, r7
+ 371 0068 02B0     		add	sp, sp, #8
+ 372              		@ sp needed
+ 373 006a 80BD     		pop	{r7, pc}
+ 374              		.cfi_endproc
+ 375              	.LFE63:
+ 377              		.section	.text.spi_nand_reset,"ax",%progbits
+ 378              		.align	1
+ 379              		.global	spi_nand_reset
+ 380              		.syntax unified
+ 381              		.code	16
+ 382              		.thumb_func
+ 383              		.fpu softvfp
+ 385              	spi_nand_reset:
+ 386              	.LFB64:
+ 127:../src/drivers/nand/Spi_nand_driver.c **** 
+ 128:../src/drivers/nand/Spi_nand_driver.c **** /**
+ 129:../src/drivers/nand/Spi_nand_driver.c ****  * @brief Reset NAND flash device
+ 130:../src/drivers/nand/Spi_nand_driver.c ****  */
+ 131:../src/drivers/nand/Spi_nand_driver.c **** void spi_nand_reset(void)
+ 132:../src/drivers/nand/Spi_nand_driver.c **** {
+ 387              		.loc 2 132 1
+ 388              		.cfi_startproc
+ 389              		@ args = 0, pretend = 0, frame = 0
+ 390              		@ frame_needed = 1, uses_anonymous_args = 0
+ 391 0000 80B5     		push	{r7, lr}
+ 392              		.cfi_def_cfa_offset 8
+ 393              		.cfi_offset 7, -8
+ 394              		.cfi_offset 14, -4
+ 395 0002 00AF     		add	r7, sp, #0
+ 396              		.cfi_def_cfa_register 7
+ 133:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_cs_sel(true);
+ 397              		.loc 2 133 2
+ 398 0004 0120     		movs	r0, #1
+ 399 0006 FFF7FEFF 		bl	spi_nand_cs_sel
+ 134:../src/drivers/nand/Spi_nand_driver.c **** 
+ 135:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_rw_byte(NAND_RESET);
+ 400              		.loc 2 135 2
+ 401 000a FF20     		movs	r0, #255
+ 402 000c FFF7FEFF 		bl	spi_nand_rw_byte
+ 136:../src/drivers/nand/Spi_nand_driver.c **** 
+ 137:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_cs_sel(false);
+ 403              		.loc 2 137 2
+ 404 0010 0020     		movs	r0, #0
+ 405 0012 FFF7FEFF 		bl	spi_nand_cs_sel
+ 138:../src/drivers/nand/Spi_nand_driver.c **** }
+ 406              		.loc 2 138 1
+ 407 0016 C046     		nop
+ 408 0018 BD46     		mov	sp, r7
+ 409              		@ sp needed
+ 410 001a 80BD     		pop	{r7, pc}
+ 411              		.cfi_endproc
+ 412              	.LFE64:
+ 414              		.section	.text.spi_nand_read_id,"ax",%progbits
+ 415              		.align	1
+ 416              		.syntax unified
+ 417              		.code	16
+ 418              		.thumb_func
+ 419              		.fpu softvfp
+ 421              	spi_nand_read_id:
+ 422              	.LFB65:
+ 139:../src/drivers/nand/Spi_nand_driver.c **** 
+ 140:../src/drivers/nand/Spi_nand_driver.c **** /**
+ 141:../src/drivers/nand/Spi_nand_driver.c ****  * @brief Read NAND flash ID
+ 142:../src/drivers/nand/Spi_nand_driver.c ****  */
+ 143:../src/drivers/nand/Spi_nand_driver.c **** static void spi_nand_read_id(void)
+ 144:../src/drivers/nand/Spi_nand_driver.c **** {
+ 423              		.loc 2 144 1
+ 424              		.cfi_startproc
+ 425              		@ args = 0, pretend = 0, frame = 0
+ 426              		@ frame_needed = 1, uses_anonymous_args = 0
+ 427 0000 80B5     		push	{r7, lr}
+ 428              		.cfi_def_cfa_offset 8
+ 429              		.cfi_offset 7, -8
+ 430              		.cfi_offset 14, -4
+ 431 0002 00AF     		add	r7, sp, #0
+ 432              		.cfi_def_cfa_register 7
+ 145:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_cs_sel(true);
+ 433              		.loc 2 145 2
+ 434 0004 0120     		movs	r0, #1
+ 435 0006 FFF7FEFF 		bl	spi_nand_cs_sel
+ 146:../src/drivers/nand/Spi_nand_driver.c **** 
+ 147:../src/drivers/nand/Spi_nand_driver.c **** 	// Send read ID command
+ 148:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_rw_byte(NAND_READID);
+ 436              		.loc 2 148 2
+ 437 000a 9F20     		movs	r0, #159
+ 438 000c FFF7FEFF 		bl	spi_nand_rw_byte
+ 149:../src/drivers/nand/Spi_nand_driver.c **** 
+ 150:../src/drivers/nand/Spi_nand_driver.c **** 	// Send dummy byte
+ 151:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_rw_byte(DUMMY_BYTE);
+ 439              		.loc 2 151 2
+ 440 0010 A520     		movs	r0, #165
+ 441 0012 FFF7FEFF 		bl	spi_nand_rw_byte
+ 152:../src/drivers/nand/Spi_nand_driver.c **** 
+ 153:../src/drivers/nand/Spi_nand_driver.c **** 	// Read 5 bytes of ID
+ 154:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_id[0] = spi_nand_rw_byte(DUMMY_BYTE);
+ 442              		.loc 2 154 19
+ 443 0016 A520     		movs	r0, #165
+ 444 0018 FFF7FEFF 		bl	spi_nand_rw_byte
+ 445 001c 0300     		movs	r3, r0
+ 446 001e 1A00     		movs	r2, r3
+ 447              		.loc 2 154 17
+ 448 0020 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 449 0024 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 450 0028 1A70     		strb	r2, [r3]
+ 155:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_id[1] = spi_nand_rw_byte(DUMMY_BYTE);
+ 451              		.loc 2 155 19
+ 452 002a A520     		movs	r0, #165
+ 453 002c FFF7FEFF 		bl	spi_nand_rw_byte
+ 454 0030 0300     		movs	r3, r0
+ 455 0032 1A00     		movs	r2, r3
+ 456              		.loc 2 155 17
+ 457 0034 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 458 0038 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 459 003c 5A70     		strb	r2, [r3, #1]
+ 156:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_id[2] = spi_nand_rw_byte(DUMMY_BYTE);
+ 460              		.loc 2 156 19
+ 461 003e A520     		movs	r0, #165
+ 462 0040 FFF7FEFF 		bl	spi_nand_rw_byte
+ 463 0044 0300     		movs	r3, r0
+ 464 0046 1A00     		movs	r2, r3
+ 465              		.loc 2 156 17
+ 466 0048 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 467 004c C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 468 0050 9A70     		strb	r2, [r3, #2]
+ 157:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_id[3] = spi_nand_rw_byte(DUMMY_BYTE);
+ 469              		.loc 2 157 19
+ 470 0052 A520     		movs	r0, #165
+ 471 0054 FFF7FEFF 		bl	spi_nand_rw_byte
+ 472 0058 0300     		movs	r3, r0
+ 473 005a 1A00     		movs	r2, r3
+ 474              		.loc 2 157 17
+ 475 005c 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 476 0060 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 477 0064 DA70     		strb	r2, [r3, #3]
+ 158:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_id[4] = spi_nand_rw_byte(DUMMY_BYTE);
+ 478              		.loc 2 158 19
+ 479 0066 A520     		movs	r0, #165
+ 480 0068 FFF7FEFF 		bl	spi_nand_rw_byte
+ 481 006c 0300     		movs	r3, r0
+ 482 006e 1A00     		movs	r2, r3
+ 483              		.loc 2 158 17
+ 484 0070 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 485 0074 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 486 0078 1A71     		strb	r2, [r3, #4]
+ 159:../src/drivers/nand/Spi_nand_driver.c **** 
+ 160:../src/drivers/nand/Spi_nand_driver.c **** 	spi_nand_cs_sel(false);
+ 487              		.loc 2 160 2
+ 488 007a 0020     		movs	r0, #0
+ 489 007c FFF7FEFF 		bl	spi_nand_cs_sel
+ 161:../src/drivers/nand/Spi_nand_driver.c **** }
+ 490              		.loc 2 161 1
+ 491 0080 C046     		nop
+ 492 0082 BD46     		mov	sp, r7
+ 493              		@ sp needed
+ 494 0084 80BD     		pop	{r7, pc}
+ 495              		.cfi_endproc
+ 496              	.LFE65:
+ 498              		.section	.rodata
+ 499              		.align	2
+ 500              	.LC0:
+ 501 0000 7370695F 		.ascii	"spi_nand_id: 0x%02x%02x%02x%02x%02x\012\000"
+ 501      6E616E64 
+ 501      5F69643A 
+ 501      20307825 
+ 501      30327825 
+ 502 0025 000000   		.align	2
+ 503              	.LC2:
+ 504 0028 6E6F2069 		.ascii	"no id match, use common nand driver, pg size %d, pg"
+ 504      64206D61 
+ 504      7463682C 
+ 504      20757365 
+ 504      20636F6D 
+ 505 005b 5F706572 		.ascii	"_per_blk %d!!\012\000"
+ 505      5F626C6B 
+ 505      20256421 
+ 505      210A00
+ 506 006a 0000     		.align	2
+ 507              	.LC3:
+ 508 006c 6E616E64 		.ascii	"nand id is 0!!\000"
+ 508      20696420 
+ 508      69732030 
+ 508      212100
+ 509              		.section	.text.spinand_get_specinfo,"ax",%progbits
+ 510              		.align	1
+ 511              		.global	spinand_get_specinfo
+ 512              		.syntax unified
+ 513              		.code	16
+ 514              		.thumb_func
+ 515              		.fpu softvfp
+ 517              	spinand_get_specinfo:
+ 518              	.LFB66:
+ 162:../src/drivers/nand/Spi_nand_driver.c **** 
+ 163:../src/drivers/nand/Spi_nand_driver.c **** /**
+ 164:../src/drivers/nand/Spi_nand_driver.c ****  * @brief Detect and configure NAND flash device
+ 165:../src/drivers/nand/Spi_nand_driver.c ****  * @return Pointer to configuration info on success, NULL on failure
+ 166:../src/drivers/nand/Spi_nand_driver.c ****  */
+ 167:../src/drivers/nand/Spi_nand_driver.c **** SPINAND_CFG_INFO_T * spinand_get_specinfo(void)
+ 168:../src/drivers/nand/Spi_nand_driver.c **** {
+ 519              		.loc 2 168 1
+ 520              		.cfi_startproc
+ 521              		@ args = 0, pretend = 0, frame = 16
+ 522              		@ frame_needed = 1, uses_anonymous_args = 0
+ 523 0000 B0B5     		push	{r4, r5, r7, lr}
+ 524              		.cfi_def_cfa_offset 16
+ 525              		.cfi_offset 4, -16
+ 526              		.cfi_offset 5, -12
+ 527              		.cfi_offset 7, -8
+ 528              		.cfi_offset 14, -4
+ 529 0002 86B0     		sub	sp, sp, #24
+ 530              		.cfi_def_cfa_offset 40
+ 531 0004 02AF     		add	r7, sp, #8
+ 532              		.cfi_def_cfa 7, 32
+ 169:../src/drivers/nand/Spi_nand_driver.c **** 	uint8_t i, j;
+ 170:../src/drivers/nand/Spi_nand_driver.c **** 	uint32_t spi_mode = 0;
+ 533              		.loc 2 170 11
+ 534 0006 0023     		movs	r3, #0
+ 535 0008 BB60     		str	r3, [r7, #8]
+ 171:../src/drivers/nand/Spi_nand_driver.c **** 	SPINAND_CFG_INFO_T *spinand_specinfo_ptr = NULL;
+ 536              		.loc 2 171 22
+ 537 000a 0023     		movs	r3, #0
+ 538 000c 7B60     		str	r3, [r7, #4]
+ 172:../src/drivers/nand/Spi_nand_driver.c **** 
+ 173:../src/drivers/nand/Spi_nand_driver.c **** 	// Try all possible SPI modes to detect the device
+ 174:../src/drivers/nand/Spi_nand_driver.c **** 	for(j = 0; j < 4; j++) {
+ 539              		.loc 2 174 8
+ 540 000e 0E23     		movs	r3, #14
+ 541 0010 FB18     		adds	r3, r7, r3
+ 542 0012 0022     		movs	r2, #0
+ 543 0014 1A70     		strb	r2, [r3]
+ 544              		.loc 2 174 2
+ 545 0016 97E0     		b	.L15
+ 546              	.L28:
+ 175:../src/drivers/nand/Spi_nand_driver.c **** 		switch(j) {
+ 547              		.loc 2 175 3
+ 548 0018 0E23     		movs	r3, #14
+ 549 001a FB18     		adds	r3, r7, r3
+ 550 001c 1B78     		ldrb	r3, [r3]
+ 551 001e 032B     		cmp	r3, #3
+ 552 0020 10D0     		beq	.L16
+ 553 0022 12DC     		bgt	.L30
+ 554 0024 022B     		cmp	r3, #2
+ 555 0026 0AD0     		beq	.L18
+ 556 0028 0FDC     		bgt	.L30
+ 557 002a 13B1     		cbz	r3, .L19
+ 558 002c 012B     		cmp	r3, #1
+ 559 002e 03D0     		beq	.L20
+ 176:../src/drivers/nand/Spi_nand_driver.c **** 		case 0:
+ 177:../src/drivers/nand/Spi_nand_driver.c **** 			spi_mode = SPI_CK_PL_LOW_PH_1EDGE;
+ 178:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 179:../src/drivers/nand/Spi_nand_driver.c **** 		case 1:
+ 180:../src/drivers/nand/Spi_nand_driver.c **** 			spi_mode = SPI_CK_PL_HIGH_PH_1EDGE;
+ 181:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 182:../src/drivers/nand/Spi_nand_driver.c **** 		case 2:
+ 183:../src/drivers/nand/Spi_nand_driver.c **** 			spi_mode = SPI_CK_PL_LOW_PH_2EDGE;
+ 184:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 185:../src/drivers/nand/Spi_nand_driver.c **** 		case 3:
+ 186:../src/drivers/nand/Spi_nand_driver.c **** 			spi_mode = SPI_CK_PL_HIGH_PH_2EDGE;
+ 187:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 188:../src/drivers/nand/Spi_nand_driver.c **** 		default:
+ 189:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 560              		.loc 2 189 4
+ 561 0030 0BE0     		b	.L30
+ 562              	.L19:
+ 177:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 563              		.loc 2 177 13
+ 564 0032 0023     		movs	r3, #0
+ 565 0034 BB60     		str	r3, [r7, #8]
+ 178:../src/drivers/nand/Spi_nand_driver.c **** 		case 1:
+ 566              		.loc 2 178 4
+ 567 0036 09E0     		b	.L21
+ 568              	.L20:
+ 180:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 569              		.loc 2 180 13
+ 570 0038 0223     		movs	r3, #2
+ 571 003a BB60     		str	r3, [r7, #8]
+ 181:../src/drivers/nand/Spi_nand_driver.c **** 		case 2:
+ 572              		.loc 2 181 4
+ 573 003c 06E0     		b	.L21
+ 574              	.L18:
+ 183:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 575              		.loc 2 183 13
+ 576 003e 0123     		movs	r3, #1
+ 577 0040 BB60     		str	r3, [r7, #8]
+ 184:../src/drivers/nand/Spi_nand_driver.c **** 		case 3:
+ 578              		.loc 2 184 4
+ 579 0042 03E0     		b	.L21
+ 580              	.L16:
+ 186:../src/drivers/nand/Spi_nand_driver.c **** 			break;
+ 581              		.loc 2 186 13
+ 582 0044 0323     		movs	r3, #3
+ 583 0046 BB60     		str	r3, [r7, #8]
+ 187:../src/drivers/nand/Spi_nand_driver.c **** 		default:
+ 584              		.loc 2 187 4
+ 585 0048 00E0     		b	.L21
+ 586              	.L30:
+ 587              		.loc 2 189 4
+ 588 004a C046     		nop
+ 589              	.L21:
+ 190:../src/drivers/nand/Spi_nand_driver.c **** 		}
+ 191:../src/drivers/nand/Spi_nand_driver.c **** 
+ 192:../src/drivers/nand/Spi_nand_driver.c **** 		// Initialize SPI with current mode
+ 193:../src/drivers/nand/Spi_nand_driver.c **** 		if (spi_nandflash_init(spi_mode) != 0)
+ 590              		.loc 2 193 7
+ 591 004c BB68     		ldr	r3, [r7, #8]
+ 592 004e 1800     		movs	r0, r3
+ 593 0050 FFF7FEFF 		bl	spi_nandflash_init
+ 594 0054 0300     		movs	r3, r0
+ 595              		.loc 2 193 6
+ 596 0056 002B     		cmp	r3, #0
+ 597 0058 6FD1     		bne	.L31
+ 194:../src/drivers/nand/Spi_nand_driver.c **** 			continue;
+ 195:../src/drivers/nand/Spi_nand_driver.c **** 
+ 196:../src/drivers/nand/Spi_nand_driver.c **** 		spi_nand_reset();
+ 598              		.loc 2 196 3
+ 599 005a FFF7FEFF 		bl	spi_nand_reset
+ 197:../src/drivers/nand/Spi_nand_driver.c **** 		spi_nand_read_id();
+ 600              		.loc 2 197 3
+ 601 005e FFF7FEFF 		bl	spi_nand_read_id
+ 198:../src/drivers/nand/Spi_nand_driver.c **** 		// Debug output
+ 199:../src/drivers/nand/Spi_nand_driver.c **** 		printf("spi_nand_id: 0x%02x%02x%02x%02x%02x\n",
+ 200:../src/drivers/nand/Spi_nand_driver.c **** 		       spi_nand_id[0], spi_nand_id[1], spi_nand_id[2],
+ 602              		.loc 2 200 21
+ 603 0062 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 604 0066 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 605 006a 1B78     		ldrb	r3, [r3]
+ 199:../src/drivers/nand/Spi_nand_driver.c **** 		       spi_nand_id[0], spi_nand_id[1], spi_nand_id[2],
+ 606              		.loc 2 199 3
+ 607 006c 1900     		movs	r1, r3
+ 608              		.loc 2 200 37
+ 609 006e 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 610 0072 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 611 0076 5B78     		ldrb	r3, [r3, #1]
+ 199:../src/drivers/nand/Spi_nand_driver.c **** 		       spi_nand_id[0], spi_nand_id[1], spi_nand_id[2],
+ 612              		.loc 2 199 3
+ 613 0078 1C00     		movs	r4, r3
+ 614              		.loc 2 200 53
+ 615 007a 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 616 007e C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 617 0082 9B78     		ldrb	r3, [r3, #2]
+ 199:../src/drivers/nand/Spi_nand_driver.c **** 		       spi_nand_id[0], spi_nand_id[1], spi_nand_id[2],
+ 618              		.loc 2 199 3
+ 619 0084 1D00     		movs	r5, r3
+ 201:../src/drivers/nand/Spi_nand_driver.c **** 		       spi_nand_id[3], spi_nand_id[4]);
+ 620              		.loc 2 201 21
+ 621 0086 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 622 008a C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 623 008e DB78     		ldrb	r3, [r3, #3]
+ 199:../src/drivers/nand/Spi_nand_driver.c **** 		       spi_nand_id[0], spi_nand_id[1], spi_nand_id[2],
+ 624              		.loc 2 199 3
+ 625 0090 1A00     		movs	r2, r3
+ 626              		.loc 2 201 37
+ 627 0092 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 628 0096 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 629 009a 1B79     		ldrb	r3, [r3, #4]
+ 199:../src/drivers/nand/Spi_nand_driver.c **** 		       spi_nand_id[0], spi_nand_id[1], spi_nand_id[2],
+ 630              		.loc 2 199 3
+ 631 009c 40F20000 		movw	r0, #:lower16:.LC0
+ 632 00a0 C0F20000 		movt	r0, #:upper16:.LC0
+ 633 00a4 0193     		str	r3, [sp, #4]
+ 634 00a6 0092     		str	r2, [sp]
+ 635 00a8 2B00     		movs	r3, r5
+ 636 00aa 2200     		movs	r2, r4
+ 637 00ac FFF7FEFF 		bl	printf
+ 202:../src/drivers/nand/Spi_nand_driver.c **** 
+ 203:../src/drivers/nand/Spi_nand_driver.c **** 		// Search for matching device in configuration table
+ 204:../src/drivers/nand/Spi_nand_driver.c **** 		for(i = 0; i < sizeof(s_apinand_cfg_tab) / sizeof(SPINAND_CFG_INFO_T); i++) {
+ 638              		.loc 2 204 9
+ 639 00b0 0F23     		movs	r3, #15
+ 640 00b2 FB18     		adds	r3, r7, r3
+ 641 00b4 0022     		movs	r2, #0
+ 642 00b6 1A70     		strb	r2, [r3]
+ 643              		.loc 2 204 3
+ 644 00b8 39E0     		b	.L24
+ 645              	.L27:
+ 646              	.LBB2:
+ 205:../src/drivers/nand/Spi_nand_driver.c **** 			// Compare first 2 bytes of device ID
+ 206:../src/drivers/nand/Spi_nand_driver.c **** 			if (memcmp(s_apinand_cfg_tab[i].dev_id, spi_nand_id, 2) == 0) {
+ 647              		.loc 2 206 35
+ 648 00ba 0F24     		movs	r4, #15
+ 649 00bc 3B19     		adds	r3, r7, r4
+ 650 00be 1A78     		ldrb	r2, [r3]
+ 651 00c0 1300     		movs	r3, r2
+ 652 00c2 9B00     		lsls	r3, r3, #2
+ 653 00c4 9B18     		adds	r3, r3, r2
+ 654 00c6 9B00     		lsls	r3, r3, #2
+ 655 00c8 40F20002 		movw	r2, #:lower16:s_apinand_cfg_tab
+ 656 00cc C0F20002 		movt	r2, #:upper16:s_apinand_cfg_tab
+ 657 00d0 9818     		adds	r0, r3, r2
+ 658              		.loc 2 206 8
+ 659 00d2 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 660 00d6 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 661 00da 0222     		movs	r2, #2
+ 662 00dc 1900     		movs	r1, r3
+ 663 00de FFF7FEFF 		bl	memcmp
+ 664 00e2 0300     		movs	r3, r0
+ 665              		.loc 2 206 7
+ 666 00e4 EBB9     		cbnz	r3, .L25
+ 207:../src/drivers/nand/Spi_nand_driver.c **** 				spinand_specinfo_ptr = &s_apinand_cfg_tab[i];
+ 667              		.loc 2 207 46
+ 668 00e6 3B19     		adds	r3, r7, r4
+ 669 00e8 1A78     		ldrb	r2, [r3]
+ 670              		.loc 2 207 26
+ 671 00ea 1300     		movs	r3, r2
+ 672 00ec 9B00     		lsls	r3, r3, #2
+ 673 00ee 9B18     		adds	r3, r3, r2
+ 674 00f0 9B00     		lsls	r3, r3, #2
+ 675 00f2 40F20002 		movw	r2, #:lower16:s_apinand_cfg_tab
+ 676 00f6 C0F20002 		movt	r2, #:upper16:s_apinand_cfg_tab
+ 677 00fa 9B18     		adds	r3, r3, r2
+ 678 00fc 7B60     		str	r3, [r7, #4]
+ 208:../src/drivers/nand/Spi_nand_driver.c **** 				NAND_PAGE_SIZE = spinand_specinfo_ptr->pagesize;
+ 679              		.loc 2 208 42
+ 680 00fe 7B68     		ldr	r3, [r7, #4]
+ 681 0100 DB68     		ldr	r3, [r3, #12]
+ 682 0102 1A00     		movs	r2, r3
+ 683              		.loc 2 208 20
+ 684 0104 40F20003 		movw	r3, #:lower16:NAND_PAGE_SIZE
+ 685 0108 C0F20003 		movt	r3, #:upper16:NAND_PAGE_SIZE
+ 686 010c 1A60     		str	r2, [r3]
+ 209:../src/drivers/nand/Spi_nand_driver.c **** 				NAND_PAGE_PER_BLK = spinand_specinfo_ptr->page_per_blk;
+ 687              		.loc 2 209 45
+ 688 010e 7B68     		ldr	r3, [r7, #4]
+ 689 0110 1B69     		ldr	r3, [r3, #16]
+ 690 0112 1A00     		movs	r2, r3
+ 691              		.loc 2 209 23
+ 692 0114 40F20003 		movw	r3, #:lower16:NAND_PAGE_PER_BLK
+ 693 0118 C0F20003 		movt	r3, #:upper16:NAND_PAGE_PER_BLK
+ 694 011c 1A60     		str	r2, [r3]
+ 210:../src/drivers/nand/Spi_nand_driver.c **** 
+ 211:../src/drivers/nand/Spi_nand_driver.c **** 				return spinand_specinfo_ptr;
+ 695              		.loc 2 211 12
+ 696 011e 7B68     		ldr	r3, [r7, #4]
+ 697 0120 4BE0     		b	.L26
+ 698              	.L25:
+ 699              	.LBE2:
+ 204:../src/drivers/nand/Spi_nand_driver.c **** 			// Compare first 2 bytes of device ID
+ 700              		.loc 2 204 75 discriminator 2
+ 701 0122 0F21     		movs	r1, #15
+ 702 0124 7B18     		adds	r3, r7, r1
+ 703 0126 1A78     		ldrb	r2, [r3]
+ 704 0128 7B18     		adds	r3, r7, r1
+ 705 012a 0132     		adds	r2, r2, #1
+ 706 012c 1A70     		strb	r2, [r3]
+ 707              	.L24:
+ 204:../src/drivers/nand/Spi_nand_driver.c **** 			// Compare first 2 bytes of device ID
+ 708              		.loc 2 204 3 discriminator 1
+ 709 012e 0F23     		movs	r3, #15
+ 710 0130 FB18     		adds	r3, r7, r3
+ 711 0132 1B78     		ldrb	r3, [r3]
+ 712 0134 0C2B     		cmp	r3, #12
+ 713 0136 C0D9     		bls	.L27
+ 714 0138 00E0     		b	.L23
+ 715              	.L31:
+ 194:../src/drivers/nand/Spi_nand_driver.c **** 
+ 716              		.loc 2 194 4
+ 717 013a C046     		nop
+ 718              	.L23:
+ 174:../src/drivers/nand/Spi_nand_driver.c **** 		switch(j) {
+ 719              		.loc 2 174 21 discriminator 2
+ 720 013c 0E21     		movs	r1, #14
+ 721 013e 7B18     		adds	r3, r7, r1
+ 722 0140 1A78     		ldrb	r2, [r3]
+ 723 0142 7B18     		adds	r3, r7, r1
+ 724 0144 0132     		adds	r2, r2, #1
+ 725 0146 1A70     		strb	r2, [r3]
+ 726              	.L15:
+ 174:../src/drivers/nand/Spi_nand_driver.c **** 		switch(j) {
+ 727              		.loc 2 174 2 discriminator 1
+ 728 0148 0E23     		movs	r3, #14
+ 729 014a FB18     		adds	r3, r7, r3
+ 730 014c 1B78     		ldrb	r3, [r3]
+ 731 014e 032B     		cmp	r3, #3
+ 732 0150 00D8     		bhi	.LCB500
+ 733 0152 61E7     		b	.L28	@long jump
+ 734              	.LCB500:
+ 212:../src/drivers/nand/Spi_nand_driver.c **** 			}
+ 213:../src/drivers/nand/Spi_nand_driver.c **** 		}
+ 214:../src/drivers/nand/Spi_nand_driver.c **** 	}
+ 215:../src/drivers/nand/Spi_nand_driver.c **** 	if (spi_nand_id[0]) {
+ 735              		.loc 2 215 17
+ 736 0154 40F20003 		movw	r3, #:lower16:spi_nand_id
+ 737 0158 C0F20003 		movt	r3, #:upper16:spi_nand_id
+ 738 015c 1B78     		ldrb	r3, [r3]
+ 739              		.loc 2 215 5
+ 740 015e 23B3     		cbz	r3, .L29
+ 216:../src/drivers/nand/Spi_nand_driver.c **** 		spinand_specinfo_ptr = &s_apinand_cfg_tab[8];//4k common parameter use [11]!
+ 741              		.loc 2 216 24
+ 742 0160 184B     		ldr	r3, .L32
+ 743 0162 7B60     		str	r3, [r7, #4]
+ 217:../src/drivers/nand/Spi_nand_driver.c **** 		NAND_PAGE_SIZE = spinand_specinfo_ptr->pagesize;
+ 744              		.loc 2 217 40
+ 745 0164 7B68     		ldr	r3, [r7, #4]
+ 746 0166 DB68     		ldr	r3, [r3, #12]
+ 747 0168 1A00     		movs	r2, r3
+ 748              		.loc 2 217 18
+ 749 016a 40F20003 		movw	r3, #:lower16:NAND_PAGE_SIZE
+ 750 016e C0F20003 		movt	r3, #:upper16:NAND_PAGE_SIZE
+ 751 0172 1A60     		str	r2, [r3]
+ 218:../src/drivers/nand/Spi_nand_driver.c **** 		NAND_PAGE_PER_BLK = spinand_specinfo_ptr->page_per_blk;
+ 752              		.loc 2 218 43
+ 753 0174 7B68     		ldr	r3, [r7, #4]
+ 754 0176 1B69     		ldr	r3, [r3, #16]
+ 755 0178 1A00     		movs	r2, r3
+ 756              		.loc 2 218 21
+ 757 017a 40F20003 		movw	r3, #:lower16:NAND_PAGE_PER_BLK
+ 758 017e C0F20003 		movt	r3, #:upper16:NAND_PAGE_PER_BLK
+ 759 0182 1A60     		str	r2, [r3]
+ 219:../src/drivers/nand/Spi_nand_driver.c **** 		printf("no id match, use common nand driver, pg size %d, pg_per_blk %d!!\n",
+ 760              		.loc 2 219 3
+ 761 0184 40F20003 		movw	r3, #:lower16:NAND_PAGE_SIZE
+ 762 0188 C0F20003 		movt	r3, #:upper16:NAND_PAGE_SIZE
+ 763 018c 1968     		ldr	r1, [r3]
+ 764 018e 40F20003 		movw	r3, #:lower16:NAND_PAGE_PER_BLK
+ 765 0192 C0F20003 		movt	r3, #:upper16:NAND_PAGE_PER_BLK
+ 766 0196 1A68     		ldr	r2, [r3]
+ 767 0198 40F20003 		movw	r3, #:lower16:.LC2
+ 768 019c C0F20003 		movt	r3, #:upper16:.LC2
+ 769 01a0 1800     		movs	r0, r3
+ 770 01a2 FFF7FEFF 		bl	printf
+ 220:../src/drivers/nand/Spi_nand_driver.c **** 		       NAND_PAGE_SIZE, NAND_PAGE_PER_BLK);
+ 221:../src/drivers/nand/Spi_nand_driver.c **** 
+ 222:../src/drivers/nand/Spi_nand_driver.c **** 		return spinand_specinfo_ptr;
+ 771              		.loc 2 222 10
+ 772 01a6 7B68     		ldr	r3, [r7, #4]
+ 773 01a8 07E0     		b	.L26
+ 774              	.L29:
+ 223:../src/drivers/nand/Spi_nand_driver.c **** 	}
+ 224:../src/drivers/nand/Spi_nand_driver.c **** 
+ 225:../src/drivers/nand/Spi_nand_driver.c **** 	printf("nand id is 0!!\n");
+ 775              		.loc 2 225 2
+ 776 01aa 40F20003 		movw	r3, #:lower16:.LC3
+ 777 01ae C0F20003 		movt	r3, #:upper16:.LC3
+ 778 01b2 1800     		movs	r0, r3
+ 779 01b4 FFF7FEFF 		bl	puts
+ 226:../src/drivers/nand/Spi_nand_driver.c **** 
+ 227:../src/drivers/nand/Spi_nand_driver.c **** 	return NULL;
+ 780              		.loc 2 227 9
+ 781 01b8 0023     		movs	r3, #0
+ 782              	.L26:
+ 228:../src/drivers/nand/Spi_nand_driver.c **** }
+ 783              		.loc 2 228 1
+ 784 01ba 1800     		movs	r0, r3
+ 785 01bc BD46     		mov	sp, r7
+ 786 01be 04B0     		add	sp, sp, #16
+ 787              		@ sp needed
+ 788 01c0 B0BD     		pop	{r4, r5, r7, pc}
+ 789              	.L33:
+ 790 01c2 C046     		.align	2
+ 791              	.L32:
+ 792 01c4 A0000000 		.word	s_apinand_cfg_tab+160
+ 793              		.cfi_endproc
+ 794              	.LFE66:
+ 796              		.section	.text.NANDFLASH_Read,"ax",%progbits
+ 797              		.align	1
+ 798              		.global	NANDFLASH_Read
+ 799              		.syntax unified
+ 800              		.code	16
+ 801              		.thumb_func
+ 802              		.fpu softvfp
+ 804              	NANDFLASH_Read:
+ 805              	.LFB67:
+ 229:../src/drivers/nand/Spi_nand_driver.c **** 
+ 230:../src/drivers/nand/Spi_nand_driver.c **** /**
+ 231:../src/drivers/nand/Spi_nand_driver.c ****  * @brief Read data from NAND flash
+ 232:../src/drivers/nand/Spi_nand_driver.c ****  * @param add Address to read from
+ 233:../src/drivers/nand/Spi_nand_driver.c ****  * @param Readbuff Buffer to store read data
+ 234:../src/drivers/nand/Spi_nand_driver.c ****  * @param Transfer_Length Number of bytes to read
+ 235:../src/drivers/nand/Spi_nand_driver.c ****  * @return NAND_OK on success, error code on failure
+ 236:../src/drivers/nand/Spi_nand_driver.c ****  */
+ 237:../src/drivers/nand/Spi_nand_driver.c **** uint16_t NANDFLASH_Read(NAND_ADDRESS add, uint8_t *Readbuff, uint16_t Transfer_Length)
+ 238:../src/drivers/nand/Spi_nand_driver.c **** {
+ 806              		.loc 2 238 1
+ 807              		.cfi_startproc
+ 808              		@ args = 0, pretend = 0, frame = 16
+ 809              		@ frame_needed = 1, uses_anonymous_args = 0
+ 810 0000 90B5     		push	{r4, r7, lr}
+ 811              		.cfi_def_cfa_offset 12
+ 812              		.cfi_offset 4, -12
+ 813              		.cfi_offset 7, -8
+ 814              		.cfi_offset 14, -4
+ 815 0002 85B0     		sub	sp, sp, #20
+ 816              		.cfi_def_cfa_offset 32
+ 817 0004 00AF     		add	r7, sp, #0
+ 818              		.cfi_def_cfa_register 7
+ 819 0006 0824     		movs	r4, #8
+ 820 0008 3C19     		adds	r4, r7, r4
+ 821 000a 2060     		str	r0, [r4]
+ 822 000c 6160     		str	r1, [r4, #4]
+ 823 000e 7A60     		str	r2, [r7, #4]
+ 824 0010 1A00     		movs	r2, r3
+ 825 0012 BB1C     		adds	r3, r7, #2
+ 826 0014 1A80     		strh	r2, [r3]
+ 239:../src/drivers/nand/Spi_nand_driver.c **** 	// Validate input parameters
+ 240:../src/drivers/nand/Spi_nand_driver.c **** 	if (s_spinand_spec_info_ptr == NULL || Readbuff == NULL)
+ 827              		.loc 2 240 30
+ 828 0016 40F20003 		movw	r3, #:lower16:s_spinand_spec_info_ptr
+ 829 001a C0F20003 		movt	r3, #:upper16:s_spinand_spec_info_ptr
+ 830 001e 1B68     		ldr	r3, [r3]
+ 831              		.loc 2 240 5
+ 832 0020 0BB1     		cbz	r3, .L35
+ 833              		.loc 2 240 38 discriminator 1
+ 834 0022 7B68     		ldr	r3, [r7, #4]
+ 835 0024 0BB9     		cbnz	r3, .L36
+ 836              	.L35:
+ 241:../src/drivers/nand/Spi_nand_driver.c **** 		return NAND_FAIL;
+ 837              		.loc 2 241 10
+ 838 0026 0123     		movs	r3, #1
+ 839 0028 3FE0     		b	.L37
+ 840              	.L36:
+ 242:../src/drivers/nand/Spi_nand_driver.c **** 
+ 243:../src/drivers/nand/Spi_nand_driver.c **** 	// Enable ECC
+ 244:../src/drivers/nand/Spi_nand_driver.c **** 	s_spinand_spec_info_ptr->spinnad_operation->spinand_eccenable();
+ 841              		.loc 2 244 25
+ 842 002a 40F20003 		movw	r3, #:lower16:s_spinand_spec_info_ptr
+ 843 002e C0F20003 		movt	r3, #:upper16:s_spinand_spec_info_ptr
+ 844 0032 1B68     		ldr	r3, [r3]
+ 845 0034 9B68     		ldr	r3, [r3, #8]
+ 846              		.loc 2 244 44
+ 847 0036 9B69     		ldr	r3, [r3, #24]
+ 848              		.loc 2 244 2
+ 849 0038 9847     		blx	r3
+ 850              	.LVL0:
+ 245:../src/drivers/nand/Spi_nand_driver.c **** 
+ 246:../src/drivers/nand/Spi_nand_driver.c **** 	// Check if read length is valid
+ 247:../src/drivers/nand/Spi_nand_driver.c **** 	if (NAND_PAGE_SIZE - add.Area < Transfer_Length)
+ 851              		.loc 2 247 21
+ 852 003a 40F20003 		movw	r3, #:lower16:NAND_PAGE_SIZE
+ 853 003e C0F20003 		movt	r3, #:upper16:NAND_PAGE_SIZE
+ 854 0042 1B68     		ldr	r3, [r3]
+ 855              		.loc 2 247 26
+ 856 0044 0822     		movs	r2, #8
+ 857 0046 BA18     		adds	r2, r7, r2
+ 858 0048 9288     		ldrh	r2, [r2, #4]
+ 859              		.loc 2 247 21
+ 860 004a 9A1A     		subs	r2, r3, r2
+ 861              		.loc 2 247 32
+ 862 004c BB1C     		adds	r3, r7, #2
+ 863 004e 1B88     		ldrh	r3, [r3]
+ 864              		.loc 2 247 5
+ 865 0050 9A42     		cmp	r2, r3
+ 866 0052 01DA     		bge	.L38
+ 248:../src/drivers/nand/Spi_nand_driver.c **** 		return NAND_FAIL;
+ 867              		.loc 2 248 10
+ 868 0054 0123     		movs	r3, #1
+ 869 0056 28E0     		b	.L37
+ 870              	.L38:
+ 249:../src/drivers/nand/Spi_nand_driver.c **** 
+ 250:../src/drivers/nand/Spi_nand_driver.c **** 	// Read data to cache
+ 251:../src/drivers/nand/Spi_nand_driver.c **** 	s_spinand_spec_info_ptr->spinnad_operation->spinand_readtocatch(add);
+ 871              		.loc 2 251 25
+ 872 0058 40F20003 		movw	r3, #:lower16:s_spinand_spec_info_ptr
+ 873 005c C0F20003 		movt	r3, #:upper16:s_spinand_spec_info_ptr
+ 874 0060 1B68     		ldr	r3, [r3]
+ 875 0062 9B68     		ldr	r3, [r3, #8]
+ 876              		.loc 2 251 44
+ 877 0064 DA68     		ldr	r2, [r3, #12]
+ 878              		.loc 2 251 2
+ 879 0066 0823     		movs	r3, #8
+ 880 0068 FB18     		adds	r3, r7, r3
+ 881 006a 1868     		ldr	r0, [r3]
+ 882 006c 5968     		ldr	r1, [r3, #4]
+ 883 006e 9047     		blx	r2
+ 884              	.LVL1:
+ 252:../src/drivers/nand/Spi_nand_driver.c **** 
+ 253:../src/drivers/nand/Spi_nand_driver.c **** 	// Check ECC status
+ 254:../src/drivers/nand/Spi_nand_driver.c **** 	if (s_spinand_spec_info_ptr->spinnad_operation->spinand_checkecc() == NAND_FAIL)
+ 885              		.loc 2 254 29
+ 886 0070 40F20003 		movw	r3, #:lower16:s_spinand_spec_info_ptr
+ 887 0074 C0F20003 		movt	r3, #:upper16:s_spinand_spec_info_ptr
+ 888 0078 1B68     		ldr	r3, [r3]
+ 889 007a 9B68     		ldr	r3, [r3, #8]
+ 890              		.loc 2 254 48
+ 891 007c 1B6A     		ldr	r3, [r3, #32]
+ 892              		.loc 2 254 6
+ 893 007e 9847     		blx	r3
+ 894              	.LVL2:
+ 895 0080 0300     		movs	r3, r0
+ 896              		.loc 2 254 5
+ 897 0082 012B     		cmp	r3, #1
+ 898 0084 01D1     		bne	.L39
+ 255:../src/drivers/nand/Spi_nand_driver.c **** 		return READ_NANDFLASH_ECC_ERROR;
+ 899              		.loc 2 255 10
+ 900 0086 9A23     		movs	r3, #154
+ 901 0088 0FE0     		b	.L37
+ 902              	.L39:
+ 256:../src/drivers/nand/Spi_nand_driver.c **** 
+ 257:../src/drivers/nand/Spi_nand_driver.c **** 	// Read data from cache
+ 258:../src/drivers/nand/Spi_nand_driver.c **** 	s_spinand_spec_info_ptr->spinnad_operation->spinand_readfromcatch(Readbuff,
+ 903              		.loc 2 258 25
+ 904 008a 40F20003 		movw	r3, #:lower16:s_spinand_spec_info_ptr
+ 905 008e C0F20003 		movt	r3, #:upper16:s_spinand_spec_info_ptr
+ 906 0092 1B68     		ldr	r3, [r3]
+ 907 0094 9B68     		ldr	r3, [r3, #8]
+ 908              		.loc 2 258 44
+ 909 0096 9C68     		ldr	r4, [r3, #8]
+ 910              		.loc 2 258 2
+ 911 0098 BB1C     		adds	r3, r7, #2
+ 912 009a 1B88     		ldrh	r3, [r3]
+ 913 009c 0822     		movs	r2, #8
+ 914 009e BA18     		adds	r2, r7, r2
+ 915 00a0 7868     		ldr	r0, [r7, #4]
+ 916 00a2 1168     		ldr	r1, [r2]
+ 917 00a4 5268     		ldr	r2, [r2, #4]
+ 918 00a6 A047     		blx	r4
+ 919              	.LVL3:
+ 259:../src/drivers/nand/Spi_nand_driver.c **** 									  add, Transfer_Length);
+ 260:../src/drivers/nand/Spi_nand_driver.c **** 
+ 261:../src/drivers/nand/Spi_nand_driver.c **** 	return NAND_OK;
+ 920              		.loc 2 261 9
+ 921 00a8 0023     		movs	r3, #0
+ 922              	.L37:
+ 262:../src/drivers/nand/Spi_nand_driver.c **** }
+ 923              		.loc 2 262 1
+ 924 00aa 1800     		movs	r0, r3
+ 925 00ac BD46     		mov	sp, r7
+ 926 00ae 05B0     		add	sp, sp, #20
+ 927              		@ sp needed
+ 928 00b0 90BD     		pop	{r4, r7, pc}
+ 929              		.cfi_endproc
+ 930              	.LFE67:
+ 932              		.text
+ 933              	.Letext0:
+ 934              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 935              		.file 4 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 936              		.file 5 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 937              		.file 6 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+ 938              		.file 7 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_spi.h"
+ 939              		.file 8 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 940              		.file 9 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 941              		.file 10 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 942              		.file 11 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 943              		.file 12 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 944              		.file 13 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+ 945              		.file 14 "<built-in>"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Spi_nand_driver.c
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:16     .text.spi_nand_cs_sel:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:23     .text.spi_nand_cs_sel:00000000 spi_nand_cs_sel
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:86     .bss.s_spinand_spec_info_ptr:00000000 s_spinand_spec_info_ptr
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:83     .bss.s_spinand_spec_info_ptr:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:93     .bss.spi_nand_id:00000000 spi_nand_id
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:90     .bss.spi_nand_id:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:100    .data.NAND_PAGE_SIZE:00000000 NAND_PAGE_SIZE
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:97     .data.NAND_PAGE_SIZE:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:107    .data.NAND_PAGE_PER_BLK:00000000 NAND_PAGE_PER_BLK
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:104    .data.NAND_PAGE_PER_BLK:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:110    .data.s_apinand_cfg_tab:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:113    .data.s_apinand_cfg_tab:00000000 s_apinand_cfg_tab
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:180    .text.spi_nandflash_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:187    .text.spi_nandflash_init:00000000 spi_nandflash_init
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:302    .text.spi_nand_rw_byte:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:309    .text.spi_nand_rw_byte:00000000 spi_nand_rw_byte
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:378    .text.spi_nand_reset:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:385    .text.spi_nand_reset:00000000 spi_nand_reset
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:415    .text.spi_nand_read_id:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:421    .text.spi_nand_read_id:00000000 spi_nand_read_id
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:499    .rodata:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:500    .rodata:00000000 .LC0
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:503    .rodata:00000028 .LC2
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:507    .rodata:0000006c .LC3
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:510    .text.spinand_get_specinfo:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:517    .text.spinand_get_specinfo:00000000 spinand_get_specinfo
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:792    .text.spinand_get_specinfo:000001c4 $d
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:797    .text.NANDFLASH_Read:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccBN2RJz.s:804    .text.NANDFLASH_Read:00000000 NANDFLASH_Read
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.Spi_nand_driver.h.23.eb117548492f45290d19a14af5cfae91
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+
+UNDEFINED SYMBOLS
+gpio_bit_reset
+spi_i2s_flag_get
+gpio_bit_set
+g_spinand_gd
+g_spinand_esmt
+g_spinand_ds
+g_spinand_foresee
+spi_disable
+rcu_periph_clock_enable
+gpio_af_set
+gpio_mode_set
+gpio_output_options_set
+spi_init
+spi_enable
+spi_i2s_data_transmit
+spi_i2s_data_receive
+printf
+memcmp
+puts

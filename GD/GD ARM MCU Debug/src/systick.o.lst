@@ -1,0 +1,2371 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"systick.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.__NVIC_SetPriority,"ax",%progbits
+  16              		.align	1
+  17              		.arch armv8-m.base
+  18              		.syntax unified
+  19              		.code	16
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	__NVIC_SetPriority:
+  24              	.LFB51:
+  25              		.file 1 "../Firmware/CMSIS/core_cm23.h"
+   1:../Firmware/CMSIS/core_cm23.h **** /**************************************************************************//**
+   2:../Firmware/CMSIS/core_cm23.h ****  * @file     core_cm23.h
+   3:../Firmware/CMSIS/core_cm23.h ****  * @brief    CMSIS Cortex-M23 Core Peripheral Access Layer Header File
+   4:../Firmware/CMSIS/core_cm23.h ****  * @version  V5.0.1
+   5:../Firmware/CMSIS/core_cm23.h ****  * @date     25. November 2016
+   6:../Firmware/CMSIS/core_cm23.h ****  ******************************************************************************/
+   7:../Firmware/CMSIS/core_cm23.h **** /*
+   8:../Firmware/CMSIS/core_cm23.h ****  * Copyright (c) 2009-2016 ARM Limited. All rights reserved.
+   9:../Firmware/CMSIS/core_cm23.h ****  *
+  10:../Firmware/CMSIS/core_cm23.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:../Firmware/CMSIS/core_cm23.h ****  *
+  12:../Firmware/CMSIS/core_cm23.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:../Firmware/CMSIS/core_cm23.h ****  * not use this file except in compliance with the License.
+  14:../Firmware/CMSIS/core_cm23.h ****  * You may obtain a copy of the License at
+  15:../Firmware/CMSIS/core_cm23.h ****  *
+  16:../Firmware/CMSIS/core_cm23.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:../Firmware/CMSIS/core_cm23.h ****  *
+  18:../Firmware/CMSIS/core_cm23.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:../Firmware/CMSIS/core_cm23.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:../Firmware/CMSIS/core_cm23.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:../Firmware/CMSIS/core_cm23.h ****  * See the License for the specific language governing permissions and
+  22:../Firmware/CMSIS/core_cm23.h ****  * limitations under the License.
+  23:../Firmware/CMSIS/core_cm23.h ****  */
+  24:../Firmware/CMSIS/core_cm23.h **** 
+  25:../Firmware/CMSIS/core_cm23.h **** #if   defined ( __ICCARM__ )
+  26:../Firmware/CMSIS/core_cm23.h ****  #pragma system_include         /* treat file as system include file for MISRA check */
+  27:../Firmware/CMSIS/core_cm23.h **** #elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  28:../Firmware/CMSIS/core_cm23.h ****   #pragma clang system_header   /* treat file as system include file */
+  29:../Firmware/CMSIS/core_cm23.h **** #endif
+  30:../Firmware/CMSIS/core_cm23.h **** 
+  31:../Firmware/CMSIS/core_cm23.h **** #ifndef __CORE_CM23_H_GENERIC
+  32:../Firmware/CMSIS/core_cm23.h **** #define __CORE_CM23_H_GENERIC
+  33:../Firmware/CMSIS/core_cm23.h **** 
+  34:../Firmware/CMSIS/core_cm23.h **** #include <stdint.h>
+  35:../Firmware/CMSIS/core_cm23.h **** 
+  36:../Firmware/CMSIS/core_cm23.h **** #ifdef __cplusplus
+  37:../Firmware/CMSIS/core_cm23.h ****  extern "C" {
+  38:../Firmware/CMSIS/core_cm23.h **** #endif
+  39:../Firmware/CMSIS/core_cm23.h **** 
+  40:../Firmware/CMSIS/core_cm23.h **** /**
+  41:../Firmware/CMSIS/core_cm23.h ****   \page CMSIS_MISRA_Exceptions  MISRA-C:2004 Compliance Exceptions
+  42:../Firmware/CMSIS/core_cm23.h ****   CMSIS violates the following MISRA-C:2004 rules:
+  43:../Firmware/CMSIS/core_cm23.h **** 
+  44:../Firmware/CMSIS/core_cm23.h ****    \li Required Rule 8.5, object/function definition in header file.<br>
+  45:../Firmware/CMSIS/core_cm23.h ****      Function definitions in header files are used to allow 'inlining'.
+  46:../Firmware/CMSIS/core_cm23.h **** 
+  47:../Firmware/CMSIS/core_cm23.h ****    \li Required Rule 18.4, declaration of union type or object of union type: '{...}'.<br>
+  48:../Firmware/CMSIS/core_cm23.h ****      Unions are used for effective representation of core registers.
+  49:../Firmware/CMSIS/core_cm23.h **** 
+  50:../Firmware/CMSIS/core_cm23.h ****    \li Advisory Rule 19.7, Function-like macro defined.<br>
+  51:../Firmware/CMSIS/core_cm23.h ****      Function-like macros are used to allow more efficient code.
+  52:../Firmware/CMSIS/core_cm23.h ****  */
+  53:../Firmware/CMSIS/core_cm23.h **** 
+  54:../Firmware/CMSIS/core_cm23.h **** 
+  55:../Firmware/CMSIS/core_cm23.h **** /*******************************************************************************
+  56:../Firmware/CMSIS/core_cm23.h ****  *                 CMSIS definitions
+  57:../Firmware/CMSIS/core_cm23.h ****  ******************************************************************************/
+  58:../Firmware/CMSIS/core_cm23.h **** /**
+  59:../Firmware/CMSIS/core_cm23.h ****   \ingroup Cortex_M23
+  60:../Firmware/CMSIS/core_cm23.h ****   @{
+  61:../Firmware/CMSIS/core_cm23.h ****  */
+  62:../Firmware/CMSIS/core_cm23.h **** 
+  63:../Firmware/CMSIS/core_cm23.h **** /*  CMSIS cmGrebe definitions */
+  64:../Firmware/CMSIS/core_cm23.h **** #define __CM23_CMSIS_VERSION_MAIN  ( 5U)                                       /*!< [31:16] CMSIS H
+  65:../Firmware/CMSIS/core_cm23.h **** #define __CM23_CMSIS_VERSION_SUB   ( 0U)                                       /*!< [15:0]  CMSIS H
+  66:../Firmware/CMSIS/core_cm23.h **** #define __CM23_CMSIS_VERSION       ((__CM23_CMSIS_VERSION_MAIN << 16U) | \
+  67:../Firmware/CMSIS/core_cm23.h ****                                      __CM23_CMSIS_VERSION_SUB           )      /*!< CMSIS HAL versi
+  68:../Firmware/CMSIS/core_cm23.h **** 
+  69:../Firmware/CMSIS/core_cm23.h **** #define __CORTEX_M                     (23U)                                   /*!< Cortex-M Core *
+  70:../Firmware/CMSIS/core_cm23.h **** 
+  71:../Firmware/CMSIS/core_cm23.h **** /** __FPU_USED indicates whether an FPU is used or not.
+  72:../Firmware/CMSIS/core_cm23.h ****     This core does not support an FPU at all
+  73:../Firmware/CMSIS/core_cm23.h **** */
+  74:../Firmware/CMSIS/core_cm23.h **** #define __FPU_USED       0U
+  75:../Firmware/CMSIS/core_cm23.h **** 
+  76:../Firmware/CMSIS/core_cm23.h **** #if defined ( __CC_ARM )
+  77:../Firmware/CMSIS/core_cm23.h ****   #if defined __TARGET_FPU_VFP
+  78:../Firmware/CMSIS/core_cm23.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  79:../Firmware/CMSIS/core_cm23.h ****   #endif
+  80:../Firmware/CMSIS/core_cm23.h **** 
+  81:../Firmware/CMSIS/core_cm23.h **** #elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  82:../Firmware/CMSIS/core_cm23.h ****   #if defined __ARM_PCS_VFP
+  83:../Firmware/CMSIS/core_cm23.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  84:../Firmware/CMSIS/core_cm23.h ****   #endif
+  85:../Firmware/CMSIS/core_cm23.h **** 
+  86:../Firmware/CMSIS/core_cm23.h **** #elif defined ( __GNUC__ )
+  87:../Firmware/CMSIS/core_cm23.h ****   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
+  88:../Firmware/CMSIS/core_cm23.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  89:../Firmware/CMSIS/core_cm23.h ****   #endif
+  90:../Firmware/CMSIS/core_cm23.h **** 
+  91:../Firmware/CMSIS/core_cm23.h **** #elif defined ( __ICCARM__ )
+  92:../Firmware/CMSIS/core_cm23.h ****   #if defined __ARMVFP__
+  93:../Firmware/CMSIS/core_cm23.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  94:../Firmware/CMSIS/core_cm23.h ****   #endif
+  95:../Firmware/CMSIS/core_cm23.h **** 
+  96:../Firmware/CMSIS/core_cm23.h **** #elif defined ( __TI_ARM__ )
+  97:../Firmware/CMSIS/core_cm23.h ****   #if defined __TI_VFP_SUPPORT__
+  98:../Firmware/CMSIS/core_cm23.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  99:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 100:../Firmware/CMSIS/core_cm23.h **** 
+ 101:../Firmware/CMSIS/core_cm23.h **** #elif defined ( __TASKING__ )
+ 102:../Firmware/CMSIS/core_cm23.h ****   #if defined __FPU_VFP__
+ 103:../Firmware/CMSIS/core_cm23.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 104:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 105:../Firmware/CMSIS/core_cm23.h **** 
+ 106:../Firmware/CMSIS/core_cm23.h **** #elif defined ( __CSMC__ )
+ 107:../Firmware/CMSIS/core_cm23.h ****   #if ( __CSMC__ & 0x400U)
+ 108:../Firmware/CMSIS/core_cm23.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 109:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 110:../Firmware/CMSIS/core_cm23.h **** 
+ 111:../Firmware/CMSIS/core_cm23.h **** #endif
+ 112:../Firmware/CMSIS/core_cm23.h **** 
+ 113:../Firmware/CMSIS/core_cm23.h **** #include "cmsis_compiler.h"               /* CMSIS compiler specific defines */
+ 114:../Firmware/CMSIS/core_cm23.h **** 
+ 115:../Firmware/CMSIS/core_cm23.h **** 
+ 116:../Firmware/CMSIS/core_cm23.h **** #ifdef __cplusplus
+ 117:../Firmware/CMSIS/core_cm23.h **** }
+ 118:../Firmware/CMSIS/core_cm23.h **** #endif
+ 119:../Firmware/CMSIS/core_cm23.h **** 
+ 120:../Firmware/CMSIS/core_cm23.h **** #endif /* __CORE_CM23_H_GENERIC */
+ 121:../Firmware/CMSIS/core_cm23.h **** 
+ 122:../Firmware/CMSIS/core_cm23.h **** #ifndef __CMSIS_GENERIC
+ 123:../Firmware/CMSIS/core_cm23.h **** 
+ 124:../Firmware/CMSIS/core_cm23.h **** #ifndef __CORE_CM23_H_DEPENDANT
+ 125:../Firmware/CMSIS/core_cm23.h **** #define __CORE_CM23_H_DEPENDANT
+ 126:../Firmware/CMSIS/core_cm23.h **** 
+ 127:../Firmware/CMSIS/core_cm23.h **** #ifdef __cplusplus
+ 128:../Firmware/CMSIS/core_cm23.h ****  extern "C" {
+ 129:../Firmware/CMSIS/core_cm23.h **** #endif
+ 130:../Firmware/CMSIS/core_cm23.h **** 
+ 131:../Firmware/CMSIS/core_cm23.h **** /* check device defines and use defaults */
+ 132:../Firmware/CMSIS/core_cm23.h **** #if defined __CHECK_DEVICE_DEFINES
+ 133:../Firmware/CMSIS/core_cm23.h ****   #ifndef __CM23_REV
+ 134:../Firmware/CMSIS/core_cm23.h ****     #define __CM23_REV                0x0000U
+ 135:../Firmware/CMSIS/core_cm23.h ****     #warning "__CM23_REV not defined in device header file; using default!"
+ 136:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 137:../Firmware/CMSIS/core_cm23.h **** 
+ 138:../Firmware/CMSIS/core_cm23.h ****   #ifndef __FPU_PRESENT
+ 139:../Firmware/CMSIS/core_cm23.h ****     #define __FPU_PRESENT             0U
+ 140:../Firmware/CMSIS/core_cm23.h ****     #warning "__FPU_PRESENT not defined in device header file; using default!"
+ 141:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 142:../Firmware/CMSIS/core_cm23.h **** 
+ 143:../Firmware/CMSIS/core_cm23.h ****   #ifndef __MPU_PRESENT
+ 144:../Firmware/CMSIS/core_cm23.h ****     #define __MPU_PRESENT             0U
+ 145:../Firmware/CMSIS/core_cm23.h ****     #warning "__MPU_PRESENT not defined in device header file; using default!"
+ 146:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 147:../Firmware/CMSIS/core_cm23.h **** 
+ 148:../Firmware/CMSIS/core_cm23.h ****   #ifndef __SAUREGION_PRESENT
+ 149:../Firmware/CMSIS/core_cm23.h ****     #define __SAUREGION_PRESENT       0U
+ 150:../Firmware/CMSIS/core_cm23.h ****     #warning "__SAUREGION_PRESENT not defined in device header file; using default!"
+ 151:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 152:../Firmware/CMSIS/core_cm23.h **** 
+ 153:../Firmware/CMSIS/core_cm23.h ****   #ifndef __VTOR_PRESENT
+ 154:../Firmware/CMSIS/core_cm23.h ****     #define __VTOR_PRESENT            0U
+ 155:../Firmware/CMSIS/core_cm23.h ****     #warning "__VTOR_PRESENT not defined in device header file; using default!"
+ 156:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 157:../Firmware/CMSIS/core_cm23.h **** 
+ 158:../Firmware/CMSIS/core_cm23.h ****   #ifndef __NVIC_PRIO_BITS
+ 159:../Firmware/CMSIS/core_cm23.h ****     #define __NVIC_PRIO_BITS          2U
+ 160:../Firmware/CMSIS/core_cm23.h ****     #warning "__NVIC_PRIO_BITS not defined in device header file; using default!"
+ 161:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 162:../Firmware/CMSIS/core_cm23.h **** 
+ 163:../Firmware/CMSIS/core_cm23.h ****   #ifndef __Vendor_SysTickConfig
+ 164:../Firmware/CMSIS/core_cm23.h ****     #define __Vendor_SysTickConfig    0U
+ 165:../Firmware/CMSIS/core_cm23.h ****     #warning "__Vendor_SysTickConfig not defined in device header file; using default!"
+ 166:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 167:../Firmware/CMSIS/core_cm23.h **** 
+ 168:../Firmware/CMSIS/core_cm23.h ****   #ifndef __ETM_PRESENT
+ 169:../Firmware/CMSIS/core_cm23.h ****     #define __ETM_PRESENT             0U
+ 170:../Firmware/CMSIS/core_cm23.h ****     #warning "__ETM_PRESENT not defined in device header file; using default!"
+ 171:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 172:../Firmware/CMSIS/core_cm23.h **** 
+ 173:../Firmware/CMSIS/core_cm23.h ****   #ifndef __MTB_PRESENT
+ 174:../Firmware/CMSIS/core_cm23.h ****     #define __MTB_PRESENT             0U
+ 175:../Firmware/CMSIS/core_cm23.h ****     #warning "__MTB_PRESENT not defined in device header file; using default!"
+ 176:../Firmware/CMSIS/core_cm23.h ****   #endif
+ 177:../Firmware/CMSIS/core_cm23.h **** 
+ 178:../Firmware/CMSIS/core_cm23.h **** #endif
+ 179:../Firmware/CMSIS/core_cm23.h **** 
+ 180:../Firmware/CMSIS/core_cm23.h **** /* IO definitions (access restrictions to peripheral registers) */
+ 181:../Firmware/CMSIS/core_cm23.h **** /**
+ 182:../Firmware/CMSIS/core_cm23.h ****     \defgroup CMSIS_glob_defs CMSIS Global Defines
+ 183:../Firmware/CMSIS/core_cm23.h **** 
+ 184:../Firmware/CMSIS/core_cm23.h ****     <strong>IO Type Qualifiers</strong> are used
+ 185:../Firmware/CMSIS/core_cm23.h ****     \li to specify the access to peripheral variables.
+ 186:../Firmware/CMSIS/core_cm23.h ****     \li for automatic generation of peripheral register debug information.
+ 187:../Firmware/CMSIS/core_cm23.h **** */
+ 188:../Firmware/CMSIS/core_cm23.h **** #ifdef __cplusplus
+ 189:../Firmware/CMSIS/core_cm23.h ****   #define   __I     volatile             /*!< Defines 'read only' permissions */
+ 190:../Firmware/CMSIS/core_cm23.h **** #else
+ 191:../Firmware/CMSIS/core_cm23.h ****   #define   __I     volatile const       /*!< Defines 'read only' permissions */
+ 192:../Firmware/CMSIS/core_cm23.h **** #endif
+ 193:../Firmware/CMSIS/core_cm23.h **** #define     __O     volatile             /*!< Defines 'write only' permissions */
+ 194:../Firmware/CMSIS/core_cm23.h **** #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+ 195:../Firmware/CMSIS/core_cm23.h **** 
+ 196:../Firmware/CMSIS/core_cm23.h **** /* following defines should be used for structure members */
+ 197:../Firmware/CMSIS/core_cm23.h **** #define     __IM     volatile const      /*! Defines 'read only' structure member permissions */
+ 198:../Firmware/CMSIS/core_cm23.h **** #define     __OM     volatile            /*! Defines 'write only' structure member permissions */
+ 199:../Firmware/CMSIS/core_cm23.h **** #define     __IOM    volatile            /*! Defines 'read / write' structure member permissions */
+ 200:../Firmware/CMSIS/core_cm23.h **** 
+ 201:../Firmware/CMSIS/core_cm23.h **** /*@} end of group Cortex_M23 */
+ 202:../Firmware/CMSIS/core_cm23.h **** 
+ 203:../Firmware/CMSIS/core_cm23.h **** 
+ 204:../Firmware/CMSIS/core_cm23.h **** 
+ 205:../Firmware/CMSIS/core_cm23.h **** /*******************************************************************************
+ 206:../Firmware/CMSIS/core_cm23.h ****  *                 Register Abstraction
+ 207:../Firmware/CMSIS/core_cm23.h ****   Core Register contain:
+ 208:../Firmware/CMSIS/core_cm23.h ****   - Core Register
+ 209:../Firmware/CMSIS/core_cm23.h ****   - Core NVIC Register
+ 210:../Firmware/CMSIS/core_cm23.h ****   - Core SCB Register
+ 211:../Firmware/CMSIS/core_cm23.h ****   - Core SysTick Register
+ 212:../Firmware/CMSIS/core_cm23.h ****   - Core Debug Register
+ 213:../Firmware/CMSIS/core_cm23.h ****   - Core MPU Register
+ 214:../Firmware/CMSIS/core_cm23.h ****   - Core SAU Register
+ 215:../Firmware/CMSIS/core_cm23.h ****  ******************************************************************************/
+ 216:../Firmware/CMSIS/core_cm23.h **** /**
+ 217:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_core_register Defines and Type Definitions
+ 218:../Firmware/CMSIS/core_cm23.h ****   \brief Type definitions and defines for Cortex-M processor based devices.
+ 219:../Firmware/CMSIS/core_cm23.h **** */
+ 220:../Firmware/CMSIS/core_cm23.h **** 
+ 221:../Firmware/CMSIS/core_cm23.h **** /**
+ 222:../Firmware/CMSIS/core_cm23.h ****   \ingroup    CMSIS_core_register
+ 223:../Firmware/CMSIS/core_cm23.h ****   \defgroup   CMSIS_CORE  Status and Control Registers
+ 224:../Firmware/CMSIS/core_cm23.h ****   \brief      Core Register type definitions.
+ 225:../Firmware/CMSIS/core_cm23.h ****   @{
+ 226:../Firmware/CMSIS/core_cm23.h ****  */
+ 227:../Firmware/CMSIS/core_cm23.h **** 
+ 228:../Firmware/CMSIS/core_cm23.h **** /**
+ 229:../Firmware/CMSIS/core_cm23.h ****   \brief  Union type to access the Application Program Status Register (APSR).
+ 230:../Firmware/CMSIS/core_cm23.h ****  */
+ 231:../Firmware/CMSIS/core_cm23.h **** typedef union
+ 232:../Firmware/CMSIS/core_cm23.h **** {
+ 233:../Firmware/CMSIS/core_cm23.h ****   struct
+ 234:../Firmware/CMSIS/core_cm23.h ****   {
+ 235:../Firmware/CMSIS/core_cm23.h ****     uint32_t _reserved0:28;              /*!< bit:  0..27  Reserved */
+ 236:../Firmware/CMSIS/core_cm23.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 237:../Firmware/CMSIS/core_cm23.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 238:../Firmware/CMSIS/core_cm23.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 239:../Firmware/CMSIS/core_cm23.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 240:../Firmware/CMSIS/core_cm23.h ****   } b;                                   /*!< Structure used for bit  access */
+ 241:../Firmware/CMSIS/core_cm23.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 242:../Firmware/CMSIS/core_cm23.h **** } APSR_Type;
+ 243:../Firmware/CMSIS/core_cm23.h **** 
+ 244:../Firmware/CMSIS/core_cm23.h **** /* APSR Register Definitions */
+ 245:../Firmware/CMSIS/core_cm23.h **** #define APSR_N_Pos                         31U                                            /*!< APSR
+ 246:../Firmware/CMSIS/core_cm23.h **** #define APSR_N_Msk                         (1UL << APSR_N_Pos)                            /*!< APSR
+ 247:../Firmware/CMSIS/core_cm23.h **** 
+ 248:../Firmware/CMSIS/core_cm23.h **** #define APSR_Z_Pos                         30U                                            /*!< APSR
+ 249:../Firmware/CMSIS/core_cm23.h **** #define APSR_Z_Msk                         (1UL << APSR_Z_Pos)                            /*!< APSR
+ 250:../Firmware/CMSIS/core_cm23.h **** 
+ 251:../Firmware/CMSIS/core_cm23.h **** #define APSR_C_Pos                         29U                                            /*!< APSR
+ 252:../Firmware/CMSIS/core_cm23.h **** #define APSR_C_Msk                         (1UL << APSR_C_Pos)                            /*!< APSR
+ 253:../Firmware/CMSIS/core_cm23.h **** 
+ 254:../Firmware/CMSIS/core_cm23.h **** #define APSR_V_Pos                         28U                                            /*!< APSR
+ 255:../Firmware/CMSIS/core_cm23.h **** #define APSR_V_Msk                         (1UL << APSR_V_Pos)                            /*!< APSR
+ 256:../Firmware/CMSIS/core_cm23.h **** 
+ 257:../Firmware/CMSIS/core_cm23.h **** 
+ 258:../Firmware/CMSIS/core_cm23.h **** /**
+ 259:../Firmware/CMSIS/core_cm23.h ****   \brief  Union type to access the Interrupt Program Status Register (IPSR).
+ 260:../Firmware/CMSIS/core_cm23.h ****  */
+ 261:../Firmware/CMSIS/core_cm23.h **** typedef union
+ 262:../Firmware/CMSIS/core_cm23.h **** {
+ 263:../Firmware/CMSIS/core_cm23.h ****   struct
+ 264:../Firmware/CMSIS/core_cm23.h ****   {
+ 265:../Firmware/CMSIS/core_cm23.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 266:../Firmware/CMSIS/core_cm23.h ****     uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved */
+ 267:../Firmware/CMSIS/core_cm23.h ****   } b;                                   /*!< Structure used for bit  access */
+ 268:../Firmware/CMSIS/core_cm23.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 269:../Firmware/CMSIS/core_cm23.h **** } IPSR_Type;
+ 270:../Firmware/CMSIS/core_cm23.h **** 
+ 271:../Firmware/CMSIS/core_cm23.h **** /* IPSR Register Definitions */
+ 272:../Firmware/CMSIS/core_cm23.h **** #define IPSR_ISR_Pos                        0U                                            /*!< IPSR
+ 273:../Firmware/CMSIS/core_cm23.h **** #define IPSR_ISR_Msk                       (0x1FFUL /*<< IPSR_ISR_Pos*/)                  /*!< IPSR
+ 274:../Firmware/CMSIS/core_cm23.h **** 
+ 275:../Firmware/CMSIS/core_cm23.h **** 
+ 276:../Firmware/CMSIS/core_cm23.h **** /**
+ 277:../Firmware/CMSIS/core_cm23.h ****   \brief  Union type to access the Special-Purpose Program Status Registers (xPSR).
+ 278:../Firmware/CMSIS/core_cm23.h ****  */
+ 279:../Firmware/CMSIS/core_cm23.h **** typedef union
+ 280:../Firmware/CMSIS/core_cm23.h **** {
+ 281:../Firmware/CMSIS/core_cm23.h ****   struct
+ 282:../Firmware/CMSIS/core_cm23.h ****   {
+ 283:../Firmware/CMSIS/core_cm23.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 284:../Firmware/CMSIS/core_cm23.h ****     uint32_t _reserved0:15;              /*!< bit:  9..23  Reserved */
+ 285:../Firmware/CMSIS/core_cm23.h ****     uint32_t T:1;                        /*!< bit:     24  Thumb bit        (read 0) */
+ 286:../Firmware/CMSIS/core_cm23.h ****     uint32_t _reserved1:3;               /*!< bit: 25..27  Reserved */
+ 287:../Firmware/CMSIS/core_cm23.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 288:../Firmware/CMSIS/core_cm23.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 289:../Firmware/CMSIS/core_cm23.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 290:../Firmware/CMSIS/core_cm23.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 291:../Firmware/CMSIS/core_cm23.h ****   } b;                                   /*!< Structure used for bit  access */
+ 292:../Firmware/CMSIS/core_cm23.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 293:../Firmware/CMSIS/core_cm23.h **** } xPSR_Type;
+ 294:../Firmware/CMSIS/core_cm23.h **** 
+ 295:../Firmware/CMSIS/core_cm23.h **** /* xPSR Register Definitions */
+ 296:../Firmware/CMSIS/core_cm23.h **** #define xPSR_N_Pos                         31U                                            /*!< xPSR
+ 297:../Firmware/CMSIS/core_cm23.h **** #define xPSR_N_Msk                         (1UL << xPSR_N_Pos)                            /*!< xPSR
+ 298:../Firmware/CMSIS/core_cm23.h **** 
+ 299:../Firmware/CMSIS/core_cm23.h **** #define xPSR_Z_Pos                         30U                                            /*!< xPSR
+ 300:../Firmware/CMSIS/core_cm23.h **** #define xPSR_Z_Msk                         (1UL << xPSR_Z_Pos)                            /*!< xPSR
+ 301:../Firmware/CMSIS/core_cm23.h **** 
+ 302:../Firmware/CMSIS/core_cm23.h **** #define xPSR_C_Pos                         29U                                            /*!< xPSR
+ 303:../Firmware/CMSIS/core_cm23.h **** #define xPSR_C_Msk                         (1UL << xPSR_C_Pos)                            /*!< xPSR
+ 304:../Firmware/CMSIS/core_cm23.h **** 
+ 305:../Firmware/CMSIS/core_cm23.h **** #define xPSR_V_Pos                         28U                                            /*!< xPSR
+ 306:../Firmware/CMSIS/core_cm23.h **** #define xPSR_V_Msk                         (1UL << xPSR_V_Pos)                            /*!< xPSR
+ 307:../Firmware/CMSIS/core_cm23.h **** 
+ 308:../Firmware/CMSIS/core_cm23.h **** #define xPSR_T_Pos                         24U                                            /*!< xPSR
+ 309:../Firmware/CMSIS/core_cm23.h **** #define xPSR_T_Msk                         (1UL << xPSR_T_Pos)                            /*!< xPSR
+ 310:../Firmware/CMSIS/core_cm23.h **** 
+ 311:../Firmware/CMSIS/core_cm23.h **** #define xPSR_ISR_Pos                        0U                                            /*!< xPSR
+ 312:../Firmware/CMSIS/core_cm23.h **** #define xPSR_ISR_Msk                       (0x1FFUL /*<< xPSR_ISR_Pos*/)                  /*!< xPSR
+ 313:../Firmware/CMSIS/core_cm23.h **** 
+ 314:../Firmware/CMSIS/core_cm23.h **** 
+ 315:../Firmware/CMSIS/core_cm23.h **** /**
+ 316:../Firmware/CMSIS/core_cm23.h ****   \brief  Union type to access the Control Registers (CONTROL).
+ 317:../Firmware/CMSIS/core_cm23.h ****  */
+ 318:../Firmware/CMSIS/core_cm23.h **** typedef union
+ 319:../Firmware/CMSIS/core_cm23.h **** {
+ 320:../Firmware/CMSIS/core_cm23.h ****   struct
+ 321:../Firmware/CMSIS/core_cm23.h ****   {
+ 322:../Firmware/CMSIS/core_cm23.h ****     uint32_t nPRIV:1;                    /*!< bit:      0  Execution privilege in Thread mode */
+ 323:../Firmware/CMSIS/core_cm23.h ****     uint32_t SPSEL:1;                    /*!< bit:      1  Stack-pointer select */
+ 324:../Firmware/CMSIS/core_cm23.h ****     uint32_t _reserved1:30;              /*!< bit:  2..31  Reserved */
+ 325:../Firmware/CMSIS/core_cm23.h ****   } b;                                   /*!< Structure used for bit  access */
+ 326:../Firmware/CMSIS/core_cm23.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 327:../Firmware/CMSIS/core_cm23.h **** } CONTROL_Type;
+ 328:../Firmware/CMSIS/core_cm23.h **** 
+ 329:../Firmware/CMSIS/core_cm23.h **** /* CONTROL Register Definitions */
+ 330:../Firmware/CMSIS/core_cm23.h **** #define CONTROL_SPSEL_Pos                   1U                                            /*!< CONT
+ 331:../Firmware/CMSIS/core_cm23.h **** #define CONTROL_SPSEL_Msk                  (1UL << CONTROL_SPSEL_Pos)                     /*!< CONT
+ 332:../Firmware/CMSIS/core_cm23.h **** 
+ 333:../Firmware/CMSIS/core_cm23.h **** #define CONTROL_nPRIV_Pos                   0U                                            /*!< CONT
+ 334:../Firmware/CMSIS/core_cm23.h **** #define CONTROL_nPRIV_Msk                  (1UL /*<< CONTROL_nPRIV_Pos*/)                 /*!< CONT
+ 335:../Firmware/CMSIS/core_cm23.h **** 
+ 336:../Firmware/CMSIS/core_cm23.h **** /*@} end of group CMSIS_CORE */
+ 337:../Firmware/CMSIS/core_cm23.h **** 
+ 338:../Firmware/CMSIS/core_cm23.h **** 
+ 339:../Firmware/CMSIS/core_cm23.h **** /**
+ 340:../Firmware/CMSIS/core_cm23.h ****   \ingroup    CMSIS_core_register
+ 341:../Firmware/CMSIS/core_cm23.h ****   \defgroup   CMSIS_NVIC  Nested Vectored Interrupt Controller (NVIC)
+ 342:../Firmware/CMSIS/core_cm23.h ****   \brief      Type definitions for the NVIC Registers
+ 343:../Firmware/CMSIS/core_cm23.h ****   @{
+ 344:../Firmware/CMSIS/core_cm23.h ****  */
+ 345:../Firmware/CMSIS/core_cm23.h **** 
+ 346:../Firmware/CMSIS/core_cm23.h **** /**
+ 347:../Firmware/CMSIS/core_cm23.h ****   \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ 348:../Firmware/CMSIS/core_cm23.h ****  */
+ 349:../Firmware/CMSIS/core_cm23.h **** typedef struct
+ 350:../Firmware/CMSIS/core_cm23.h **** {
+ 351:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t ISER[16U];              /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+ 352:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED0[16U];
+ 353:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t ICER[16U];              /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register 
+ 354:../Firmware/CMSIS/core_cm23.h ****         uint32_t RSERVED1[16U];
+ 355:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t ISPR[16U];              /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register *
+ 356:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED2[16U];
+ 357:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t ICPR[16U];              /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
+ 358:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED3[16U];
+ 359:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t IABR[16U];              /*!< Offset: 0x200 (R/W)  Interrupt Active bit Register */
+ 360:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED4[16U];
+ 361:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t ITNS[16U];              /*!< Offset: 0x280 (R/W)  Interrupt Non-Secure State Regis
+ 362:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED5[16U];
+ 363:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t IPR[124U];              /*!< Offset: 0x300 (R/W)  Interrupt Priority Register */
+ 364:../Firmware/CMSIS/core_cm23.h **** }  NVIC_Type;
+ 365:../Firmware/CMSIS/core_cm23.h **** 
+ 366:../Firmware/CMSIS/core_cm23.h **** /*@} end of group CMSIS_NVIC */
+ 367:../Firmware/CMSIS/core_cm23.h **** 
+ 368:../Firmware/CMSIS/core_cm23.h **** 
+ 369:../Firmware/CMSIS/core_cm23.h **** /**
+ 370:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_core_register
+ 371:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_SCB     System Control Block (SCB)
+ 372:../Firmware/CMSIS/core_cm23.h ****   \brief    Type definitions for the System Control Block Registers
+ 373:../Firmware/CMSIS/core_cm23.h ****   @{
+ 374:../Firmware/CMSIS/core_cm23.h ****  */
+ 375:../Firmware/CMSIS/core_cm23.h **** 
+ 376:../Firmware/CMSIS/core_cm23.h **** /**
+ 377:../Firmware/CMSIS/core_cm23.h ****   \brief  Structure type to access the System Control Block (SCB).
+ 378:../Firmware/CMSIS/core_cm23.h ****  */
+ 379:../Firmware/CMSIS/core_cm23.h **** typedef struct
+ 380:../Firmware/CMSIS/core_cm23.h **** {
+ 381:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t CPUID;                  /*!< Offset: 0x000 (R/ )  CPUID Base Register */
+ 382:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t ICSR;                   /*!< Offset: 0x004 (R/W)  Interrupt Control and State Regi
+ 383:../Firmware/CMSIS/core_cm23.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 384:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t VTOR;                   /*!< Offset: 0x008 (R/W)  Vector Table Offset Register */
+ 385:../Firmware/CMSIS/core_cm23.h **** #else
+ 386:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED0;
+ 387:../Firmware/CMSIS/core_cm23.h **** #endif
+ 388:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t AIRCR;                  /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset 
+ 389:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t SCR;                    /*!< Offset: 0x010 (R/W)  System Control Register */
+ 390:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t CCR;                    /*!< Offset: 0x014 (R/W)  Configuration Control Register *
+ 391:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED1;
+ 392:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t SHPR[2U];               /*!< Offset: 0x01C (R/W)  System Handlers Priority Registe
+ 393:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t SHCSR;                  /*!< Offset: 0x024 (R/W)  System Handler Control and State
+ 394:../Firmware/CMSIS/core_cm23.h **** } SCB_Type;
+ 395:../Firmware/CMSIS/core_cm23.h **** 
+ 396:../Firmware/CMSIS/core_cm23.h **** /* SCB CPUID Register Definitions */
+ 397:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_IMPLEMENTER_Pos          24U                                            /*!< SCB 
+ 398:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_IMPLEMENTER_Msk          (0xFFUL << SCB_CPUID_IMPLEMENTER_Pos)          /*!< SCB 
+ 399:../Firmware/CMSIS/core_cm23.h **** 
+ 400:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_VARIANT_Pos              20U                                            /*!< SCB 
+ 401:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_VARIANT_Msk              (0xFUL << SCB_CPUID_VARIANT_Pos)               /*!< SCB 
+ 402:../Firmware/CMSIS/core_cm23.h **** 
+ 403:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_ARCHITECTURE_Pos         16U                                            /*!< SCB 
+ 404:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_ARCHITECTURE_Msk         (0xFUL << SCB_CPUID_ARCHITECTURE_Pos)          /*!< SCB 
+ 405:../Firmware/CMSIS/core_cm23.h **** 
+ 406:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_PARTNO_Pos                4U                                            /*!< SCB 
+ 407:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFUL << SCB_CPUID_PARTNO_Pos)              /*!< SCB 
+ 408:../Firmware/CMSIS/core_cm23.h **** 
+ 409:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_REVISION_Pos              0U                                            /*!< SCB 
+ 410:../Firmware/CMSIS/core_cm23.h **** #define SCB_CPUID_REVISION_Msk             (0xFUL /*<< SCB_CPUID_REVISION_Pos*/)          /*!< SCB 
+ 411:../Firmware/CMSIS/core_cm23.h **** 
+ 412:../Firmware/CMSIS/core_cm23.h **** /* SCB Interrupt Control State Register Definitions */
+ 413:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDNMISET_Pos            31U                                            /*!< SCB 
+ 414:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDNMISET_Msk            (1UL << SCB_ICSR_PENDNMISET_Pos)               /*!< SCB 
+ 415:../Firmware/CMSIS/core_cm23.h **** 
+ 416:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDNMICLR_Pos            30U                                            /*!< SCB 
+ 417:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDNMICLR_Msk            (1UL << SCB_ICSR_PENDNMICLR_Pos)               /*!< SCB 
+ 418:../Firmware/CMSIS/core_cm23.h **** 
+ 419:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDSVSET_Pos             28U                                            /*!< SCB 
+ 420:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDSVSET_Msk             (1UL << SCB_ICSR_PENDSVSET_Pos)                /*!< SCB 
+ 421:../Firmware/CMSIS/core_cm23.h **** 
+ 422:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDSVCLR_Pos             27U                                            /*!< SCB 
+ 423:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDSVCLR_Msk             (1UL << SCB_ICSR_PENDSVCLR_Pos)                /*!< SCB 
+ 424:../Firmware/CMSIS/core_cm23.h **** 
+ 425:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDSTSET_Pos             26U                                            /*!< SCB 
+ 426:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDSTSET_Msk             (1UL << SCB_ICSR_PENDSTSET_Pos)                /*!< SCB 
+ 427:../Firmware/CMSIS/core_cm23.h **** 
+ 428:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDSTCLR_Pos             25U                                            /*!< SCB 
+ 429:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_PENDSTCLR_Msk             (1UL << SCB_ICSR_PENDSTCLR_Pos)                /*!< SCB 
+ 430:../Firmware/CMSIS/core_cm23.h **** 
+ 431:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_STTNS_Pos                 24U                                            /*!< SCB 
+ 432:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_STTNS_Msk                 (1UL << SCB_ICSR_STTNS_Pos)                    /*!< SCB 
+ 433:../Firmware/CMSIS/core_cm23.h **** 
+ 434:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_ISRPREEMPT_Pos            23U                                            /*!< SCB 
+ 435:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_ISRPREEMPT_Msk            (1UL << SCB_ICSR_ISRPREEMPT_Pos)               /*!< SCB 
+ 436:../Firmware/CMSIS/core_cm23.h **** 
+ 437:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_ISRPENDING_Pos            22U                                            /*!< SCB 
+ 438:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_ISRPENDING_Msk            (1UL << SCB_ICSR_ISRPENDING_Pos)               /*!< SCB 
+ 439:../Firmware/CMSIS/core_cm23.h **** 
+ 440:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_VECTPENDING_Pos           12U                                            /*!< SCB 
+ 441:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_VECTPENDING_Msk           (0x1FFUL << SCB_ICSR_VECTPENDING_Pos)          /*!< SCB 
+ 442:../Firmware/CMSIS/core_cm23.h **** 
+ 443:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_RETTOBASE_Pos             11U                                            /*!< SCB 
+ 444:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_RETTOBASE_Msk             (1UL << SCB_ICSR_RETTOBASE_Pos)                /*!< SCB 
+ 445:../Firmware/CMSIS/core_cm23.h **** 
+ 446:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_VECTACTIVE_Pos             0U                                            /*!< SCB 
+ 447:../Firmware/CMSIS/core_cm23.h **** #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFUL /*<< SCB_ICSR_VECTACTIVE_Pos*/)       /*!< SCB 
+ 448:../Firmware/CMSIS/core_cm23.h **** 
+ 449:../Firmware/CMSIS/core_cm23.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 450:../Firmware/CMSIS/core_cm23.h **** /* SCB Vector Table Offset Register Definitions */
+ 451:../Firmware/CMSIS/core_cm23.h **** #define SCB_VTOR_TBLOFF_Pos                 7U                                            /*!< SCB 
+ 452:../Firmware/CMSIS/core_cm23.h **** #define SCB_VTOR_TBLOFF_Msk                (0x1FFFFFFUL << SCB_VTOR_TBLOFF_Pos)           /*!< SCB 
+ 453:../Firmware/CMSIS/core_cm23.h **** #endif
+ 454:../Firmware/CMSIS/core_cm23.h **** 
+ 455:../Firmware/CMSIS/core_cm23.h **** /* SCB Application Interrupt and Reset Control Register Definitions */
+ 456:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_VECTKEY_Pos              16U                                            /*!< SCB 
+ 457:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_VECTKEY_Msk              (0xFFFFUL << SCB_AIRCR_VECTKEY_Pos)            /*!< SCB 
+ 458:../Firmware/CMSIS/core_cm23.h **** 
+ 459:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_VECTKEYSTAT_Pos          16U                                            /*!< SCB 
+ 460:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_VECTKEYSTAT_Msk          (0xFFFFUL << SCB_AIRCR_VECTKEYSTAT_Pos)        /*!< SCB 
+ 461:../Firmware/CMSIS/core_cm23.h **** 
+ 462:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_ENDIANESS_Pos            15U                                            /*!< SCB 
+ 463:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_ENDIANESS_Msk            (1UL << SCB_AIRCR_ENDIANESS_Pos)               /*!< SCB 
+ 464:../Firmware/CMSIS/core_cm23.h **** 
+ 465:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_PRIS_Pos                 14U                                            /*!< SCB 
+ 466:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_PRIS_Msk                 (1UL << SCB_AIRCR_PRIS_Pos)                    /*!< SCB 
+ 467:../Firmware/CMSIS/core_cm23.h **** 
+ 468:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_BFHFNMINS_Pos            13U                                            /*!< SCB 
+ 469:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_BFHFNMINS_Msk            (1UL << SCB_AIRCR_BFHFNMINS_Pos)               /*!< SCB 
+ 470:../Firmware/CMSIS/core_cm23.h **** 
+ 471:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_SYSRESETREQS_Pos          3U                                            /*!< SCB 
+ 472:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_SYSRESETREQS_Msk         (1UL << SCB_AIRCR_SYSRESETREQS_Pos)            /*!< SCB 
+ 473:../Firmware/CMSIS/core_cm23.h **** 
+ 474:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2U                                            /*!< SCB 
+ 475:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1UL << SCB_AIRCR_SYSRESETREQ_Pos)             /*!< SCB 
+ 476:../Firmware/CMSIS/core_cm23.h **** 
+ 477:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1U                                            /*!< SCB 
+ 478:../Firmware/CMSIS/core_cm23.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1UL << SCB_AIRCR_VECTCLRACTIVE_Pos)           /*!< SCB 
+ 479:../Firmware/CMSIS/core_cm23.h **** 
+ 480:../Firmware/CMSIS/core_cm23.h **** /* SCB System Control Register Definitions */
+ 481:../Firmware/CMSIS/core_cm23.h **** #define SCB_SCR_SEVONPEND_Pos               4U                                            /*!< SCB 
+ 482:../Firmware/CMSIS/core_cm23.h **** #define SCB_SCR_SEVONPEND_Msk              (1UL << SCB_SCR_SEVONPEND_Pos)                 /*!< SCB 
+ 483:../Firmware/CMSIS/core_cm23.h **** 
+ 484:../Firmware/CMSIS/core_cm23.h **** #define SCB_SCR_SLEEPDEEPS_Pos              3U                                            /*!< SCB 
+ 485:../Firmware/CMSIS/core_cm23.h **** #define SCB_SCR_SLEEPDEEPS_Msk             (1UL << SCB_SCR_SLEEPDEEPS_Pos)                /*!< SCB 
+ 486:../Firmware/CMSIS/core_cm23.h **** 
+ 487:../Firmware/CMSIS/core_cm23.h **** #define SCB_SCR_SLEEPDEEP_Pos               2U                                            /*!< SCB 
+ 488:../Firmware/CMSIS/core_cm23.h **** #define SCB_SCR_SLEEPDEEP_Msk              (1UL << SCB_SCR_SLEEPDEEP_Pos)                 /*!< SCB 
+ 489:../Firmware/CMSIS/core_cm23.h **** 
+ 490:../Firmware/CMSIS/core_cm23.h **** #define SCB_SCR_SLEEPONEXIT_Pos             1U                                            /*!< SCB 
+ 491:../Firmware/CMSIS/core_cm23.h **** #define SCB_SCR_SLEEPONEXIT_Msk            (1UL << SCB_SCR_SLEEPONEXIT_Pos)               /*!< SCB 
+ 492:../Firmware/CMSIS/core_cm23.h **** 
+ 493:../Firmware/CMSIS/core_cm23.h **** /* SCB Configuration Control Register Definitions */
+ 494:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_BP_Pos                     18U                                            /*!< SCB 
+ 495:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_BP_Msk                     (1UL << SCB_CCR_BP_Pos)                        /*!< SCB 
+ 496:../Firmware/CMSIS/core_cm23.h **** 
+ 497:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_IC_Pos                     17U                                            /*!< SCB 
+ 498:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_IC_Msk                     (1UL << SCB_CCR_IC_Pos)                        /*!< SCB 
+ 499:../Firmware/CMSIS/core_cm23.h **** 
+ 500:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_DC_Pos                     16U                                            /*!< SCB 
+ 501:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_DC_Msk                     (1UL << SCB_CCR_DC_Pos)                        /*!< SCB 
+ 502:../Firmware/CMSIS/core_cm23.h **** 
+ 503:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_STKOFHFNMIGN_Pos           10U                                            /*!< SCB 
+ 504:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_STKOFHFNMIGN_Msk           (1UL << SCB_CCR_STKOFHFNMIGN_Pos)              /*!< SCB 
+ 505:../Firmware/CMSIS/core_cm23.h **** 
+ 506:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_BFHFNMIGN_Pos               8U                                            /*!< SCB 
+ 507:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_BFHFNMIGN_Msk              (1UL << SCB_CCR_BFHFNMIGN_Pos)                 /*!< SCB 
+ 508:../Firmware/CMSIS/core_cm23.h **** 
+ 509:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_DIV_0_TRP_Pos               4U                                            /*!< SCB 
+ 510:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_DIV_0_TRP_Msk              (1UL << SCB_CCR_DIV_0_TRP_Pos)                 /*!< SCB 
+ 511:../Firmware/CMSIS/core_cm23.h **** 
+ 512:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_UNALIGN_TRP_Pos             3U                                            /*!< SCB 
+ 513:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_UNALIGN_TRP_Msk            (1UL << SCB_CCR_UNALIGN_TRP_Pos)               /*!< SCB 
+ 514:../Firmware/CMSIS/core_cm23.h **** 
+ 515:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_USERSETMPEND_Pos            1U                                            /*!< SCB 
+ 516:../Firmware/CMSIS/core_cm23.h **** #define SCB_CCR_USERSETMPEND_Msk           (1UL << SCB_CCR_USERSETMPEND_Pos)              /*!< SCB 
+ 517:../Firmware/CMSIS/core_cm23.h **** 
+ 518:../Firmware/CMSIS/core_cm23.h **** /* SCB System Handler Control and State Register Definitions */
+ 519:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_HARDFAULTPENDED_Pos      21U                                            /*!< SCB 
+ 520:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_HARDFAULTPENDED_Msk      (1UL << SCB_SHCSR_HARDFAULTPENDED_Pos)         /*!< SCB 
+ 521:../Firmware/CMSIS/core_cm23.h **** 
+ 522:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_SVCALLPENDED_Pos         15U                                            /*!< SCB 
+ 523:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_SVCALLPENDED_Msk         (1UL << SCB_SHCSR_SVCALLPENDED_Pos)            /*!< SCB 
+ 524:../Firmware/CMSIS/core_cm23.h **** 
+ 525:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_SYSTICKACT_Pos           11U                                            /*!< SCB 
+ 526:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_SYSTICKACT_Msk           (1UL << SCB_SHCSR_SYSTICKACT_Pos)              /*!< SCB 
+ 527:../Firmware/CMSIS/core_cm23.h **** 
+ 528:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_PENDSVACT_Pos            10U                                            /*!< SCB 
+ 529:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_PENDSVACT_Msk            (1UL << SCB_SHCSR_PENDSVACT_Pos)               /*!< SCB 
+ 530:../Firmware/CMSIS/core_cm23.h **** 
+ 531:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_SVCALLACT_Pos             7U                                            /*!< SCB 
+ 532:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_SVCALLACT_Msk            (1UL << SCB_SHCSR_SVCALLACT_Pos)               /*!< SCB 
+ 533:../Firmware/CMSIS/core_cm23.h **** 
+ 534:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_NMIACT_Pos                5U                                            /*!< SCB 
+ 535:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_NMIACT_Msk               (1UL << SCB_SHCSR_NMIACT_Pos)                  /*!< SCB 
+ 536:../Firmware/CMSIS/core_cm23.h **** 
+ 537:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_HARDFAULTACT_Pos          2U                                            /*!< SCB 
+ 538:../Firmware/CMSIS/core_cm23.h **** #define SCB_SHCSR_HARDFAULTACT_Msk         (1UL << SCB_SHCSR_HARDFAULTACT_Pos)            /*!< SCB 
+ 539:../Firmware/CMSIS/core_cm23.h **** 
+ 540:../Firmware/CMSIS/core_cm23.h **** /*@} end of group CMSIS_SCB */
+ 541:../Firmware/CMSIS/core_cm23.h **** 
+ 542:../Firmware/CMSIS/core_cm23.h **** 
+ 543:../Firmware/CMSIS/core_cm23.h **** /**
+ 544:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_core_register
+ 545:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_SysTick     System Tick Timer (SysTick)
+ 546:../Firmware/CMSIS/core_cm23.h ****   \brief    Type definitions for the System Timer Registers.
+ 547:../Firmware/CMSIS/core_cm23.h ****   @{
+ 548:../Firmware/CMSIS/core_cm23.h ****  */
+ 549:../Firmware/CMSIS/core_cm23.h **** 
+ 550:../Firmware/CMSIS/core_cm23.h **** /**
+ 551:../Firmware/CMSIS/core_cm23.h ****   \brief  Structure type to access the System Timer (SysTick).
+ 552:../Firmware/CMSIS/core_cm23.h ****  */
+ 553:../Firmware/CMSIS/core_cm23.h **** typedef struct
+ 554:../Firmware/CMSIS/core_cm23.h **** {
+ 555:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  SysTick Control and Status Regis
+ 556:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t LOAD;                   /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register */
+ 557:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t VAL;                    /*!< Offset: 0x008 (R/W)  SysTick Current Value Register *
+ 558:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t CALIB;                  /*!< Offset: 0x00C (R/ )  SysTick Calibration Register */
+ 559:../Firmware/CMSIS/core_cm23.h **** } SysTick_Type;
+ 560:../Firmware/CMSIS/core_cm23.h **** 
+ 561:../Firmware/CMSIS/core_cm23.h **** /* SysTick Control / Status Register Definitions */
+ 562:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16U                                            /*!< SysT
+ 563:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CTRL_COUNTFLAG_Msk         (1UL << SysTick_CTRL_COUNTFLAG_Pos)            /*!< SysT
+ 564:../Firmware/CMSIS/core_cm23.h **** 
+ 565:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CTRL_CLKSOURCE_Pos          2U                                            /*!< SysT
+ 566:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CTRL_CLKSOURCE_Msk         (1UL << SysTick_CTRL_CLKSOURCE_Pos)            /*!< SysT
+ 567:../Firmware/CMSIS/core_cm23.h **** 
+ 568:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CTRL_TICKINT_Pos            1U                                            /*!< SysT
+ 569:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CTRL_TICKINT_Msk           (1UL << SysTick_CTRL_TICKINT_Pos)              /*!< SysT
+ 570:../Firmware/CMSIS/core_cm23.h **** 
+ 571:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CTRL_ENABLE_Pos             0U                                            /*!< SysT
+ 572:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CTRL_ENABLE_Msk            (1UL /*<< SysTick_CTRL_ENABLE_Pos*/)           /*!< SysT
+ 573:../Firmware/CMSIS/core_cm23.h **** 
+ 574:../Firmware/CMSIS/core_cm23.h **** /* SysTick Reload Register Definitions */
+ 575:../Firmware/CMSIS/core_cm23.h **** #define SysTick_LOAD_RELOAD_Pos             0U                                            /*!< SysT
+ 576:../Firmware/CMSIS/core_cm23.h **** #define SysTick_LOAD_RELOAD_Msk            (0xFFFFFFUL /*<< SysTick_LOAD_RELOAD_Pos*/)    /*!< SysT
+ 577:../Firmware/CMSIS/core_cm23.h **** 
+ 578:../Firmware/CMSIS/core_cm23.h **** /* SysTick Current Register Definitions */
+ 579:../Firmware/CMSIS/core_cm23.h **** #define SysTick_VAL_CURRENT_Pos             0U                                            /*!< SysT
+ 580:../Firmware/CMSIS/core_cm23.h **** #define SysTick_VAL_CURRENT_Msk            (0xFFFFFFUL /*<< SysTick_VAL_CURRENT_Pos*/)    /*!< SysT
+ 581:../Firmware/CMSIS/core_cm23.h **** 
+ 582:../Firmware/CMSIS/core_cm23.h **** /* SysTick Calibration Register Definitions */
+ 583:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CALIB_NOREF_Pos            31U                                            /*!< SysT
+ 584:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CALIB_NOREF_Msk            (1UL << SysTick_CALIB_NOREF_Pos)               /*!< SysT
+ 585:../Firmware/CMSIS/core_cm23.h **** 
+ 586:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CALIB_SKEW_Pos             30U                                            /*!< SysT
+ 587:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CALIB_SKEW_Msk             (1UL << SysTick_CALIB_SKEW_Pos)                /*!< SysT
+ 588:../Firmware/CMSIS/core_cm23.h **** 
+ 589:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CALIB_TENMS_Pos             0U                                            /*!< SysT
+ 590:../Firmware/CMSIS/core_cm23.h **** #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysT
+ 591:../Firmware/CMSIS/core_cm23.h **** 
+ 592:../Firmware/CMSIS/core_cm23.h **** /*@} end of group CMSIS_SysTick */
+ 593:../Firmware/CMSIS/core_cm23.h **** 
+ 594:../Firmware/CMSIS/core_cm23.h **** 
+ 595:../Firmware/CMSIS/core_cm23.h **** /**
+ 596:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_core_register
+ 597:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_DWT     Data Watchpoint and Trace (DWT)
+ 598:../Firmware/CMSIS/core_cm23.h ****   \brief    Type definitions for the Data Watchpoint and Trace (DWT)
+ 599:../Firmware/CMSIS/core_cm23.h ****   @{
+ 600:../Firmware/CMSIS/core_cm23.h ****  */
+ 601:../Firmware/CMSIS/core_cm23.h **** 
+ 602:../Firmware/CMSIS/core_cm23.h **** /**
+ 603:../Firmware/CMSIS/core_cm23.h ****   \brief  Structure type to access the Data Watchpoint and Trace Register (DWT).
+ 604:../Firmware/CMSIS/core_cm23.h ****  */
+ 605:../Firmware/CMSIS/core_cm23.h **** typedef struct
+ 606:../Firmware/CMSIS/core_cm23.h **** {
+ 607:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  Control Register */
+ 608:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED0[6U];
+ 609:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t PCSR;                   /*!< Offset: 0x01C (R/ )  Program Counter Sample Register 
+ 610:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP0;                  /*!< Offset: 0x020 (R/W)  Comparator Register 0 */
+ 611:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED1[1U];
+ 612:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION0;              /*!< Offset: 0x028 (R/W)  Function Register 0 */
+ 613:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED2[1U];
+ 614:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP1;                  /*!< Offset: 0x030 (R/W)  Comparator Register 1 */
+ 615:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED3[1U];
+ 616:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION1;              /*!< Offset: 0x038 (R/W)  Function Register 1 */
+ 617:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED4[1U];
+ 618:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP2;                  /*!< Offset: 0x040 (R/W)  Comparator Register 2 */
+ 619:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED5[1U];
+ 620:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION2;              /*!< Offset: 0x048 (R/W)  Function Register 2 */
+ 621:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED6[1U];
+ 622:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP3;                  /*!< Offset: 0x050 (R/W)  Comparator Register 3 */
+ 623:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED7[1U];
+ 624:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION3;              /*!< Offset: 0x058 (R/W)  Function Register 3 */
+ 625:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED8[1U];
+ 626:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP4;                  /*!< Offset: 0x060 (R/W)  Comparator Register 4 */
+ 627:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED9[1U];
+ 628:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION4;              /*!< Offset: 0x068 (R/W)  Function Register 4 */
+ 629:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED10[1U];
+ 630:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP5;                  /*!< Offset: 0x070 (R/W)  Comparator Register 5 */
+ 631:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED11[1U];
+ 632:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION5;              /*!< Offset: 0x078 (R/W)  Function Register 5 */
+ 633:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED12[1U];
+ 634:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP6;                  /*!< Offset: 0x080 (R/W)  Comparator Register 6 */
+ 635:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED13[1U];
+ 636:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION6;              /*!< Offset: 0x088 (R/W)  Function Register 6 */
+ 637:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED14[1U];
+ 638:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP7;                  /*!< Offset: 0x090 (R/W)  Comparator Register 7 */
+ 639:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED15[1U];
+ 640:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION7;              /*!< Offset: 0x098 (R/W)  Function Register 7 */
+ 641:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED16[1U];
+ 642:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP8;                  /*!< Offset: 0x0A0 (R/W)  Comparator Register 8 */
+ 643:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED17[1U];
+ 644:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION8;              /*!< Offset: 0x0A8 (R/W)  Function Register 8 */
+ 645:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED18[1U];
+ 646:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP9;                  /*!< Offset: 0x0B0 (R/W)  Comparator Register 9 */
+ 647:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED19[1U];
+ 648:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION9;              /*!< Offset: 0x0B8 (R/W)  Function Register 9 */
+ 649:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED20[1U];
+ 650:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP10;                 /*!< Offset: 0x0C0 (R/W)  Comparator Register 10 */
+ 651:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED21[1U];
+ 652:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION10;             /*!< Offset: 0x0C8 (R/W)  Function Register 10 */
+ 653:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED22[1U];
+ 654:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP11;                 /*!< Offset: 0x0D0 (R/W)  Comparator Register 11 */
+ 655:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED23[1U];
+ 656:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION11;             /*!< Offset: 0x0D8 (R/W)  Function Register 11 */
+ 657:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED24[1U];
+ 658:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP12;                 /*!< Offset: 0x0E0 (R/W)  Comparator Register 12 */
+ 659:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED25[1U];
+ 660:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION12;             /*!< Offset: 0x0E8 (R/W)  Function Register 12 */
+ 661:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED26[1U];
+ 662:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP13;                 /*!< Offset: 0x0F0 (R/W)  Comparator Register 13 */
+ 663:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED27[1U];
+ 664:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION13;             /*!< Offset: 0x0F8 (R/W)  Function Register 13 */
+ 665:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED28[1U];
+ 666:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP14;                 /*!< Offset: 0x100 (R/W)  Comparator Register 14 */
+ 667:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED29[1U];
+ 668:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION14;             /*!< Offset: 0x108 (R/W)  Function Register 14 */
+ 669:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED30[1U];
+ 670:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t COMP15;                 /*!< Offset: 0x110 (R/W)  Comparator Register 15 */
+ 671:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED31[1U];
+ 672:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FUNCTION15;             /*!< Offset: 0x118 (R/W)  Function Register 15 */
+ 673:../Firmware/CMSIS/core_cm23.h **** } DWT_Type;
+ 674:../Firmware/CMSIS/core_cm23.h **** 
+ 675:../Firmware/CMSIS/core_cm23.h **** /* DWT Control Register Definitions */
+ 676:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NUMCOMP_Pos               28U                                         /*!< DWT CTR
+ 677:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NUMCOMP_Msk               (0xFUL << DWT_CTRL_NUMCOMP_Pos)             /*!< DWT CTR
+ 678:../Firmware/CMSIS/core_cm23.h **** 
+ 679:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NOTRCPKT_Pos              27U                                         /*!< DWT CTR
+ 680:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NOTRCPKT_Msk              (0x1UL << DWT_CTRL_NOTRCPKT_Pos)            /*!< DWT CTR
+ 681:../Firmware/CMSIS/core_cm23.h **** 
+ 682:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NOEXTTRIG_Pos             26U                                         /*!< DWT CTR
+ 683:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NOEXTTRIG_Msk             (0x1UL << DWT_CTRL_NOEXTTRIG_Pos)           /*!< DWT CTR
+ 684:../Firmware/CMSIS/core_cm23.h **** 
+ 685:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NOCYCCNT_Pos              25U                                         /*!< DWT CTR
+ 686:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NOCYCCNT_Msk              (0x1UL << DWT_CTRL_NOCYCCNT_Pos)            /*!< DWT CTR
+ 687:../Firmware/CMSIS/core_cm23.h **** 
+ 688:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NOPRFCNT_Pos              24U                                         /*!< DWT CTR
+ 689:../Firmware/CMSIS/core_cm23.h **** #define DWT_CTRL_NOPRFCNT_Msk              (0x1UL << DWT_CTRL_NOPRFCNT_Pos)            /*!< DWT CTR
+ 690:../Firmware/CMSIS/core_cm23.h **** 
+ 691:../Firmware/CMSIS/core_cm23.h **** /* DWT Comparator Function Register Definitions */
+ 692:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_ID_Pos                27U                                         /*!< DWT FUN
+ 693:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_ID_Msk                (0x1FUL << DWT_FUNCTION_ID_Pos)             /*!< DWT FUN
+ 694:../Firmware/CMSIS/core_cm23.h **** 
+ 695:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_MATCHED_Pos           24U                                         /*!< DWT FUN
+ 696:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_MATCHED_Msk           (0x1UL << DWT_FUNCTION_MATCHED_Pos)         /*!< DWT FUN
+ 697:../Firmware/CMSIS/core_cm23.h **** 
+ 698:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_DATAVSIZE_Pos         10U                                         /*!< DWT FUN
+ 699:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_DATAVSIZE_Msk         (0x3UL << DWT_FUNCTION_DATAVSIZE_Pos)       /*!< DWT FUN
+ 700:../Firmware/CMSIS/core_cm23.h **** 
+ 701:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_ACTION_Pos             4U                                         /*!< DWT FUN
+ 702:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_ACTION_Msk            (0x3UL << DWT_FUNCTION_ACTION_Pos)          /*!< DWT FUN
+ 703:../Firmware/CMSIS/core_cm23.h **** 
+ 704:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_MATCH_Pos              0U                                         /*!< DWT FUN
+ 705:../Firmware/CMSIS/core_cm23.h **** #define DWT_FUNCTION_MATCH_Msk             (0xFUL /*<< DWT_FUNCTION_MATCH_Pos*/)       /*!< DWT FUN
+ 706:../Firmware/CMSIS/core_cm23.h **** 
+ 707:../Firmware/CMSIS/core_cm23.h **** /*@}*/ /* end of group CMSIS_DWT */
+ 708:../Firmware/CMSIS/core_cm23.h **** 
+ 709:../Firmware/CMSIS/core_cm23.h **** 
+ 710:../Firmware/CMSIS/core_cm23.h **** /**
+ 711:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_core_register
+ 712:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_TPI     Trace Port Interface (TPI)
+ 713:../Firmware/CMSIS/core_cm23.h ****   \brief    Type definitions for the Trace Port Interface (TPI)
+ 714:../Firmware/CMSIS/core_cm23.h ****   @{
+ 715:../Firmware/CMSIS/core_cm23.h ****  */
+ 716:../Firmware/CMSIS/core_cm23.h **** 
+ 717:../Firmware/CMSIS/core_cm23.h **** /**
+ 718:../Firmware/CMSIS/core_cm23.h ****   \brief  Structure type to access the Trace Port Interface Register (TPI).
+ 719:../Firmware/CMSIS/core_cm23.h ****  */
+ 720:../Firmware/CMSIS/core_cm23.h **** typedef struct
+ 721:../Firmware/CMSIS/core_cm23.h **** {
+ 722:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t SSPSR;                  /*!< Offset: 0x000 (R/ )  Supported Parallel Port Size Reg
+ 723:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t CSPSR;                  /*!< Offset: 0x004 (R/W)  Current Parallel Port Size Regis
+ 724:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED0[2U];
+ 725:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t ACPR;                   /*!< Offset: 0x010 (R/W)  Asynchronous Clock Prescaler Reg
+ 726:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED1[55U];
+ 727:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t SPPR;                   /*!< Offset: 0x0F0 (R/W)  Selected Pin Protocol Register *
+ 728:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED2[131U];
+ 729:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t FFSR;                   /*!< Offset: 0x300 (R/ )  Formatter and Flush Status Regis
+ 730:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t FFCR;                   /*!< Offset: 0x304 (R/W)  Formatter and Flush Control Regi
+ 731:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t FSCR;                   /*!< Offset: 0x308 (R/ )  Formatter Synchronization Counte
+ 732:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED3[759U];
+ 733:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t TRIGGER;                /*!< Offset: 0xEE8 (R/ )  TRIGGER */
+ 734:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t FIFO0;                  /*!< Offset: 0xEEC (R/ )  Integration ETM Data */
+ 735:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t ITATBCTR2;              /*!< Offset: 0xEF0 (R/ )  ITATBCTR2 */
+ 736:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED4[1U];
+ 737:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t ITATBCTR0;              /*!< Offset: 0xEF8 (R/ )  ITATBCTR0 */
+ 738:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t FIFO1;                  /*!< Offset: 0xEFC (R/ )  Integration ITM Data */
+ 739:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t ITCTRL;                 /*!< Offset: 0xF00 (R/W)  Integration Mode Control */
+ 740:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED5[39U];
+ 741:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t CLAIMSET;               /*!< Offset: 0xFA0 (R/W)  Claim tag set */
+ 742:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t CLAIMCLR;               /*!< Offset: 0xFA4 (R/W)  Claim tag clear */
+ 743:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED7[8U];
+ 744:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t DEVID;                  /*!< Offset: 0xFC8 (R/ )  TPIU_DEVID */
+ 745:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t DEVTYPE;                /*!< Offset: 0xFCC (R/ )  TPIU_DEVTYPE */
+ 746:../Firmware/CMSIS/core_cm23.h **** } TPI_Type;
+ 747:../Firmware/CMSIS/core_cm23.h **** 
+ 748:../Firmware/CMSIS/core_cm23.h **** /* TPI Asynchronous Clock Prescaler Register Definitions */
+ 749:../Firmware/CMSIS/core_cm23.h **** #define TPI_ACPR_PRESCALER_Pos              0U                                         /*!< TPI ACP
+ 750:../Firmware/CMSIS/core_cm23.h **** #define TPI_ACPR_PRESCALER_Msk             (0x1FFFUL /*<< TPI_ACPR_PRESCALER_Pos*/)    /*!< TPI ACP
+ 751:../Firmware/CMSIS/core_cm23.h **** 
+ 752:../Firmware/CMSIS/core_cm23.h **** /* TPI Selected Pin Protocol Register Definitions */
+ 753:../Firmware/CMSIS/core_cm23.h **** #define TPI_SPPR_TXMODE_Pos                 0U                                         /*!< TPI SPP
+ 754:../Firmware/CMSIS/core_cm23.h **** #define TPI_SPPR_TXMODE_Msk                (0x3UL /*<< TPI_SPPR_TXMODE_Pos*/)          /*!< TPI SPP
+ 755:../Firmware/CMSIS/core_cm23.h **** 
+ 756:../Firmware/CMSIS/core_cm23.h **** /* TPI Formatter and Flush Status Register Definitions */
+ 757:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFSR_FtNonStop_Pos              3U                                         /*!< TPI FFS
+ 758:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFSR_FtNonStop_Msk             (0x1UL << TPI_FFSR_FtNonStop_Pos)           /*!< TPI FFS
+ 759:../Firmware/CMSIS/core_cm23.h **** 
+ 760:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFSR_TCPresent_Pos              2U                                         /*!< TPI FFS
+ 761:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFSR_TCPresent_Msk             (0x1UL << TPI_FFSR_TCPresent_Pos)           /*!< TPI FFS
+ 762:../Firmware/CMSIS/core_cm23.h **** 
+ 763:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFSR_FtStopped_Pos              1U                                         /*!< TPI FFS
+ 764:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFSR_FtStopped_Msk             (0x1UL << TPI_FFSR_FtStopped_Pos)           /*!< TPI FFS
+ 765:../Firmware/CMSIS/core_cm23.h **** 
+ 766:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFSR_FlInProg_Pos               0U                                         /*!< TPI FFS
+ 767:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFSR_FlInProg_Msk              (0x1UL /*<< TPI_FFSR_FlInProg_Pos*/)        /*!< TPI FFS
+ 768:../Firmware/CMSIS/core_cm23.h **** 
+ 769:../Firmware/CMSIS/core_cm23.h **** /* TPI Formatter and Flush Control Register Definitions */
+ 770:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFCR_TrigIn_Pos                 8U                                         /*!< TPI FFC
+ 771:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFCR_TrigIn_Msk                (0x1UL << TPI_FFCR_TrigIn_Pos)              /*!< TPI FFC
+ 772:../Firmware/CMSIS/core_cm23.h **** 
+ 773:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFCR_EnFCont_Pos                1U                                         /*!< TPI FFC
+ 774:../Firmware/CMSIS/core_cm23.h **** #define TPI_FFCR_EnFCont_Msk               (0x1UL << TPI_FFCR_EnFCont_Pos)             /*!< TPI FFC
+ 775:../Firmware/CMSIS/core_cm23.h **** 
+ 776:../Firmware/CMSIS/core_cm23.h **** /* TPI TRIGGER Register Definitions */
+ 777:../Firmware/CMSIS/core_cm23.h **** #define TPI_TRIGGER_TRIGGER_Pos             0U                                         /*!< TPI TRI
+ 778:../Firmware/CMSIS/core_cm23.h **** #define TPI_TRIGGER_TRIGGER_Msk            (0x1UL /*<< TPI_TRIGGER_TRIGGER_Pos*/)      /*!< TPI TRI
+ 779:../Firmware/CMSIS/core_cm23.h **** 
+ 780:../Firmware/CMSIS/core_cm23.h **** /* TPI Integration ETM Data Register Definitions (FIFO0) */
+ 781:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ITM_ATVALID_Pos          29U                                         /*!< TPI FIF
+ 782:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ITM_ATVALID_Msk          (0x3UL << TPI_FIFO0_ITM_ATVALID_Pos)        /*!< TPI FIF
+ 783:../Firmware/CMSIS/core_cm23.h **** 
+ 784:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ITM_bytecount_Pos        27U                                         /*!< TPI FIF
+ 785:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ITM_bytecount_Msk        (0x3UL << TPI_FIFO0_ITM_bytecount_Pos)      /*!< TPI FIF
+ 786:../Firmware/CMSIS/core_cm23.h **** 
+ 787:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM_ATVALID_Pos          26U                                         /*!< TPI FIF
+ 788:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM_ATVALID_Msk          (0x3UL << TPI_FIFO0_ETM_ATVALID_Pos)        /*!< TPI FIF
+ 789:../Firmware/CMSIS/core_cm23.h **** 
+ 790:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM_bytecount_Pos        24U                                         /*!< TPI FIF
+ 791:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM_bytecount_Msk        (0x3UL << TPI_FIFO0_ETM_bytecount_Pos)      /*!< TPI FIF
+ 792:../Firmware/CMSIS/core_cm23.h **** 
+ 793:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM2_Pos                 16U                                         /*!< TPI FIF
+ 794:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM2_Msk                 (0xFFUL << TPI_FIFO0_ETM2_Pos)              /*!< TPI FIF
+ 795:../Firmware/CMSIS/core_cm23.h **** 
+ 796:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM1_Pos                  8U                                         /*!< TPI FIF
+ 797:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM1_Msk                 (0xFFUL << TPI_FIFO0_ETM1_Pos)              /*!< TPI FIF
+ 798:../Firmware/CMSIS/core_cm23.h **** 
+ 799:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM0_Pos                  0U                                         /*!< TPI FIF
+ 800:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO0_ETM0_Msk                 (0xFFUL /*<< TPI_FIFO0_ETM0_Pos*/)          /*!< TPI FIF
+ 801:../Firmware/CMSIS/core_cm23.h **** 
+ 802:../Firmware/CMSIS/core_cm23.h **** /* TPI ITATBCTR2 Register Definitions */
+ 803:../Firmware/CMSIS/core_cm23.h **** #define TPI_ITATBCTR2_ATREADY_Pos           0U                                         /*!< TPI ITA
+ 804:../Firmware/CMSIS/core_cm23.h **** #define TPI_ITATBCTR2_ATREADY_Msk          (0x1UL /*<< TPI_ITATBCTR2_ATREADY_Pos*/)    /*!< TPI ITA
+ 805:../Firmware/CMSIS/core_cm23.h **** 
+ 806:../Firmware/CMSIS/core_cm23.h **** /* TPI Integration ITM Data Register Definitions (FIFO1) */
+ 807:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM_ATVALID_Pos          29U                                         /*!< TPI FIF
+ 808:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM_ATVALID_Msk          (0x3UL << TPI_FIFO1_ITM_ATVALID_Pos)        /*!< TPI FIF
+ 809:../Firmware/CMSIS/core_cm23.h **** 
+ 810:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM_bytecount_Pos        27U                                         /*!< TPI FIF
+ 811:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM_bytecount_Msk        (0x3UL << TPI_FIFO1_ITM_bytecount_Pos)      /*!< TPI FIF
+ 812:../Firmware/CMSIS/core_cm23.h **** 
+ 813:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ETM_ATVALID_Pos          26U                                         /*!< TPI FIF
+ 814:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ETM_ATVALID_Msk          (0x3UL << TPI_FIFO1_ETM_ATVALID_Pos)        /*!< TPI FIF
+ 815:../Firmware/CMSIS/core_cm23.h **** 
+ 816:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ETM_bytecount_Pos        24U                                         /*!< TPI FIF
+ 817:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ETM_bytecount_Msk        (0x3UL << TPI_FIFO1_ETM_bytecount_Pos)      /*!< TPI FIF
+ 818:../Firmware/CMSIS/core_cm23.h **** 
+ 819:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM2_Pos                 16U                                         /*!< TPI FIF
+ 820:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM2_Msk                 (0xFFUL << TPI_FIFO1_ITM2_Pos)              /*!< TPI FIF
+ 821:../Firmware/CMSIS/core_cm23.h **** 
+ 822:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM1_Pos                  8U                                         /*!< TPI FIF
+ 823:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM1_Msk                 (0xFFUL << TPI_FIFO1_ITM1_Pos)              /*!< TPI FIF
+ 824:../Firmware/CMSIS/core_cm23.h **** 
+ 825:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM0_Pos                  0U                                         /*!< TPI FIF
+ 826:../Firmware/CMSIS/core_cm23.h **** #define TPI_FIFO1_ITM0_Msk                 (0xFFUL /*<< TPI_FIFO1_ITM0_Pos*/)          /*!< TPI FIF
+ 827:../Firmware/CMSIS/core_cm23.h **** 
+ 828:../Firmware/CMSIS/core_cm23.h **** /* TPI ITATBCTR0 Register Definitions */
+ 829:../Firmware/CMSIS/core_cm23.h **** #define TPI_ITATBCTR0_ATREADY_Pos           0U                                         /*!< TPI ITA
+ 830:../Firmware/CMSIS/core_cm23.h **** #define TPI_ITATBCTR0_ATREADY_Msk          (0x1UL /*<< TPI_ITATBCTR0_ATREADY_Pos*/)    /*!< TPI ITA
+ 831:../Firmware/CMSIS/core_cm23.h **** 
+ 832:../Firmware/CMSIS/core_cm23.h **** /* TPI Integration Mode Control Register Definitions */
+ 833:../Firmware/CMSIS/core_cm23.h **** #define TPI_ITCTRL_Mode_Pos                 0U                                         /*!< TPI ITC
+ 834:../Firmware/CMSIS/core_cm23.h **** #define TPI_ITCTRL_Mode_Msk                (0x1UL /*<< TPI_ITCTRL_Mode_Pos*/)          /*!< TPI ITC
+ 835:../Firmware/CMSIS/core_cm23.h **** 
+ 836:../Firmware/CMSIS/core_cm23.h **** /* TPI DEVID Register Definitions */
+ 837:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_NRZVALID_Pos             11U                                         /*!< TPI DEV
+ 838:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_NRZVALID_Msk             (0x1UL << TPI_DEVID_NRZVALID_Pos)           /*!< TPI DEV
+ 839:../Firmware/CMSIS/core_cm23.h **** 
+ 840:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_MANCVALID_Pos            10U                                         /*!< TPI DEV
+ 841:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_MANCVALID_Msk            (0x1UL << TPI_DEVID_MANCVALID_Pos)          /*!< TPI DEV
+ 842:../Firmware/CMSIS/core_cm23.h **** 
+ 843:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_PTINVALID_Pos             9U                                         /*!< TPI DEV
+ 844:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_PTINVALID_Msk            (0x1UL << TPI_DEVID_PTINVALID_Pos)          /*!< TPI DEV
+ 845:../Firmware/CMSIS/core_cm23.h **** 
+ 846:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_MinBufSz_Pos              6U                                         /*!< TPI DEV
+ 847:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_MinBufSz_Msk             (0x7UL << TPI_DEVID_MinBufSz_Pos)           /*!< TPI DEV
+ 848:../Firmware/CMSIS/core_cm23.h **** 
+ 849:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_AsynClkIn_Pos             5U                                         /*!< TPI DEV
+ 850:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_AsynClkIn_Msk            (0x1UL << TPI_DEVID_AsynClkIn_Pos)          /*!< TPI DEV
+ 851:../Firmware/CMSIS/core_cm23.h **** 
+ 852:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_NrTraceInput_Pos          0U                                         /*!< TPI DEV
+ 853:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVID_NrTraceInput_Msk         (0x1FUL /*<< TPI_DEVID_NrTraceInput_Pos*/)  /*!< TPI DEV
+ 854:../Firmware/CMSIS/core_cm23.h **** 
+ 855:../Firmware/CMSIS/core_cm23.h **** /* TPI DEVTYPE Register Definitions */
+ 856:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVTYPE_MajorType_Pos           4U                                         /*!< TPI DEV
+ 857:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVTYPE_MajorType_Msk          (0xFUL << TPI_DEVTYPE_MajorType_Pos)        /*!< TPI DEV
+ 858:../Firmware/CMSIS/core_cm23.h **** 
+ 859:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVTYPE_SubType_Pos             0U                                         /*!< TPI DEV
+ 860:../Firmware/CMSIS/core_cm23.h **** #define TPI_DEVTYPE_SubType_Msk            (0xFUL /*<< TPI_DEVTYPE_SubType_Pos*/)      /*!< TPI DEV
+ 861:../Firmware/CMSIS/core_cm23.h **** 
+ 862:../Firmware/CMSIS/core_cm23.h **** /*@}*/ /* end of group CMSIS_TPI */
+ 863:../Firmware/CMSIS/core_cm23.h **** 
+ 864:../Firmware/CMSIS/core_cm23.h **** 
+ 865:../Firmware/CMSIS/core_cm23.h **** #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)
+ 866:../Firmware/CMSIS/core_cm23.h **** /**
+ 867:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_core_register
+ 868:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_MPU     Memory Protection Unit (MPU)
+ 869:../Firmware/CMSIS/core_cm23.h ****   \brief    Type definitions for the Memory Protection Unit (MPU)
+ 870:../Firmware/CMSIS/core_cm23.h ****   @{
+ 871:../Firmware/CMSIS/core_cm23.h ****  */
+ 872:../Firmware/CMSIS/core_cm23.h **** 
+ 873:../Firmware/CMSIS/core_cm23.h **** /**
+ 874:../Firmware/CMSIS/core_cm23.h ****   \brief  Structure type to access the Memory Protection Unit (MPU).
+ 875:../Firmware/CMSIS/core_cm23.h ****  */
+ 876:../Firmware/CMSIS/core_cm23.h **** typedef struct
+ 877:../Firmware/CMSIS/core_cm23.h **** {
+ 878:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t TYPE;                   /*!< Offset: 0x000 (R/ )  MPU Type Register */
+ 879:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x004 (R/W)  MPU Control Register */
+ 880:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t RNR;                    /*!< Offset: 0x008 (R/W)  MPU Region Number Register */
+ 881:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t RBAR;                   /*!< Offset: 0x00C (R/W)  MPU Region Base Address Register
+ 882:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t RLAR;                   /*!< Offset: 0x010 (R/W)  MPU Region Limit Address Registe
+ 883:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED0[7U];
+ 884:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t MAIR0;                  /*!< Offset: 0x030 (R/W)  MPU Memory Attribute Indirection
+ 885:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t MAIR1;                  /*!< Offset: 0x034 (R/W)  MPU Memory Attribute Indirection
+ 886:../Firmware/CMSIS/core_cm23.h **** } MPU_Type;
+ 887:../Firmware/CMSIS/core_cm23.h **** 
+ 888:../Firmware/CMSIS/core_cm23.h **** /* MPU Type Register Definitions */
+ 889:../Firmware/CMSIS/core_cm23.h **** #define MPU_TYPE_IREGION_Pos               16U                                            /*!< MPU 
+ 890:../Firmware/CMSIS/core_cm23.h **** #define MPU_TYPE_IREGION_Msk               (0xFFUL << MPU_TYPE_IREGION_Pos)               /*!< MPU 
+ 891:../Firmware/CMSIS/core_cm23.h **** 
+ 892:../Firmware/CMSIS/core_cm23.h **** #define MPU_TYPE_DREGION_Pos                8U                                            /*!< MPU 
+ 893:../Firmware/CMSIS/core_cm23.h **** #define MPU_TYPE_DREGION_Msk               (0xFFUL << MPU_TYPE_DREGION_Pos)               /*!< MPU 
+ 894:../Firmware/CMSIS/core_cm23.h **** 
+ 895:../Firmware/CMSIS/core_cm23.h **** #define MPU_TYPE_SEPARATE_Pos               0U                                            /*!< MPU 
+ 896:../Firmware/CMSIS/core_cm23.h **** #define MPU_TYPE_SEPARATE_Msk              (1UL /*<< MPU_TYPE_SEPARATE_Pos*/)             /*!< MPU 
+ 897:../Firmware/CMSIS/core_cm23.h **** 
+ 898:../Firmware/CMSIS/core_cm23.h **** /* MPU Control Register Definitions */
+ 899:../Firmware/CMSIS/core_cm23.h **** #define MPU_CTRL_PRIVDEFENA_Pos             2U                                            /*!< MPU 
+ 900:../Firmware/CMSIS/core_cm23.h **** #define MPU_CTRL_PRIVDEFENA_Msk            (1UL << MPU_CTRL_PRIVDEFENA_Pos)               /*!< MPU 
+ 901:../Firmware/CMSIS/core_cm23.h **** 
+ 902:../Firmware/CMSIS/core_cm23.h **** #define MPU_CTRL_HFNMIENA_Pos               1U                                            /*!< MPU 
+ 903:../Firmware/CMSIS/core_cm23.h **** #define MPU_CTRL_HFNMIENA_Msk              (1UL << MPU_CTRL_HFNMIENA_Pos)                 /*!< MPU 
+ 904:../Firmware/CMSIS/core_cm23.h **** 
+ 905:../Firmware/CMSIS/core_cm23.h **** #define MPU_CTRL_ENABLE_Pos                 0U                                            /*!< MPU 
+ 906:../Firmware/CMSIS/core_cm23.h **** #define MPU_CTRL_ENABLE_Msk                (1UL /*<< MPU_CTRL_ENABLE_Pos*/)               /*!< MPU 
+ 907:../Firmware/CMSIS/core_cm23.h **** 
+ 908:../Firmware/CMSIS/core_cm23.h **** /* MPU Region Number Register Definitions */
+ 909:../Firmware/CMSIS/core_cm23.h **** #define MPU_RNR_REGION_Pos                  0U                                            /*!< MPU 
+ 910:../Firmware/CMSIS/core_cm23.h **** #define MPU_RNR_REGION_Msk                 (0xFFUL /*<< MPU_RNR_REGION_Pos*/)             /*!< MPU 
+ 911:../Firmware/CMSIS/core_cm23.h **** 
+ 912:../Firmware/CMSIS/core_cm23.h **** /* MPU Region Base Address Register Definitions */
+ 913:../Firmware/CMSIS/core_cm23.h **** #define MPU_RBAR_BASE_Pos                   5U                                            /*!< MPU 
+ 914:../Firmware/CMSIS/core_cm23.h **** #define MPU_RBAR_BASE_Msk                  (0x7FFFFFFUL << MPU_RBAR_BASE_Pos)             /*!< MPU 
+ 915:../Firmware/CMSIS/core_cm23.h **** 
+ 916:../Firmware/CMSIS/core_cm23.h **** #define MPU_RBAR_SH_Pos                     3U                                            /*!< MPU 
+ 917:../Firmware/CMSIS/core_cm23.h **** #define MPU_RBAR_SH_Msk                    (0x3UL << MPU_RBAR_SH_Pos)                     /*!< MPU 
+ 918:../Firmware/CMSIS/core_cm23.h **** 
+ 919:../Firmware/CMSIS/core_cm23.h **** #define MPU_RBAR_AP_Pos                     1U                                            /*!< MPU 
+ 920:../Firmware/CMSIS/core_cm23.h **** #define MPU_RBAR_AP_Msk                    (0x3UL << MPU_RBAR_AP_Pos)                     /*!< MPU 
+ 921:../Firmware/CMSIS/core_cm23.h **** 
+ 922:../Firmware/CMSIS/core_cm23.h **** #define MPU_RBAR_XN_Pos                     0U                                            /*!< MPU 
+ 923:../Firmware/CMSIS/core_cm23.h **** #define MPU_RBAR_XN_Msk                    (01UL /*<< MPU_RBAR_XN_Pos*/)                  /*!< MPU 
+ 924:../Firmware/CMSIS/core_cm23.h **** 
+ 925:../Firmware/CMSIS/core_cm23.h **** /* MPU Region Limit Address Register Definitions */
+ 926:../Firmware/CMSIS/core_cm23.h **** #define MPU_RLAR_LIMIT_Pos                  5U                                            /*!< MPU 
+ 927:../Firmware/CMSIS/core_cm23.h **** #define MPU_RLAR_LIMIT_Msk                 (0x7FFFFFFUL << MPU_RLAR_LIMIT_Pos)            /*!< MPU 
+ 928:../Firmware/CMSIS/core_cm23.h **** 
+ 929:../Firmware/CMSIS/core_cm23.h **** #define MPU_RLAR_AttrIndx_Pos               1U                                            /*!< MPU 
+ 930:../Firmware/CMSIS/core_cm23.h **** #define MPU_RLAR_AttrIndx_Msk              (0x7UL << MPU_RLAR_AttrIndx_Pos)               /*!< MPU 
+ 931:../Firmware/CMSIS/core_cm23.h **** 
+ 932:../Firmware/CMSIS/core_cm23.h **** #define MPU_RLAR_EN_Pos                     0U                                            /*!< MPU 
+ 933:../Firmware/CMSIS/core_cm23.h **** #define MPU_RLAR_EN_Msk                    (1UL /*<< MPU_RLAR_EN_Pos*/)                   /*!< MPU 
+ 934:../Firmware/CMSIS/core_cm23.h **** 
+ 935:../Firmware/CMSIS/core_cm23.h **** /* MPU Memory Attribute Indirection Register 0 Definitions */
+ 936:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR0_Attr3_Pos                24U                                            /*!< MPU 
+ 937:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR0_Attr3_Msk                (0xFFUL << MPU_MAIR0_Attr3_Pos)                /*!< MPU 
+ 938:../Firmware/CMSIS/core_cm23.h **** 
+ 939:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR0_Attr2_Pos                16U                                            /*!< MPU 
+ 940:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR0_Attr2_Msk                (0xFFUL << MPU_MAIR0_Attr2_Pos)                /*!< MPU 
+ 941:../Firmware/CMSIS/core_cm23.h **** 
+ 942:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR0_Attr1_Pos                 8U                                            /*!< MPU 
+ 943:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR0_Attr1_Msk                (0xFFUL << MPU_MAIR0_Attr1_Pos)                /*!< MPU 
+ 944:../Firmware/CMSIS/core_cm23.h **** 
+ 945:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR0_Attr0_Pos                 0U                                            /*!< MPU 
+ 946:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR0_Attr0_Msk                (0xFFUL /*<< MPU_MAIR0_Attr0_Pos*/)            /*!< MPU 
+ 947:../Firmware/CMSIS/core_cm23.h **** 
+ 948:../Firmware/CMSIS/core_cm23.h **** /* MPU Memory Attribute Indirection Register 1 Definitions */
+ 949:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR1_Attr7_Pos                24U                                            /*!< MPU 
+ 950:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR1_Attr7_Msk                (0xFFUL << MPU_MAIR1_Attr7_Pos)                /*!< MPU 
+ 951:../Firmware/CMSIS/core_cm23.h **** 
+ 952:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR1_Attr6_Pos                16U                                            /*!< MPU 
+ 953:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR1_Attr6_Msk                (0xFFUL << MPU_MAIR1_Attr6_Pos)                /*!< MPU 
+ 954:../Firmware/CMSIS/core_cm23.h **** 
+ 955:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR1_Attr5_Pos                 8U                                            /*!< MPU 
+ 956:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR1_Attr5_Msk                (0xFFUL << MPU_MAIR1_Attr5_Pos)                /*!< MPU 
+ 957:../Firmware/CMSIS/core_cm23.h **** 
+ 958:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR1_Attr4_Pos                 0U                                            /*!< MPU 
+ 959:../Firmware/CMSIS/core_cm23.h **** #define MPU_MAIR1_Attr4_Msk                (0xFFUL /*<< MPU_MAIR1_Attr4_Pos*/)            /*!< MPU 
+ 960:../Firmware/CMSIS/core_cm23.h **** 
+ 961:../Firmware/CMSIS/core_cm23.h **** /*@} end of group CMSIS_MPU */
+ 962:../Firmware/CMSIS/core_cm23.h **** #endif
+ 963:../Firmware/CMSIS/core_cm23.h **** 
+ 964:../Firmware/CMSIS/core_cm23.h **** 
+ 965:../Firmware/CMSIS/core_cm23.h **** #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+ 966:../Firmware/CMSIS/core_cm23.h **** /**
+ 967:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_core_register
+ 968:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_SAU     Security Attribution Unit (SAU)
+ 969:../Firmware/CMSIS/core_cm23.h ****   \brief    Type definitions for the Security Attribution Unit (SAU)
+ 970:../Firmware/CMSIS/core_cm23.h ****   @{
+ 971:../Firmware/CMSIS/core_cm23.h ****  */
+ 972:../Firmware/CMSIS/core_cm23.h **** 
+ 973:../Firmware/CMSIS/core_cm23.h **** /**
+ 974:../Firmware/CMSIS/core_cm23.h ****   \brief  Structure type to access the Security Attribution Unit (SAU).
+ 975:../Firmware/CMSIS/core_cm23.h ****  */
+ 976:../Firmware/CMSIS/core_cm23.h **** typedef struct
+ 977:../Firmware/CMSIS/core_cm23.h **** {
+ 978:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  SAU Control Register */
+ 979:../Firmware/CMSIS/core_cm23.h ****   __IM  uint32_t TYPE;                   /*!< Offset: 0x004 (R/ )  SAU Type Register */
+ 980:../Firmware/CMSIS/core_cm23.h **** #if defined (__SAUREGION_PRESENT) && (__SAUREGION_PRESENT == 1U)
+ 981:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t RNR;                    /*!< Offset: 0x008 (R/W)  SAU Region Number Register */
+ 982:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t RBAR;                   /*!< Offset: 0x00C (R/W)  SAU Region Base Address Register
+ 983:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t RLAR;                   /*!< Offset: 0x010 (R/W)  SAU Region Limit Address Registe
+ 984:../Firmware/CMSIS/core_cm23.h **** #endif
+ 985:../Firmware/CMSIS/core_cm23.h **** } SAU_Type;
+ 986:../Firmware/CMSIS/core_cm23.h **** 
+ 987:../Firmware/CMSIS/core_cm23.h **** /* SAU Control Register Definitions */
+ 988:../Firmware/CMSIS/core_cm23.h **** #define SAU_CTRL_ALLNS_Pos                  1U                                            /*!< SAU 
+ 989:../Firmware/CMSIS/core_cm23.h **** #define SAU_CTRL_ALLNS_Msk                 (1UL << SAU_CTRL_ALLNS_Pos)                    /*!< SAU 
+ 990:../Firmware/CMSIS/core_cm23.h **** 
+ 991:../Firmware/CMSIS/core_cm23.h **** #define SAU_CTRL_ENABLE_Pos                 0U                                            /*!< SAU 
+ 992:../Firmware/CMSIS/core_cm23.h **** #define SAU_CTRL_ENABLE_Msk                (1UL /*<< SAU_CTRL_ENABLE_Pos*/)               /*!< SAU 
+ 993:../Firmware/CMSIS/core_cm23.h **** 
+ 994:../Firmware/CMSIS/core_cm23.h **** /* SAU Type Register Definitions */
+ 995:../Firmware/CMSIS/core_cm23.h **** #define SAU_TYPE_SREGION_Pos                0U                                            /*!< SAU 
+ 996:../Firmware/CMSIS/core_cm23.h **** #define SAU_TYPE_SREGION_Msk               (0xFFUL /*<< SAU_TYPE_SREGION_Pos*/)           /*!< SAU 
+ 997:../Firmware/CMSIS/core_cm23.h **** 
+ 998:../Firmware/CMSIS/core_cm23.h **** #if defined (__SAUREGION_PRESENT) && (__SAUREGION_PRESENT == 1U)
+ 999:../Firmware/CMSIS/core_cm23.h **** /* SAU Region Number Register Definitions */
+1000:../Firmware/CMSIS/core_cm23.h **** #define SAU_RNR_REGION_Pos                  0U                                            /*!< SAU 
+1001:../Firmware/CMSIS/core_cm23.h **** #define SAU_RNR_REGION_Msk                 (0xFFUL /*<< SAU_RNR_REGION_Pos*/)             /*!< SAU 
+1002:../Firmware/CMSIS/core_cm23.h **** 
+1003:../Firmware/CMSIS/core_cm23.h **** /* SAU Region Base Address Register Definitions */
+1004:../Firmware/CMSIS/core_cm23.h **** #define SAU_RBAR_BADDR_Pos                  5U                                            /*!< SAU 
+1005:../Firmware/CMSIS/core_cm23.h **** #define SAU_RBAR_BADDR_Msk                 (0x7FFFFFFUL << SAU_RBAR_BADDR_Pos)            /*!< SAU 
+1006:../Firmware/CMSIS/core_cm23.h **** 
+1007:../Firmware/CMSIS/core_cm23.h **** /* SAU Region Limit Address Register Definitions */
+1008:../Firmware/CMSIS/core_cm23.h **** #define SAU_RLAR_LADDR_Pos                  5U                                            /*!< SAU 
+1009:../Firmware/CMSIS/core_cm23.h **** #define SAU_RLAR_LADDR_Msk                 (0x7FFFFFFUL << SAU_RLAR_LADDR_Pos)            /*!< SAU 
+1010:../Firmware/CMSIS/core_cm23.h **** 
+1011:../Firmware/CMSIS/core_cm23.h **** #define SAU_RLAR_NSC_Pos                    1U                                            /*!< SAU 
+1012:../Firmware/CMSIS/core_cm23.h **** #define SAU_RLAR_NSC_Msk                   (1UL << SAU_RLAR_NSC_Pos)                      /*!< SAU 
+1013:../Firmware/CMSIS/core_cm23.h **** 
+1014:../Firmware/CMSIS/core_cm23.h **** #define SAU_RLAR_ENABLE_Pos                 0U                                            /*!< SAU 
+1015:../Firmware/CMSIS/core_cm23.h **** #define SAU_RLAR_ENABLE_Msk                (1UL /*<< SAU_RLAR_ENABLE_Pos*/)               /*!< SAU 
+1016:../Firmware/CMSIS/core_cm23.h **** 
+1017:../Firmware/CMSIS/core_cm23.h **** #endif /* defined (__SAUREGION_PRESENT) && (__SAUREGION_PRESENT == 1U) */
+1018:../Firmware/CMSIS/core_cm23.h **** 
+1019:../Firmware/CMSIS/core_cm23.h **** /*@} end of group CMSIS_SAU */
+1020:../Firmware/CMSIS/core_cm23.h **** #endif /* defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
+1021:../Firmware/CMSIS/core_cm23.h **** 
+1022:../Firmware/CMSIS/core_cm23.h **** 
+1023:../Firmware/CMSIS/core_cm23.h **** /**
+1024:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_core_register
+1025:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_CoreDebug       Core Debug Registers (CoreDebug)
+1026:../Firmware/CMSIS/core_cm23.h ****   \brief    Type definitions for the Core Debug Registers
+1027:../Firmware/CMSIS/core_cm23.h ****   @{
+1028:../Firmware/CMSIS/core_cm23.h ****  */
+1029:../Firmware/CMSIS/core_cm23.h **** 
+1030:../Firmware/CMSIS/core_cm23.h **** /**
+1031:../Firmware/CMSIS/core_cm23.h ****   \brief  Structure type to access the Core Debug Register (CoreDebug).
+1032:../Firmware/CMSIS/core_cm23.h ****  */
+1033:../Firmware/CMSIS/core_cm23.h **** typedef struct
+1034:../Firmware/CMSIS/core_cm23.h **** {
+1035:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t DHCSR;                  /*!< Offset: 0x000 (R/W)  Debug Halting Control and Status
+1036:../Firmware/CMSIS/core_cm23.h ****   __OM  uint32_t DCRSR;                  /*!< Offset: 0x004 ( /W)  Debug Core Register Selector Reg
+1037:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t DCRDR;                  /*!< Offset: 0x008 (R/W)  Debug Core Register Data Registe
+1038:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t DEMCR;                  /*!< Offset: 0x00C (R/W)  Debug Exception and Monitor Cont
+1039:../Firmware/CMSIS/core_cm23.h ****         uint32_t RESERVED4[1U];
+1040:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t DAUTHCTRL;              /*!< Offset: 0x014 (R/W)  Debug Authentication Control Reg
+1041:../Firmware/CMSIS/core_cm23.h ****   __IOM uint32_t DSCSR;                  /*!< Offset: 0x018 (R/W)  Debug Security Control and Statu
+1042:../Firmware/CMSIS/core_cm23.h **** } CoreDebug_Type;
+1043:../Firmware/CMSIS/core_cm23.h **** 
+1044:../Firmware/CMSIS/core_cm23.h **** /* Debug Halting Control and Status Register Definitions */
+1045:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_DBGKEY_Pos         16U                                            /*!< Core
+1046:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_DBGKEY_Msk         (0xFFFFUL << CoreDebug_DHCSR_DBGKEY_Pos)       /*!< Core
+1047:../Firmware/CMSIS/core_cm23.h **** 
+1048:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_RESTART_ST_Pos   26U                                            /*!< Core
+1049:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_RESTART_ST_Msk   (1UL << CoreDebug_DHCSR_S_RESTART_ST_Pos)      /*!< Core
+1050:../Firmware/CMSIS/core_cm23.h **** 
+1051:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_RESET_ST_Pos     25U                                            /*!< Core
+1052:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_RESET_ST_Msk     (1UL << CoreDebug_DHCSR_S_RESET_ST_Pos)        /*!< Core
+1053:../Firmware/CMSIS/core_cm23.h **** 
+1054:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Pos    24U                                            /*!< Core
+1055:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Msk    (1UL << CoreDebug_DHCSR_S_RETIRE_ST_Pos)       /*!< Core
+1056:../Firmware/CMSIS/core_cm23.h **** 
+1057:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_LOCKUP_Pos       19U                                            /*!< Core
+1058:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_LOCKUP_Msk       (1UL << CoreDebug_DHCSR_S_LOCKUP_Pos)          /*!< Core
+1059:../Firmware/CMSIS/core_cm23.h **** 
+1060:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_SLEEP_Pos        18U                                            /*!< Core
+1061:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_SLEEP_Msk        (1UL << CoreDebug_DHCSR_S_SLEEP_Pos)           /*!< Core
+1062:../Firmware/CMSIS/core_cm23.h **** 
+1063:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_HALT_Pos         17U                                            /*!< Core
+1064:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_HALT_Msk         (1UL << CoreDebug_DHCSR_S_HALT_Pos)            /*!< Core
+1065:../Firmware/CMSIS/core_cm23.h **** 
+1066:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_REGRDY_Pos       16U                                            /*!< Core
+1067:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_S_REGRDY_Msk       (1UL << CoreDebug_DHCSR_S_REGRDY_Pos)          /*!< Core
+1068:../Firmware/CMSIS/core_cm23.h **** 
+1069:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_C_MASKINTS_Pos      3U                                            /*!< Core
+1070:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_C_MASKINTS_Msk     (1UL << CoreDebug_DHCSR_C_MASKINTS_Pos)        /*!< Core
+1071:../Firmware/CMSIS/core_cm23.h **** 
+1072:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_C_STEP_Pos          2U                                            /*!< Core
+1073:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_C_STEP_Msk         (1UL << CoreDebug_DHCSR_C_STEP_Pos)            /*!< Core
+1074:../Firmware/CMSIS/core_cm23.h **** 
+1075:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_C_HALT_Pos          1U                                            /*!< Core
+1076:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_C_HALT_Msk         (1UL << CoreDebug_DHCSR_C_HALT_Pos)            /*!< Core
+1077:../Firmware/CMSIS/core_cm23.h **** 
+1078:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Pos       0U                                            /*!< Core
+1079:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Msk      (1UL /*<< CoreDebug_DHCSR_C_DEBUGEN_Pos*/)     /*!< Core
+1080:../Firmware/CMSIS/core_cm23.h **** 
+1081:../Firmware/CMSIS/core_cm23.h **** /* Debug Core Register Selector Register Definitions */
+1082:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DCRSR_REGWnR_Pos         16U                                            /*!< Core
+1083:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DCRSR_REGWnR_Msk         (1UL << CoreDebug_DCRSR_REGWnR_Pos)            /*!< Core
+1084:../Firmware/CMSIS/core_cm23.h **** 
+1085:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DCRSR_REGSEL_Pos          0U                                            /*!< Core
+1086:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DCRSR_REGSEL_Msk         (0x1FUL /*<< CoreDebug_DCRSR_REGSEL_Pos*/)     /*!< Core
+1087:../Firmware/CMSIS/core_cm23.h **** 
+1088:../Firmware/CMSIS/core_cm23.h **** /* Debug Exception and Monitor Control Register */
+1089:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DEMCR_DWTENA_Pos         24U                                            /*!< Core
+1090:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DEMCR_DWTENA_Msk         (1UL << CoreDebug_DEMCR_DWTENA_Pos)            /*!< Core
+1091:../Firmware/CMSIS/core_cm23.h **** 
+1092:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DEMCR_VC_HARDERR_Pos     10U                                            /*!< Core
+1093:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DEMCR_VC_HARDERR_Msk     (1UL << CoreDebug_DEMCR_VC_HARDERR_Pos)        /*!< Core
+1094:../Firmware/CMSIS/core_cm23.h **** 
+1095:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DEMCR_VC_CORERESET_Pos    0U                                            /*!< Core
+1096:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DEMCR_VC_CORERESET_Msk   (1UL /*<< CoreDebug_DEMCR_VC_CORERESET_Pos*/)  /*!< Core
+1097:../Firmware/CMSIS/core_cm23.h **** 
+1098:../Firmware/CMSIS/core_cm23.h **** /* Debug Authentication Control Register Definitions */
+1099:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DAUTHCTRL_INTSPNIDEN_Pos  3U                                            /*!< Core
+1100:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DAUTHCTRL_INTSPNIDEN_Msk (1UL << CoreDebug_DAUTHCTRL_INTSPNIDEN_Pos)    /*!< Core
+1101:../Firmware/CMSIS/core_cm23.h **** 
+1102:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DAUTHCTRL_SPNIDENSEL_Pos  2U                                            /*!< Core
+1103:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DAUTHCTRL_SPNIDENSEL_Msk (1UL << CoreDebug_DAUTHCTRL_SPNIDENSEL_Pos)    /*!< Core
+1104:../Firmware/CMSIS/core_cm23.h **** 
+1105:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DAUTHCTRL_INTSPIDEN_Pos   1U                                            /*!< Core
+1106:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DAUTHCTRL_INTSPIDEN_Msk  (1UL << CoreDebug_DAUTHCTRL_INTSPIDEN_Pos)     /*!< Core
+1107:../Firmware/CMSIS/core_cm23.h **** 
+1108:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DAUTHCTRL_SPIDENSEL_Pos   0U                                            /*!< Core
+1109:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DAUTHCTRL_SPIDENSEL_Msk  (1UL /*<< CoreDebug_DAUTHCTRL_SPIDENSEL_Pos*/) /*!< Core
+1110:../Firmware/CMSIS/core_cm23.h **** 
+1111:../Firmware/CMSIS/core_cm23.h **** /* Debug Security Control and Status Register Definitions */
+1112:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DSCSR_CDS_Pos            16U                                            /*!< Core
+1113:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DSCSR_CDS_Msk            (1UL << CoreDebug_DSCSR_CDS_Pos)               /*!< Core
+1114:../Firmware/CMSIS/core_cm23.h **** 
+1115:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DSCSR_SBRSEL_Pos          1U                                            /*!< Core
+1116:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DSCSR_SBRSEL_Msk         (1UL << CoreDebug_DSCSR_SBRSEL_Pos)            /*!< Core
+1117:../Firmware/CMSIS/core_cm23.h **** 
+1118:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DSCSR_SBRSELEN_Pos        0U                                            /*!< Core
+1119:../Firmware/CMSIS/core_cm23.h **** #define CoreDebug_DSCSR_SBRSELEN_Msk       (1UL /*<< CoreDebug_DSCSR_SBRSELEN_Pos*/)      /*!< Core
+1120:../Firmware/CMSIS/core_cm23.h **** 
+1121:../Firmware/CMSIS/core_cm23.h **** /*@} end of group CMSIS_CoreDebug */
+1122:../Firmware/CMSIS/core_cm23.h **** 
+1123:../Firmware/CMSIS/core_cm23.h **** 
+1124:../Firmware/CMSIS/core_cm23.h **** /**
+1125:../Firmware/CMSIS/core_cm23.h ****   \ingroup    CMSIS_core_register
+1126:../Firmware/CMSIS/core_cm23.h ****   \defgroup   CMSIS_core_bitfield     Core register bit field macros
+1127:../Firmware/CMSIS/core_cm23.h ****   \brief      Macros for use with bit field definitions (xxx_Pos, xxx_Msk).
+1128:../Firmware/CMSIS/core_cm23.h ****   @{
+1129:../Firmware/CMSIS/core_cm23.h ****  */
+1130:../Firmware/CMSIS/core_cm23.h **** 
+1131:../Firmware/CMSIS/core_cm23.h **** /**
+1132:../Firmware/CMSIS/core_cm23.h ****   \brief   Mask and shift a bit field value for use in a register bit range.
+1133:../Firmware/CMSIS/core_cm23.h ****   \param[in] field  Name of the register bit field.
+1134:../Firmware/CMSIS/core_cm23.h ****   \param[in] value  Value of the bit field. This parameter is interpreted as an uint32_t type.
+1135:../Firmware/CMSIS/core_cm23.h ****   \return           Masked and shifted value.
+1136:../Firmware/CMSIS/core_cm23.h **** */
+1137:../Firmware/CMSIS/core_cm23.h **** #define _VAL2FLD(field, value)    (((uint32_t)(value) << field ## _Pos) & field ## _Msk)
+1138:../Firmware/CMSIS/core_cm23.h **** 
+1139:../Firmware/CMSIS/core_cm23.h **** /**
+1140:../Firmware/CMSIS/core_cm23.h ****   \brief     Mask and shift a register value to extract a bit filed value.
+1141:../Firmware/CMSIS/core_cm23.h ****   \param[in] field  Name of the register bit field.
+1142:../Firmware/CMSIS/core_cm23.h ****   \param[in] value  Value of register. This parameter is interpreted as an uint32_t type.
+1143:../Firmware/CMSIS/core_cm23.h ****   \return           Masked and shifted bit field value.
+1144:../Firmware/CMSIS/core_cm23.h **** */
+1145:../Firmware/CMSIS/core_cm23.h **** #define _FLD2VAL(field, value)    (((uint32_t)(value) & field ## _Msk) >> field ## _Pos)
+1146:../Firmware/CMSIS/core_cm23.h **** 
+1147:../Firmware/CMSIS/core_cm23.h **** /*@} end of group CMSIS_core_bitfield */
+1148:../Firmware/CMSIS/core_cm23.h **** 
+1149:../Firmware/CMSIS/core_cm23.h **** 
+1150:../Firmware/CMSIS/core_cm23.h **** /**
+1151:../Firmware/CMSIS/core_cm23.h ****   \ingroup    CMSIS_core_register
+1152:../Firmware/CMSIS/core_cm23.h ****   \defgroup   CMSIS_core_base     Core Definitions
+1153:../Firmware/CMSIS/core_cm23.h ****   \brief      Definitions for base addresses, unions, and structures.
+1154:../Firmware/CMSIS/core_cm23.h ****   @{
+1155:../Firmware/CMSIS/core_cm23.h ****  */
+1156:../Firmware/CMSIS/core_cm23.h **** 
+1157:../Firmware/CMSIS/core_cm23.h **** /* Memory mapping of Core Hardware */
+1158:../Firmware/CMSIS/core_cm23.h ****   #define SCS_BASE            (0xE000E000UL)                             /*!< System Control Space 
+1159:../Firmware/CMSIS/core_cm23.h ****   #define DWT_BASE            (0xE0001000UL)                             /*!< DWT Base Address */
+1160:../Firmware/CMSIS/core_cm23.h ****   #define TPI_BASE            (0xE0040000UL)                             /*!< TPI Base Address */
+1161:../Firmware/CMSIS/core_cm23.h ****   #define CoreDebug_BASE      (0xE000EDF0UL)                             /*!< Core Debug Base Addre
+1162:../Firmware/CMSIS/core_cm23.h ****   #define SysTick_BASE        (SCS_BASE +  0x0010UL)                     /*!< SysTick Base Address 
+1163:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_BASE           (SCS_BASE +  0x0100UL)                     /*!< NVIC Base Address */
+1164:../Firmware/CMSIS/core_cm23.h ****   #define SCB_BASE            (SCS_BASE +  0x0D00UL)                     /*!< System Control Block 
+1165:../Firmware/CMSIS/core_cm23.h **** 
+1166:../Firmware/CMSIS/core_cm23.h **** 
+1167:../Firmware/CMSIS/core_cm23.h ****   #define SCB                 ((SCB_Type       *)     SCB_BASE         ) /*!< SCB configuration str
+1168:../Firmware/CMSIS/core_cm23.h ****   #define SysTick             ((SysTick_Type   *)     SysTick_BASE     ) /*!< SysTick configuration
+1169:../Firmware/CMSIS/core_cm23.h ****   #define NVIC                ((NVIC_Type      *)     NVIC_BASE        ) /*!< NVIC configuration st
+1170:../Firmware/CMSIS/core_cm23.h ****   #define DWT                 ((DWT_Type       *)     DWT_BASE         ) /*!< DWT configuration str
+1171:../Firmware/CMSIS/core_cm23.h ****   #define TPI                 ((TPI_Type       *)     TPI_BASE         ) /*!< TPI configuration str
+1172:../Firmware/CMSIS/core_cm23.h ****   #define CoreDebug           ((CoreDebug_Type *)     CoreDebug_BASE   ) /*!< Core Debug configurat
+1173:../Firmware/CMSIS/core_cm23.h **** 
+1174:../Firmware/CMSIS/core_cm23.h ****   #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)
+1175:../Firmware/CMSIS/core_cm23.h ****     #define MPU_BASE          (SCS_BASE +  0x0D90UL)                     /*!< Memory Protection Uni
+1176:../Firmware/CMSIS/core_cm23.h ****     #define MPU               ((MPU_Type       *)     MPU_BASE         ) /*!< Memory Protection Uni
+1177:../Firmware/CMSIS/core_cm23.h ****   #endif
+1178:../Firmware/CMSIS/core_cm23.h **** 
+1179:../Firmware/CMSIS/core_cm23.h ****   #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+1180:../Firmware/CMSIS/core_cm23.h ****     #define SAU_BASE          (SCS_BASE +  0x0DD0UL)                     /*!< Security Attribution 
+1181:../Firmware/CMSIS/core_cm23.h ****     #define SAU               ((SAU_Type       *)     SAU_BASE         ) /*!< Security Attribution 
+1182:../Firmware/CMSIS/core_cm23.h ****   #endif
+1183:../Firmware/CMSIS/core_cm23.h **** 
+1184:../Firmware/CMSIS/core_cm23.h **** #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+1185:../Firmware/CMSIS/core_cm23.h ****   #define SCS_BASE_NS         (0xE002E000UL)                             /*!< System Control Space 
+1186:../Firmware/CMSIS/core_cm23.h ****   #define CoreDebug_BASE_NS   (0xE002EDF0UL)                             /*!< Core Debug Base Addre
+1187:../Firmware/CMSIS/core_cm23.h ****   #define SysTick_BASE_NS     (SCS_BASE_NS +  0x0010UL)                  /*!< SysTick Base Address 
+1188:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_BASE_NS        (SCS_BASE_NS +  0x0100UL)                  /*!< NVIC Base Address    
+1189:../Firmware/CMSIS/core_cm23.h ****   #define SCB_BASE_NS         (SCS_BASE_NS +  0x0D00UL)                  /*!< System Control Block 
+1190:../Firmware/CMSIS/core_cm23.h **** 
+1191:../Firmware/CMSIS/core_cm23.h ****   #define SCB_NS              ((SCB_Type       *)     SCB_BASE_NS      ) /*!< SCB configuration str
+1192:../Firmware/CMSIS/core_cm23.h ****   #define SysTick_NS          ((SysTick_Type   *)     SysTick_BASE_NS  ) /*!< SysTick configuration
+1193:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_NS             ((NVIC_Type      *)     NVIC_BASE_NS     ) /*!< NVIC configuration st
+1194:../Firmware/CMSIS/core_cm23.h ****   #define CoreDebug_NS        ((CoreDebug_Type *)     CoreDebug_BASE_NS) /*!< Core Debug configurat
+1195:../Firmware/CMSIS/core_cm23.h **** 
+1196:../Firmware/CMSIS/core_cm23.h ****   #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)
+1197:../Firmware/CMSIS/core_cm23.h ****     #define MPU_BASE_NS       (SCS_BASE_NS +  0x0D90UL)                  /*!< Memory Protection Uni
+1198:../Firmware/CMSIS/core_cm23.h ****     #define MPU_NS            ((MPU_Type       *)     MPU_BASE_NS      ) /*!< Memory Protection Uni
+1199:../Firmware/CMSIS/core_cm23.h ****   #endif
+1200:../Firmware/CMSIS/core_cm23.h **** 
+1201:../Firmware/CMSIS/core_cm23.h **** #endif /* defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
+1202:../Firmware/CMSIS/core_cm23.h **** /*@} */
+1203:../Firmware/CMSIS/core_cm23.h **** 
+1204:../Firmware/CMSIS/core_cm23.h **** 
+1205:../Firmware/CMSIS/core_cm23.h **** 
+1206:../Firmware/CMSIS/core_cm23.h **** /*******************************************************************************
+1207:../Firmware/CMSIS/core_cm23.h ****  *                Hardware Abstraction Layer
+1208:../Firmware/CMSIS/core_cm23.h ****   Core Function Interface contains:
+1209:../Firmware/CMSIS/core_cm23.h ****   - Core NVIC Functions
+1210:../Firmware/CMSIS/core_cm23.h ****   - Core SysTick Functions
+1211:../Firmware/CMSIS/core_cm23.h ****   - Core Register Access Functions
+1212:../Firmware/CMSIS/core_cm23.h ****  ******************************************************************************/
+1213:../Firmware/CMSIS/core_cm23.h **** /**
+1214:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_Core_FunctionInterface Functions and Instructions Reference
+1215:../Firmware/CMSIS/core_cm23.h **** */
+1216:../Firmware/CMSIS/core_cm23.h **** 
+1217:../Firmware/CMSIS/core_cm23.h **** 
+1218:../Firmware/CMSIS/core_cm23.h **** 
+1219:../Firmware/CMSIS/core_cm23.h **** /* ##########################   NVIC functions  #################################### */
+1220:../Firmware/CMSIS/core_cm23.h **** /**
+1221:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_Core_FunctionInterface
+1222:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_Core_NVICFunctions NVIC Functions
+1223:../Firmware/CMSIS/core_cm23.h ****   \brief    Functions that manage interrupts and exceptions via the NVIC.
+1224:../Firmware/CMSIS/core_cm23.h ****   @{
+1225:../Firmware/CMSIS/core_cm23.h ****  */
+1226:../Firmware/CMSIS/core_cm23.h **** 
+1227:../Firmware/CMSIS/core_cm23.h **** #ifndef CMSIS_NVIC_VIRTUAL
+1228:../Firmware/CMSIS/core_cm23.h **** /*#define NVIC_SetPriorityGrouping    __NVIC_SetPriorityGrouping   not available for Cortex-M23 */
+1229:../Firmware/CMSIS/core_cm23.h **** /*#define NVIC_GetPriorityGrouping    __NVIC_GetPriorityGrouping   not available for Cortex-M23 */
+1230:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_EnableIRQ              __NVIC_EnableIRQ
+1231:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_GetEnableIRQ           __NVIC_GetEnableIRQ
+1232:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_DisableIRQ             __NVIC_DisableIRQ
+1233:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_GetPendingIRQ          __NVIC_GetPendingIRQ
+1234:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_SetPendingIRQ          __NVIC_SetPendingIRQ
+1235:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_ClearPendingIRQ        __NVIC_ClearPendingIRQ
+1236:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_GetActive              __NVIC_GetActive
+1237:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_SetPriority            __NVIC_SetPriority
+1238:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_GetPriority            __NVIC_GetPriority
+1239:../Firmware/CMSIS/core_cm23.h **** #endif /* CMSIS_NVIC_VIRTUAL */
+1240:../Firmware/CMSIS/core_cm23.h **** 
+1241:../Firmware/CMSIS/core_cm23.h **** #ifndef CMSIS_VECTAB_VIRTUAL
+1242:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_SetVector              __NVIC_SetVector
+1243:../Firmware/CMSIS/core_cm23.h ****   #define NVIC_GetVector              __NVIC_GetVector
+1244:../Firmware/CMSIS/core_cm23.h **** #endif  /* (CMSIS_VECTAB_VIRTUAL) */
+1245:../Firmware/CMSIS/core_cm23.h **** 
+1246:../Firmware/CMSIS/core_cm23.h **** #define NVIC_USER_IRQ_OFFSET          16
+1247:../Firmware/CMSIS/core_cm23.h **** 
+1248:../Firmware/CMSIS/core_cm23.h **** 
+1249:../Firmware/CMSIS/core_cm23.h **** /* Interrupt Priorities are WORD accessible only under ARMv6M                   */
+1250:../Firmware/CMSIS/core_cm23.h **** /* The following MACROS handle generation of the register offset and byte masks */
+1251:../Firmware/CMSIS/core_cm23.h **** #define _BIT_SHIFT(IRQn)         (  ((((uint32_t)(int32_t)(IRQn))         )      &  0x03UL) * 8UL)
+1252:../Firmware/CMSIS/core_cm23.h **** #define _SHP_IDX(IRQn)           ( (((((uint32_t)(int32_t)(IRQn)) & 0x0FUL)-8UL) >>    2UL)      )
+1253:../Firmware/CMSIS/core_cm23.h **** #define _IP_IDX(IRQn)            (   (((uint32_t)(int32_t)(IRQn))                >>    2UL)      )
+1254:../Firmware/CMSIS/core_cm23.h **** 
+1255:../Firmware/CMSIS/core_cm23.h **** 
+1256:../Firmware/CMSIS/core_cm23.h **** /**
+1257:../Firmware/CMSIS/core_cm23.h ****   \brief   Enable Interrupt
+1258:../Firmware/CMSIS/core_cm23.h ****   \details Enables a device specific interrupt in the NVIC interrupt controller.
+1259:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1260:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1261:../Firmware/CMSIS/core_cm23.h ****  */
+1262:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+1263:../Firmware/CMSIS/core_cm23.h **** {
+1264:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1265:../Firmware/CMSIS/core_cm23.h ****   {
+1266:../Firmware/CMSIS/core_cm23.h ****     NVIC->ISER[(((uint32_t)(int32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn) &
+1267:../Firmware/CMSIS/core_cm23.h ****   }
+1268:../Firmware/CMSIS/core_cm23.h **** }
+1269:../Firmware/CMSIS/core_cm23.h **** 
+1270:../Firmware/CMSIS/core_cm23.h **** 
+1271:../Firmware/CMSIS/core_cm23.h **** /**
+1272:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Interrupt Enable status
+1273:../Firmware/CMSIS/core_cm23.h ****   \details Returns a device specific interrupt enable status from the NVIC interrupt controller.
+1274:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1275:../Firmware/CMSIS/core_cm23.h ****   \return             0  Interrupt is not enabled.
+1276:../Firmware/CMSIS/core_cm23.h ****   \return             1  Interrupt is enabled.
+1277:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1278:../Firmware/CMSIS/core_cm23.h ****  */
+1279:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t __NVIC_GetEnableIRQ(IRQn_Type IRQn)
+1280:../Firmware/CMSIS/core_cm23.h **** {
+1281:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1282:../Firmware/CMSIS/core_cm23.h ****   {
+1283:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC->ISER[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(int32
+1284:../Firmware/CMSIS/core_cm23.h ****   }
+1285:../Firmware/CMSIS/core_cm23.h ****   else
+1286:../Firmware/CMSIS/core_cm23.h ****   {
+1287:../Firmware/CMSIS/core_cm23.h ****     return(0U);
+1288:../Firmware/CMSIS/core_cm23.h ****   }
+1289:../Firmware/CMSIS/core_cm23.h **** }
+1290:../Firmware/CMSIS/core_cm23.h **** 
+1291:../Firmware/CMSIS/core_cm23.h **** 
+1292:../Firmware/CMSIS/core_cm23.h **** /**
+1293:../Firmware/CMSIS/core_cm23.h ****   \brief   Disable Interrupt
+1294:../Firmware/CMSIS/core_cm23.h ****   \details Disables a device specific interrupt in the NVIC interrupt controller.
+1295:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1296:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1297:../Firmware/CMSIS/core_cm23.h ****  */
+1298:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void __NVIC_DisableIRQ(IRQn_Type IRQn)
+1299:../Firmware/CMSIS/core_cm23.h **** {
+1300:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1301:../Firmware/CMSIS/core_cm23.h ****   {
+1302:../Firmware/CMSIS/core_cm23.h ****     NVIC->ICER[(((uint32_t)(int32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn) &
+1303:../Firmware/CMSIS/core_cm23.h ****     __DSB();
+1304:../Firmware/CMSIS/core_cm23.h ****     __ISB();
+1305:../Firmware/CMSIS/core_cm23.h ****   }
+1306:../Firmware/CMSIS/core_cm23.h **** }
+1307:../Firmware/CMSIS/core_cm23.h **** 
+1308:../Firmware/CMSIS/core_cm23.h **** 
+1309:../Firmware/CMSIS/core_cm23.h **** /**
+1310:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Pending Interrupt
+1311:../Firmware/CMSIS/core_cm23.h ****   \details Reads the NVIC pending register and returns the pending bit for the specified device spe
+1312:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1313:../Firmware/CMSIS/core_cm23.h ****   \return             0  Interrupt status is not pending.
+1314:../Firmware/CMSIS/core_cm23.h ****   \return             1  Interrupt status is pending.
+1315:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1316:../Firmware/CMSIS/core_cm23.h ****  */
+1317:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t __NVIC_GetPendingIRQ(IRQn_Type IRQn)
+1318:../Firmware/CMSIS/core_cm23.h **** {
+1319:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1320:../Firmware/CMSIS/core_cm23.h ****   {
+1321:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC->ISPR[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(int32
+1322:../Firmware/CMSIS/core_cm23.h ****   }
+1323:../Firmware/CMSIS/core_cm23.h ****   else
+1324:../Firmware/CMSIS/core_cm23.h ****   {
+1325:../Firmware/CMSIS/core_cm23.h ****     return(0U);
+1326:../Firmware/CMSIS/core_cm23.h ****   }
+1327:../Firmware/CMSIS/core_cm23.h **** }
+1328:../Firmware/CMSIS/core_cm23.h **** 
+1329:../Firmware/CMSIS/core_cm23.h **** 
+1330:../Firmware/CMSIS/core_cm23.h **** /**
+1331:../Firmware/CMSIS/core_cm23.h ****   \brief   Set Pending Interrupt
+1332:../Firmware/CMSIS/core_cm23.h ****   \details Sets the pending bit of a device specific interrupt in the NVIC pending register.
+1333:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1334:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1335:../Firmware/CMSIS/core_cm23.h ****  */
+1336:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void __NVIC_SetPendingIRQ(IRQn_Type IRQn)
+1337:../Firmware/CMSIS/core_cm23.h **** {
+1338:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1339:../Firmware/CMSIS/core_cm23.h ****   {
+1340:../Firmware/CMSIS/core_cm23.h ****     NVIC->ISPR[(((uint32_t)(int32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn) &
+1341:../Firmware/CMSIS/core_cm23.h ****   }
+1342:../Firmware/CMSIS/core_cm23.h **** }
+1343:../Firmware/CMSIS/core_cm23.h **** 
+1344:../Firmware/CMSIS/core_cm23.h **** 
+1345:../Firmware/CMSIS/core_cm23.h **** /**
+1346:../Firmware/CMSIS/core_cm23.h ****   \brief   Clear Pending Interrupt
+1347:../Firmware/CMSIS/core_cm23.h ****   \details Clears the pending bit of a device specific interrupt in the NVIC pending register.
+1348:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1349:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1350:../Firmware/CMSIS/core_cm23.h ****  */
+1351:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void __NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+1352:../Firmware/CMSIS/core_cm23.h **** {
+1353:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1354:../Firmware/CMSIS/core_cm23.h ****   {
+1355:../Firmware/CMSIS/core_cm23.h ****     NVIC->ICPR[(((uint32_t)(int32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn) &
+1356:../Firmware/CMSIS/core_cm23.h ****   }
+1357:../Firmware/CMSIS/core_cm23.h **** }
+1358:../Firmware/CMSIS/core_cm23.h **** 
+1359:../Firmware/CMSIS/core_cm23.h **** 
+1360:../Firmware/CMSIS/core_cm23.h **** /**
+1361:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Active Interrupt
+1362:../Firmware/CMSIS/core_cm23.h ****   \details Reads the active register in the NVIC and returns the active bit for the device specific
+1363:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1364:../Firmware/CMSIS/core_cm23.h ****   \return             0  Interrupt status is not active.
+1365:../Firmware/CMSIS/core_cm23.h ****   \return             1  Interrupt status is active.
+1366:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1367:../Firmware/CMSIS/core_cm23.h ****  */
+1368:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t __NVIC_GetActive(IRQn_Type IRQn)
+1369:../Firmware/CMSIS/core_cm23.h **** {
+1370:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1371:../Firmware/CMSIS/core_cm23.h ****   {
+1372:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC->IABR[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(int32
+1373:../Firmware/CMSIS/core_cm23.h ****   }
+1374:../Firmware/CMSIS/core_cm23.h ****   else
+1375:../Firmware/CMSIS/core_cm23.h ****   {
+1376:../Firmware/CMSIS/core_cm23.h ****     return(0U);
+1377:../Firmware/CMSIS/core_cm23.h ****   }
+1378:../Firmware/CMSIS/core_cm23.h **** }
+1379:../Firmware/CMSIS/core_cm23.h **** 
+1380:../Firmware/CMSIS/core_cm23.h **** 
+1381:../Firmware/CMSIS/core_cm23.h **** #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+1382:../Firmware/CMSIS/core_cm23.h **** /**
+1383:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Interrupt Target State
+1384:../Firmware/CMSIS/core_cm23.h ****   \details Reads the interrupt target field in the NVIC and returns the interrupt target bit for th
+1385:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1386:../Firmware/CMSIS/core_cm23.h ****   \return             0  if interrupt is assigned to Secure
+1387:../Firmware/CMSIS/core_cm23.h ****   \return             1  if interrupt is assigned to Non Secure
+1388:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1389:../Firmware/CMSIS/core_cm23.h ****  */
+1390:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t NVIC_GetTargetState(IRQn_Type IRQn)
+1391:../Firmware/CMSIS/core_cm23.h **** {
+1392:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1393:../Firmware/CMSIS/core_cm23.h ****   {
+1394:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC->ITNS[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(int32
+1395:../Firmware/CMSIS/core_cm23.h ****   }
+1396:../Firmware/CMSIS/core_cm23.h ****   else
+1397:../Firmware/CMSIS/core_cm23.h ****   {
+1398:../Firmware/CMSIS/core_cm23.h ****     return(0U);
+1399:../Firmware/CMSIS/core_cm23.h ****   }
+1400:../Firmware/CMSIS/core_cm23.h **** }
+1401:../Firmware/CMSIS/core_cm23.h **** 
+1402:../Firmware/CMSIS/core_cm23.h **** 
+1403:../Firmware/CMSIS/core_cm23.h **** /**
+1404:../Firmware/CMSIS/core_cm23.h ****   \brief   Set Interrupt Target State
+1405:../Firmware/CMSIS/core_cm23.h ****   \details Sets the interrupt target field in the NVIC and returns the interrupt target bit for the
+1406:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1407:../Firmware/CMSIS/core_cm23.h ****   \return             0  if interrupt is assigned to Secure
+1408:../Firmware/CMSIS/core_cm23.h ****                       1  if interrupt is assigned to Non Secure
+1409:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1410:../Firmware/CMSIS/core_cm23.h ****  */
+1411:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t NVIC_SetTargetState(IRQn_Type IRQn)
+1412:../Firmware/CMSIS/core_cm23.h **** {
+1413:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1414:../Firmware/CMSIS/core_cm23.h ****   {
+1415:../Firmware/CMSIS/core_cm23.h ****     NVIC->ITNS[(((uint32_t)(int32_t)IRQn) >> 5UL)] |=  ((uint32_t)(1UL << (((uint32_t)(int32_t)IRQn
+1416:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC->ITNS[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(int32
+1417:../Firmware/CMSIS/core_cm23.h ****   }
+1418:../Firmware/CMSIS/core_cm23.h ****   else
+1419:../Firmware/CMSIS/core_cm23.h ****   {
+1420:../Firmware/CMSIS/core_cm23.h ****     return(0U);
+1421:../Firmware/CMSIS/core_cm23.h ****   }
+1422:../Firmware/CMSIS/core_cm23.h **** }
+1423:../Firmware/CMSIS/core_cm23.h **** 
+1424:../Firmware/CMSIS/core_cm23.h **** 
+1425:../Firmware/CMSIS/core_cm23.h **** /**
+1426:../Firmware/CMSIS/core_cm23.h ****   \brief   Clear Interrupt Target State
+1427:../Firmware/CMSIS/core_cm23.h ****   \details Clears the interrupt target field in the NVIC and returns the interrupt target bit for t
+1428:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1429:../Firmware/CMSIS/core_cm23.h ****   \return             0  if interrupt is assigned to Secure
+1430:../Firmware/CMSIS/core_cm23.h ****                       1  if interrupt is assigned to Non Secure
+1431:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1432:../Firmware/CMSIS/core_cm23.h ****  */
+1433:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t NVIC_ClearTargetState(IRQn_Type IRQn)
+1434:../Firmware/CMSIS/core_cm23.h **** {
+1435:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1436:../Firmware/CMSIS/core_cm23.h ****   {
+1437:../Firmware/CMSIS/core_cm23.h ****     NVIC->ITNS[(((uint32_t)(int32_t)IRQn) >> 5UL)] &= ~((uint32_t)(1UL << (((uint32_t)(int32_t)IRQn
+1438:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC->ITNS[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(int32
+1439:../Firmware/CMSIS/core_cm23.h ****   }
+1440:../Firmware/CMSIS/core_cm23.h ****   else
+1441:../Firmware/CMSIS/core_cm23.h ****   {
+1442:../Firmware/CMSIS/core_cm23.h ****     return(0U);
+1443:../Firmware/CMSIS/core_cm23.h ****   }
+1444:../Firmware/CMSIS/core_cm23.h **** }
+1445:../Firmware/CMSIS/core_cm23.h **** #endif /* defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
+1446:../Firmware/CMSIS/core_cm23.h **** 
+1447:../Firmware/CMSIS/core_cm23.h **** 
+1448:../Firmware/CMSIS/core_cm23.h **** /**
+1449:../Firmware/CMSIS/core_cm23.h ****   \brief   Set Interrupt Priority
+1450:../Firmware/CMSIS/core_cm23.h ****   \details Sets the priority of a device specific interrupt or a processor exception.
+1451:../Firmware/CMSIS/core_cm23.h ****            The interrupt number can be positive to specify a device specific interrupt,
+1452:../Firmware/CMSIS/core_cm23.h ****            or negative to specify a processor exception.
+1453:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Interrupt number.
+1454:../Firmware/CMSIS/core_cm23.h ****   \param [in]  priority  Priority to set.
+1455:../Firmware/CMSIS/core_cm23.h ****   \note    The priority cannot be set for every processor exception.
+1456:../Firmware/CMSIS/core_cm23.h ****  */
+1457:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+1458:../Firmware/CMSIS/core_cm23.h **** {
+  26              		.loc 1 1458 1
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 1, uses_anonymous_args = 0
+  30 0000 90B5     		push	{r4, r7, lr}
+  31              		.cfi_def_cfa_offset 12
+  32              		.cfi_offset 4, -12
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 83B0     		sub	sp, sp, #12
+  36              		.cfi_def_cfa_offset 24
+  37 0004 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  39 0006 0200     		movs	r2, r0
+  40 0008 3960     		str	r1, [r7]
+  41 000a FB1D     		adds	r3, r7, #7
+  42 000c 1A70     		strb	r2, [r3]
+1459:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+  43              		.loc 1 1459 6
+  44 000e FB1D     		adds	r3, r7, #7
+  45 0010 1B78     		ldrb	r3, [r3]
+  46 0012 7F2B     		cmp	r3, #127
+  47 0014 2FD8     		bhi	.L2
+1460:../Firmware/CMSIS/core_cm23.h ****   {
+1461:../Firmware/CMSIS/core_cm23.h ****     NVIC->IPR[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IPR[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn
+  48              		.loc 1 1461 49
+  49 0016 4EF20013 		movw	r3, #57600
+  50 001a CEF20003 		movt	r3, 57344
+  51              		.loc 1 1461 55
+  52 001e FA1D     		adds	r2, r7, #7
+  53 0020 1278     		ldrb	r2, [r2]
+  54 0022 52B2     		sxtb	r2, r2
+  55 0024 9208     		lsrs	r2, r2, #2
+  56              		.loc 1 1461 54
+  57 0026 C032     		adds	r2, r2, #192
+  58 0028 9200     		lsls	r2, r2, #2
+  59 002a D358     		ldr	r3, [r2, r3]
+  60              		.loc 1 1461 85
+  61 002c FA1D     		adds	r2, r7, #7
+  62 002e 1278     		ldrb	r2, [r2]
+  63 0030 1100     		movs	r1, r2
+  64 0032 0322     		movs	r2, #3
+  65 0034 0A40     		ands	r2, r1
+  66 0036 D200     		lsls	r2, r2, #3
+  67              		.loc 1 1461 82
+  68 0038 FF21     		movs	r1, #255
+  69 003a 9140     		lsls	r1, r1, r2
+  70 003c 0A00     		movs	r2, r1
+  71              		.loc 1 1461 73
+  72 003e D243     		mvns	r2, r2
+  73              		.loc 1 1461 34
+  74 0040 1A40     		ands	r2, r3
+  75 0042 1000     		movs	r0, r2
+1462:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  76              		.loc 1 1462 20
+  77 0044 3B68     		ldr	r3, [r7]
+  78 0046 9B01     		lsls	r3, r3, #6
+  79              		.loc 1 1462 48
+  80 0048 FF22     		movs	r2, #255
+  81 004a 1A40     		ands	r2, r3
+  82              		.loc 1 1462 71
+  83 004c FB1D     		adds	r3, r7, #7
+  84 004e 1B78     		ldrb	r3, [r3]
+  85 0050 1900     		movs	r1, r3
+  86 0052 0323     		movs	r3, #3
+  87 0054 0B40     		ands	r3, r1
+  88 0056 DB00     		lsls	r3, r3, #3
+  89              		.loc 1 1462 68
+  90 0058 9A40     		lsls	r2, r2, r3
+  91 005a 1100     		movs	r1, r2
+1461:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  92              		.loc 1 1461 9
+  93 005c 4EF20013 		movw	r3, #57600
+  94 0060 CEF20003 		movt	r3, 57344
+1461:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+  95              		.loc 1 1461 15
+  96 0064 FA1D     		adds	r2, r7, #7
+  97 0066 1278     		ldrb	r2, [r2]
+  98 0068 52B2     		sxtb	r2, r2
+  99 006a 9208     		lsrs	r2, r2, #2
+1461:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 100              		.loc 1 1461 104
+ 101 006c 0143     		orrs	r1, r0
+1461:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 102              		.loc 1 1461 31
+ 103 006e C032     		adds	r2, r2, #192
+ 104 0070 9200     		lsls	r2, r2, #2
+ 105 0072 D150     		str	r1, [r2, r3]
+1463:../Firmware/CMSIS/core_cm23.h ****   }
+1464:../Firmware/CMSIS/core_cm23.h ****   else
+1465:../Firmware/CMSIS/core_cm23.h ****   {
+1466:../Firmware/CMSIS/core_cm23.h ****     SCB->SHPR[_SHP_IDX(IRQn)] = ((uint32_t)(SCB->SHPR[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn
+1467:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+1468:../Firmware/CMSIS/core_cm23.h ****   }
+1469:../Firmware/CMSIS/core_cm23.h **** }
+ 106              		.loc 1 1469 1
+ 107 0074 37E0     		b	.L4
+ 108              	.L2:
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 109              		.loc 1 1466 48
+ 110 0076 4EF60053 		movw	r3, #60672
+ 111 007a CEF20003 		movt	r3, 57344
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 112              		.loc 1 1466 55
+ 113 007e FA1D     		adds	r2, r7, #7
+ 114 0080 1278     		ldrb	r2, [r2]
+ 115 0082 1100     		movs	r1, r2
+ 116 0084 0F22     		movs	r2, #15
+ 117 0086 0A40     		ands	r2, r1
+ 118 0088 083A     		subs	r2, r2, #8
+ 119 008a 9208     		lsrs	r2, r2, #2
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 120              		.loc 1 1466 54
+ 121 008c 0632     		adds	r2, r2, #6
+ 122 008e 9200     		lsls	r2, r2, #2
+ 123 0090 9B18     		adds	r3, r3, r2
+ 124 0092 0433     		adds	r3, r3, #4
+ 125 0094 1B68     		ldr	r3, [r3]
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 126              		.loc 1 1466 85
+ 127 0096 FA1D     		adds	r2, r7, #7
+ 128 0098 1278     		ldrb	r2, [r2]
+ 129 009a 1100     		movs	r1, r2
+ 130 009c 0322     		movs	r2, #3
+ 131 009e 0A40     		ands	r2, r1
+ 132 00a0 D200     		lsls	r2, r2, #3
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 133              		.loc 1 1466 82
+ 134 00a2 FF21     		movs	r1, #255
+ 135 00a4 9140     		lsls	r1, r1, r2
+ 136 00a6 0A00     		movs	r2, r1
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 137              		.loc 1 1466 73
+ 138 00a8 D243     		mvns	r2, r2
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 139              		.loc 1 1466 34
+ 140 00aa 1A40     		ands	r2, r3
+ 141 00ac 1000     		movs	r0, r2
+1467:../Firmware/CMSIS/core_cm23.h ****   }
+ 142              		.loc 1 1467 20
+ 143 00ae 3B68     		ldr	r3, [r7]
+ 144 00b0 9B01     		lsls	r3, r3, #6
+1467:../Firmware/CMSIS/core_cm23.h ****   }
+ 145              		.loc 1 1467 48
+ 146 00b2 FF22     		movs	r2, #255
+ 147 00b4 1A40     		ands	r2, r3
+1467:../Firmware/CMSIS/core_cm23.h ****   }
+ 148              		.loc 1 1467 71
+ 149 00b6 FB1D     		adds	r3, r7, #7
+ 150 00b8 1B78     		ldrb	r3, [r3]
+ 151 00ba 1900     		movs	r1, r3
+ 152 00bc 0323     		movs	r3, #3
+ 153 00be 0B40     		ands	r3, r1
+ 154 00c0 DB00     		lsls	r3, r3, #3
+1467:../Firmware/CMSIS/core_cm23.h ****   }
+ 155              		.loc 1 1467 68
+ 156 00c2 9A40     		lsls	r2, r2, r3
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 157              		.loc 1 1466 8
+ 158 00c4 4EF60053 		movw	r3, #60672
+ 159 00c8 CEF20003 		movt	r3, 57344
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 160              		.loc 1 1466 15
+ 161 00cc F91D     		adds	r1, r7, #7
+ 162 00ce 0978     		ldrb	r1, [r1]
+ 163 00d0 0C00     		movs	r4, r1
+ 164 00d2 0F21     		movs	r1, #15
+ 165 00d4 2140     		ands	r1, r4
+ 166 00d6 0839     		subs	r1, r1, #8
+ 167 00d8 8908     		lsrs	r1, r1, #2
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 168              		.loc 1 1466 104
+ 169 00da 0243     		orrs	r2, r0
+1466:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 170              		.loc 1 1466 31
+ 171 00dc 0631     		adds	r1, r1, #6
+ 172 00de 8900     		lsls	r1, r1, #2
+ 173 00e0 5B18     		adds	r3, r3, r1
+ 174 00e2 0433     		adds	r3, r3, #4
+ 175 00e4 1A60     		str	r2, [r3]
+ 176              	.L4:
+ 177              		.loc 1 1469 1
+ 178 00e6 C046     		nop
+ 179 00e8 BD46     		mov	sp, r7
+ 180 00ea 03B0     		add	sp, sp, #12
+ 181              		@ sp needed
+ 182 00ec 90BD     		pop	{r4, r7, pc}
+ 183              		.cfi_endproc
+ 184              	.LFE51:
+ 186              		.section	.text.SysTick_Config,"ax",%progbits
+ 187              		.align	1
+ 188              		.syntax unified
+ 189              		.code	16
+ 190              		.thumb_func
+ 191              		.fpu softvfp
+ 193              	SysTick_Config:
+ 194              	.LFB57:
+1470:../Firmware/CMSIS/core_cm23.h **** 
+1471:../Firmware/CMSIS/core_cm23.h **** 
+1472:../Firmware/CMSIS/core_cm23.h **** /**
+1473:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Interrupt Priority
+1474:../Firmware/CMSIS/core_cm23.h ****   \details Reads the priority of a device specific interrupt or a processor exception.
+1475:../Firmware/CMSIS/core_cm23.h ****            The interrupt number can be positive to specify a device specific interrupt,
+1476:../Firmware/CMSIS/core_cm23.h ****            or negative to specify a processor exception.
+1477:../Firmware/CMSIS/core_cm23.h ****   \param [in]   IRQn  Interrupt number.
+1478:../Firmware/CMSIS/core_cm23.h ****   \return             Interrupt Priority.
+1479:../Firmware/CMSIS/core_cm23.h ****                       Value is aligned automatically to the implemented priority bits of the microc
+1480:../Firmware/CMSIS/core_cm23.h ****  */
+1481:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t __NVIC_GetPriority(IRQn_Type IRQn)
+1482:../Firmware/CMSIS/core_cm23.h **** {
+1483:../Firmware/CMSIS/core_cm23.h **** 
+1484:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1485:../Firmware/CMSIS/core_cm23.h ****   {
+1486:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC->IPR[ _IP_IDX(IRQn)] >> _BIT_SHIFT(IRQn) ) & (uint32_t)0xFFUL) >> (8U 
+1487:../Firmware/CMSIS/core_cm23.h ****   }
+1488:../Firmware/CMSIS/core_cm23.h ****   else
+1489:../Firmware/CMSIS/core_cm23.h ****   {
+1490:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((SCB->SHPR[_SHP_IDX(IRQn)] >> _BIT_SHIFT(IRQn) ) & (uint32_t)0xFFUL) >> (8U 
+1491:../Firmware/CMSIS/core_cm23.h ****   }
+1492:../Firmware/CMSIS/core_cm23.h **** }
+1493:../Firmware/CMSIS/core_cm23.h **** 
+1494:../Firmware/CMSIS/core_cm23.h **** 
+1495:../Firmware/CMSIS/core_cm23.h **** /**
+1496:../Firmware/CMSIS/core_cm23.h ****   \brief   Set Interrupt Vector
+1497:../Firmware/CMSIS/core_cm23.h ****   \details Sets an interrupt vector in SRAM based interrupt vector table.
+1498:../Firmware/CMSIS/core_cm23.h ****            The interrupt number can be positive to specify a device specific interrupt,
+1499:../Firmware/CMSIS/core_cm23.h ****            or negative to specify a processor exception.
+1500:../Firmware/CMSIS/core_cm23.h ****            VTOR must been relocated to SRAM before.
+1501:../Firmware/CMSIS/core_cm23.h ****            If VTOR is not present address 0 must be mapped to SRAM.
+1502:../Firmware/CMSIS/core_cm23.h ****   \param [in]   IRQn      Interrupt number
+1503:../Firmware/CMSIS/core_cm23.h ****   \param [in]   vector    Address of interrupt handler function
+1504:../Firmware/CMSIS/core_cm23.h ****  */
+1505:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void __NVIC_SetVector(IRQn_Type IRQn, uint32_t vector)
+1506:../Firmware/CMSIS/core_cm23.h **** {
+1507:../Firmware/CMSIS/core_cm23.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+1508:../Firmware/CMSIS/core_cm23.h ****   uint32_t *vectors = (uint32_t *)SCB->VTOR;
+1509:../Firmware/CMSIS/core_cm23.h **** #else
+1510:../Firmware/CMSIS/core_cm23.h ****   uint32_t *vectors = (uint32_t *)0x0U;
+1511:../Firmware/CMSIS/core_cm23.h **** #endif
+1512:../Firmware/CMSIS/core_cm23.h ****   vectors[(int32_t)IRQn + NVIC_USER_IRQ_OFFSET] = vector;
+1513:../Firmware/CMSIS/core_cm23.h **** }
+1514:../Firmware/CMSIS/core_cm23.h **** 
+1515:../Firmware/CMSIS/core_cm23.h **** 
+1516:../Firmware/CMSIS/core_cm23.h **** /**
+1517:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Interrupt Vector
+1518:../Firmware/CMSIS/core_cm23.h ****   \details Reads an interrupt vector from interrupt vector table.
+1519:../Firmware/CMSIS/core_cm23.h ****            The interrupt number can be positive to specify a device specific interrupt,
+1520:../Firmware/CMSIS/core_cm23.h ****            or negative to specify a processor exception.
+1521:../Firmware/CMSIS/core_cm23.h ****   \param [in]   IRQn      Interrupt number.
+1522:../Firmware/CMSIS/core_cm23.h ****   \return                 Address of interrupt handler function
+1523:../Firmware/CMSIS/core_cm23.h ****  */
+1524:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t __NVIC_GetVector(IRQn_Type IRQn)
+1525:../Firmware/CMSIS/core_cm23.h **** {
+1526:../Firmware/CMSIS/core_cm23.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+1527:../Firmware/CMSIS/core_cm23.h ****   uint32_t *vectors = (uint32_t *)SCB->VTOR;
+1528:../Firmware/CMSIS/core_cm23.h **** #else
+1529:../Firmware/CMSIS/core_cm23.h ****   uint32_t *vectors = (uint32_t *)0x0U;
+1530:../Firmware/CMSIS/core_cm23.h **** #endif
+1531:../Firmware/CMSIS/core_cm23.h ****   return vectors[(int32_t)IRQn + NVIC_USER_IRQ_OFFSET];
+1532:../Firmware/CMSIS/core_cm23.h **** }
+1533:../Firmware/CMSIS/core_cm23.h **** 
+1534:../Firmware/CMSIS/core_cm23.h **** 
+1535:../Firmware/CMSIS/core_cm23.h **** /**
+1536:../Firmware/CMSIS/core_cm23.h ****   \brief   System Reset
+1537:../Firmware/CMSIS/core_cm23.h ****   \details Initiates a system reset request to reset the MCU.
+1538:../Firmware/CMSIS/core_cm23.h ****  */
+1539:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void NVIC_SystemReset(void)
+1540:../Firmware/CMSIS/core_cm23.h **** {
+1541:../Firmware/CMSIS/core_cm23.h ****   __DSB();                                                          /* Ensure all outstanding memor
+1542:../Firmware/CMSIS/core_cm23.h ****                                                                        buffered write are completed
+1543:../Firmware/CMSIS/core_cm23.h ****   SCB->AIRCR  = ((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
+1544:../Firmware/CMSIS/core_cm23.h ****                  SCB_AIRCR_SYSRESETREQ_Msk);
+1545:../Firmware/CMSIS/core_cm23.h ****   __DSB();                                                          /* Ensure completion of memory 
+1546:../Firmware/CMSIS/core_cm23.h **** 
+1547:../Firmware/CMSIS/core_cm23.h ****   for(;;)                                                           /* wait until reset */
+1548:../Firmware/CMSIS/core_cm23.h ****   {
+1549:../Firmware/CMSIS/core_cm23.h ****     __NOP();
+1550:../Firmware/CMSIS/core_cm23.h ****   }
+1551:../Firmware/CMSIS/core_cm23.h **** }
+1552:../Firmware/CMSIS/core_cm23.h **** 
+1553:../Firmware/CMSIS/core_cm23.h **** #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+1554:../Firmware/CMSIS/core_cm23.h **** /**
+1555:../Firmware/CMSIS/core_cm23.h ****   \brief   Enable Interrupt (non-secure)
+1556:../Firmware/CMSIS/core_cm23.h ****   \details Enables a device specific interrupt in the non-secure NVIC interrupt controller when in 
+1557:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1558:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1559:../Firmware/CMSIS/core_cm23.h ****  */
+1560:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void TZ_NVIC_EnableIRQ_NS(IRQn_Type IRQn)
+1561:../Firmware/CMSIS/core_cm23.h **** {
+1562:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1563:../Firmware/CMSIS/core_cm23.h ****   {
+1564:../Firmware/CMSIS/core_cm23.h ****     NVIC_NS->ISER[(((uint32_t)(int32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn
+1565:../Firmware/CMSIS/core_cm23.h ****   }
+1566:../Firmware/CMSIS/core_cm23.h **** }
+1567:../Firmware/CMSIS/core_cm23.h **** 
+1568:../Firmware/CMSIS/core_cm23.h **** 
+1569:../Firmware/CMSIS/core_cm23.h **** /**
+1570:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Interrupt Enable status (non-secure)
+1571:../Firmware/CMSIS/core_cm23.h ****   \details Returns a device specific interrupt enable status from the non-secure NVIC interrupt con
+1572:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1573:../Firmware/CMSIS/core_cm23.h ****   \return             0  Interrupt is not enabled.
+1574:../Firmware/CMSIS/core_cm23.h ****   \return             1  Interrupt is enabled.
+1575:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1576:../Firmware/CMSIS/core_cm23.h ****  */
+1577:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t TZ_NVIC_GetEnableIRQ_NS(IRQn_Type IRQn)
+1578:../Firmware/CMSIS/core_cm23.h **** {
+1579:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1580:../Firmware/CMSIS/core_cm23.h ****   {
+1581:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC_NS->ISER[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(in
+1582:../Firmware/CMSIS/core_cm23.h ****   }
+1583:../Firmware/CMSIS/core_cm23.h ****   else
+1584:../Firmware/CMSIS/core_cm23.h ****   {
+1585:../Firmware/CMSIS/core_cm23.h ****     return(0U);
+1586:../Firmware/CMSIS/core_cm23.h ****   }
+1587:../Firmware/CMSIS/core_cm23.h **** }
+1588:../Firmware/CMSIS/core_cm23.h **** 
+1589:../Firmware/CMSIS/core_cm23.h **** 
+1590:../Firmware/CMSIS/core_cm23.h **** /**
+1591:../Firmware/CMSIS/core_cm23.h ****   \brief   Disable Interrupt (non-secure)
+1592:../Firmware/CMSIS/core_cm23.h ****   \details Disables a device specific interrupt in the non-secure NVIC interrupt controller when in
+1593:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1594:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1595:../Firmware/CMSIS/core_cm23.h ****  */
+1596:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void TZ_NVIC_DisableIRQ_NS(IRQn_Type IRQn)
+1597:../Firmware/CMSIS/core_cm23.h **** {
+1598:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1599:../Firmware/CMSIS/core_cm23.h ****   {
+1600:../Firmware/CMSIS/core_cm23.h ****     NVIC_NS->ICER[(((uint32_t)(int32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn
+1601:../Firmware/CMSIS/core_cm23.h ****   }
+1602:../Firmware/CMSIS/core_cm23.h **** }
+1603:../Firmware/CMSIS/core_cm23.h **** 
+1604:../Firmware/CMSIS/core_cm23.h **** 
+1605:../Firmware/CMSIS/core_cm23.h **** /**
+1606:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Pending Interrupt (non-secure)
+1607:../Firmware/CMSIS/core_cm23.h ****   \details Reads the NVIC pending register in the non-secure NVIC when in secure state and returns 
+1608:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1609:../Firmware/CMSIS/core_cm23.h ****   \return             0  Interrupt status is not pending.
+1610:../Firmware/CMSIS/core_cm23.h ****   \return             1  Interrupt status is pending.
+1611:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1612:../Firmware/CMSIS/core_cm23.h ****  */
+1613:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t TZ_NVIC_GetPendingIRQ_NS(IRQn_Type IRQn)
+1614:../Firmware/CMSIS/core_cm23.h **** {
+1615:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1616:../Firmware/CMSIS/core_cm23.h ****   {
+1617:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC_NS->ISPR[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(in
+1618:../Firmware/CMSIS/core_cm23.h ****   }
+1619:../Firmware/CMSIS/core_cm23.h **** }
+1620:../Firmware/CMSIS/core_cm23.h **** 
+1621:../Firmware/CMSIS/core_cm23.h **** 
+1622:../Firmware/CMSIS/core_cm23.h **** /**
+1623:../Firmware/CMSIS/core_cm23.h ****   \brief   Set Pending Interrupt (non-secure)
+1624:../Firmware/CMSIS/core_cm23.h ****   \details Sets the pending bit of a device specific interrupt in the non-secure NVIC pending regis
+1625:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1626:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1627:../Firmware/CMSIS/core_cm23.h ****  */
+1628:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void TZ_NVIC_SetPendingIRQ_NS(IRQn_Type IRQn)
+1629:../Firmware/CMSIS/core_cm23.h **** {
+1630:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1631:../Firmware/CMSIS/core_cm23.h ****   {
+1632:../Firmware/CMSIS/core_cm23.h ****     NVIC_NS->ISPR[(((uint32_t)(int32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn
+1633:../Firmware/CMSIS/core_cm23.h ****   }
+1634:../Firmware/CMSIS/core_cm23.h **** }
+1635:../Firmware/CMSIS/core_cm23.h **** 
+1636:../Firmware/CMSIS/core_cm23.h **** 
+1637:../Firmware/CMSIS/core_cm23.h **** /**
+1638:../Firmware/CMSIS/core_cm23.h ****   \brief   Clear Pending Interrupt (non-secure)
+1639:../Firmware/CMSIS/core_cm23.h ****   \details Clears the pending bit of a device specific interrupt in the non-secure NVIC pending reg
+1640:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1641:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1642:../Firmware/CMSIS/core_cm23.h ****  */
+1643:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void TZ_NVIC_ClearPendingIRQ_NS(IRQn_Type IRQn)
+1644:../Firmware/CMSIS/core_cm23.h **** {
+1645:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1646:../Firmware/CMSIS/core_cm23.h ****   {
+1647:../Firmware/CMSIS/core_cm23.h ****     NVIC_NS->ICPR[(((uint32_t)(int32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)IRQn
+1648:../Firmware/CMSIS/core_cm23.h ****   }
+1649:../Firmware/CMSIS/core_cm23.h **** }
+1650:../Firmware/CMSIS/core_cm23.h **** 
+1651:../Firmware/CMSIS/core_cm23.h **** 
+1652:../Firmware/CMSIS/core_cm23.h **** /**
+1653:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Active Interrupt (non-secure)
+1654:../Firmware/CMSIS/core_cm23.h ****   \details Reads the active register in non-secure NVIC when in secure state and returns the active
+1655:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Device specific interrupt number.
+1656:../Firmware/CMSIS/core_cm23.h ****   \return             0  Interrupt status is not active.
+1657:../Firmware/CMSIS/core_cm23.h ****   \return             1  Interrupt status is active.
+1658:../Firmware/CMSIS/core_cm23.h ****   \note    IRQn must not be negative.
+1659:../Firmware/CMSIS/core_cm23.h ****  */
+1660:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t TZ_NVIC_GetActive_NS(IRQn_Type IRQn)
+1661:../Firmware/CMSIS/core_cm23.h **** {
+1662:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1663:../Firmware/CMSIS/core_cm23.h ****   {
+1664:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC_NS->IABR[(((uint32_t)(int32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)(in
+1665:../Firmware/CMSIS/core_cm23.h ****   }
+1666:../Firmware/CMSIS/core_cm23.h ****   else
+1667:../Firmware/CMSIS/core_cm23.h ****   {
+1668:../Firmware/CMSIS/core_cm23.h ****     return(0U);
+1669:../Firmware/CMSIS/core_cm23.h ****   }
+1670:../Firmware/CMSIS/core_cm23.h **** }
+1671:../Firmware/CMSIS/core_cm23.h **** 
+1672:../Firmware/CMSIS/core_cm23.h **** 
+1673:../Firmware/CMSIS/core_cm23.h **** /**
+1674:../Firmware/CMSIS/core_cm23.h ****   \brief   Set Interrupt Priority (non-secure)
+1675:../Firmware/CMSIS/core_cm23.h ****   \details Sets the priority of a non-secure device specific interrupt or a non-secure processor ex
+1676:../Firmware/CMSIS/core_cm23.h ****            The interrupt number can be positive to specify a device specific interrupt,
+1677:../Firmware/CMSIS/core_cm23.h ****            or negative to specify a processor exception.
+1678:../Firmware/CMSIS/core_cm23.h ****   \param [in]      IRQn  Interrupt number.
+1679:../Firmware/CMSIS/core_cm23.h ****   \param [in]  priority  Priority to set.
+1680:../Firmware/CMSIS/core_cm23.h ****   \note    The priority cannot be set for every non-secure processor exception.
+1681:../Firmware/CMSIS/core_cm23.h ****  */
+1682:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void TZ_NVIC_SetPriority_NS(IRQn_Type IRQn, uint32_t priority)
+1683:../Firmware/CMSIS/core_cm23.h **** {
+1684:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1685:../Firmware/CMSIS/core_cm23.h ****   {
+1686:../Firmware/CMSIS/core_cm23.h ****     NVIC_NS->IPR[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC_NS->IPR[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIF
+1687:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+1688:../Firmware/CMSIS/core_cm23.h ****   }
+1689:../Firmware/CMSIS/core_cm23.h ****   else
+1690:../Firmware/CMSIS/core_cm23.h ****   {
+1691:../Firmware/CMSIS/core_cm23.h ****     SCB_NS->SHPR[_SHP_IDX(IRQn)] = ((uint32_t)(SCB_NS->SHPR[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIF
+1692:../Firmware/CMSIS/core_cm23.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+1693:../Firmware/CMSIS/core_cm23.h ****   }
+1694:../Firmware/CMSIS/core_cm23.h **** }
+1695:../Firmware/CMSIS/core_cm23.h **** 
+1696:../Firmware/CMSIS/core_cm23.h **** 
+1697:../Firmware/CMSIS/core_cm23.h **** /**
+1698:../Firmware/CMSIS/core_cm23.h ****   \brief   Get Interrupt Priority (non-secure)
+1699:../Firmware/CMSIS/core_cm23.h ****   \details Reads the priority of a non-secure device specific interrupt or a non-secure processor e
+1700:../Firmware/CMSIS/core_cm23.h ****            The interrupt number can be positive to specify a device specific interrupt,
+1701:../Firmware/CMSIS/core_cm23.h ****            or negative to specify a processor exception.
+1702:../Firmware/CMSIS/core_cm23.h ****   \param [in]   IRQn  Interrupt number.
+1703:../Firmware/CMSIS/core_cm23.h ****   \return             Interrupt Priority. Value is aligned automatically to the implemented priorit
+1704:../Firmware/CMSIS/core_cm23.h ****  */
+1705:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t TZ_NVIC_GetPriority_NS(IRQn_Type IRQn)
+1706:../Firmware/CMSIS/core_cm23.h **** {
+1707:../Firmware/CMSIS/core_cm23.h **** 
+1708:../Firmware/CMSIS/core_cm23.h ****   if ((int32_t)(IRQn) >= 0)
+1709:../Firmware/CMSIS/core_cm23.h ****   {
+1710:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((NVIC_NS->IPR[ _IP_IDX(IRQn)] >> _BIT_SHIFT(IRQn) ) & (uint32_t)0xFFUL) >> (
+1711:../Firmware/CMSIS/core_cm23.h ****   }
+1712:../Firmware/CMSIS/core_cm23.h ****   else
+1713:../Firmware/CMSIS/core_cm23.h ****   {
+1714:../Firmware/CMSIS/core_cm23.h ****     return((uint32_t)(((SCB_NS->SHPR[_SHP_IDX(IRQn)] >> _BIT_SHIFT(IRQn) ) & (uint32_t)0xFFUL) >> (
+1715:../Firmware/CMSIS/core_cm23.h ****   }
+1716:../Firmware/CMSIS/core_cm23.h **** }
+1717:../Firmware/CMSIS/core_cm23.h **** #endif /*  defined (__ARM_FEATURE_CMSE) &&(__ARM_FEATURE_CMSE == 3U) */
+1718:../Firmware/CMSIS/core_cm23.h **** 
+1719:../Firmware/CMSIS/core_cm23.h **** /*@} end of CMSIS_Core_NVICFunctions */
+1720:../Firmware/CMSIS/core_cm23.h **** 
+1721:../Firmware/CMSIS/core_cm23.h **** 
+1722:../Firmware/CMSIS/core_cm23.h **** /* ##########################  FPU functions  #################################### */
+1723:../Firmware/CMSIS/core_cm23.h **** /**
+1724:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_Core_FunctionInterface
+1725:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_Core_FpuFunctions FPU Functions
+1726:../Firmware/CMSIS/core_cm23.h ****   \brief    Function that provides FPU type.
+1727:../Firmware/CMSIS/core_cm23.h ****   @{
+1728:../Firmware/CMSIS/core_cm23.h ****  */
+1729:../Firmware/CMSIS/core_cm23.h **** 
+1730:../Firmware/CMSIS/core_cm23.h **** /**
+1731:../Firmware/CMSIS/core_cm23.h ****   \brief   get FPU type
+1732:../Firmware/CMSIS/core_cm23.h ****   \details returns the FPU type
+1733:../Firmware/CMSIS/core_cm23.h ****   \returns
+1734:../Firmware/CMSIS/core_cm23.h ****    - \b  0: No FPU
+1735:../Firmware/CMSIS/core_cm23.h ****    - \b  1: Single precision FPU
+1736:../Firmware/CMSIS/core_cm23.h ****    - \b  2: Double + Single precision FPU
+1737:../Firmware/CMSIS/core_cm23.h ****  */
+1738:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t SCB_GetFPUType(void)
+1739:../Firmware/CMSIS/core_cm23.h **** {
+1740:../Firmware/CMSIS/core_cm23.h ****     return 0U;           /* No FPU */
+1741:../Firmware/CMSIS/core_cm23.h **** }
+1742:../Firmware/CMSIS/core_cm23.h **** 
+1743:../Firmware/CMSIS/core_cm23.h **** 
+1744:../Firmware/CMSIS/core_cm23.h **** /*@} end of CMSIS_Core_FpuFunctions */
+1745:../Firmware/CMSIS/core_cm23.h **** 
+1746:../Firmware/CMSIS/core_cm23.h **** 
+1747:../Firmware/CMSIS/core_cm23.h **** 
+1748:../Firmware/CMSIS/core_cm23.h **** /* ##########################   SAU functions  #################################### */
+1749:../Firmware/CMSIS/core_cm23.h **** /**
+1750:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_Core_FunctionInterface
+1751:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_Core_SAUFunctions SAU Functions
+1752:../Firmware/CMSIS/core_cm23.h ****   \brief    Functions that configure the SAU.
+1753:../Firmware/CMSIS/core_cm23.h ****   @{
+1754:../Firmware/CMSIS/core_cm23.h ****  */
+1755:../Firmware/CMSIS/core_cm23.h **** 
+1756:../Firmware/CMSIS/core_cm23.h **** #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+1757:../Firmware/CMSIS/core_cm23.h **** 
+1758:../Firmware/CMSIS/core_cm23.h **** /**
+1759:../Firmware/CMSIS/core_cm23.h ****   \brief   Enable SAU
+1760:../Firmware/CMSIS/core_cm23.h ****   \details Enables the Security Attribution Unit (SAU).
+1761:../Firmware/CMSIS/core_cm23.h ****  */
+1762:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void TZ_SAU_Enable(void)
+1763:../Firmware/CMSIS/core_cm23.h **** {
+1764:../Firmware/CMSIS/core_cm23.h ****     SAU->CTRL |=  (SAU_CTRL_ENABLE_Msk);
+1765:../Firmware/CMSIS/core_cm23.h **** }
+1766:../Firmware/CMSIS/core_cm23.h **** 
+1767:../Firmware/CMSIS/core_cm23.h **** 
+1768:../Firmware/CMSIS/core_cm23.h **** 
+1769:../Firmware/CMSIS/core_cm23.h **** /**
+1770:../Firmware/CMSIS/core_cm23.h ****   \brief   Disable SAU
+1771:../Firmware/CMSIS/core_cm23.h ****   \details Disables the Security Attribution Unit (SAU).
+1772:../Firmware/CMSIS/core_cm23.h ****  */
+1773:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE void TZ_SAU_Disable(void)
+1774:../Firmware/CMSIS/core_cm23.h **** {
+1775:../Firmware/CMSIS/core_cm23.h ****     SAU->CTRL &= ~(SAU_CTRL_ENABLE_Msk);
+1776:../Firmware/CMSIS/core_cm23.h **** }
+1777:../Firmware/CMSIS/core_cm23.h **** 
+1778:../Firmware/CMSIS/core_cm23.h **** #endif /* defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
+1779:../Firmware/CMSIS/core_cm23.h **** 
+1780:../Firmware/CMSIS/core_cm23.h **** /*@} end of CMSIS_Core_SAUFunctions */
+1781:../Firmware/CMSIS/core_cm23.h **** 
+1782:../Firmware/CMSIS/core_cm23.h **** 
+1783:../Firmware/CMSIS/core_cm23.h **** 
+1784:../Firmware/CMSIS/core_cm23.h **** 
+1785:../Firmware/CMSIS/core_cm23.h **** /* ##################################    SysTick function  ########################################
+1786:../Firmware/CMSIS/core_cm23.h **** /**
+1787:../Firmware/CMSIS/core_cm23.h ****   \ingroup  CMSIS_Core_FunctionInterface
+1788:../Firmware/CMSIS/core_cm23.h ****   \defgroup CMSIS_Core_SysTickFunctions SysTick Functions
+1789:../Firmware/CMSIS/core_cm23.h ****   \brief    Functions that configure the System.
+1790:../Firmware/CMSIS/core_cm23.h ****   @{
+1791:../Firmware/CMSIS/core_cm23.h ****  */
+1792:../Firmware/CMSIS/core_cm23.h **** 
+1793:../Firmware/CMSIS/core_cm23.h **** #if defined (__Vendor_SysTickConfig) && (__Vendor_SysTickConfig == 0U)
+1794:../Firmware/CMSIS/core_cm23.h **** 
+1795:../Firmware/CMSIS/core_cm23.h **** /**
+1796:../Firmware/CMSIS/core_cm23.h ****   \brief   System Tick Configuration
+1797:../Firmware/CMSIS/core_cm23.h ****   \details Initializes the System Timer and its interrupt, and starts the System Tick Timer.
+1798:../Firmware/CMSIS/core_cm23.h ****            Counter is in free running mode to generate periodic interrupts.
+1799:../Firmware/CMSIS/core_cm23.h ****   \param [in]  ticks  Number of ticks between two interrupts.
+1800:../Firmware/CMSIS/core_cm23.h ****   \return          0  Function succeeded.
+1801:../Firmware/CMSIS/core_cm23.h ****   \return          1  Function failed.
+1802:../Firmware/CMSIS/core_cm23.h ****   \note    When the variable <b>__Vendor_SysTickConfig</b> is set to 1, then the
+1803:../Firmware/CMSIS/core_cm23.h ****            function <b>SysTick_Config</b> is not included. In this case, the file <b><i>device</i>.
+1804:../Firmware/CMSIS/core_cm23.h ****            must contain a vendor-specific implementation of this function.
+1805:../Firmware/CMSIS/core_cm23.h ****  */
+1806:../Firmware/CMSIS/core_cm23.h **** __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
+1807:../Firmware/CMSIS/core_cm23.h **** {
+ 195              		.loc 1 1807 1
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 8
+ 198              		@ frame_needed = 1, uses_anonymous_args = 0
+ 199 0000 80B5     		push	{r7, lr}
+ 200              		.cfi_def_cfa_offset 8
+ 201              		.cfi_offset 7, -8
+ 202              		.cfi_offset 14, -4
+ 203 0002 82B0     		sub	sp, sp, #8
+ 204              		.cfi_def_cfa_offset 16
+ 205 0004 00AF     		add	r7, sp, #0
+ 206              		.cfi_def_cfa_register 7
+ 207 0006 7860     		str	r0, [r7, #4]
+1808:../Firmware/CMSIS/core_cm23.h ****   if ((ticks - 1UL) > SysTick_LOAD_RELOAD_Msk)
+ 208              		.loc 1 1808 14
+ 209 0008 7B68     		ldr	r3, [r7, #4]
+ 210 000a 5A1E     		subs	r2, r3, #1
+ 211              		.loc 1 1808 6
+ 212 000c 8023     		movs	r3, #128
+ 213 000e 5B04     		lsls	r3, r3, #17
+ 214 0010 9A42     		cmp	r2, r3
+ 215 0012 01D3     		bcc	.L6
+1809:../Firmware/CMSIS/core_cm23.h ****   {
+1810:../Firmware/CMSIS/core_cm23.h ****     return (1UL);                                                   /* Reload value impossible */
+ 216              		.loc 1 1810 12
+ 217 0014 0123     		movs	r3, #1
+ 218 0016 19E0     		b	.L7
+ 219              	.L6:
+1811:../Firmware/CMSIS/core_cm23.h ****   }
+1812:../Firmware/CMSIS/core_cm23.h **** 
+1813:../Firmware/CMSIS/core_cm23.h ****   SysTick->LOAD  = (uint32_t)(ticks - 1UL);                         /* set reload register */
+ 220              		.loc 1 1813 10
+ 221 0018 4EF21003 		movw	r3, #57360
+ 222 001c CEF20003 		movt	r3, 57344
+ 223              		.loc 1 1813 20
+ 224 0020 7A68     		ldr	r2, [r7, #4]
+ 225 0022 013A     		subs	r2, r2, #1
+ 226              		.loc 1 1813 18
+ 227 0024 5A60     		str	r2, [r3, #4]
+1814:../Firmware/CMSIS/core_cm23.h ****   NVIC_SetPriority (SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL); /* set Priority for Systick Int
+ 228              		.loc 1 1814 3
+ 229 0026 0123     		movs	r3, #1
+ 230 0028 5B42     		rsbs	r3, r3, #0
+ 231 002a 0321     		movs	r1, #3
+ 232 002c 1800     		movs	r0, r3
+ 233 002e FFF7FEFF 		bl	__NVIC_SetPriority
+1815:../Firmware/CMSIS/core_cm23.h ****   SysTick->VAL   = 0UL;                                             /* Load the SysTick Counter Val
+ 234              		.loc 1 1815 10
+ 235 0032 4EF21003 		movw	r3, #57360
+ 236 0036 CEF20003 		movt	r3, 57344
+ 237              		.loc 1 1815 18
+ 238 003a 0022     		movs	r2, #0
+ 239 003c 9A60     		str	r2, [r3, #8]
+1816:../Firmware/CMSIS/core_cm23.h ****   SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
+ 240              		.loc 1 1816 10
+ 241 003e 4EF21003 		movw	r3, #57360
+ 242 0042 CEF20003 		movt	r3, 57344
+ 243              		.loc 1 1816 18
+ 244 0046 0722     		movs	r2, #7
+ 245 0048 1A60     		str	r2, [r3]
+1817:../Firmware/CMSIS/core_cm23.h ****                    SysTick_CTRL_TICKINT_Msk   |
+1818:../Firmware/CMSIS/core_cm23.h ****                    SysTick_CTRL_ENABLE_Msk;                         /* Enable SysTick IRQ and SysTi
+1819:../Firmware/CMSIS/core_cm23.h ****   return (0UL);                                                     /* Function successful */
+ 246              		.loc 1 1819 10
+ 247 004a 0023     		movs	r3, #0
+ 248              	.L7:
+1820:../Firmware/CMSIS/core_cm23.h **** }
+ 249              		.loc 1 1820 1
+ 250 004c 1800     		movs	r0, r3
+ 251 004e BD46     		mov	sp, r7
+ 252 0050 02B0     		add	sp, sp, #8
+ 253              		@ sp needed
+ 254 0052 80BD     		pop	{r7, pc}
+ 255              		.cfi_endproc
+ 256              	.LFE57:
+ 258              		.section	.bss.delay,"aw",%nobits
+ 259              		.align	2
+ 262              	delay:
+ 263 0000 00000000 		.space	4
+ 264              		.section	.text.systick_config,"ax",%progbits
+ 265              		.align	1
+ 266              		.global	systick_config
+ 267              		.syntax unified
+ 268              		.code	16
+ 269              		.thumb_func
+ 270              		.fpu softvfp
+ 272              	systick_config:
+ 273              	.LFB58:
+ 274              		.file 2 "../src/systick.c"
+   1:../src/systick.c **** /*!
+   2:../src/systick.c ****     \file    systick.c
+   3:../src/systick.c ****     \brief   the systick configuration file
+   4:../src/systick.c **** 
+   5:../src/systick.c ****     \version 2025-08-08, V2.4.0, firmware for GD32E23x
+   6:../src/systick.c **** */
+   7:../src/systick.c **** 
+   8:../src/systick.c **** /*
+   9:../src/systick.c ****     Copyright (c) 2025, GigaDevice Semiconductor Inc.
+  10:../src/systick.c **** 
+  11:../src/systick.c ****     Redistribution and use in source and binary forms, with or without modification,
+  12:../src/systick.c **** are permitted provided that the following conditions are met:
+  13:../src/systick.c **** 
+  14:../src/systick.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  15:../src/systick.c ****        list of conditions and the following disclaimer.
+  16:../src/systick.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  17:../src/systick.c ****        this list of conditions and the following disclaimer in the documentation
+  18:../src/systick.c ****        and/or other materials provided with the distribution.
+  19:../src/systick.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  20:../src/systick.c ****        may be used to endorse or promote products derived from this software without
+  21:../src/systick.c ****        specific prior written permission.
+  22:../src/systick.c **** 
+  23:../src/systick.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  24:../src/systick.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  25:../src/systick.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  26:../src/systick.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  27:../src/systick.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  28:../src/systick.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  29:../src/systick.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  30:../src/systick.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  31:../src/systick.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  32:../src/systick.c **** OF SUCH DAMAGE.
+  33:../src/systick.c **** */
+  34:../src/systick.c **** 
+  35:../src/systick.c **** #include "gd32e23x.h"
+  36:../src/systick.c **** #include "systick.h"
+  37:../src/systick.c **** 
+  38:../src/systick.c **** volatile static uint32_t delay;
+  39:../src/systick.c **** 
+  40:../src/systick.c **** /*!
+  41:../src/systick.c ****     \brief      configure systick
+  42:../src/systick.c ****     \param[in]  none
+  43:../src/systick.c ****     \param[out] none
+  44:../src/systick.c ****     \retval     none
+  45:../src/systick.c **** */
+  46:../src/systick.c **** void systick_config(void)
+  47:../src/systick.c **** {
+ 275              		.loc 2 47 1
+ 276              		.cfi_startproc
+ 277              		@ args = 0, pretend = 0, frame = 0
+ 278              		@ frame_needed = 1, uses_anonymous_args = 0
+ 279 0000 80B5     		push	{r7, lr}
+ 280              		.cfi_def_cfa_offset 8
+ 281              		.cfi_offset 7, -8
+ 282              		.cfi_offset 14, -4
+ 283 0002 00AF     		add	r7, sp, #0
+ 284              		.cfi_def_cfa_register 7
+  48:../src/systick.c ****     /* setup systick timer for 1000Hz interrupts */
+  49:../src/systick.c ****     if(SysTick_Config(SystemCoreClock / 1000U)) {
+ 285              		.loc 2 49 8
+ 286 0004 40F20003 		movw	r3, #:lower16:SystemCoreClock
+ 287 0008 C0F20003 		movt	r3, #:upper16:SystemCoreClock
+ 288 000c 1B68     		ldr	r3, [r3]
+ 289 000e 40F2E832 		movw	r2, #1000
+ 290 0012 B3FBF2F3 		udiv	r3, r3, r2
+ 291 0016 1800     		movs	r0, r3
+ 292 0018 FFF7FEFF 		bl	SysTick_Config
+ 293 001c 0300     		movs	r3, r0
+ 294              		.loc 2 49 7
+ 295 001e 03B1     		cbz	r3, .L9
+ 296              	.L10:
+  50:../src/systick.c ****         /* capture error */
+  51:../src/systick.c ****         while(1) {
+ 297              		.loc 2 51 14 discriminator 1
+ 298 0020 FEE7     		b	.L10
+ 299              	.L9:
+  52:../src/systick.c ****         }
+  53:../src/systick.c ****     }
+  54:../src/systick.c ****     /* configure the systick handler priority */
+  55:../src/systick.c ****     NVIC_SetPriority(SysTick_IRQn, 0x00U);
+ 300              		.loc 2 55 5
+ 301 0022 0123     		movs	r3, #1
+ 302 0024 5B42     		rsbs	r3, r3, #0
+ 303 0026 0021     		movs	r1, #0
+ 304 0028 1800     		movs	r0, r3
+ 305 002a FFF7FEFF 		bl	__NVIC_SetPriority
+  56:../src/systick.c **** }
+ 306              		.loc 2 56 1
+ 307 002e C046     		nop
+ 308 0030 BD46     		mov	sp, r7
+ 309              		@ sp needed
+ 310 0032 80BD     		pop	{r7, pc}
+ 311              		.cfi_endproc
+ 312              	.LFE58:
+ 314              		.section	.text.delay_1ms,"ax",%progbits
+ 315              		.align	1
+ 316              		.global	delay_1ms
+ 317              		.syntax unified
+ 318              		.code	16
+ 319              		.thumb_func
+ 320              		.fpu softvfp
+ 322              	delay_1ms:
+ 323              	.LFB59:
+  57:../src/systick.c **** 
+  58:../src/systick.c **** /*!
+  59:../src/systick.c ****     \brief      delay a time in milliseconds
+  60:../src/systick.c ****     \param[in]  count: count in milliseconds
+  61:../src/systick.c ****     \param[out] none
+  62:../src/systick.c ****     \retval     none
+  63:../src/systick.c **** */
+  64:../src/systick.c **** void delay_1ms(uint32_t count)
+  65:../src/systick.c **** {
+ 324              		.loc 2 65 1
+ 325              		.cfi_startproc
+ 326              		@ args = 0, pretend = 0, frame = 8
+ 327              		@ frame_needed = 1, uses_anonymous_args = 0
+ 328 0000 80B5     		push	{r7, lr}
+ 329              		.cfi_def_cfa_offset 8
+ 330              		.cfi_offset 7, -8
+ 331              		.cfi_offset 14, -4
+ 332 0002 82B0     		sub	sp, sp, #8
+ 333              		.cfi_def_cfa_offset 16
+ 334 0004 00AF     		add	r7, sp, #0
+ 335              		.cfi_def_cfa_register 7
+ 336 0006 7860     		str	r0, [r7, #4]
+  66:../src/systick.c ****     delay = count;
+ 337              		.loc 2 66 11
+ 338 0008 40F20003 		movw	r3, #:lower16:delay
+ 339 000c C0F20003 		movt	r3, #:upper16:delay
+ 340 0010 7A68     		ldr	r2, [r7, #4]
+ 341 0012 1A60     		str	r2, [r3]
+  67:../src/systick.c **** 
+  68:../src/systick.c ****     while(0U != delay) {
+ 342              		.loc 2 68 10
+ 343 0014 C046     		nop
+ 344              	.L12:
+ 345              		.loc 2 68 14 discriminator 1
+ 346 0016 40F20003 		movw	r3, #:lower16:delay
+ 347 001a C0F20003 		movt	r3, #:upper16:delay
+ 348 001e 1B68     		ldr	r3, [r3]
+ 349              		.loc 2 68 10 discriminator 1
+ 350 0020 002B     		cmp	r3, #0
+ 351 0022 F8D1     		bne	.L12
+  69:../src/systick.c ****     }
+  70:../src/systick.c **** }
+ 352              		.loc 2 70 1
+ 353 0024 C046     		nop
+ 354 0026 C046     		nop
+ 355 0028 BD46     		mov	sp, r7
+ 356 002a 02B0     		add	sp, sp, #8
+ 357              		@ sp needed
+ 358 002c 80BD     		pop	{r7, pc}
+ 359              		.cfi_endproc
+ 360              	.LFE59:
+ 362              		.section	.text.delay_decrement,"ax",%progbits
+ 363              		.align	1
+ 364              		.global	delay_decrement
+ 365              		.syntax unified
+ 366              		.code	16
+ 367              		.thumb_func
+ 368              		.fpu softvfp
+ 370              	delay_decrement:
+ 371              	.LFB60:
+  71:../src/systick.c **** 
+  72:../src/systick.c **** /*!
+  73:../src/systick.c ****     \brief      delay decrement
+  74:../src/systick.c ****     \param[in]  none
+  75:../src/systick.c ****     \param[out] none
+  76:../src/systick.c ****     \retval     none
+  77:../src/systick.c **** */
+  78:../src/systick.c **** void delay_decrement(void)
+  79:../src/systick.c **** {
+ 372              		.loc 2 79 1
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 0
+ 375              		@ frame_needed = 1, uses_anonymous_args = 0
+ 376 0000 80B5     		push	{r7, lr}
+ 377              		.cfi_def_cfa_offset 8
+ 378              		.cfi_offset 7, -8
+ 379              		.cfi_offset 14, -4
+ 380 0002 00AF     		add	r7, sp, #0
+ 381              		.cfi_def_cfa_register 7
+  80:../src/systick.c ****     if(0U != delay) {
+ 382              		.loc 2 80 11
+ 383 0004 40F20003 		movw	r3, #:lower16:delay
+ 384 0008 C0F20003 		movt	r3, #:upper16:delay
+ 385 000c 1B68     		ldr	r3, [r3]
+ 386              		.loc 2 80 7
+ 387 000e 53B1     		cbz	r3, .L15
+  81:../src/systick.c ****         delay--;
+ 388              		.loc 2 81 14
+ 389 0010 40F20003 		movw	r3, #:lower16:delay
+ 390 0014 C0F20003 		movt	r3, #:upper16:delay
+ 391 0018 1B68     		ldr	r3, [r3]
+ 392 001a 5A1E     		subs	r2, r3, #1
+ 393 001c 40F20003 		movw	r3, #:lower16:delay
+ 394 0020 C0F20003 		movt	r3, #:upper16:delay
+ 395 0024 1A60     		str	r2, [r3]
+ 396              	.L15:
+  82:../src/systick.c ****     }
+  83:../src/systick.c **** }
+ 397              		.loc 2 83 1
+ 398 0026 C046     		nop
+ 399 0028 BD46     		mov	sp, r7
+ 400              		@ sp needed
+ 401 002a 80BD     		pop	{r7, pc}
+ 402              		.cfi_endproc
+ 403              	.LFE60:
+ 405              		.text
+ 406              	.Letext0:
+ 407              		.file 3 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 408              		.file 4 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 409              		.file 5 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 410              		.file 6 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+ 411              		.file 7 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 412              		.file 8 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 systick.c
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:16     .text.__NVIC_SetPriority:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:23     .text.__NVIC_SetPriority:00000000 __NVIC_SetPriority
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:187    .text.SysTick_Config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:193    .text.SysTick_Config:00000000 SysTick_Config
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:259    .bss.delay:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:262    .bss.delay:00000000 delay
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:265    .text.systick_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:272    .text.systick_config:00000000 systick_config
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:315    .text.delay_1ms:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:322    .text.delay_1ms:00000000 delay_1ms
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:363    .text.delay_decrement:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCFYP9q.s:370    .text.delay_decrement:00000000 delay_decrement
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+
+UNDEFINED SYMBOLS
+SystemCoreClock

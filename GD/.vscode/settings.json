@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "spl_stdio.h": "c",
+        "spi_nand_driver.h": "c",
+        "sprd_config.h": "c"
+    }
+}

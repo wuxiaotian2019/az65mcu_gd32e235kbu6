@@ -1,0 +1,292 @@
+   1              	# 1 "../gcc_startup/startup_gd32e23x.S"
+   1              	  .syntax unified
+   0              	
+   0              	
+   0              	
+   2              	  .cpu cortex-m23
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	.global  g_pfnVectors
+   7              	.global  Default_Handler
+   8              	
+   9              	/* necessary symbols defined in linker script to initialize data */
+  10 0000 00000000 	.word  _sidata
+  11 0004 00000000 	.word  _sdata
+  12 0008 00000000 	.word  _edata
+  13 000c 00000000 	.word  _sbss
+  14 0010 00000000 	.word  _ebss
+  15              	
+  16              	  .section  .text.Reset_Handler
+  17              	  .weak  Reset_Handler
+  19              	
+  20              	/* reset Handler */
+  21              	Reset_Handler:
+  22 0000 0D48     	    ldr   r0, =_sp
+  23 0002 8546     	    mov   sp, r0
+  24              	/* copy the data segment into ram */
+  25 0004 0021     	    movs  r1, #0
+  26 0006 03E0     	    b  LoopCopyDataInit
+  27              	
+  28              	CopyDataInit:
+  29 0008 0C4B     	    ldr  r3, =_sidata
+  30 000a 5B58     	    ldr  r3, [r3, r1]
+  31 000c 4350     	    str  r3, [r0, r1]
+  32 000e 0431     	    adds  r1, r1, #4
+  33              	
+  34              	LoopCopyDataInit:
+  35 0010 0B48     	    ldr  r0, =_sdata
+  36 0012 0C4B     	    ldr  r3, =_edata
+  37 0014 4218     	    adds  r2, r0, r1
+  38 0016 9A42     	    cmp  r2, r3
+  39 0018 F6D3     	    bcc  CopyDataInit
+  40 001a 0B4A     	    ldr  r2, =_sbss
+  41 001c 02E0     	    b  LoopFillZerobss
+  42              	
+  43              	FillZerobss:
+  44 001e 0023     	    movs  r3, #0
+  45 0020 1360     	    str  r3, [r2]
+  46 0022 0432     	    adds r2, r2, #4
+  47              	
+  48              	LoopFillZerobss:
+  49 0024 094B     	    ldr  r3, = _ebss
+  50 0026 9A42     	    cmp  r2, r3
+  51 0028 F9D3     	    bcc  FillZerobss
+  52              	
+  53              	/* Call SystemInit function */
+  54 002a FFF7FEFF 	    bl  SystemInit
+  55              	/* Call static constructors */
+  56 002e FFF7FEFF 	    bl __libc_init_array
+  57              	/*Call the main function */
+  58 0032 FFF7FEFF 	    bl  main
+  59              	
+  60              	LoopForever:
+  61 0036 FEE7     	    b LoopForever
+  62              	
+  64              	
+  65              	.section  .text.Default_Handler,"ax",%progbits
+  66              	
+  67              	Default_Handler:
+  68              	Infinite_Loop:
+  69 0000 FEE7     	    b  Infinite_Loop
+  71              	
+  72              	   .section  .vectors,"a",%progbits
+  73              	   .global __gVectors
+  74              	
+  75              	__gVectors:
+  76 0000 00000000 	                    .word _sp                                   /* Top of Stack */
+  77 0004 00000000 	                    .word Reset_Handler                         /* 1:Reset Handler */
+  78 0008 00000000 	                    .word NMI_Handler                           /* 2:NMI Handler */
+  79 000c 00000000 	                    .word HardFault_Handler                     /* 3:Hard Fault Handler */
+  80 0010 00000000 	                    .word 0                                     /* Reserved */
+  81 0014 00000000 	                    .word 0                                     /* Reserved */
+  82 0018 00000000 	                    .word 0                                     /* Reserved */
+  83 001c 00000000 	                    .word 0                                     /* Reserved */
+  84 0020 00000000 	                    .word 0                                     /* Reserved */
+  85 0024 00000000 	                    .word 0                                     /* Reserved */
+  86 0028 00000000 	                    .word 0                                     /* Reserved */
+  87 002c 00000000 	                    .word SVC_Handler                           /* 11:SVCall Handler */
+  88 0030 00000000 	                    .word 0                                     /* Reserved */
+  89 0034 00000000 	                    .word 0                                     /* Reserved */
+  90 0038 00000000 	                    .word PendSV_Handler                        /* 14:PendSV Handler */
+  91 003c 00000000 	                    .word SysTick_Handler                       /* 15:SysTick Handler */
+  92              	
+  93              	                    /* external interrupts handler */
+  94 0040 00000000 	                    .word WWDGT_IRQHandler                      /* 16:Window Watchdog Timer */
+  95 0044 00000000 	                    .word LVD_IRQHandler                        /* 17:LVD through EXTI Line detect 
+  96 0048 00000000 	                    .word RTC_IRQHandler                        /* 18:RTC through EXTI Line */
+  97 004c 00000000 	                    .word FMC_IRQHandler                        /* 19:FMC */
+  98 0050 00000000 	                    .word RCU_IRQHandler                        /* 20:RCU */
+  99 0054 00000000 	                    .word EXTI0_1_IRQHandler                    /* 21:EXTI Line 0 and EXTI Line 1 *
+ 100 0058 00000000 	                    .word EXTI2_3_IRQHandler                    /* 22:EXTI Line 2 and EXTI Line 3 *
+ 101 005c 00000000 	                    .word EXTI4_15_IRQHandler                   /* 23:EXTI Line 4 to EXTI Line 15 *
+ 102 0060 00000000 	                    .word 0                                     /* Reserved */
+ 103 0064 00000000 	                    .word DMA_Channel0_IRQHandler               /* 25:DMA Channel 0 */
+ 104 0068 00000000 	                    .word DMA_Channel1_2_IRQHandler             /* 26:DMA Channel 1 and DMA Channel
+ 105 006c 00000000 	                    .word DMA_Channel3_4_IRQHandler             /* 27:DMA Channel 3 and DMA Channel
+ 106 0070 00000000 	                    .word ADC_CMP_IRQHandler                    /* 28:ADC and Comparator */
+ 107 0074 00000000 	                    .word TIMER0_BRK_UP_TRG_COM_IRQHandler      /* 29:TIMER0 Break,Update,Trigger a
+ 108 0078 00000000 	                    .word TIMER0_Channel_IRQHandler             /* 30:TIMER0 Channel Capture Compar
+ 109 007c 00000000 	                    .word 0                                     /* Reserved */
+ 110 0080 00000000 	                    .word TIMER2_IRQHandler                     /* 32:TIMER2 */
+ 111 0084 00000000 	                    .word TIMER5_IRQHandler                     /* 33:TIMER5 */
+ 112 0088 00000000 	                    .word 0                                     /* Reserved */
+ 113 008c 00000000 	                    .word TIMER13_IRQHandler                    /* 35:TIMER13 */
+ 114 0090 00000000 	                    .word TIMER14_IRQHandler                    /* 36:TIMER14 */
+ 115 0094 00000000 	                    .word TIMER15_IRQHandler                    /* 37:TIMER15 */
+ 116 0098 00000000 	                    .word TIMER16_IRQHandler                    /* 38:TIMER16 */
+ 117 009c 00000000 	                    .word I2C0_EV_IRQHandler                    /* 39:I2C0 Event */
+ 118 00a0 00000000 	                    .word I2C1_EV_IRQHandler                    /* 40:I2C1 Event */
+ 119 00a4 00000000 	                    .word SPI0_IRQHandler                       /* 41:SPI0 */
+ 120 00a8 00000000 	                    .word SPI1_IRQHandler                       /* 42:SPI1 */
+ 121 00ac 00000000 	                    .word USART0_IRQHandler                     /* 43:USART0 */
+ 122 00b0 00000000 	                    .word USART1_IRQHandler                     /* 44:USART1 */
+ 123 00b4 00000000 	                    .word 0                                     /* Reserved */
+ 124 00b8 00000000 	                    .word 0                                     /* Reserved */
+ 125 00bc 00000000 	                    .word 0                                     /* Reserved */
+ 126 00c0 00000000 	                    .word I2C0_ER_IRQHandler                    /* 48:I2C0 Error */
+ 127 00c4 00000000 	                    .word 0                                     /* Reserved */
+ 128 00c8 00000000 	                    .word I2C1_ER_IRQHandler                    /* 50:I2C1 Error */
+ 129              	
+ 131              	
+ 132              	  .weak NMI_Handler
+ 133              	  .thumb_set NMI_Handler,Default_Handler
+ 134              	
+ 135              	  .weak HardFault_Handler
+ 136              	  .thumb_set HardFault_Handler,Default_Handler
+ 137              	
+ 138              	  .weak SVC_Handler
+ 139              	  .thumb_set SVC_Handler,Default_Handler
+ 140              	
+ 141              	  .weak PendSV_Handler
+ 142              	  .thumb_set PendSV_Handler,Default_Handler
+ 143              	
+ 144              	  .weak SysTick_Handler
+ 145              	  .thumb_set SysTick_Handler,Default_Handler
+ 146              	
+ 147              	  .weak WWDGT_IRQHandler
+ 148              	  .thumb_set WWDGT_IRQHandler,Default_Handler
+ 149              	
+ 150              	  .weak LVD_IRQHandler
+ 151              	  .thumb_set LVD_IRQHandler,Default_Handler
+ 152              	
+ 153              	  .weak TAMPER_IRQHandler
+ 154              	  .thumb_set TAMPER_IRQHandler,Default_Handler
+ 155              	
+ 156              	  .weak RTC_IRQHandler
+ 157              	  .thumb_set RTC_IRQHandler,Default_Handler
+ 158              	
+ 159              	  .weak FMC_IRQHandler
+ 160              	  .thumb_set FMC_IRQHandler,Default_Handler
+ 161              	
+ 162              	  .weak RCU_IRQHandler
+ 163              	  .thumb_set RCU_IRQHandler,Default_Handler
+ 164              	
+ 165              	  .weak EXTI0_1_IRQHandler
+ 166              	  .thumb_set EXTI0_1_IRQHandler,Default_Handler
+ 167              	
+ 168              	  .weak EXTI2_3_IRQHandler
+ 169              	  .thumb_set EXTI2_3_IRQHandler,Default_Handler
+ 170              	
+ 171              	  .weak EXTI4_15_IRQHandler
+ 172              	  .thumb_set EXTI4_15_IRQHandler,Default_Handler
+ 173              	
+ 174              	  .weak DMA_Channel0_IRQHandler
+ 175              	  .thumb_set DMA_Channel0_IRQHandler,Default_Handler
+ 176              	
+ 177              	  .weak DMA_Channel1_2_IRQHandler
+ 178              	  .thumb_set DMA_Channel1_2_IRQHandler,Default_Handler
+ 179              	
+ 180              	  .weak DMA_Channel3_4_IRQHandler
+ 181              	  .thumb_set DMA_Channel3_4_IRQHandler,Default_Handler
+ 182              	
+ 183              	  .weak ADC_CMP_IRQHandler
+ 184              	  .thumb_set ADC_CMP_IRQHandler,Default_Handler
+ 185              	
+ 186              	  .weak TIMER0_BRK_UP_TRG_COM_IRQHandler
+ 187              	  .thumb_set TIMER0_BRK_UP_TRG_COM_IRQHandler,Default_Handler
+ 188              	
+ 189              	  .weak TIMER0_Channel_IRQHandler
+ 190              	  .thumb_set TIMER0_Channel_IRQHandler,Default_Handler
+ 191              	
+ 192              	  .weak TIMER2_IRQHandler
+ 193              	  .thumb_set TIMER2_IRQHandler,Default_Handler
+ 194              	
+ 195              	  .weak TIMER5_IRQHandler
+ 196              	  .thumb_set TIMER5_IRQHandler,Default_Handler
+ 197              	
+ 198              	  .weak TIMER13_IRQHandler
+ 199              	  .thumb_set TIMER13_IRQHandler,Default_Handler
+ 200              	
+ 201              	  .weak TIMER14_IRQHandler
+ 202              	  .thumb_set TIMER14_IRQHandler,Default_Handler
+ 203              	
+ 204              	  .weak TIMER15_IRQHandler
+ 205              	  .thumb_set TIMER15_IRQHandler,Default_Handler
+ 206              	
+ 207              	  .weak TIMER16_IRQHandler
+ 208              	  .thumb_set TIMER16_IRQHandler,Default_Handler
+ 209              	
+ 210              	  .weak I2C0_EV_IRQHandler
+ 211              	  .thumb_set I2C0_EV_IRQHandler,Default_Handler
+ 212              	
+ 213              	  .weak I2C1_EV_IRQHandler
+ 214              	  .thumb_set I2C1_EV_IRQHandler,Default_Handler
+ 215              	
+ 216              	  .weak SPI0_IRQHandler
+ 217              	  .thumb_set SPI0_IRQHandler,Default_Handler
+ 218              	
+ 219              	  .weak SPI1_IRQHandler
+ 220              	  .thumb_set SPI1_IRQHandler,Default_Handler
+ 221              	
+ 222              	  .weak USART0_IRQHandler
+ 223              	  .thumb_set USART0_IRQHandler,Default_Handler
+ 224              	
+ 225              	  .weak USART1_IRQHandler
+ 226              	  .thumb_set USART1_IRQHandler,Default_Handler
+ 227              	
+ 228              	  .weak I2C0_ER_IRQHandler
+ 229              	  .thumb_set I2C0_ER_IRQHandler,Default_Handler
+ 230              	
+ 231              	  .weak I2C1_ER_IRQHandler
+ 232              	  .thumb_set I2C1_ER_IRQHandler,Default_Handler
+DEFINED SYMBOLS
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 Default_Handler
+../gcc_startup/startup_gd32e23x.S:21     .text.Reset_Handler:00000000 Reset_Handler
+../gcc_startup/startup_gd32e23x.S:22     .text.Reset_Handler:00000000 $t
+../gcc_startup/startup_gd32e23x.S:34     .text.Reset_Handler:00000010 LoopCopyDataInit
+../gcc_startup/startup_gd32e23x.S:28     .text.Reset_Handler:00000008 CopyDataInit
+../gcc_startup/startup_gd32e23x.S:48     .text.Reset_Handler:00000024 LoopFillZerobss
+../gcc_startup/startup_gd32e23x.S:43     .text.Reset_Handler:0000001e FillZerobss
+../gcc_startup/startup_gd32e23x.S:60     .text.Reset_Handler:00000036 LoopForever
+../gcc_startup/startup_gd32e23x.S:68     .text.Default_Handler:00000000 Infinite_Loop
+../gcc_startup/startup_gd32e23x.S:69     .text.Default_Handler:00000000 $t
+../gcc_startup/startup_gd32e23x.S:75     .vectors:00000000 __gVectors
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 NMI_Handler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 HardFault_Handler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 SVC_Handler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 PendSV_Handler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 SysTick_Handler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 WWDGT_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 LVD_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 RTC_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 FMC_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 RCU_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 EXTI0_1_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 EXTI2_3_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 EXTI4_15_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 DMA_Channel0_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 DMA_Channel1_2_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 DMA_Channel3_4_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 ADC_CMP_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TIMER0_BRK_UP_TRG_COM_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TIMER0_Channel_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TIMER2_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TIMER5_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TIMER13_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TIMER14_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TIMER15_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TIMER16_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 I2C0_EV_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 I2C1_EV_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 SPI0_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 SPI1_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 USART0_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 USART1_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 I2C0_ER_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 I2C1_ER_IRQHandler
+../gcc_startup/startup_gd32e23x.S:67     .text.Default_Handler:00000000 TAMPER_IRQHandler
+../gcc_startup/startup_gd32e23x.S:232    .text.Reset_Handler:00000038 $d
+                            .text:00000000 $d
+
+UNDEFINED SYMBOLS
+g_pfnVectors
+_sidata
+_sdata
+_edata
+_sbss
+_ebss
+_sp
+SystemInit
+__libc_init_array
+main

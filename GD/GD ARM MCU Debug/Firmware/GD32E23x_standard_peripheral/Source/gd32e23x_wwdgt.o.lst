@@ -1,0 +1,484 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"gd32e23x_wwdgt.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.wwdgt_deinit,"ax",%progbits
+  16              		.align	1
+  17              		.global	wwdgt_deinit
+  18              		.arch armv8-m.base
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	wwdgt_deinit:
+  25              	.LFB58:
+  26              		.file 1 "../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c"
+   1:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*!
+   2:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \file    gd32e23x_wwdgt.c
+   3:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \brief   WWDGT driver
+   4:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+   5:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \version 2025-08-08, V2.4.0, firmware for GD32E23x
+   6:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+   7:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+   8:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*
+   9:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     Copyright (c) 2025, GigaDevice Semiconductor Inc.
+  10:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  11:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     All rights reserved.
+  12:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  13:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     Redistribution and use in source and binary forms, with or without modification,
+  14:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** are permitted provided that the following conditions are met:
+  15:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  16:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  17:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****        list of conditions and the following disclaimer.
+  18:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  19:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****        this list of conditions and the following disclaimer in the documentation
+  20:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****        and/or other materials provided with the distribution.
+  21:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  22:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****        may be used to endorse or promote products derived from this software without
+  23:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****        specific prior written permission.
+  24:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  25:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  26:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  27:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  28:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  29:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  30:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  31:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  32:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  33:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  34:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** OF SUCH DAMAGE.
+  35:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+  36:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  37:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** #include "gd32e23x_wwdgt.h"
+  38:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  39:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*!
+  40:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \brief      reset the window watchdog timer configuration
+  41:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  none
+  42:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[out] none
+  43:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \retval     none
+  44:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+  45:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** void wwdgt_deinit(void)
+  46:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** {
+  27              		.loc 1 46 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              		.cfi_def_cfa_register 7
+  47:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     rcu_periph_reset_enable(RCU_WWDGTRST);
+  37              		.loc 1 47 5
+  38 0004 40F20B40 		movw	r0, #1035
+  39 0008 FFF7FEFF 		bl	rcu_periph_reset_enable
+  48:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     rcu_periph_reset_disable(RCU_WWDGTRST);
+  40              		.loc 1 48 5
+  41 000c 40F20B40 		movw	r0, #1035
+  42 0010 FFF7FEFF 		bl	rcu_periph_reset_disable
+  49:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** }
+  43              		.loc 1 49 1
+  44 0014 C046     		nop
+  45 0016 BD46     		mov	sp, r7
+  46              		@ sp needed
+  47 0018 80BD     		pop	{r7, pc}
+  48              		.cfi_endproc
+  49              	.LFE58:
+  51              		.section	.text.wwdgt_enable,"ax",%progbits
+  52              		.align	1
+  53              		.global	wwdgt_enable
+  54              		.syntax unified
+  55              		.code	16
+  56              		.thumb_func
+  57              		.fpu softvfp
+  59              	wwdgt_enable:
+  60              	.LFB59:
+  50:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  51:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*!
+  52:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \brief      start the window watchdog timer counter
+  53:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  none
+  54:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[out] none
+  55:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \retval     none
+  56:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+  57:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** void wwdgt_enable(void)
+  58:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** {
+  61              		.loc 1 58 1
+  62              		.cfi_startproc
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 1, uses_anonymous_args = 0
+  65 0000 80B5     		push	{r7, lr}
+  66              		.cfi_def_cfa_offset 8
+  67              		.cfi_offset 7, -8
+  68              		.cfi_offset 14, -4
+  69 0002 00AF     		add	r7, sp, #0
+  70              		.cfi_def_cfa_register 7
+  59:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     WWDGT_CTL |= WWDGT_CTL_WDGTEN;
+  71              		.loc 1 59 15
+  72 0004 42F60043 		movw	r3, #11264
+  73 0008 C4F20003 		movt	r3, 16384
+  74 000c 1A68     		ldr	r2, [r3]
+  75 000e 42F60043 		movw	r3, #11264
+  76 0012 C4F20003 		movt	r3, 16384
+  77 0016 8021     		movs	r1, #128
+  78 0018 0A43     		orrs	r2, r1
+  79 001a 1A60     		str	r2, [r3]
+  60:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** }
+  80              		.loc 1 60 1
+  81 001c C046     		nop
+  82 001e BD46     		mov	sp, r7
+  83              		@ sp needed
+  84 0020 80BD     		pop	{r7, pc}
+  85              		.cfi_endproc
+  86              	.LFE59:
+  88              		.section	.text.wwdgt_counter_update,"ax",%progbits
+  89              		.align	1
+  90              		.global	wwdgt_counter_update
+  91              		.syntax unified
+  92              		.code	16
+  93              		.thumb_func
+  94              		.fpu softvfp
+  96              	wwdgt_counter_update:
+  97              	.LFB60:
+  61:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  62:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*!
+  63:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \brief      configure the window watchdog timer counter value
+  64:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  counter_value: 0x00000000 - 0x0000007F
+  65:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[out] none
+  66:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \retval     none
+  67:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+  68:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** void wwdgt_counter_update(uint16_t counter_value)
+  69:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** {
+  98              		.loc 1 69 1
+  99              		.cfi_startproc
+ 100              		@ args = 0, pretend = 0, frame = 8
+ 101              		@ frame_needed = 1, uses_anonymous_args = 0
+ 102 0000 80B5     		push	{r7, lr}
+ 103              		.cfi_def_cfa_offset 8
+ 104              		.cfi_offset 7, -8
+ 105              		.cfi_offset 14, -4
+ 106 0002 82B0     		sub	sp, sp, #8
+ 107              		.cfi_def_cfa_offset 16
+ 108 0004 00AF     		add	r7, sp, #0
+ 109              		.cfi_def_cfa_register 7
+ 110 0006 0200     		movs	r2, r0
+ 111 0008 BB1D     		adds	r3, r7, #6
+ 112 000a 1A80     		strh	r2, [r3]
+  70:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     WWDGT_CTL = (uint32_t)(CTL_CNT(counter_value));
+ 113              		.loc 1 70 28
+ 114 000c BB1D     		adds	r3, r7, #6
+ 115 000e 1A88     		ldrh	r2, [r3]
+ 116              		.loc 1 70 5
+ 117 0010 42F60043 		movw	r3, #11264
+ 118 0014 C4F20003 		movt	r3, 16384
+ 119              		.loc 1 70 17
+ 120 0018 7F21     		movs	r1, #127
+ 121 001a 0A40     		ands	r2, r1
+ 122              		.loc 1 70 15
+ 123 001c 1A60     		str	r2, [r3]
+  71:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** }
+ 124              		.loc 1 71 1
+ 125 001e C046     		nop
+ 126 0020 BD46     		mov	sp, r7
+ 127 0022 02B0     		add	sp, sp, #8
+ 128              		@ sp needed
+ 129 0024 80BD     		pop	{r7, pc}
+ 130              		.cfi_endproc
+ 131              	.LFE60:
+ 133              		.section	.text.wwdgt_config,"ax",%progbits
+ 134              		.align	1
+ 135              		.global	wwdgt_config
+ 136              		.syntax unified
+ 137              		.code	16
+ 138              		.thumb_func
+ 139              		.fpu softvfp
+ 141              	wwdgt_config:
+ 142              	.LFB61:
+  72:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  73:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*!
+  74:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \brief      configure counter value, window value, and prescaler divider value
+  75:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  counter: 0x00000000 - 0x0000007F
+  76:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  window: 0x00000000 - 0x0000007F
+  77:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  prescaler: wwdgt prescaler value
+  78:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****                 only one parameter can be selected which is shown as below:
+  79:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****       \arg        WWDGT_CFG_PSC_DIV1: the time base of window watchdog counter = (PCLK1/4096)/1
+  80:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****       \arg        WWDGT_CFG_PSC_DIV2: the time base of window watchdog counter = (PCLK1/4096)/2
+  81:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****       \arg        WWDGT_CFG_PSC_DIV4: the time base of window watchdog counter = (PCLK1/4096)/4
+  82:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****       \arg        WWDGT_CFG_PSC_DIV8: the time base of window watchdog counter = (PCLK1/4096)/8
+  83:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[out] none
+  84:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \retval     none
+  85:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+  86:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** void wwdgt_config(uint16_t counter, uint16_t window, uint32_t prescaler)
+  87:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** {
+ 143              		.loc 1 87 1
+ 144              		.cfi_startproc
+ 145              		@ args = 0, pretend = 0, frame = 8
+ 146              		@ frame_needed = 1, uses_anonymous_args = 0
+ 147 0000 80B5     		push	{r7, lr}
+ 148              		.cfi_def_cfa_offset 8
+ 149              		.cfi_offset 7, -8
+ 150              		.cfi_offset 14, -4
+ 151 0002 82B0     		sub	sp, sp, #8
+ 152              		.cfi_def_cfa_offset 16
+ 153 0004 00AF     		add	r7, sp, #0
+ 154              		.cfi_def_cfa_register 7
+ 155 0006 3A60     		str	r2, [r7]
+ 156 0008 BB1D     		adds	r3, r7, #6
+ 157 000a 021C     		adds	r2, r0, #0
+ 158 000c 1A80     		strh	r2, [r3]
+ 159 000e 3B1D     		adds	r3, r7, #4
+ 160 0010 0A1C     		adds	r2, r1, #0
+ 161 0012 1A80     		strh	r2, [r3]
+  88:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     WWDGT_CFG = (uint32_t)(CFG_WIN(window) | prescaler);
+ 162              		.loc 1 88 28
+ 163 0014 3B1D     		adds	r3, r7, #4
+ 164 0016 1B88     		ldrh	r3, [r3]
+ 165 0018 7F22     		movs	r2, #127
+ 166 001a 1340     		ands	r3, r2
+ 167 001c 1900     		movs	r1, r3
+ 168              		.loc 1 88 5
+ 169 001e 42F60443 		movw	r3, #11268
+ 170 0022 C4F20003 		movt	r3, 16384
+ 171              		.loc 1 88 17
+ 172 0026 3A68     		ldr	r2, [r7]
+ 173 0028 0A43     		orrs	r2, r1
+ 174              		.loc 1 88 15
+ 175 002a 1A60     		str	r2, [r3]
+  89:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     WWDGT_CTL = (uint32_t)(CTL_CNT(counter));
+ 176              		.loc 1 89 28
+ 177 002c BB1D     		adds	r3, r7, #6
+ 178 002e 1A88     		ldrh	r2, [r3]
+ 179              		.loc 1 89 5
+ 180 0030 42F60043 		movw	r3, #11264
+ 181 0034 C4F20003 		movt	r3, 16384
+ 182              		.loc 1 89 17
+ 183 0038 7F21     		movs	r1, #127
+ 184 003a 0A40     		ands	r2, r1
+ 185              		.loc 1 89 15
+ 186 003c 1A60     		str	r2, [r3]
+  90:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** }
+ 187              		.loc 1 90 1
+ 188 003e C046     		nop
+ 189 0040 BD46     		mov	sp, r7
+ 190 0042 02B0     		add	sp, sp, #8
+ 191              		@ sp needed
+ 192 0044 80BD     		pop	{r7, pc}
+ 193              		.cfi_endproc
+ 194              	.LFE61:
+ 196              		.section	.text.wwdgt_flag_get,"ax",%progbits
+ 197              		.align	1
+ 198              		.global	wwdgt_flag_get
+ 199              		.syntax unified
+ 200              		.code	16
+ 201              		.thumb_func
+ 202              		.fpu softvfp
+ 204              	wwdgt_flag_get:
+ 205              	.LFB62:
+  91:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+  92:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*!
+  93:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \brief      check early wakeup interrupt state of WWDGT
+  94:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  none
+  95:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[out] none
+  96:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \retval     FlagStatus: SET or RESET
+  97:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+  98:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** FlagStatus wwdgt_flag_get(void)
+  99:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** {
+ 206              		.loc 1 99 1
+ 207              		.cfi_startproc
+ 208              		@ args = 0, pretend = 0, frame = 0
+ 209              		@ frame_needed = 1, uses_anonymous_args = 0
+ 210 0000 80B5     		push	{r7, lr}
+ 211              		.cfi_def_cfa_offset 8
+ 212              		.cfi_offset 7, -8
+ 213              		.cfi_offset 14, -4
+ 214 0002 00AF     		add	r7, sp, #0
+ 215              		.cfi_def_cfa_register 7
+ 100:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     if(RESET != (WWDGT_STAT & WWDGT_STAT_EWIF)) {
+ 216              		.loc 1 100 18
+ 217 0004 42F60843 		movw	r3, #11272
+ 218 0008 C4F20003 		movt	r3, 16384
+ 219 000c 1B68     		ldr	r3, [r3]
+ 220              		.loc 1 100 29
+ 221 000e 0122     		movs	r2, #1
+ 222 0010 1340     		ands	r3, r2
+ 223              		.loc 1 100 7
+ 224 0012 0BB1     		cbz	r3, .L6
+ 101:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****         return SET;
+ 225              		.loc 1 101 16
+ 226 0014 0123     		movs	r3, #1
+ 227 0016 00E0     		b	.L7
+ 228              	.L6:
+ 102:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     }
+ 103:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     return RESET;
+ 229              		.loc 1 103 12
+ 230 0018 0023     		movs	r3, #0
+ 231              	.L7:
+ 104:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** }
+ 232              		.loc 1 104 1
+ 233 001a 1800     		movs	r0, r3
+ 234 001c BD46     		mov	sp, r7
+ 235              		@ sp needed
+ 236 001e 80BD     		pop	{r7, pc}
+ 237              		.cfi_endproc
+ 238              	.LFE62:
+ 240              		.section	.text.wwdgt_flag_clear,"ax",%progbits
+ 241              		.align	1
+ 242              		.global	wwdgt_flag_clear
+ 243              		.syntax unified
+ 244              		.code	16
+ 245              		.thumb_func
+ 246              		.fpu softvfp
+ 248              	wwdgt_flag_clear:
+ 249              	.LFB63:
+ 105:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+ 106:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*!
+ 107:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \brief      clear early wakeup interrupt state of WWDGT
+ 108:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  none
+ 109:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[out] none
+ 110:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \retval     none
+ 111:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+ 112:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** void wwdgt_flag_clear(void)
+ 113:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** {
+ 250              		.loc 1 113 1
+ 251              		.cfi_startproc
+ 252              		@ args = 0, pretend = 0, frame = 0
+ 253              		@ frame_needed = 1, uses_anonymous_args = 0
+ 254 0000 80B5     		push	{r7, lr}
+ 255              		.cfi_def_cfa_offset 8
+ 256              		.cfi_offset 7, -8
+ 257              		.cfi_offset 14, -4
+ 258 0002 00AF     		add	r7, sp, #0
+ 259              		.cfi_def_cfa_register 7
+ 114:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     WWDGT_STAT &= (~(uint32_t)WWDGT_STAT_EWIF);
+ 260              		.loc 1 114 16
+ 261 0004 42F60843 		movw	r3, #11272
+ 262 0008 C4F20003 		movt	r3, 16384
+ 263 000c 1A68     		ldr	r2, [r3]
+ 264 000e 42F60843 		movw	r3, #11272
+ 265 0012 C4F20003 		movt	r3, 16384
+ 266 0016 0121     		movs	r1, #1
+ 267 0018 8A43     		bics	r2, r1
+ 268 001a 1A60     		str	r2, [r3]
+ 115:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** }
+ 269              		.loc 1 115 1
+ 270 001c C046     		nop
+ 271 001e BD46     		mov	sp, r7
+ 272              		@ sp needed
+ 273 0020 80BD     		pop	{r7, pc}
+ 274              		.cfi_endproc
+ 275              	.LFE63:
+ 277              		.section	.text.wwdgt_interrupt_enable,"ax",%progbits
+ 278              		.align	1
+ 279              		.global	wwdgt_interrupt_enable
+ 280              		.syntax unified
+ 281              		.code	16
+ 282              		.thumb_func
+ 283              		.fpu softvfp
+ 285              	wwdgt_interrupt_enable:
+ 286              	.LFB64:
+ 116:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** 
+ 117:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** /*!
+ 118:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \brief      enable early wakeup interrupt of WWDGT
+ 119:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[in]  none
+ 120:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \param[out] none
+ 121:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     \retval     none
+ 122:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** */
+ 123:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** void wwdgt_interrupt_enable(void)
+ 124:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** {
+ 287              		.loc 1 124 1
+ 288              		.cfi_startproc
+ 289              		@ args = 0, pretend = 0, frame = 0
+ 290              		@ frame_needed = 1, uses_anonymous_args = 0
+ 291 0000 80B5     		push	{r7, lr}
+ 292              		.cfi_def_cfa_offset 8
+ 293              		.cfi_offset 7, -8
+ 294              		.cfi_offset 14, -4
+ 295 0002 00AF     		add	r7, sp, #0
+ 296              		.cfi_def_cfa_register 7
+ 125:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c ****     WWDGT_CFG |= WWDGT_CFG_EWIE;
+ 297              		.loc 1 125 15
+ 298 0004 42F60443 		movw	r3, #11268
+ 299 0008 C4F20003 		movt	r3, 16384
+ 300 000c 1A68     		ldr	r2, [r3]
+ 301 000e 42F60443 		movw	r3, #11268
+ 302 0012 C4F20003 		movt	r3, 16384
+ 303 0016 40F20021 		movw	r1, #512
+ 304 001a 0A43     		orrs	r2, r1
+ 305 001c 1A60     		str	r2, [r3]
+ 126:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_wwdgt.c **** }
+ 306              		.loc 1 126 1
+ 307 001e C046     		nop
+ 308 0020 BD46     		mov	sp, r7
+ 309              		@ sp needed
+ 310 0022 80BD     		pop	{r7, pc}
+ 311              		.cfi_endproc
+ 312              	.LFE64:
+ 314              		.text
+ 315              	.Letext0:
+ 316              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 317              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 318              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 319              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+ 320              		.file 6 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 gd32e23x_wwdgt.c
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:16     .text.wwdgt_deinit:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:24     .text.wwdgt_deinit:00000000 wwdgt_deinit
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:52     .text.wwdgt_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:59     .text.wwdgt_enable:00000000 wwdgt_enable
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:89     .text.wwdgt_counter_update:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:96     .text.wwdgt_counter_update:00000000 wwdgt_counter_update
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:134    .text.wwdgt_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:141    .text.wwdgt_config:00000000 wwdgt_config
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:197    .text.wwdgt_flag_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:204    .text.wwdgt_flag_get:00000000 wwdgt_flag_get
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:241    .text.wwdgt_flag_clear:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:248    .text.wwdgt_flag_clear:00000000 wwdgt_flag_clear
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:278    .text.wwdgt_interrupt_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccjjNQVt.s:285    .text.wwdgt_interrupt_enable:00000000 wwdgt_interrupt_enable
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.41.6048b63d2fbca632a2a4e828c73930ba
+
+UNDEFINED SYMBOLS
+rcu_periph_reset_enable
+rcu_periph_reset_disable

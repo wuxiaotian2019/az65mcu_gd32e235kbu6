@@ -1,0 +1,1255 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"GPIO_init.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.bss.key_pressed,"aw",%nobits
+  18              	key_pressed:
+  19 0000 00       		.space	1
+  20              		.section	.bss.key_press_start_time,"aw",%nobits
+  21              		.align	2
+  24              	key_press_start_time:
+  25 0000 00000000 		.space	4
+  26              		.section	.bss.key_long_press_detected,"aw",%nobits
+  29              	key_long_press_detected:
+  30 0000 00       		.space	1
+  31              		.section	.bss.key_shot_press_detected,"aw",%nobits
+  34              	key_shot_press_detected:
+  35 0000 00       		.space	1
+  36              		.section	.bss.detection_window_active,"aw",%nobits
+  39              	detection_window_active:
+  40 0000 00       		.space	1
+  41              		.section	.bss.system_boot_start_time,"aw",%nobits
+  42              		.align	2
+  45              	system_boot_start_time:
+  46 0000 00000000 		.space	4
+  47              		.section	.text.com_gpio_init,"ax",%progbits
+  48              		.align	1
+  49              		.global	com_gpio_init
+  50              		.arch armv8-m.base
+  51              		.syntax unified
+  52              		.code	16
+  53              		.thumb_func
+  54              		.fpu softvfp
+  56              	com_gpio_init:
+  57              	.LFB62:
+  58              		.file 1 "../src/drivers/gpio/GPIO_init.c"
+   1:../src/drivers/gpio/GPIO_init.c **** #include "GPIO_init.h"
+   2:../src/drivers/gpio/GPIO_init.c **** #include "gd32e23x.h"
+   3:../src/drivers/gpio/GPIO_init.c **** #include "gd32e235c_eval.h"
+   4:../src/drivers/gpio/GPIO_init.c **** #include <stdio.h>
+   5:../src/drivers/gpio/GPIO_init.c **** #include <sprd_config.h>
+   6:../src/drivers/gpio/GPIO_init.c **** #include "Process_Packet.h"
+   7:../src/drivers/gpio/GPIO_init.c **** 
+   8:../src/drivers/gpio/GPIO_init.c **** static volatile uint8_t key_pressed = 0;
+   9:../src/drivers/gpio/GPIO_init.c **** static volatile uint32_t key_press_start_time = 0;
+  10:../src/drivers/gpio/GPIO_init.c **** static volatile uint8_t key_long_press_detected = 0;
+  11:../src/drivers/gpio/GPIO_init.c **** static volatile uint8_t key_shot_press_detected = 0;
+  12:../src/drivers/gpio/GPIO_init.c **** static volatile uint8_t detection_window_active = 0;
+  13:../src/drivers/gpio/GPIO_init.c **** static volatile uint32_t system_boot_start_time = 0;
+  14:../src/drivers/gpio/GPIO_init.c **** 
+  15:../src/drivers/gpio/GPIO_init.c **** /*!
+  16:../src/drivers/gpio/GPIO_init.c ****     \brief      initilize the com GPIO
+  17:../src/drivers/gpio/GPIO_init.c ****     \param[in]  none
+  18:../src/drivers/gpio/GPIO_init.c ****     \param[out] none
+  19:../src/drivers/gpio/GPIO_init.c ****     \retval     none
+  20:../src/drivers/gpio/GPIO_init.c **** */
+  21:../src/drivers/gpio/GPIO_init.c **** void com_gpio_init(void)
+  22:../src/drivers/gpio/GPIO_init.c **** {
+  59              		.loc 1 22 1
+  60              		.cfi_startproc
+  61              		@ args = 0, pretend = 0, frame = 0
+  62              		@ frame_needed = 1, uses_anonymous_args = 0
+  63 0000 80B5     		push	{r7, lr}
+  64              		.cfi_def_cfa_offset 8
+  65              		.cfi_offset 7, -8
+  66              		.cfi_offset 14, -4
+  67 0002 00AF     		add	r7, sp, #0
+  68              		.cfi_def_cfa_register 7
+  23:../src/drivers/gpio/GPIO_init.c ****     /* enable COM GPIO clock */
+  24:../src/drivers/gpio/GPIO_init.c ****     rcu_periph_clock_enable(RCU_GPIOA);
+  69              		.loc 1 24 5
+  70 0004 40F21150 		movw	r0, #1297
+  71 0008 FFF7FEFF 		bl	rcu_periph_clock_enable
+  25:../src/drivers/gpio/GPIO_init.c **** 
+  26:../src/drivers/gpio/GPIO_init.c ****     /* connect port to USART0_Tx */
+  27:../src/drivers/gpio/GPIO_init.c ****     gpio_af_set(GPIOA, GPIO_AF_1, GPIO_PIN_9);
+  72              		.loc 1 27 5
+  73 000c 9023     		movs	r3, #144
+  74 000e DB05     		lsls	r3, r3, #23
+  75 0010 40F20022 		movw	r2, #512
+  76 0014 0121     		movs	r1, #1
+  77 0016 1800     		movs	r0, r3
+  78 0018 FFF7FEFF 		bl	gpio_af_set
+  28:../src/drivers/gpio/GPIO_init.c **** 
+  29:../src/drivers/gpio/GPIO_init.c ****     /* connect port to USART0_Rx */
+  30:../src/drivers/gpio/GPIO_init.c ****     gpio_af_set(GPIOA, GPIO_AF_1, GPIO_PIN_10);
+  79              		.loc 1 30 5
+  80 001c 9023     		movs	r3, #144
+  81 001e DB05     		lsls	r3, r3, #23
+  82 0020 40F20042 		movw	r2, #1024
+  83 0024 0121     		movs	r1, #1
+  84 0026 1800     		movs	r0, r3
+  85 0028 FFF7FEFF 		bl	gpio_af_set
+  31:../src/drivers/gpio/GPIO_init.c **** 
+  32:../src/drivers/gpio/GPIO_init.c ****     /* configure USART Tx as alternate function push-pull */
+  33:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_9);
+  86              		.loc 1 33 5
+  87 002c 9023     		movs	r3, #144
+  88 002e D805     		lsls	r0, r3, #23
+  89 0030 40F20023 		movw	r3, #512
+  90 0034 0122     		movs	r2, #1
+  91 0036 0221     		movs	r1, #2
+  92 0038 FFF7FEFF 		bl	gpio_mode_set
+  34:../src/drivers/gpio/GPIO_init.c ****     gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+  93              		.loc 1 34 5
+  94 003c 9023     		movs	r3, #144
+  95 003e D805     		lsls	r0, r3, #23
+  96 0040 40F20023 		movw	r3, #512
+  97 0044 0322     		movs	r2, #3
+  98 0046 0021     		movs	r1, #0
+  99 0048 FFF7FEFF 		bl	gpio_output_options_set
+  35:../src/drivers/gpio/GPIO_init.c **** 
+  36:../src/drivers/gpio/GPIO_init.c ****     /* configure USART Rx as alternate function push-pull */
+  37:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_10);
+ 100              		.loc 1 37 5
+ 101 004c 9023     		movs	r3, #144
+ 102 004e D805     		lsls	r0, r3, #23
+ 103 0050 40F20043 		movw	r3, #1024
+ 104 0054 0122     		movs	r2, #1
+ 105 0056 0221     		movs	r1, #2
+ 106 0058 FFF7FEFF 		bl	gpio_mode_set
+  38:../src/drivers/gpio/GPIO_init.c ****     gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+ 107              		.loc 1 38 5
+ 108 005c 9023     		movs	r3, #144
+ 109 005e D805     		lsls	r0, r3, #23
+ 110 0060 40F20043 		movw	r3, #1024
+ 111 0064 0322     		movs	r2, #3
+ 112 0066 0021     		movs	r1, #0
+ 113 0068 FFF7FEFF 		bl	gpio_output_options_set
+  39:../src/drivers/gpio/GPIO_init.c **** 
+  40:../src/drivers/gpio/GPIO_init.c ****     /* for mcu control soc reset */
+  41:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_PULLDOWN, GPIO_PIN_0);
+ 114              		.loc 1 41 5
+ 115 006c 9023     		movs	r3, #144
+ 116 006e D805     		lsls	r0, r3, #23
+ 117 0070 0123     		movs	r3, #1
+ 118 0072 0222     		movs	r2, #2
+ 119 0074 0121     		movs	r1, #1
+ 120 0076 FFF7FEFF 		bl	gpio_mode_set
+  42:../src/drivers/gpio/GPIO_init.c ****     gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
+ 121              		.loc 1 42 5
+ 122 007a 9023     		movs	r3, #144
+ 123 007c D805     		lsls	r0, r3, #23
+ 124 007e 0123     		movs	r3, #1
+ 125 0080 0322     		movs	r2, #3
+ 126 0082 0021     		movs	r1, #0
+ 127 0084 FFF7FEFF 		bl	gpio_output_options_set
+  43:../src/drivers/gpio/GPIO_init.c **** 
+  44:../src/drivers/gpio/GPIO_init.c ****     /* reset GPIO PA0 pin */
+  45:../src/drivers/gpio/GPIO_init.c ****     gpio_bit_reset(GPIOA, GPIO_PIN_0);
+ 128              		.loc 1 45 5
+ 129 0088 9023     		movs	r3, #144
+ 130 008a DB05     		lsls	r3, r3, #23
+ 131 008c 0121     		movs	r1, #1
+ 132 008e 1800     		movs	r0, r3
+ 133 0090 FFF7FEFF 		bl	gpio_bit_reset
+  46:../src/drivers/gpio/GPIO_init.c **** 
+  47:../src/drivers/gpio/GPIO_init.c ****     /* for mcu tell soc which spl is used 0:default spl, 1:spl_bak */
+  48:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_1);
+ 134              		.loc 1 48 5
+ 135 0094 9023     		movs	r3, #144
+ 136 0096 D805     		lsls	r0, r3, #23
+ 137 0098 0223     		movs	r3, #2
+ 138 009a 0022     		movs	r2, #0
+ 139 009c 0121     		movs	r1, #1
+ 140 009e FFF7FEFF 		bl	gpio_mode_set
+  49:../src/drivers/gpio/GPIO_init.c ****     gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_1);
+ 141              		.loc 1 49 5
+ 142 00a2 9023     		movs	r3, #144
+ 143 00a4 D805     		lsls	r0, r3, #23
+ 144 00a6 0223     		movs	r3, #2
+ 145 00a8 0322     		movs	r2, #3
+ 146 00aa 0021     		movs	r1, #0
+ 147 00ac FFF7FEFF 		bl	gpio_output_options_set
+  50:../src/drivers/gpio/GPIO_init.c **** 
+  51:../src/drivers/gpio/GPIO_init.c ****     /* reset GPIO PA1 pin */
+  52:../src/drivers/gpio/GPIO_init.c ****     gpio_bit_reset(GPIOA, GPIO_PIN_1);
+ 148              		.loc 1 52 5
+ 149 00b0 9023     		movs	r3, #144
+ 150 00b2 DB05     		lsls	r3, r3, #23
+ 151 00b4 0221     		movs	r1, #2
+ 152 00b6 1800     		movs	r0, r3
+ 153 00b8 FFF7FEFF 		bl	gpio_bit_reset
+  53:../src/drivers/gpio/GPIO_init.c **** 
+  54:../src/drivers/gpio/GPIO_init.c ****     /* enable COM GPIO clock */
+  55:../src/drivers/gpio/GPIO_init.c ****     rcu_periph_clock_enable(RCU_GPIOB);
+ 154              		.loc 1 55 5
+ 155 00bc 40F21250 		movw	r0, #1298
+ 156 00c0 FFF7FEFF 		bl	rcu_periph_clock_enable
+  56:../src/drivers/gpio/GPIO_init.c **** 
+  57:../src/drivers/gpio/GPIO_init.c ****     /* PB0, for soc tell mcu status, 0:not ready, 1:bootup to spl */
+  58:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOB, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO_PIN_0);
+ 157              		.loc 1 58 5
+ 158 00c4 40F20040 		movw	r0, #1024
+ 159 00c8 C4F60000 		movt	r0, 18432
+ 160 00cc 0123     		movs	r3, #1
+ 161 00ce 0022     		movs	r2, #0
+ 162 00d0 0021     		movs	r1, #0
+ 163 00d2 FFF7FEFF 		bl	gpio_mode_set
+  59:../src/drivers/gpio/GPIO_init.c **** 
+  60:../src/drivers/gpio/GPIO_init.c ****     /* for mcu check pbint status, 0:no powerkey pressed, 1:powerkey pressed */
+  61:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO_PIN_8);
+ 164              		.loc 1 61 5
+ 165 00d6 9023     		movs	r3, #144
+ 166 00d8 D805     		lsls	r0, r3, #23
+ 167 00da 40F20013 		movw	r3, #256
+ 168 00de 0022     		movs	r2, #0
+ 169 00e0 0021     		movs	r1, #0
+ 170 00e2 FFF7FEFF 		bl	gpio_mode_set
+  62:../src/drivers/gpio/GPIO_init.c **** }
+ 171              		.loc 1 62 1
+ 172 00e6 C046     		nop
+ 173 00e8 BD46     		mov	sp, r7
+ 174              		@ sp needed
+ 175 00ea 80BD     		pop	{r7, pc}
+ 176              		.cfi_endproc
+ 177              	.LFE62:
+ 179              		.section	.text.com1_gpio_init,"ax",%progbits
+ 180              		.align	1
+ 181              		.global	com1_gpio_init
+ 182              		.syntax unified
+ 183              		.code	16
+ 184              		.thumb_func
+ 185              		.fpu softvfp
+ 187              	com1_gpio_init:
+ 188              	.LFB63:
+  63:../src/drivers/gpio/GPIO_init.c **** 
+  64:../src/drivers/gpio/GPIO_init.c **** /*!
+  65:../src/drivers/gpio/GPIO_init.c ****     \brief      initilize the com GPIO
+  66:../src/drivers/gpio/GPIO_init.c ****     \param[in]  none
+  67:../src/drivers/gpio/GPIO_init.c ****     \param[out] none
+  68:../src/drivers/gpio/GPIO_init.c ****     \retval     none
+  69:../src/drivers/gpio/GPIO_init.c **** */
+  70:../src/drivers/gpio/GPIO_init.c **** void com1_gpio_init(void)
+  71:../src/drivers/gpio/GPIO_init.c **** {
+ 189              		.loc 1 71 1
+ 190              		.cfi_startproc
+ 191              		@ args = 0, pretend = 0, frame = 0
+ 192              		@ frame_needed = 1, uses_anonymous_args = 0
+ 193 0000 80B5     		push	{r7, lr}
+ 194              		.cfi_def_cfa_offset 8
+ 195              		.cfi_offset 7, -8
+ 196              		.cfi_offset 14, -4
+ 197 0002 00AF     		add	r7, sp, #0
+ 198              		.cfi_def_cfa_register 7
+  72:../src/drivers/gpio/GPIO_init.c ****     /* enable COM GPIO clock */
+  73:../src/drivers/gpio/GPIO_init.c ****     rcu_periph_clock_enable(RCU_GPIOA);
+ 199              		.loc 1 73 5
+ 200 0004 40F21150 		movw	r0, #1297
+ 201 0008 FFF7FEFF 		bl	rcu_periph_clock_enable
+  74:../src/drivers/gpio/GPIO_init.c **** 
+  75:../src/drivers/gpio/GPIO_init.c ****     /* connect port to USARTx_Tx */
+  76:../src/drivers/gpio/GPIO_init.c ****     gpio_af_set(GPIOA, GPIO_AF_1, GPIO_PIN_2);
+ 202              		.loc 1 76 5
+ 203 000c 9023     		movs	r3, #144
+ 204 000e DB05     		lsls	r3, r3, #23
+ 205 0010 0422     		movs	r2, #4
+ 206 0012 0121     		movs	r1, #1
+ 207 0014 1800     		movs	r0, r3
+ 208 0016 FFF7FEFF 		bl	gpio_af_set
+  77:../src/drivers/gpio/GPIO_init.c **** 
+  78:../src/drivers/gpio/GPIO_init.c ****     /* connect port to USARTx_Rx */
+  79:../src/drivers/gpio/GPIO_init.c ****     gpio_af_set(GPIOA, GPIO_AF_1, GPIO_PIN_3);
+ 209              		.loc 1 79 5
+ 210 001a 9023     		movs	r3, #144
+ 211 001c DB05     		lsls	r3, r3, #23
+ 212 001e 0822     		movs	r2, #8
+ 213 0020 0121     		movs	r1, #1
+ 214 0022 1800     		movs	r0, r3
+ 215 0024 FFF7FEFF 		bl	gpio_af_set
+  80:../src/drivers/gpio/GPIO_init.c **** 
+  81:../src/drivers/gpio/GPIO_init.c ****     /* configure USART Tx as alternate function push-pull */
+  82:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_2);
+ 216              		.loc 1 82 5
+ 217 0028 9023     		movs	r3, #144
+ 218 002a D805     		lsls	r0, r3, #23
+ 219 002c 0423     		movs	r3, #4
+ 220 002e 0122     		movs	r2, #1
+ 221 0030 0221     		movs	r1, #2
+ 222 0032 FFF7FEFF 		bl	gpio_mode_set
+  83:../src/drivers/gpio/GPIO_init.c ****     gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, GPIO_PIN_2);
+ 223              		.loc 1 83 5
+ 224 0036 9023     		movs	r3, #144
+ 225 0038 D805     		lsls	r0, r3, #23
+ 226 003a 0423     		movs	r3, #4
+ 227 003c 0122     		movs	r2, #1
+ 228 003e 0021     		movs	r1, #0
+ 229 0040 FFF7FEFF 		bl	gpio_output_options_set
+  84:../src/drivers/gpio/GPIO_init.c **** 
+  85:../src/drivers/gpio/GPIO_init.c ****     /* configure USART Rx as alternate function push-pull */
+  86:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO_PIN_3);
+ 230              		.loc 1 86 5
+ 231 0044 9023     		movs	r3, #144
+ 232 0046 D805     		lsls	r0, r3, #23
+ 233 0048 0823     		movs	r3, #8
+ 234 004a 0122     		movs	r2, #1
+ 235 004c 0221     		movs	r1, #2
+ 236 004e FFF7FEFF 		bl	gpio_mode_set
+  87:../src/drivers/gpio/GPIO_init.c ****     gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, GPIO_PIN_3);
+ 237              		.loc 1 87 5
+ 238 0052 9023     		movs	r3, #144
+ 239 0054 D805     		lsls	r0, r3, #23
+ 240 0056 0823     		movs	r3, #8
+ 241 0058 0122     		movs	r2, #1
+ 242 005a 0021     		movs	r1, #0
+ 243 005c FFF7FEFF 		bl	gpio_output_options_set
+  88:../src/drivers/gpio/GPIO_init.c **** }
+ 244              		.loc 1 88 1
+ 245 0060 C046     		nop
+ 246 0062 BD46     		mov	sp, r7
+ 247              		@ sp needed
+ 248 0064 80BD     		pop	{r7, pc}
+ 249              		.cfi_endproc
+ 250              	.LFE63:
+ 252              		.section	.text.init_key_detection,"ax",%progbits
+ 253              		.align	1
+ 254              		.global	init_key_detection
+ 255              		.syntax unified
+ 256              		.code	16
+ 257              		.thumb_func
+ 258              		.fpu softvfp
+ 260              	init_key_detection:
+ 261              	.LFB64:
+  89:../src/drivers/gpio/GPIO_init.c **** 
+  90:../src/drivers/gpio/GPIO_init.c **** void init_key_detection(void)
+  91:../src/drivers/gpio/GPIO_init.c **** {
+ 262              		.loc 1 91 1
+ 263              		.cfi_startproc
+ 264              		@ args = 0, pretend = 0, frame = 0
+ 265              		@ frame_needed = 1, uses_anonymous_args = 0
+ 266 0000 80B5     		push	{r7, lr}
+ 267              		.cfi_def_cfa_offset 8
+ 268              		.cfi_offset 7, -8
+ 269              		.cfi_offset 14, -4
+ 270 0002 00AF     		add	r7, sp, #0
+ 271              		.cfi_def_cfa_register 7
+  92:../src/drivers/gpio/GPIO_init.c ****     key_pressed = 0;
+ 272              		.loc 1 92 17
+ 273 0004 40F20003 		movw	r3, #:lower16:key_pressed
+ 274 0008 C0F20003 		movt	r3, #:upper16:key_pressed
+ 275 000c 0022     		movs	r2, #0
+ 276 000e 1A70     		strb	r2, [r3]
+  93:../src/drivers/gpio/GPIO_init.c ****     key_long_press_detected = 0;
+ 277              		.loc 1 93 29
+ 278 0010 40F20003 		movw	r3, #:lower16:key_long_press_detected
+ 279 0014 C0F20003 		movt	r3, #:upper16:key_long_press_detected
+ 280 0018 0022     		movs	r2, #0
+ 281 001a 1A70     		strb	r2, [r3]
+  94:../src/drivers/gpio/GPIO_init.c ****     detection_window_active = 1;
+ 282              		.loc 1 94 29
+ 283 001c 40F20003 		movw	r3, #:lower16:detection_window_active
+ 284 0020 C0F20003 		movt	r3, #:upper16:detection_window_active
+ 285 0024 0122     		movs	r2, #1
+ 286 0026 1A70     		strb	r2, [r3]
+  95:../src/drivers/gpio/GPIO_init.c ****     system_boot_start_time = timer_handle.Timer_Count;
+ 287              		.loc 1 95 42
+ 288 0028 40F20003 		movw	r3, #:lower16:timer_handle
+ 289 002c C0F20003 		movt	r3, #:upper16:timer_handle
+ 290 0030 5B68     		ldr	r3, [r3, #4]
+ 291 0032 1A00     		movs	r2, r3
+ 292              		.loc 1 95 28
+ 293 0034 40F20003 		movw	r3, #:lower16:system_boot_start_time
+ 294 0038 C0F20003 		movt	r3, #:upper16:system_boot_start_time
+ 295 003c 1A60     		str	r2, [r3]
+  96:../src/drivers/gpio/GPIO_init.c **** }
+ 296              		.loc 1 96 1
+ 297 003e C046     		nop
+ 298 0040 BD46     		mov	sp, r7
+ 299              		@ sp needed
+ 300 0042 80BD     		pop	{r7, pc}
+ 301              		.cfi_endproc
+ 302              	.LFE64:
+ 304              		.section	.text.check_key_press_during_boot,"ax",%progbits
+ 305              		.align	1
+ 306              		.global	check_key_press_during_boot
+ 307              		.syntax unified
+ 308              		.code	16
+ 309              		.thumb_func
+ 310              		.fpu softvfp
+ 312              	check_key_press_during_boot:
+ 313              	.LFB65:
+  97:../src/drivers/gpio/GPIO_init.c **** void check_key_press_during_boot(void)
+  98:../src/drivers/gpio/GPIO_init.c **** {
+ 314              		.loc 1 98 1
+ 315              		.cfi_startproc
+ 316              		@ args = 0, pretend = 0, frame = 8
+ 317              		@ frame_needed = 1, uses_anonymous_args = 0
+ 318 0000 80B5     		push	{r7, lr}
+ 319              		.cfi_def_cfa_offset 8
+ 320              		.cfi_offset 7, -8
+ 321              		.cfi_offset 14, -4
+ 322 0002 82B0     		sub	sp, sp, #8
+ 323              		.cfi_def_cfa_offset 16
+ 324 0004 00AF     		add	r7, sp, #0
+ 325              		.cfi_def_cfa_register 7
+  99:../src/drivers/gpio/GPIO_init.c ****     uint32_t current_time = timer_handle.Timer_Count;
+ 326              		.loc 1 99 41
+ 327 0006 40F20003 		movw	r3, #:lower16:timer_handle
+ 328 000a C0F20003 		movt	r3, #:upper16:timer_handle
+ 329 000e 5B68     		ldr	r3, [r3, #4]
+ 330              		.loc 1 99 14
+ 331 0010 7B60     		str	r3, [r7, #4]
+ 100:../src/drivers/gpio/GPIO_init.c ****     if (detection_window_active) {
+ 332              		.loc 1 100 9
+ 333 0012 40F20003 		movw	r3, #:lower16:detection_window_active
+ 334 0016 C0F20003 		movt	r3, #:upper16:detection_window_active
+ 335 001a 1B78     		ldrb	r3, [r3]
+ 336 001c DBB2     		uxtb	r3, r3
+ 337              		.loc 1 100 8
+ 338 001e 002B     		cmp	r3, #0
+ 339 0020 5BD0     		beq	.L11
+ 101:../src/drivers/gpio/GPIO_init.c ****         if (SET == gpio_input_bit_get(GPIOA, GPIO_PIN_13)) {
+ 340              		.loc 1 101 20
+ 341 0022 9023     		movs	r3, #144
+ 342 0024 DB05     		lsls	r3, r3, #23
+ 343 0026 42F20001 		movw	r1, #8192
+ 344 002a 1800     		movs	r0, r3
+ 345 002c FFF7FEFF 		bl	gpio_input_bit_get
+ 346 0030 0300     		movs	r3, r0
+ 347              		.loc 1 101 12
+ 348 0032 012B     		cmp	r3, #1
+ 349 0034 2CD1     		bne	.L6
+ 102:../src/drivers/gpio/GPIO_init.c ****             if (!key_pressed) {
+ 350              		.loc 1 102 17
+ 351 0036 40F20003 		movw	r3, #:lower16:key_pressed
+ 352 003a C0F20003 		movt	r3, #:upper16:key_pressed
+ 353 003e 1B78     		ldrb	r3, [r3]
+ 354 0040 DBB2     		uxtb	r3, r3
+ 355              		.loc 1 102 16
+ 356 0042 9BB9     		cbnz	r3, .L7
+ 103:../src/drivers/gpio/GPIO_init.c ****                 key_press_start_time = current_time;
+ 357              		.loc 1 103 38
+ 358 0044 40F20003 		movw	r3, #:lower16:key_press_start_time
+ 359 0048 C0F20003 		movt	r3, #:upper16:key_press_start_time
+ 360 004c 7A68     		ldr	r2, [r7, #4]
+ 361 004e 1A60     		str	r2, [r3]
+ 104:../src/drivers/gpio/GPIO_init.c ****                 key_pressed++;
+ 362              		.loc 1 104 28
+ 363 0050 40F20003 		movw	r3, #:lower16:key_pressed
+ 364 0054 C0F20003 		movt	r3, #:upper16:key_pressed
+ 365 0058 1B78     		ldrb	r3, [r3]
+ 366 005a DBB2     		uxtb	r3, r3
+ 367 005c 0133     		adds	r3, r3, #1
+ 368 005e DAB2     		uxtb	r2, r3
+ 369 0060 40F20003 		movw	r3, #:lower16:key_pressed
+ 370 0064 C0F20003 		movt	r3, #:upper16:key_pressed
+ 371 0068 1A70     		strb	r2, [r3]
+ 372 006a 24E0     		b	.L8
+ 373              	.L7:
+ 105:../src/drivers/gpio/GPIO_init.c ****             } else {
+ 106:../src/drivers/gpio/GPIO_init.c ****                 if ((current_time - key_press_start_time) >= KEYPRESS_TIME) {
+ 374              		.loc 1 106 35
+ 375 006c 40F20003 		movw	r3, #:lower16:key_press_start_time
+ 376 0070 C0F20003 		movt	r3, #:upper16:key_press_start_time
+ 377 0074 1B68     		ldr	r3, [r3]
+ 378 0076 7A68     		ldr	r2, [r7, #4]
+ 379 0078 D31A     		subs	r3, r2, r3
+ 380              		.loc 1 106 20
+ 381 007a 40F6B732 		movw	r2, #2999
+ 382 007e 9342     		cmp	r3, r2
+ 383 0080 19D9     		bls	.L8
+ 107:../src/drivers/gpio/GPIO_init.c ****                     key_long_press_detected = 1;
+ 384              		.loc 1 107 45
+ 385 0082 40F20003 		movw	r3, #:lower16:key_long_press_detected
+ 386 0086 C0F20003 		movt	r3, #:upper16:key_long_press_detected
+ 387 008a 0122     		movs	r2, #1
+ 388 008c 1A70     		strb	r2, [r3]
+ 389 008e 12E0     		b	.L8
+ 390              	.L6:
+ 108:../src/drivers/gpio/GPIO_init.c ****                 }
+ 109:../src/drivers/gpio/GPIO_init.c ****             }
+ 110:../src/drivers/gpio/GPIO_init.c ****         } else {
+ 111:../src/drivers/gpio/GPIO_init.c ****             if (key_pressed)
+ 391              		.loc 1 111 17
+ 392 0090 40F20003 		movw	r3, #:lower16:key_pressed
+ 393 0094 C0F20003 		movt	r3, #:upper16:key_pressed
+ 394 0098 1B78     		ldrb	r3, [r3]
+ 395 009a DBB2     		uxtb	r3, r3
+ 396              		.loc 1 111 16
+ 397 009c 2BB1     		cbz	r3, .L9
+ 112:../src/drivers/gpio/GPIO_init.c ****                 key_shot_press_detected = 1;
+ 398              		.loc 1 112 41
+ 399 009e 40F20003 		movw	r3, #:lower16:key_shot_press_detected
+ 400 00a2 C0F20003 		movt	r3, #:upper16:key_shot_press_detected
+ 401 00a6 0122     		movs	r2, #1
+ 402 00a8 1A70     		strb	r2, [r3]
+ 403              	.L9:
+ 113:../src/drivers/gpio/GPIO_init.c ****             key_pressed = 0;
+ 404              		.loc 1 113 25
+ 405 00aa 40F20003 		movw	r3, #:lower16:key_pressed
+ 406 00ae C0F20003 		movt	r3, #:upper16:key_pressed
+ 407 00b2 0022     		movs	r2, #0
+ 408 00b4 1A70     		strb	r2, [r3]
+ 409              	.L8:
+ 114:../src/drivers/gpio/GPIO_init.c ****         }
+ 115:../src/drivers/gpio/GPIO_init.c ****     } else { 
+ 116:../src/drivers/gpio/GPIO_init.c ****         return;
+ 117:../src/drivers/gpio/GPIO_init.c ****     }
+ 118:../src/drivers/gpio/GPIO_init.c ****     if ((current_time - system_boot_start_time) >= KEYPRESS_CHECKTIME) {
+ 410              		.loc 1 118 23
+ 411 00b6 40F20003 		movw	r3, #:lower16:system_boot_start_time
+ 412 00ba C0F20003 		movt	r3, #:upper16:system_boot_start_time
+ 413 00be 1B68     		ldr	r3, [r3]
+ 414 00c0 7A68     		ldr	r2, [r7, #4]
+ 415 00c2 D31A     		subs	r3, r2, r3
+ 416              		.loc 1 118 8
+ 417 00c4 40F6AB52 		movw	r2, #3499
+ 418 00c8 9342     		cmp	r3, r2
+ 419 00ca 07D9     		bls	.L4
+ 119:../src/drivers/gpio/GPIO_init.c ****         detection_window_active = 0;
+ 420              		.loc 1 119 33
+ 421 00cc 40F20003 		movw	r3, #:lower16:detection_window_active
+ 422 00d0 C0F20003 		movt	r3, #:upper16:detection_window_active
+ 423 00d4 0022     		movs	r2, #0
+ 424 00d6 1A70     		strb	r2, [r3]
+ 425 00d8 00E0     		b	.L4
+ 426              	.L11:
+ 116:../src/drivers/gpio/GPIO_init.c ****     }
+ 427              		.loc 1 116 9
+ 428 00da C046     		nop
+ 429              	.L4:
+ 120:../src/drivers/gpio/GPIO_init.c ****     }
+ 121:../src/drivers/gpio/GPIO_init.c **** }
+ 430              		.loc 1 121 1
+ 431 00dc BD46     		mov	sp, r7
+ 432 00de 02B0     		add	sp, sp, #8
+ 433              		@ sp needed
+ 434 00e0 80BD     		pop	{r7, pc}
+ 435              		.cfi_endproc
+ 436              	.LFE65:
+ 438              		.section	.rodata
+ 439              		.align	2
+ 440              	.LC0:
+ 441 0000 6B65795F 		.ascii	"key_long_press_detected:%d, key_shot_press_detected"
+ 441      6C6F6E67 
+ 441      5F707265 
+ 441      73735F64 
+ 441      65746563 
+ 442 0033 3A25640A 		.ascii	":%d\012\000"
+ 442      00
+ 443              		.section	.text.is_long_key_or_nokey_press_power,"ax",%progbits
+ 444              		.align	1
+ 445              		.global	is_long_key_or_nokey_press_power
+ 446              		.syntax unified
+ 447              		.code	16
+ 448              		.thumb_func
+ 449              		.fpu softvfp
+ 451              	is_long_key_or_nokey_press_power:
+ 452              	.LFB66:
+ 122:../src/drivers/gpio/GPIO_init.c **** uint8_t is_long_key_or_nokey_press_power(void)
+ 123:../src/drivers/gpio/GPIO_init.c **** {
+ 453              		.loc 1 123 1
+ 454              		.cfi_startproc
+ 455              		@ args = 0, pretend = 0, frame = 0
+ 456              		@ frame_needed = 1, uses_anonymous_args = 0
+ 457 0000 80B5     		push	{r7, lr}
+ 458              		.cfi_def_cfa_offset 8
+ 459              		.cfi_offset 7, -8
+ 460              		.cfi_offset 14, -4
+ 461 0002 00AF     		add	r7, sp, #0
+ 462              		.cfi_def_cfa_register 7
+ 124:../src/drivers/gpio/GPIO_init.c ****     if (!detection_window_active) {
+ 463              		.loc 1 124 9
+ 464 0004 40F20003 		movw	r3, #:lower16:detection_window_active
+ 465 0008 C0F20003 		movt	r3, #:upper16:detection_window_active
+ 466 000c 1B78     		ldrb	r3, [r3]
+ 467 000e DBB2     		uxtb	r3, r3
+ 468              		.loc 1 124 8
+ 469 0010 3BBB     		cbnz	r3, .L13
+ 125:../src/drivers/gpio/GPIO_init.c ****         printf("key_long_press_detected:%d, key_shot_press_detected:%d\n", key_long_press_detected,
+ 470              		.loc 1 125 9
+ 471 0012 40F20003 		movw	r3, #:lower16:key_long_press_detected
+ 472 0016 C0F20003 		movt	r3, #:upper16:key_long_press_detected
+ 473 001a 1B78     		ldrb	r3, [r3]
+ 474 001c DBB2     		uxtb	r3, r3
+ 475 001e 1900     		movs	r1, r3
+ 476 0020 40F20003 		movw	r3, #:lower16:key_shot_press_detected
+ 477 0024 C0F20003 		movt	r3, #:upper16:key_shot_press_detected
+ 478 0028 1B78     		ldrb	r3, [r3]
+ 479 002a DBB2     		uxtb	r3, r3
+ 480 002c 1A00     		movs	r2, r3
+ 481 002e 40F20003 		movw	r3, #:lower16:.LC0
+ 482 0032 C0F20003 		movt	r3, #:upper16:.LC0
+ 483 0036 1800     		movs	r0, r3
+ 484 0038 FFF7FEFF 		bl	printf
+ 126:../src/drivers/gpio/GPIO_init.c ****         return key_long_press_detected || !key_shot_press_detected;
+ 485              		.loc 1 126 16
+ 486 003c 40F20003 		movw	r3, #:lower16:key_long_press_detected
+ 487 0040 C0F20003 		movt	r3, #:upper16:key_long_press_detected
+ 488 0044 1B78     		ldrb	r3, [r3]
+ 489 0046 DBB2     		uxtb	r3, r3
+ 490              		.loc 1 126 40
+ 491 0048 33B9     		cbnz	r3, .L14
+ 492              		.loc 1 126 43 discriminator 2
+ 493 004a 40F20003 		movw	r3, #:lower16:key_shot_press_detected
+ 494 004e C0F20003 		movt	r3, #:upper16:key_shot_press_detected
+ 495 0052 1B78     		ldrb	r3, [r3]
+ 496 0054 DBB2     		uxtb	r3, r3
+ 497              		.loc 1 126 40 discriminator 2
+ 498 0056 0BB9     		cbnz	r3, .L15
+ 499              	.L14:
+ 500              		.loc 1 126 40 is_stmt 0 discriminator 3
+ 501 0058 0123     		movs	r3, #1
+ 502 005a 00E0     		b	.L16
+ 503              	.L15:
+ 504              		.loc 1 126 40 discriminator 4
+ 505 005c 0023     		movs	r3, #0
+ 506              	.L16:
+ 507              		.loc 1 126 40 discriminator 6
+ 508 005e DBB2     		uxtb	r3, r3
+ 509 0060 00E0     		b	.L17
+ 510              	.L13:
+ 127:../src/drivers/gpio/GPIO_init.c ****     } else {
+ 128:../src/drivers/gpio/GPIO_init.c ****         return 0;
+ 511              		.loc 1 128 16 is_stmt 1
+ 512 0062 0023     		movs	r3, #0
+ 513              	.L17:
+ 129:../src/drivers/gpio/GPIO_init.c ****     }
+ 130:../src/drivers/gpio/GPIO_init.c **** }
+ 514              		.loc 1 130 1
+ 515 0064 1800     		movs	r0, r3
+ 516 0066 BD46     		mov	sp, r7
+ 517              		@ sp needed
+ 518 0068 80BD     		pop	{r7, pc}
+ 519              		.cfi_endproc
+ 520              	.LFE66:
+ 522              		.section	.text.Set_SPI_High_Resistance,"ax",%progbits
+ 523              		.align	1
+ 524              		.global	Set_SPI_High_Resistance
+ 525              		.syntax unified
+ 526              		.code	16
+ 527              		.thumb_func
+ 528              		.fpu softvfp
+ 530              	Set_SPI_High_Resistance:
+ 531              	.LFB67:
+ 131:../src/drivers/gpio/GPIO_init.c **** 
+ 132:../src/drivers/gpio/GPIO_init.c **** void Set_SPI_High_Resistance(void)
+ 133:../src/drivers/gpio/GPIO_init.c **** {
+ 532              		.loc 1 133 1
+ 533              		.cfi_startproc
+ 534              		@ args = 0, pretend = 0, frame = 0
+ 535              		@ frame_needed = 1, uses_anonymous_args = 0
+ 536 0000 80B5     		push	{r7, lr}
+ 537              		.cfi_def_cfa_offset 8
+ 538              		.cfi_offset 7, -8
+ 539              		.cfi_offset 14, -4
+ 540 0002 00AF     		add	r7, sp, #0
+ 541              		.cfi_def_cfa_register 7
+ 134:../src/drivers/gpio/GPIO_init.c ****     rcu_periph_clock_enable(RCU_GPIOA);
+ 542              		.loc 1 134 5
+ 543 0004 40F21150 		movw	r0, #1297
+ 544 0008 FFF7FEFF 		bl	rcu_periph_clock_enable
+ 135:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE,GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN
+ 545              		.loc 1 135 5
+ 546 000c 9023     		movs	r3, #144
+ 547 000e D805     		lsls	r0, r3, #23
+ 548 0010 F023     		movs	r3, #240
+ 549 0012 0022     		movs	r2, #0
+ 550 0014 0321     		movs	r1, #3
+ 551 0016 FFF7FEFF 		bl	gpio_mode_set
+ 136:../src/drivers/gpio/GPIO_init.c **** }
+ 552              		.loc 1 136 1
+ 553 001a C046     		nop
+ 554 001c BD46     		mov	sp, r7
+ 555              		@ sp needed
+ 556 001e 80BD     		pop	{r7, pc}
+ 557              		.cfi_endproc
+ 558              	.LFE67:
+ 560              		.section	.text.MCU_DeepSleepMode,"ax",%progbits
+ 561              		.align	1
+ 562              		.global	MCU_DeepSleepMode
+ 563              		.syntax unified
+ 564              		.code	16
+ 565              		.thumb_func
+ 566              		.fpu softvfp
+ 568              	MCU_DeepSleepMode:
+ 569              	.LFB68:
+ 137:../src/drivers/gpio/GPIO_init.c **** 
+ 138:../src/drivers/gpio/GPIO_init.c **** void MCU_DeepSleepMode(void)
+ 139:../src/drivers/gpio/GPIO_init.c **** {
+ 570              		.loc 1 139 1
+ 571              		.cfi_startproc
+ 572              		@ args = 0, pretend = 0, frame = 0
+ 573              		@ frame_needed = 1, uses_anonymous_args = 0
+ 574 0000 80B5     		push	{r7, lr}
+ 575              		.cfi_def_cfa_offset 8
+ 576              		.cfi_offset 7, -8
+ 577              		.cfi_offset 14, -4
+ 578 0002 00AF     		add	r7, sp, #0
+ 579              		.cfi_def_cfa_register 7
+ 140:../src/drivers/gpio/GPIO_init.c ****     rcu_periph_clock_enable(RCU_GPIOA);
+ 580              		.loc 1 140 5
+ 581 0004 40F21150 		movw	r0, #1297
+ 582 0008 FFF7FEFF 		bl	rcu_periph_clock_enable
+ 141:../src/drivers/gpio/GPIO_init.c ****     /* configure LED1 GPIO port */
+ 142:../src/drivers/gpio/GPIO_init.c ****     gpio_mode_set(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_5|GPIO_P
+ 583              		.loc 1 142 5
+ 584 000c 9023     		movs	r3, #144
+ 585 000e D805     		lsls	r0, r3, #23
+ 586 0010 40F2F063 		movw	r3, #1776
+ 587 0014 0022     		movs	r2, #0
+ 588 0016 0321     		movs	r1, #3
+ 589 0018 FFF7FEFF 		bl	gpio_mode_set
+ 143:../src/drivers/gpio/GPIO_init.c **** 
+ 144:../src/drivers/gpio/GPIO_init.c ****     pmu_to_deepsleepmode(PMU_LDO_NORMAL,WFI_CMD);  //deep Sleep
+ 590              		.loc 1 144 5
+ 591 001c 0021     		movs	r1, #0
+ 592 001e 0020     		movs	r0, #0
+ 593 0020 FFF7FEFF 		bl	pmu_to_deepsleepmode
+ 145:../src/drivers/gpio/GPIO_init.c **** }
+ 594              		.loc 1 145 1
+ 595 0024 C046     		nop
+ 596 0026 BD46     		mov	sp, r7
+ 597              		@ sp needed
+ 598 0028 80BD     		pop	{r7, pc}
+ 599              		.cfi_endproc
+ 600              	.LFE68:
+ 602              		.section	.rodata
+ 603              		.align	2
+ 604              	.LC1:
+ 605 0038 534C3835 		.ascii	"SL8563MCU_W19.39.1 fmc_erase_and_program %d\012\000"
+ 605      36334D43 
+ 605      555F5731 
+ 605      392E3339 
+ 605      2E312066 
+ 606              		.section	.text.MCU_FMC_program,"ax",%progbits
+ 607              		.align	1
+ 608              		.global	MCU_FMC_program
+ 609              		.syntax unified
+ 610              		.code	16
+ 611              		.thumb_func
+ 612              		.fpu softvfp
+ 614              	MCU_FMC_program:
+ 615              	.LFB69:
+ 146:../src/drivers/gpio/GPIO_init.c **** 
+ 147:../src/drivers/gpio/GPIO_init.c **** void MCU_FMC_program(uint32_t value)
+ 148:../src/drivers/gpio/GPIO_init.c **** {
+ 616              		.loc 1 148 1
+ 617              		.cfi_startproc
+ 618              		@ args = 0, pretend = 0, frame = 16
+ 619              		@ frame_needed = 1, uses_anonymous_args = 0
+ 620 0000 80B5     		push	{r7, lr}
+ 621              		.cfi_def_cfa_offset 8
+ 622              		.cfi_offset 7, -8
+ 623              		.cfi_offset 14, -4
+ 624 0002 84B0     		sub	sp, sp, #16
+ 625              		.cfi_def_cfa_offset 24
+ 626 0004 00AF     		add	r7, sp, #0
+ 627              		.cfi_def_cfa_register 7
+ 628 0006 7860     		str	r0, [r7, #4]
+ 149:../src/drivers/gpio/GPIO_init.c ****     uint32_t *ptr = (uint32_t *)ERASE_PAGE_START_ADDR;
+ 629              		.loc 1 149 15
+ 630 0008 4FF60043 		movw	r3, #64512
+ 631 000c C0F60003 		movt	r3, 2048
+ 632 0010 FB60     		str	r3, [r7, #12]
+ 150:../src/drivers/gpio/GPIO_init.c ****     /* unlock the flash program/erase controller */
+ 151:../src/drivers/gpio/GPIO_init.c ****     fmc_unlock();
+ 633              		.loc 1 151 5
+ 634 0012 FFF7FEFF 		bl	fmc_unlock
+ 152:../src/drivers/gpio/GPIO_init.c **** 
+ 153:../src/drivers/gpio/GPIO_init.c ****     /* clear all pending flags */
+ 154:../src/drivers/gpio/GPIO_init.c ****     fmc_flag_clear(FMC_FLAG_END | FMC_FLAG_WPERR | FMC_FLAG_PGERR);
+ 635              		.loc 1 154 5
+ 636 0016 3420     		movs	r0, #52
+ 637 0018 FFF7FEFF 		bl	fmc_flag_clear
+ 155:../src/drivers/gpio/GPIO_init.c **** 
+ 156:../src/drivers/gpio/GPIO_init.c ****     /* erase target page */
+ 157:../src/drivers/gpio/GPIO_init.c ****     fmc_page_erase(ERASE_PAGE_START_ADDR);
+ 638              		.loc 1 157 5
+ 639 001c 4FF60043 		movw	r3, #64512
+ 640 0020 C0F60003 		movt	r3, 2048
+ 641 0024 1800     		movs	r0, r3
+ 642 0026 FFF7FEFF 		bl	fmc_page_erase
+ 158:../src/drivers/gpio/GPIO_init.c ****     /* check the erase result, light the LED2 if the result is failed */
+ 159:../src/drivers/gpio/GPIO_init.c ****     if(MCU_FLASH_CLEAR != (*ptr)){
+ 643              		.loc 1 159 28
+ 644 002a FB68     		ldr	r3, [r7, #12]
+ 645 002c 1B68     		ldr	r3, [r3]
+ 646              		.loc 1 159 7
+ 647 002e 0133     		adds	r3, r3, #1
+ 648 0030 1FD1     		bne	.L24
+ 160:../src/drivers/gpio/GPIO_init.c ****         return;
+ 161:../src/drivers/gpio/GPIO_init.c ****     }
+ 162:../src/drivers/gpio/GPIO_init.c ****     /* program target address */
+ 163:../src/drivers/gpio/GPIO_init.c ****     fmc_word_program(ERASE_PAGE_START_ADDR, value);
+ 649              		.loc 1 163 5
+ 650 0032 7A68     		ldr	r2, [r7, #4]
+ 651 0034 4FF60043 		movw	r3, #64512
+ 652 0038 C0F60003 		movt	r3, 2048
+ 653 003c 1100     		movs	r1, r2
+ 654 003e 1800     		movs	r0, r3
+ 655 0040 FFF7FEFF 		bl	fmc_word_program
+ 164:../src/drivers/gpio/GPIO_init.c ****     printf("SL8563MCU_W19.39.1 fmc_erase_and_program %d\n",value);/* check the program result, ligh
+ 656              		.loc 1 164 5
+ 657 0044 7A68     		ldr	r2, [r7, #4]
+ 658 0046 40F20003 		movw	r3, #:lower16:.LC1
+ 659 004a C0F20003 		movt	r3, #:upper16:.LC1
+ 660 004e 1100     		movs	r1, r2
+ 661 0050 1800     		movs	r0, r3
+ 662 0052 FFF7FEFF 		bl	printf
+ 165:../src/drivers/gpio/GPIO_init.c ****     if(ERASE_PAGE_START_ADDR != (*ptr)){
+ 663              		.loc 1 165 34
+ 664 0056 FB68     		ldr	r3, [r7, #12]
+ 665 0058 1A68     		ldr	r2, [r3]
+ 666              		.loc 1 165 7
+ 667 005a 4FF60043 		movw	r3, #64512
+ 668 005e C0F60003 		movt	r3, 2048
+ 669 0062 9A42     		cmp	r2, r3
+ 670 0064 07D1     		bne	.L25
+ 166:../src/drivers/gpio/GPIO_init.c ****         return;
+ 167:../src/drivers/gpio/GPIO_init.c ****     }
+ 168:../src/drivers/gpio/GPIO_init.c **** 
+ 169:../src/drivers/gpio/GPIO_init.c ****     /* clear all pending flags */
+ 170:../src/drivers/gpio/GPIO_init.c ****     fmc_flag_clear(FMC_FLAG_END | FMC_FLAG_WPERR | FMC_FLAG_PGERR);
+ 671              		.loc 1 170 5
+ 672 0066 3420     		movs	r0, #52
+ 673 0068 FFF7FEFF 		bl	fmc_flag_clear
+ 171:../src/drivers/gpio/GPIO_init.c **** 
+ 172:../src/drivers/gpio/GPIO_init.c ****     /* lock the main FMC after the operation */
+ 173:../src/drivers/gpio/GPIO_init.c ****     fmc_lock();
+ 674              		.loc 1 173 5
+ 675 006c FFF7FEFF 		bl	fmc_lock
+ 676 0070 02E0     		b	.L20
+ 677              	.L24:
+ 160:../src/drivers/gpio/GPIO_init.c ****     }
+ 678              		.loc 1 160 9
+ 679 0072 C046     		nop
+ 680 0074 00E0     		b	.L20
+ 681              	.L25:
+ 166:../src/drivers/gpio/GPIO_init.c ****         return;
+ 682              		.loc 1 166 9
+ 683 0076 C046     		nop
+ 684              	.L20:
+ 174:../src/drivers/gpio/GPIO_init.c **** }
+ 685              		.loc 1 174 1
+ 686 0078 BD46     		mov	sp, r7
+ 687 007a 04B0     		add	sp, sp, #16
+ 688              		@ sp needed
+ 689 007c 80BD     		pop	{r7, pc}
+ 690              		.cfi_endproc
+ 691              	.LFE69:
+ 693              		.section	.text.MCU_FMC_Read,"ax",%progbits
+ 694              		.align	1
+ 695              		.global	MCU_FMC_Read
+ 696              		.syntax unified
+ 697              		.code	16
+ 698              		.thumb_func
+ 699              		.fpu softvfp
+ 701              	MCU_FMC_Read:
+ 702              	.LFB70:
+ 175:../src/drivers/gpio/GPIO_init.c **** 
+ 176:../src/drivers/gpio/GPIO_init.c **** uint32_t MCU_FMC_Read(void)
+ 177:../src/drivers/gpio/GPIO_init.c **** {
+ 703              		.loc 1 177 1
+ 704              		.cfi_startproc
+ 705              		@ args = 0, pretend = 0, frame = 0
+ 706              		@ frame_needed = 1, uses_anonymous_args = 0
+ 707 0000 80B5     		push	{r7, lr}
+ 708              		.cfi_def_cfa_offset 8
+ 709              		.cfi_offset 7, -8
+ 710              		.cfi_offset 14, -4
+ 711 0002 00AF     		add	r7, sp, #0
+ 712              		.cfi_def_cfa_register 7
+ 178:../src/drivers/gpio/GPIO_init.c ****     return option_byte_value_get(ERASE_PAGE_START_ADDR);
+ 713              		.loc 1 178 12
+ 714 0004 4FF60043 		movw	r3, #64512
+ 715 0008 C0F60003 		movt	r3, 2048
+ 716 000c 1800     		movs	r0, r3
+ 717 000e FFF7FEFF 		bl	option_byte_value_get
+ 718 0012 0300     		movs	r3, r0
+ 179:../src/drivers/gpio/GPIO_init.c **** }
+ 719              		.loc 1 179 1
+ 720 0014 1800     		movs	r0, r3
+ 721 0016 BD46     		mov	sp, r7
+ 722              		@ sp needed
+ 723 0018 80BD     		pop	{r7, pc}
+ 724              		.cfi_endproc
+ 725              	.LFE70:
+ 727              		.section	.text.MCU_Set_Soc_Pbint,"ax",%progbits
+ 728              		.align	1
+ 729              		.global	MCU_Set_Soc_Pbint
+ 730              		.syntax unified
+ 731              		.code	16
+ 732              		.thumb_func
+ 733              		.fpu softvfp
+ 735              	MCU_Set_Soc_Pbint:
+ 736              	.LFB71:
+ 180:../src/drivers/gpio/GPIO_init.c **** 
+ 181:../src/drivers/gpio/GPIO_init.c **** void MCU_Set_Soc_Pbint(void)
+ 182:../src/drivers/gpio/GPIO_init.c **** {
+ 737              		.loc 1 182 1
+ 738              		.cfi_startproc
+ 739              		@ args = 0, pretend = 0, frame = 0
+ 740              		@ frame_needed = 1, uses_anonymous_args = 0
+ 741 0000 80B5     		push	{r7, lr}
+ 742              		.cfi_def_cfa_offset 8
+ 743              		.cfi_offset 7, -8
+ 744              		.cfi_offset 14, -4
+ 745 0002 00AF     		add	r7, sp, #0
+ 746              		.cfi_def_cfa_register 7
+ 183:../src/drivers/gpio/GPIO_init.c ****     gpio_bit_set(GPIOA, GPIO_PIN_8);
+ 747              		.loc 1 183 5
+ 748 0004 9023     		movs	r3, #144
+ 749 0006 DB05     		lsls	r3, r3, #23
+ 750 0008 40F20011 		movw	r1, #256
+ 751 000c 1800     		movs	r0, r3
+ 752 000e FFF7FEFF 		bl	gpio_bit_set
+ 184:../src/drivers/gpio/GPIO_init.c **** }
+ 753              		.loc 1 184 1
+ 754 0012 C046     		nop
+ 755 0014 BD46     		mov	sp, r7
+ 756              		@ sp needed
+ 757 0016 80BD     		pop	{r7, pc}
+ 758              		.cfi_endproc
+ 759              	.LFE71:
+ 761              		.section	.text.MCU_Reset_Soc_Pbint,"ax",%progbits
+ 762              		.align	1
+ 763              		.global	MCU_Reset_Soc_Pbint
+ 764              		.syntax unified
+ 765              		.code	16
+ 766              		.thumb_func
+ 767              		.fpu softvfp
+ 769              	MCU_Reset_Soc_Pbint:
+ 770              	.LFB72:
+ 185:../src/drivers/gpio/GPIO_init.c **** 
+ 186:../src/drivers/gpio/GPIO_init.c **** void MCU_Reset_Soc_Pbint(void)
+ 187:../src/drivers/gpio/GPIO_init.c **** {
+ 771              		.loc 1 187 1
+ 772              		.cfi_startproc
+ 773              		@ args = 0, pretend = 0, frame = 0
+ 774              		@ frame_needed = 1, uses_anonymous_args = 0
+ 775 0000 80B5     		push	{r7, lr}
+ 776              		.cfi_def_cfa_offset 8
+ 777              		.cfi_offset 7, -8
+ 778              		.cfi_offset 14, -4
+ 779 0002 00AF     		add	r7, sp, #0
+ 780              		.cfi_def_cfa_register 7
+ 188:../src/drivers/gpio/GPIO_init.c ****     gpio_bit_reset(GPIOA, GPIO_PIN_8);
+ 781              		.loc 1 188 5
+ 782 0004 9023     		movs	r3, #144
+ 783 0006 DB05     		lsls	r3, r3, #23
+ 784 0008 40F20011 		movw	r1, #256
+ 785 000c 1800     		movs	r0, r3
+ 786 000e FFF7FEFF 		bl	gpio_bit_reset
+ 189:../src/drivers/gpio/GPIO_init.c **** }
+ 787              		.loc 1 189 1
+ 788 0012 C046     		nop
+ 789 0014 BD46     		mov	sp, r7
+ 790              		@ sp needed
+ 791 0016 80BD     		pop	{r7, pc}
+ 792              		.cfi_endproc
+ 793              	.LFE72:
+ 795              		.section	.text.MCU_Set_Led_Up,"ax",%progbits
+ 796              		.align	1
+ 797              		.global	MCU_Set_Led_Up
+ 798              		.syntax unified
+ 799              		.code	16
+ 800              		.thumb_func
+ 801              		.fpu softvfp
+ 803              	MCU_Set_Led_Up:
+ 804              	.LFB73:
+ 190:../src/drivers/gpio/GPIO_init.c **** 
+ 191:../src/drivers/gpio/GPIO_init.c **** /* set led/backlight */
+ 192:../src/drivers/gpio/GPIO_init.c **** void MCU_Set_Led_Up(void)
+ 193:../src/drivers/gpio/GPIO_init.c **** {
+ 805              		.loc 1 193 1
+ 806              		.cfi_startproc
+ 807              		@ args = 0, pretend = 0, frame = 0
+ 808              		@ frame_needed = 1, uses_anonymous_args = 0
+ 809 0000 80B5     		push	{r7, lr}
+ 810              		.cfi_def_cfa_offset 8
+ 811              		.cfi_offset 7, -8
+ 812              		.cfi_offset 14, -4
+ 813 0002 00AF     		add	r7, sp, #0
+ 814              		.cfi_def_cfa_register 7
+ 194:../src/drivers/gpio/GPIO_init.c ****     gd_eval_led_on(LED5);
+ 815              		.loc 1 194 5
+ 816 0004 0420     		movs	r0, #4
+ 817 0006 FFF7FEFF 		bl	gd_eval_led_on
+ 195:../src/drivers/gpio/GPIO_init.c **** }
+ 818              		.loc 1 195 1
+ 819 000a C046     		nop
+ 820 000c BD46     		mov	sp, r7
+ 821              		@ sp needed
+ 822 000e 80BD     		pop	{r7, pc}
+ 823              		.cfi_endproc
+ 824              	.LFE73:
+ 826              		.section	.text.MCU_Set_Led_Down,"ax",%progbits
+ 827              		.align	1
+ 828              		.global	MCU_Set_Led_Down
+ 829              		.syntax unified
+ 830              		.code	16
+ 831              		.thumb_func
+ 832              		.fpu softvfp
+ 834              	MCU_Set_Led_Down:
+ 835              	.LFB74:
+ 196:../src/drivers/gpio/GPIO_init.c **** 
+ 197:../src/drivers/gpio/GPIO_init.c **** void MCU_Set_Led_Down(void)
+ 198:../src/drivers/gpio/GPIO_init.c **** {
+ 836              		.loc 1 198 1
+ 837              		.cfi_startproc
+ 838              		@ args = 0, pretend = 0, frame = 0
+ 839              		@ frame_needed = 1, uses_anonymous_args = 0
+ 840 0000 80B5     		push	{r7, lr}
+ 841              		.cfi_def_cfa_offset 8
+ 842              		.cfi_offset 7, -8
+ 843              		.cfi_offset 14, -4
+ 844 0002 00AF     		add	r7, sp, #0
+ 845              		.cfi_def_cfa_register 7
+ 199:../src/drivers/gpio/GPIO_init.c ****     gd_eval_led_off(LED5);
+ 846              		.loc 1 199 5
+ 847 0004 0420     		movs	r0, #4
+ 848 0006 FFF7FEFF 		bl	gd_eval_led_off
+ 200:../src/drivers/gpio/GPIO_init.c **** }
+ 849              		.loc 1 200 1
+ 850 000a C046     		nop
+ 851 000c BD46     		mov	sp, r7
+ 852              		@ sp needed
+ 853 000e 80BD     		pop	{r7, pc}
+ 854              		.cfi_endproc
+ 855              	.LFE74:
+ 857              		.section	.text.MCU_Detect_Key_Pressed,"ax",%progbits
+ 858              		.align	1
+ 859              		.global	MCU_Detect_Key_Pressed
+ 860              		.syntax unified
+ 861              		.code	16
+ 862              		.thumb_func
+ 863              		.fpu softvfp
+ 865              	MCU_Detect_Key_Pressed:
+ 866              	.LFB75:
+ 201:../src/drivers/gpio/GPIO_init.c **** 
+ 202:../src/drivers/gpio/GPIO_init.c **** void MCU_Detect_Key_Pressed(void)
+ 203:../src/drivers/gpio/GPIO_init.c **** {
+ 867              		.loc 1 203 1
+ 868              		.cfi_startproc
+ 869              		@ args = 0, pretend = 0, frame = 0
+ 870              		@ frame_needed = 1, uses_anonymous_args = 0
+ 871 0000 80B5     		push	{r7, lr}
+ 872              		.cfi_def_cfa_offset 8
+ 873              		.cfi_offset 7, -8
+ 874              		.cfi_offset 14, -4
+ 875 0002 00AF     		add	r7, sp, #0
+ 876              		.cfi_def_cfa_register 7
+ 204:../src/drivers/gpio/GPIO_init.c ****     gpio_bit_set(GPIOA, GPIO_PIN_1);
+ 877              		.loc 1 204 5
+ 878 0004 9023     		movs	r3, #144
+ 879 0006 DB05     		lsls	r3, r3, #23
+ 880 0008 0221     		movs	r1, #2
+ 881 000a 1800     		movs	r0, r3
+ 882 000c FFF7FEFF 		bl	gpio_bit_set
+ 205:../src/drivers/gpio/GPIO_init.c **** }
+ 883              		.loc 1 205 1
+ 884 0010 C046     		nop
+ 885 0012 BD46     		mov	sp, r7
+ 886              		@ sp needed
+ 887 0014 80BD     		pop	{r7, pc}
+ 888              		.cfi_endproc
+ 889              	.LFE75:
+ 891              		.section	.text.MCU_Detect_Soc_bootup,"ax",%progbits
+ 892              		.align	1
+ 893              		.global	MCU_Detect_Soc_bootup
+ 894              		.syntax unified
+ 895              		.code	16
+ 896              		.thumb_func
+ 897              		.fpu softvfp
+ 899              	MCU_Detect_Soc_bootup:
+ 900              	.LFB76:
+ 206:../src/drivers/gpio/GPIO_init.c **** 
+ 207:../src/drivers/gpio/GPIO_init.c **** bool MCU_Detect_Soc_bootup(void)
+ 208:../src/drivers/gpio/GPIO_init.c **** {
+ 901              		.loc 1 208 1
+ 902              		.cfi_startproc
+ 903              		@ args = 0, pretend = 0, frame = 0
+ 904              		@ frame_needed = 1, uses_anonymous_args = 0
+ 905 0000 80B5     		push	{r7, lr}
+ 906              		.cfi_def_cfa_offset 8
+ 907              		.cfi_offset 7, -8
+ 908              		.cfi_offset 14, -4
+ 909 0002 00AF     		add	r7, sp, #0
+ 910              		.cfi_def_cfa_register 7
+ 209:../src/drivers/gpio/GPIO_init.c ****    return (SET != gpio_input_bit_get(GPIOB, GPIO_PIN_0));
+ 911              		.loc 1 209 19
+ 912 0004 40F20043 		movw	r3, #1024
+ 913 0008 C4F60003 		movt	r3, 18432
+ 914 000c 0121     		movs	r1, #1
+ 915 000e 1800     		movs	r0, r3
+ 916 0010 FFF7FEFF 		bl	gpio_input_bit_get
+ 917 0014 0300     		movs	r3, r0
+ 918              		.loc 1 209 16
+ 919 0016 013B     		subs	r3, r3, #1
+ 920 0018 5A1E     		subs	r2, r3, #1
+ 921 001a 9341     		sbcs	r3, r3, r2
+ 922 001c DBB2     		uxtb	r3, r3
+ 210:../src/drivers/gpio/GPIO_init.c **** }
+ 923              		.loc 1 210 1
+ 924 001e 1800     		movs	r0, r3
+ 925 0020 BD46     		mov	sp, r7
+ 926              		@ sp needed
+ 927 0022 80BD     		pop	{r7, pc}
+ 928              		.cfi_endproc
+ 929              	.LFE76:
+ 931              		.text
+ 932              	.Letext0:
+ 933              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 934              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 935              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 936              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+ 937              		.file 6 "../inc/gd32e235c_eval.h"
+ 938              		.file 7 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 939              		.file 8 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 940              		.file 9 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 941              		.file 10 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 942              		.file 11 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 943              		.file 12 "../inc/Spi_nand_driver.h"
+ 944              		.file 13 "../inc/Process_Packet.h"
+ 945              		.file 14 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 GPIO_init.c
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:18     .bss.key_pressed:00000000 key_pressed
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:19     .bss.key_pressed:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:21     .bss.key_press_start_time:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:24     .bss.key_press_start_time:00000000 key_press_start_time
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:29     .bss.key_long_press_detected:00000000 key_long_press_detected
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:30     .bss.key_long_press_detected:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:34     .bss.key_shot_press_detected:00000000 key_shot_press_detected
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:35     .bss.key_shot_press_detected:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:39     .bss.detection_window_active:00000000 detection_window_active
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:40     .bss.detection_window_active:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:42     .bss.system_boot_start_time:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:45     .bss.system_boot_start_time:00000000 system_boot_start_time
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:48     .text.com_gpio_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:56     .text.com_gpio_init:00000000 com_gpio_init
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:180    .text.com1_gpio_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:187    .text.com1_gpio_init:00000000 com1_gpio_init
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:253    .text.init_key_detection:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:260    .text.init_key_detection:00000000 init_key_detection
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:305    .text.check_key_press_during_boot:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:312    .text.check_key_press_during_boot:00000000 check_key_press_during_boot
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:439    .rodata:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:440    .rodata:00000000 .LC0
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:444    .text.is_long_key_or_nokey_press_power:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:451    .text.is_long_key_or_nokey_press_power:00000000 is_long_key_or_nokey_press_power
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:523    .text.Set_SPI_High_Resistance:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:530    .text.Set_SPI_High_Resistance:00000000 Set_SPI_High_Resistance
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:561    .text.MCU_DeepSleepMode:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:568    .text.MCU_DeepSleepMode:00000000 MCU_DeepSleepMode
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:604    .rodata:00000038 .LC1
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:607    .text.MCU_FMC_program:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:614    .text.MCU_FMC_program:00000000 MCU_FMC_program
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:694    .text.MCU_FMC_Read:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:701    .text.MCU_FMC_Read:00000000 MCU_FMC_Read
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:728    .text.MCU_Set_Soc_Pbint:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:735    .text.MCU_Set_Soc_Pbint:00000000 MCU_Set_Soc_Pbint
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:762    .text.MCU_Reset_Soc_Pbint:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:769    .text.MCU_Reset_Soc_Pbint:00000000 MCU_Reset_Soc_Pbint
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:796    .text.MCU_Set_Led_Up:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:803    .text.MCU_Set_Led_Up:00000000 MCU_Set_Led_Up
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:827    .text.MCU_Set_Led_Down:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:834    .text.MCU_Set_Led_Down:00000000 MCU_Set_Led_Down
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:858    .text.MCU_Detect_Key_Pressed:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:865    .text.MCU_Detect_Key_Pressed:00000000 MCU_Detect_Key_Pressed
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:892    .text.MCU_Detect_Soc_bootup:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccH6wd4F.s:899    .text.MCU_Detect_Soc_bootup:00000000 MCU_Detect_Soc_bootup
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.GPIO_init.h.5.99397d96470e7c2037f26a7431d9ab35
+                           .group:00000000 wm4.gd32e235c_eval.h.36.7720dfbe8e4c2198d21e3451d7585c3f
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4.sprd_config.h.2.47b0c27560e1734ae8ad1b6bf5bcf6fc
+                           .group:00000000 wm4.Spi_nand_driver.h.16.fadacb45494f178a00212993489e2bbe
+                           .group:00000000 wm4.Process_Packet.h.7.a9eceab0854ecc804cf185fbeb95b7f7
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_af_set
+gpio_mode_set
+gpio_output_options_set
+gpio_bit_reset
+timer_handle
+gpio_input_bit_get
+printf
+pmu_to_deepsleepmode
+fmc_unlock
+fmc_flag_clear
+fmc_page_erase
+fmc_word_program
+fmc_lock
+option_byte_value_get
+gpio_bit_set
+gd_eval_led_on
+gd_eval_led_off

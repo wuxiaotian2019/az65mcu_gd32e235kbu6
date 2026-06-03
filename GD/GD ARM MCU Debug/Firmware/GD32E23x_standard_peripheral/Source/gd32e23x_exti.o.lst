@@ -1,0 +1,1018 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"gd32e23x_exti.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.exti_deinit,"ax",%progbits
+  16              		.align	1
+  17              		.global	exti_deinit
+  18              		.arch armv8-m.base
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	exti_deinit:
+  25              	.LFB58:
+  26              		.file 1 "../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c"
+   1:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+   2:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \file    gd32e23x_exti.c
+   3:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief   EXTI driver
+   4:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+   5:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \version 2025-08-08, V2.4.0, firmware for GD32E23x
+   6:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+   7:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+   8:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*
+   9:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     Copyright (c) 2025, GigaDevice Semiconductor Inc.
+  10:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  11:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     Redistribution and use in source and binary forms, with or without modification,
+  12:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** are permitted provided that the following conditions are met:
+  13:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  14:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  15:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****        list of conditions and the following disclaimer.
+  16:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  17:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****        this list of conditions and the following disclaimer in the documentation
+  18:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****        and/or other materials provided with the distribution.
+  19:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  20:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****        may be used to endorse or promote products derived from this software without
+  21:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****        specific prior written permission.
+  22:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  23:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  24:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  25:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  26:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  27:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  28:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  29:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  30:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  31:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  32:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** OF SUCH DAMAGE.
+  33:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+  34:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  35:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** #include "gd32e23x_exti.h"
+  36:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  37:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** #define EXTI_INTEN_RESET_VAL    ((uint32_t)0x0F900000U)
+  38:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** #define EXTI_REG_RESET_VAL     ((uint32_t)0x00000000U)
+  39:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  40:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  41:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+  42:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      reset the value of all EXTI registers with initial values
+  43:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  none
+  44:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+  45:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+  46:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+  47:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_deinit(void)
+  48:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+  27              		.loc 1 48 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              		.cfi_def_cfa_register 7
+  49:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     /* reset the value of the EXTI registers */
+  50:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_INTEN = EXTI_INTEN_RESET_VAL;
+  37              		.loc 1 50 5
+  38 0004 40F20043 		movw	r3, #1024
+  39 0008 C4F20103 		movt	r3, 16385
+  40              		.loc 1 50 16
+  41 000c F922     		movs	r2, #249
+  42 000e 1205     		lsls	r2, r2, #20
+  43 0010 1A60     		str	r2, [r3]
+  51:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_EVEN  = EXTI_REG_RESET_VAL;
+  44              		.loc 1 51 5
+  45 0012 40F20443 		movw	r3, #1028
+  46 0016 C4F20103 		movt	r3, 16385
+  47              		.loc 1 51 16
+  48 001a 0022     		movs	r2, #0
+  49 001c 1A60     		str	r2, [r3]
+  52:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_RTEN  = EXTI_REG_RESET_VAL;
+  50              		.loc 1 52 5
+  51 001e 40F20843 		movw	r3, #1032
+  52 0022 C4F20103 		movt	r3, 16385
+  53              		.loc 1 52 16
+  54 0026 0022     		movs	r2, #0
+  55 0028 1A60     		str	r2, [r3]
+  53:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_FTEN  = EXTI_REG_RESET_VAL;
+  56              		.loc 1 53 5
+  57 002a 40F20C43 		movw	r3, #1036
+  58 002e C4F20103 		movt	r3, 16385
+  59              		.loc 1 53 16
+  60 0032 0022     		movs	r2, #0
+  61 0034 1A60     		str	r2, [r3]
+  54:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_SWIEV = EXTI_REG_RESET_VAL;
+  62              		.loc 1 54 5
+  63 0036 40F21043 		movw	r3, #1040
+  64 003a C4F20103 		movt	r3, 16385
+  65              		.loc 1 54 16
+  66 003e 0022     		movs	r2, #0
+  67 0040 1A60     		str	r2, [r3]
+  55:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+  68              		.loc 1 55 1
+  69 0042 C046     		nop
+  70 0044 BD46     		mov	sp, r7
+  71              		@ sp needed
+  72 0046 80BD     		pop	{r7, pc}
+  73              		.cfi_endproc
+  74              	.LFE58:
+  76              		.section	.text.exti_init,"ax",%progbits
+  77              		.align	1
+  78              		.global	exti_init
+  79              		.syntax unified
+  80              		.code	16
+  81              		.thumb_func
+  82              		.fpu softvfp
+  84              	exti_init:
+  85              	.LFB59:
+  56:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  57:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+  58:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      initialize the EXTI line x
+  59:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+  60:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+  61:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..17,19,21): EXTI line x
+  62:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  mode: interrupt or event mode, refer to exti_mode_enum
+  63:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+  64:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_INTERRUPT: interrupt mode
+  65:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_EVENT: event mode
+  66:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  trig_type: interrupt trigger type, refer to exti_trig_type_enum
+  67:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+  68:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_TRIG_RISING: rising edge trigger
+  69:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_TRIG_FALLING: falling trigger
+  70:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_TRIG_BOTH: rising and falling trigger
+  71:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_TRIG_NONE: without rising edge or falling edge trigger
+  72:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+  73:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+  74:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+  75:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_init(exti_line_enum linex, exti_mode_enum mode, exti_trig_type_enum trig_type)
+  76:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+  86              		.loc 1 76 1
+  87              		.cfi_startproc
+  88              		@ args = 0, pretend = 0, frame = 8
+  89              		@ frame_needed = 1, uses_anonymous_args = 0
+  90 0000 80B5     		push	{r7, lr}
+  91              		.cfi_def_cfa_offset 8
+  92              		.cfi_offset 7, -8
+  93              		.cfi_offset 14, -4
+  94 0002 82B0     		sub	sp, sp, #8
+  95              		.cfi_def_cfa_offset 16
+  96 0004 00AF     		add	r7, sp, #0
+  97              		.cfi_def_cfa_register 7
+  98 0006 7860     		str	r0, [r7, #4]
+  99 0008 0800     		movs	r0, r1
+ 100 000a 1100     		movs	r1, r2
+ 101 000c FB1C     		adds	r3, r7, #3
+ 102 000e 021C     		adds	r2, r0, #0
+ 103 0010 1A70     		strb	r2, [r3]
+ 104 0012 BB1C     		adds	r3, r7, #2
+ 105 0014 0A1C     		adds	r2, r1, #0
+ 106 0016 1A70     		strb	r2, [r3]
+  77:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     /* reset the EXTI line x */
+  78:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_INTEN &= ~(uint32_t)linex;
+ 107              		.loc 1 78 16
+ 108 0018 40F20043 		movw	r3, #1024
+ 109 001c C4F20103 		movt	r3, 16385
+ 110 0020 1A68     		ldr	r2, [r3]
+ 111              		.loc 1 78 19
+ 112 0022 7B68     		ldr	r3, [r7, #4]
+ 113 0024 D943     		mvns	r1, r3
+ 114              		.loc 1 78 16
+ 115 0026 40F20043 		movw	r3, #1024
+ 116 002a C4F20103 		movt	r3, 16385
+ 117 002e 0A40     		ands	r2, r1
+ 118 0030 1A60     		str	r2, [r3]
+  79:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_EVEN &= ~(uint32_t)linex;
+ 119              		.loc 1 79 15
+ 120 0032 40F20443 		movw	r3, #1028
+ 121 0036 C4F20103 		movt	r3, 16385
+ 122 003a 1A68     		ldr	r2, [r3]
+ 123              		.loc 1 79 18
+ 124 003c 7B68     		ldr	r3, [r7, #4]
+ 125 003e D943     		mvns	r1, r3
+ 126              		.loc 1 79 15
+ 127 0040 40F20443 		movw	r3, #1028
+ 128 0044 C4F20103 		movt	r3, 16385
+ 129 0048 0A40     		ands	r2, r1
+ 130 004a 1A60     		str	r2, [r3]
+  80:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_RTEN &= ~(uint32_t)linex;
+ 131              		.loc 1 80 15
+ 132 004c 40F20843 		movw	r3, #1032
+ 133 0050 C4F20103 		movt	r3, 16385
+ 134 0054 1A68     		ldr	r2, [r3]
+ 135              		.loc 1 80 18
+ 136 0056 7B68     		ldr	r3, [r7, #4]
+ 137 0058 D943     		mvns	r1, r3
+ 138              		.loc 1 80 15
+ 139 005a 40F20843 		movw	r3, #1032
+ 140 005e C4F20103 		movt	r3, 16385
+ 141 0062 0A40     		ands	r2, r1
+ 142 0064 1A60     		str	r2, [r3]
+  81:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_FTEN &= ~(uint32_t)linex;
+ 143              		.loc 1 81 15
+ 144 0066 40F20C43 		movw	r3, #1036
+ 145 006a C4F20103 		movt	r3, 16385
+ 146 006e 1A68     		ldr	r2, [r3]
+ 147              		.loc 1 81 18
+ 148 0070 7B68     		ldr	r3, [r7, #4]
+ 149 0072 D943     		mvns	r1, r3
+ 150              		.loc 1 81 15
+ 151 0074 40F20C43 		movw	r3, #1036
+ 152 0078 C4F20103 		movt	r3, 16385
+ 153 007c 0A40     		ands	r2, r1
+ 154 007e 1A60     		str	r2, [r3]
+  82:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  83:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     /* set the EXTI mode and enable the interrupts or events from EXTI line x */
+  84:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     switch(mode) {
+ 155              		.loc 1 84 5
+ 156 0080 FB1C     		adds	r3, r7, #3
+ 157 0082 1B78     		ldrb	r3, [r3]
+ 158 0084 13B1     		cbz	r3, .L3
+ 159 0086 012B     		cmp	r3, #1
+ 160 0088 0DD0     		beq	.L4
+  85:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_INTERRUPT:
+  86:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_INTEN |= (uint32_t)linex;
+  87:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+  88:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_EVENT:
+  89:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_EVEN |= (uint32_t)linex;
+  90:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+  91:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     default:
+  92:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 161              		.loc 1 92 9
+ 162 008a 19E0     		b	.L6
+ 163              	.L3:
+  86:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 164              		.loc 1 86 20
+ 165 008c 40F20043 		movw	r3, #1024
+ 166 0090 C4F20103 		movt	r3, 16385
+ 167 0094 1968     		ldr	r1, [r3]
+ 168 0096 40F20043 		movw	r3, #1024
+ 169 009a C4F20103 		movt	r3, 16385
+ 170 009e 7A68     		ldr	r2, [r7, #4]
+ 171 00a0 0A43     		orrs	r2, r1
+ 172 00a2 1A60     		str	r2, [r3]
+  87:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_EVENT:
+ 173              		.loc 1 87 9
+ 174 00a4 0CE0     		b	.L6
+ 175              	.L4:
+  89:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 176              		.loc 1 89 19
+ 177 00a6 40F20443 		movw	r3, #1028
+ 178 00aa C4F20103 		movt	r3, 16385
+ 179 00ae 1968     		ldr	r1, [r3]
+ 180 00b0 40F20443 		movw	r3, #1028
+ 181 00b4 C4F20103 		movt	r3, 16385
+ 182 00b8 7A68     		ldr	r2, [r7, #4]
+ 183 00ba 0A43     		orrs	r2, r1
+ 184 00bc 1A60     		str	r2, [r3]
+  90:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     default:
+ 185              		.loc 1 90 9
+ 186 00be C046     		nop
+ 187              	.L6:
+  93:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     }
+  94:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+  95:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     /* set the EXTI trigger type */
+  96:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     switch(trig_type) {
+ 188              		.loc 1 96 5
+ 189 00c0 BB1C     		adds	r3, r7, #2
+ 190 00c2 1B78     		ldrb	r3, [r3]
+ 191 00c4 022B     		cmp	r3, #2
+ 192 00c6 38D0     		beq	.L7
+ 193 00c8 50DC     		bgt	.L12
+ 194 00ca 13B1     		cbz	r3, .L9
+ 195 00cc 012B     		cmp	r3, #1
+ 196 00ce 1AD0     		beq	.L10
+  97:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_TRIG_RISING:
+  98:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_RTEN |= (uint32_t)linex;
+  99:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_FTEN &= ~(uint32_t)linex;
+ 100:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 101:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_TRIG_FALLING:
+ 102:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_RTEN &= ~(uint32_t)linex;
+ 103:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_FTEN |= (uint32_t)linex;
+ 104:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 105:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_TRIG_BOTH:
+ 106:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_RTEN |= (uint32_t)linex;
+ 107:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_FTEN |= (uint32_t)linex;
+ 108:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 109:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_TRIG_NONE:
+ 110:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     default:
+ 111:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 197              		.loc 1 111 9
+ 198 00d0 4CE0     		b	.L12
+ 199              	.L9:
+  98:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_FTEN &= ~(uint32_t)linex;
+ 200              		.loc 1 98 19
+ 201 00d2 40F20843 		movw	r3, #1032
+ 202 00d6 C4F20103 		movt	r3, 16385
+ 203 00da 1968     		ldr	r1, [r3]
+ 204 00dc 40F20843 		movw	r3, #1032
+ 205 00e0 C4F20103 		movt	r3, 16385
+ 206 00e4 7A68     		ldr	r2, [r7, #4]
+ 207 00e6 0A43     		orrs	r2, r1
+ 208 00e8 1A60     		str	r2, [r3]
+  99:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 209              		.loc 1 99 19
+ 210 00ea 40F20C43 		movw	r3, #1036
+ 211 00ee C4F20103 		movt	r3, 16385
+ 212 00f2 1A68     		ldr	r2, [r3]
+  99:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 213              		.loc 1 99 22
+ 214 00f4 7B68     		ldr	r3, [r7, #4]
+ 215 00f6 D943     		mvns	r1, r3
+  99:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 216              		.loc 1 99 19
+ 217 00f8 40F20C43 		movw	r3, #1036
+ 218 00fc C4F20103 		movt	r3, 16385
+ 219 0100 0A40     		ands	r2, r1
+ 220 0102 1A60     		str	r2, [r3]
+ 100:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_TRIG_FALLING:
+ 221              		.loc 1 100 9
+ 222 0104 33E0     		b	.L11
+ 223              	.L10:
+ 102:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_FTEN |= (uint32_t)linex;
+ 224              		.loc 1 102 19
+ 225 0106 40F20843 		movw	r3, #1032
+ 226 010a C4F20103 		movt	r3, 16385
+ 227 010e 1A68     		ldr	r2, [r3]
+ 102:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_FTEN |= (uint32_t)linex;
+ 228              		.loc 1 102 22
+ 229 0110 7B68     		ldr	r3, [r7, #4]
+ 230 0112 D943     		mvns	r1, r3
+ 102:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_FTEN |= (uint32_t)linex;
+ 231              		.loc 1 102 19
+ 232 0114 40F20843 		movw	r3, #1032
+ 233 0118 C4F20103 		movt	r3, 16385
+ 234 011c 0A40     		ands	r2, r1
+ 235 011e 1A60     		str	r2, [r3]
+ 103:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 236              		.loc 1 103 19
+ 237 0120 40F20C43 		movw	r3, #1036
+ 238 0124 C4F20103 		movt	r3, 16385
+ 239 0128 1968     		ldr	r1, [r3]
+ 240 012a 40F20C43 		movw	r3, #1036
+ 241 012e C4F20103 		movt	r3, 16385
+ 242 0132 7A68     		ldr	r2, [r7, #4]
+ 243 0134 0A43     		orrs	r2, r1
+ 244 0136 1A60     		str	r2, [r3]
+ 104:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_TRIG_BOTH:
+ 245              		.loc 1 104 9
+ 246 0138 19E0     		b	.L11
+ 247              	.L7:
+ 106:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         EXTI_FTEN |= (uint32_t)linex;
+ 248              		.loc 1 106 19
+ 249 013a 40F20843 		movw	r3, #1032
+ 250 013e C4F20103 		movt	r3, 16385
+ 251 0142 1968     		ldr	r1, [r3]
+ 252 0144 40F20843 		movw	r3, #1032
+ 253 0148 C4F20103 		movt	r3, 16385
+ 254 014c 7A68     		ldr	r2, [r7, #4]
+ 255 014e 0A43     		orrs	r2, r1
+ 256 0150 1A60     		str	r2, [r3]
+ 107:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         break;
+ 257              		.loc 1 107 19
+ 258 0152 40F20C43 		movw	r3, #1036
+ 259 0156 C4F20103 		movt	r3, 16385
+ 260 015a 1968     		ldr	r1, [r3]
+ 261 015c 40F20C43 		movw	r3, #1036
+ 262 0160 C4F20103 		movt	r3, 16385
+ 263 0164 7A68     		ldr	r2, [r7, #4]
+ 264 0166 0A43     		orrs	r2, r1
+ 265 0168 1A60     		str	r2, [r3]
+ 108:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     case EXTI_TRIG_NONE:
+ 266              		.loc 1 108 9
+ 267 016a 00E0     		b	.L11
+ 268              	.L12:
+ 269              		.loc 1 111 9
+ 270 016c C046     		nop
+ 271              	.L11:
+ 112:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     }
+ 113:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 272              		.loc 1 113 1
+ 273 016e C046     		nop
+ 274 0170 BD46     		mov	sp, r7
+ 275 0172 02B0     		add	sp, sp, #8
+ 276              		@ sp needed
+ 277 0174 80BD     		pop	{r7, pc}
+ 278              		.cfi_endproc
+ 279              	.LFE59:
+ 281              		.section	.text.exti_interrupt_enable,"ax",%progbits
+ 282              		.align	1
+ 283              		.global	exti_interrupt_enable
+ 284              		.syntax unified
+ 285              		.code	16
+ 286              		.thumb_func
+ 287              		.fpu softvfp
+ 289              	exti_interrupt_enable:
+ 290              	.LFB60:
+ 114:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 115:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 116:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      enable the interrupts from EXTI line x
+ 117:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 118:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 119:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..27): EXTI line x
+ 120:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 121:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+ 122:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 123:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_interrupt_enable(exti_line_enum linex)
+ 124:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 291              		.loc 1 124 1
+ 292              		.cfi_startproc
+ 293              		@ args = 0, pretend = 0, frame = 8
+ 294              		@ frame_needed = 1, uses_anonymous_args = 0
+ 295 0000 80B5     		push	{r7, lr}
+ 296              		.cfi_def_cfa_offset 8
+ 297              		.cfi_offset 7, -8
+ 298              		.cfi_offset 14, -4
+ 299 0002 82B0     		sub	sp, sp, #8
+ 300              		.cfi_def_cfa_offset 16
+ 301 0004 00AF     		add	r7, sp, #0
+ 302              		.cfi_def_cfa_register 7
+ 303 0006 7860     		str	r0, [r7, #4]
+ 125:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_INTEN |= (uint32_t)linex;
+ 304              		.loc 1 125 16
+ 305 0008 40F20043 		movw	r3, #1024
+ 306 000c C4F20103 		movt	r3, 16385
+ 307 0010 1968     		ldr	r1, [r3]
+ 308 0012 40F20043 		movw	r3, #1024
+ 309 0016 C4F20103 		movt	r3, 16385
+ 310 001a 7A68     		ldr	r2, [r7, #4]
+ 311 001c 0A43     		orrs	r2, r1
+ 312 001e 1A60     		str	r2, [r3]
+ 126:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 313              		.loc 1 126 1
+ 314 0020 C046     		nop
+ 315 0022 BD46     		mov	sp, r7
+ 316 0024 02B0     		add	sp, sp, #8
+ 317              		@ sp needed
+ 318 0026 80BD     		pop	{r7, pc}
+ 319              		.cfi_endproc
+ 320              	.LFE60:
+ 322              		.section	.text.exti_interrupt_disable,"ax",%progbits
+ 323              		.align	1
+ 324              		.global	exti_interrupt_disable
+ 325              		.syntax unified
+ 326              		.code	16
+ 327              		.thumb_func
+ 328              		.fpu softvfp
+ 330              	exti_interrupt_disable:
+ 331              	.LFB61:
+ 127:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 128:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 129:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      disable the interrupts from EXTI line x
+ 130:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 131:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 132:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..27): EXTI line x
+ 133:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 134:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+ 135:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 136:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_interrupt_disable(exti_line_enum linex)
+ 137:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 332              		.loc 1 137 1
+ 333              		.cfi_startproc
+ 334              		@ args = 0, pretend = 0, frame = 8
+ 335              		@ frame_needed = 1, uses_anonymous_args = 0
+ 336 0000 80B5     		push	{r7, lr}
+ 337              		.cfi_def_cfa_offset 8
+ 338              		.cfi_offset 7, -8
+ 339              		.cfi_offset 14, -4
+ 340 0002 82B0     		sub	sp, sp, #8
+ 341              		.cfi_def_cfa_offset 16
+ 342 0004 00AF     		add	r7, sp, #0
+ 343              		.cfi_def_cfa_register 7
+ 344 0006 7860     		str	r0, [r7, #4]
+ 138:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_INTEN &= ~(uint32_t)linex;
+ 345              		.loc 1 138 16
+ 346 0008 40F20043 		movw	r3, #1024
+ 347 000c C4F20103 		movt	r3, 16385
+ 348 0010 1A68     		ldr	r2, [r3]
+ 349              		.loc 1 138 19
+ 350 0012 7B68     		ldr	r3, [r7, #4]
+ 351 0014 D943     		mvns	r1, r3
+ 352              		.loc 1 138 16
+ 353 0016 40F20043 		movw	r3, #1024
+ 354 001a C4F20103 		movt	r3, 16385
+ 355 001e 0A40     		ands	r2, r1
+ 356 0020 1A60     		str	r2, [r3]
+ 139:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 357              		.loc 1 139 1
+ 358 0022 C046     		nop
+ 359 0024 BD46     		mov	sp, r7
+ 360 0026 02B0     		add	sp, sp, #8
+ 361              		@ sp needed
+ 362 0028 80BD     		pop	{r7, pc}
+ 363              		.cfi_endproc
+ 364              	.LFE61:
+ 366              		.section	.text.exti_event_enable,"ax",%progbits
+ 367              		.align	1
+ 368              		.global	exti_event_enable
+ 369              		.syntax unified
+ 370              		.code	16
+ 371              		.thumb_func
+ 372              		.fpu softvfp
+ 374              	exti_event_enable:
+ 375              	.LFB62:
+ 140:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 141:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 142:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      enable the events from EXTI line x
+ 143:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 144:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 145:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..27): EXTI line x
+ 146:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 147:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+ 148:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 149:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_event_enable(exti_line_enum linex)
+ 150:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 376              		.loc 1 150 1
+ 377              		.cfi_startproc
+ 378              		@ args = 0, pretend = 0, frame = 8
+ 379              		@ frame_needed = 1, uses_anonymous_args = 0
+ 380 0000 80B5     		push	{r7, lr}
+ 381              		.cfi_def_cfa_offset 8
+ 382              		.cfi_offset 7, -8
+ 383              		.cfi_offset 14, -4
+ 384 0002 82B0     		sub	sp, sp, #8
+ 385              		.cfi_def_cfa_offset 16
+ 386 0004 00AF     		add	r7, sp, #0
+ 387              		.cfi_def_cfa_register 7
+ 388 0006 7860     		str	r0, [r7, #4]
+ 151:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_EVEN |= (uint32_t)linex;
+ 389              		.loc 1 151 15
+ 390 0008 40F20443 		movw	r3, #1028
+ 391 000c C4F20103 		movt	r3, 16385
+ 392 0010 1968     		ldr	r1, [r3]
+ 393 0012 40F20443 		movw	r3, #1028
+ 394 0016 C4F20103 		movt	r3, 16385
+ 395 001a 7A68     		ldr	r2, [r7, #4]
+ 396 001c 0A43     		orrs	r2, r1
+ 397 001e 1A60     		str	r2, [r3]
+ 152:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 398              		.loc 1 152 1
+ 399 0020 C046     		nop
+ 400 0022 BD46     		mov	sp, r7
+ 401 0024 02B0     		add	sp, sp, #8
+ 402              		@ sp needed
+ 403 0026 80BD     		pop	{r7, pc}
+ 404              		.cfi_endproc
+ 405              	.LFE62:
+ 407              		.section	.text.exti_event_disable,"ax",%progbits
+ 408              		.align	1
+ 409              		.global	exti_event_disable
+ 410              		.syntax unified
+ 411              		.code	16
+ 412              		.thumb_func
+ 413              		.fpu softvfp
+ 415              	exti_event_disable:
+ 416              	.LFB63:
+ 153:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 154:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 155:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      disable the events from EXTI line x
+ 156:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 157:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 158:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..27): EXTI line x
+ 159:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 160:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+ 161:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 162:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_event_disable(exti_line_enum linex)
+ 163:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 417              		.loc 1 163 1
+ 418              		.cfi_startproc
+ 419              		@ args = 0, pretend = 0, frame = 8
+ 420              		@ frame_needed = 1, uses_anonymous_args = 0
+ 421 0000 80B5     		push	{r7, lr}
+ 422              		.cfi_def_cfa_offset 8
+ 423              		.cfi_offset 7, -8
+ 424              		.cfi_offset 14, -4
+ 425 0002 82B0     		sub	sp, sp, #8
+ 426              		.cfi_def_cfa_offset 16
+ 427 0004 00AF     		add	r7, sp, #0
+ 428              		.cfi_def_cfa_register 7
+ 429 0006 7860     		str	r0, [r7, #4]
+ 164:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_EVEN &= ~(uint32_t)linex;
+ 430              		.loc 1 164 15
+ 431 0008 40F20443 		movw	r3, #1028
+ 432 000c C4F20103 		movt	r3, 16385
+ 433 0010 1A68     		ldr	r2, [r3]
+ 434              		.loc 1 164 18
+ 435 0012 7B68     		ldr	r3, [r7, #4]
+ 436 0014 D943     		mvns	r1, r3
+ 437              		.loc 1 164 15
+ 438 0016 40F20443 		movw	r3, #1028
+ 439 001a C4F20103 		movt	r3, 16385
+ 440 001e 0A40     		ands	r2, r1
+ 441 0020 1A60     		str	r2, [r3]
+ 165:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 442              		.loc 1 165 1
+ 443 0022 C046     		nop
+ 444 0024 BD46     		mov	sp, r7
+ 445 0026 02B0     		add	sp, sp, #8
+ 446              		@ sp needed
+ 447 0028 80BD     		pop	{r7, pc}
+ 448              		.cfi_endproc
+ 449              	.LFE63:
+ 451              		.section	.text.exti_software_interrupt_enable,"ax",%progbits
+ 452              		.align	1
+ 453              		.global	exti_software_interrupt_enable
+ 454              		.syntax unified
+ 455              		.code	16
+ 456              		.thumb_func
+ 457              		.fpu softvfp
+ 459              	exti_software_interrupt_enable:
+ 460              	.LFB64:
+ 166:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 167:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 168:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      enable the software interrupt event from EXTI line x
+ 169:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 170:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 171:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..17,19,21): EXTI line x
+ 172:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 173:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+ 174:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 175:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_software_interrupt_enable(exti_line_enum linex)
+ 176:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 461              		.loc 1 176 1
+ 462              		.cfi_startproc
+ 463              		@ args = 0, pretend = 0, frame = 8
+ 464              		@ frame_needed = 1, uses_anonymous_args = 0
+ 465 0000 80B5     		push	{r7, lr}
+ 466              		.cfi_def_cfa_offset 8
+ 467              		.cfi_offset 7, -8
+ 468              		.cfi_offset 14, -4
+ 469 0002 82B0     		sub	sp, sp, #8
+ 470              		.cfi_def_cfa_offset 16
+ 471 0004 00AF     		add	r7, sp, #0
+ 472              		.cfi_def_cfa_register 7
+ 473 0006 7860     		str	r0, [r7, #4]
+ 177:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_SWIEV |= (uint32_t)linex;
+ 474              		.loc 1 177 16
+ 475 0008 40F21043 		movw	r3, #1040
+ 476 000c C4F20103 		movt	r3, 16385
+ 477 0010 1968     		ldr	r1, [r3]
+ 478 0012 40F21043 		movw	r3, #1040
+ 479 0016 C4F20103 		movt	r3, 16385
+ 480 001a 7A68     		ldr	r2, [r7, #4]
+ 481 001c 0A43     		orrs	r2, r1
+ 482 001e 1A60     		str	r2, [r3]
+ 178:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 483              		.loc 1 178 1
+ 484 0020 C046     		nop
+ 485 0022 BD46     		mov	sp, r7
+ 486 0024 02B0     		add	sp, sp, #8
+ 487              		@ sp needed
+ 488 0026 80BD     		pop	{r7, pc}
+ 489              		.cfi_endproc
+ 490              	.LFE64:
+ 492              		.section	.text.exti_software_interrupt_disable,"ax",%progbits
+ 493              		.align	1
+ 494              		.global	exti_software_interrupt_disable
+ 495              		.syntax unified
+ 496              		.code	16
+ 497              		.thumb_func
+ 498              		.fpu softvfp
+ 500              	exti_software_interrupt_disable:
+ 501              	.LFB65:
+ 179:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 180:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 181:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      disable the software interrupt event from EXTI line x
+ 182:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 183:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 184:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..17,19,21): EXTI line x
+ 185:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 186:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+ 187:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 188:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_software_interrupt_disable(exti_line_enum linex)
+ 189:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 502              		.loc 1 189 1
+ 503              		.cfi_startproc
+ 504              		@ args = 0, pretend = 0, frame = 8
+ 505              		@ frame_needed = 1, uses_anonymous_args = 0
+ 506 0000 80B5     		push	{r7, lr}
+ 507              		.cfi_def_cfa_offset 8
+ 508              		.cfi_offset 7, -8
+ 509              		.cfi_offset 14, -4
+ 510 0002 82B0     		sub	sp, sp, #8
+ 511              		.cfi_def_cfa_offset 16
+ 512 0004 00AF     		add	r7, sp, #0
+ 513              		.cfi_def_cfa_register 7
+ 514 0006 7860     		str	r0, [r7, #4]
+ 190:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_SWIEV &= ~(uint32_t)linex;
+ 515              		.loc 1 190 16
+ 516 0008 40F21043 		movw	r3, #1040
+ 517 000c C4F20103 		movt	r3, 16385
+ 518 0010 1A68     		ldr	r2, [r3]
+ 519              		.loc 1 190 19
+ 520 0012 7B68     		ldr	r3, [r7, #4]
+ 521 0014 D943     		mvns	r1, r3
+ 522              		.loc 1 190 16
+ 523 0016 40F21043 		movw	r3, #1040
+ 524 001a C4F20103 		movt	r3, 16385
+ 525 001e 0A40     		ands	r2, r1
+ 526 0020 1A60     		str	r2, [r3]
+ 191:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 527              		.loc 1 191 1
+ 528 0022 C046     		nop
+ 529 0024 BD46     		mov	sp, r7
+ 530 0026 02B0     		add	sp, sp, #8
+ 531              		@ sp needed
+ 532 0028 80BD     		pop	{r7, pc}
+ 533              		.cfi_endproc
+ 534              	.LFE65:
+ 536              		.section	.text.exti_flag_get,"ax",%progbits
+ 537              		.align	1
+ 538              		.global	exti_flag_get
+ 539              		.syntax unified
+ 540              		.code	16
+ 541              		.thumb_func
+ 542              		.fpu softvfp
+ 544              	exti_flag_get:
+ 545              	.LFB66:
+ 192:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 193:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 194:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      get EXTI line x interrupt pending flag
+ 195:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 196:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 197:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..17,19,21): EXTI line x
+ 198:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 199:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     FlagStatus: status of flag (RESET or SET)
+ 200:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 201:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** FlagStatus exti_flag_get(exti_line_enum linex)
+ 202:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 546              		.loc 1 202 1
+ 547              		.cfi_startproc
+ 548              		@ args = 0, pretend = 0, frame = 8
+ 549              		@ frame_needed = 1, uses_anonymous_args = 0
+ 550 0000 80B5     		push	{r7, lr}
+ 551              		.cfi_def_cfa_offset 8
+ 552              		.cfi_offset 7, -8
+ 553              		.cfi_offset 14, -4
+ 554 0002 82B0     		sub	sp, sp, #8
+ 555              		.cfi_def_cfa_offset 16
+ 556 0004 00AF     		add	r7, sp, #0
+ 557              		.cfi_def_cfa_register 7
+ 558 0006 7860     		str	r0, [r7, #4]
+ 203:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     if(RESET != (EXTI_PD & (uint32_t)linex)) {
+ 559              		.loc 1 203 18
+ 560 0008 40F21443 		movw	r3, #1044
+ 561 000c C4F20103 		movt	r3, 16385
+ 562 0010 1B68     		ldr	r3, [r3]
+ 563              		.loc 1 203 26
+ 564 0012 7A68     		ldr	r2, [r7, #4]
+ 565 0014 1340     		ands	r3, r2
+ 566              		.loc 1 203 7
+ 567 0016 0BB1     		cbz	r3, .L20
+ 204:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         return SET;
+ 568              		.loc 1 204 16
+ 569 0018 0123     		movs	r3, #1
+ 570 001a 00E0     		b	.L21
+ 571              	.L20:
+ 205:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     } else {
+ 206:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         return RESET;
+ 572              		.loc 1 206 16
+ 573 001c 0023     		movs	r3, #0
+ 574              	.L21:
+ 207:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     }
+ 208:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 575              		.loc 1 208 1
+ 576 001e 1800     		movs	r0, r3
+ 577 0020 BD46     		mov	sp, r7
+ 578 0022 02B0     		add	sp, sp, #8
+ 579              		@ sp needed
+ 580 0024 80BD     		pop	{r7, pc}
+ 581              		.cfi_endproc
+ 582              	.LFE66:
+ 584              		.section	.text.exti_flag_clear,"ax",%progbits
+ 585              		.align	1
+ 586              		.global	exti_flag_clear
+ 587              		.syntax unified
+ 588              		.code	16
+ 589              		.thumb_func
+ 590              		.fpu softvfp
+ 592              	exti_flag_clear:
+ 593              	.LFB67:
+ 209:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 210:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 211:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      clear EXTI line x interrupt pending flag
+ 212:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 213:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 214:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..17,19,21): EXTI line x
+ 215:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 216:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+ 217:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 218:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_flag_clear(exti_line_enum linex)
+ 219:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 594              		.loc 1 219 1
+ 595              		.cfi_startproc
+ 596              		@ args = 0, pretend = 0, frame = 8
+ 597              		@ frame_needed = 1, uses_anonymous_args = 0
+ 598 0000 80B5     		push	{r7, lr}
+ 599              		.cfi_def_cfa_offset 8
+ 600              		.cfi_offset 7, -8
+ 601              		.cfi_offset 14, -4
+ 602 0002 82B0     		sub	sp, sp, #8
+ 603              		.cfi_def_cfa_offset 16
+ 604 0004 00AF     		add	r7, sp, #0
+ 605              		.cfi_def_cfa_register 7
+ 606 0006 7860     		str	r0, [r7, #4]
+ 220:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_PD = (uint32_t)linex;
+ 607              		.loc 1 220 5
+ 608 0008 40F21443 		movw	r3, #1044
+ 609 000c C4F20103 		movt	r3, 16385
+ 610              		.loc 1 220 13
+ 611 0010 7A68     		ldr	r2, [r7, #4]
+ 612 0012 1A60     		str	r2, [r3]
+ 221:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 613              		.loc 1 221 1
+ 614 0014 C046     		nop
+ 615 0016 BD46     		mov	sp, r7
+ 616 0018 02B0     		add	sp, sp, #8
+ 617              		@ sp needed
+ 618 001a 80BD     		pop	{r7, pc}
+ 619              		.cfi_endproc
+ 620              	.LFE67:
+ 622              		.section	.text.exti_interrupt_flag_get,"ax",%progbits
+ 623              		.align	1
+ 624              		.global	exti_interrupt_flag_get
+ 625              		.syntax unified
+ 626              		.code	16
+ 627              		.thumb_func
+ 628              		.fpu softvfp
+ 630              	exti_interrupt_flag_get:
+ 631              	.LFB68:
+ 222:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 223:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 224:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      get EXTI line x interrupt pending flag
+ 225:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 226:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 227:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..17,19,21): EXTI line x
+ 228:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 229:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     FlagStatus: status of flag (RESET or SET)
+ 230:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 231:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** FlagStatus exti_interrupt_flag_get(exti_line_enum linex)
+ 232:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 632              		.loc 1 232 1
+ 633              		.cfi_startproc
+ 634              		@ args = 0, pretend = 0, frame = 8
+ 635              		@ frame_needed = 1, uses_anonymous_args = 0
+ 636 0000 80B5     		push	{r7, lr}
+ 637              		.cfi_def_cfa_offset 8
+ 638              		.cfi_offset 7, -8
+ 639              		.cfi_offset 14, -4
+ 640 0002 82B0     		sub	sp, sp, #8
+ 641              		.cfi_def_cfa_offset 16
+ 642 0004 00AF     		add	r7, sp, #0
+ 643              		.cfi_def_cfa_register 7
+ 644 0006 7860     		str	r0, [r7, #4]
+ 233:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     if(RESET != (EXTI_PD & (uint32_t)linex)) {
+ 645              		.loc 1 233 18
+ 646 0008 40F21443 		movw	r3, #1044
+ 647 000c C4F20103 		movt	r3, 16385
+ 648 0010 1B68     		ldr	r3, [r3]
+ 649              		.loc 1 233 26
+ 650 0012 7A68     		ldr	r2, [r7, #4]
+ 651 0014 1340     		ands	r3, r2
+ 652              		.loc 1 233 7
+ 653 0016 0BB1     		cbz	r3, .L24
+ 234:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         return SET;
+ 654              		.loc 1 234 16
+ 655 0018 0123     		movs	r3, #1
+ 656 001a 00E0     		b	.L25
+ 657              	.L24:
+ 235:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     } else {
+ 236:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****         return RESET;
+ 658              		.loc 1 236 16
+ 659 001c 0023     		movs	r3, #0
+ 660              	.L25:
+ 237:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     }
+ 238:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 661              		.loc 1 238 1
+ 662 001e 1800     		movs	r0, r3
+ 663 0020 BD46     		mov	sp, r7
+ 664 0022 02B0     		add	sp, sp, #8
+ 665              		@ sp needed
+ 666 0024 80BD     		pop	{r7, pc}
+ 667              		.cfi_endproc
+ 668              	.LFE68:
+ 670              		.section	.text.exti_interrupt_flag_clear,"ax",%progbits
+ 671              		.align	1
+ 672              		.global	exti_interrupt_flag_clear
+ 673              		.syntax unified
+ 674              		.code	16
+ 675              		.thumb_func
+ 676              		.fpu softvfp
+ 678              	exti_interrupt_flag_clear:
+ 679              	.LFB69:
+ 239:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** 
+ 240:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** /*!
+ 241:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \brief      clear EXTI line x interrupt pending flag
+ 242:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[in]  linex: EXTI line number, refer to exti_line_enum
+ 243:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****                 only one parameter can be selected which is shown as below:
+ 244:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****       \arg        EXTI_x (x=0..17,19,21): EXTI line x
+ 245:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \param[out] none
+ 246:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     \retval     none
+ 247:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** */
+ 248:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** void exti_interrupt_flag_clear(exti_line_enum linex)
+ 249:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** {
+ 680              		.loc 1 249 1
+ 681              		.cfi_startproc
+ 682              		@ args = 0, pretend = 0, frame = 8
+ 683              		@ frame_needed = 1, uses_anonymous_args = 0
+ 684 0000 80B5     		push	{r7, lr}
+ 685              		.cfi_def_cfa_offset 8
+ 686              		.cfi_offset 7, -8
+ 687              		.cfi_offset 14, -4
+ 688 0002 82B0     		sub	sp, sp, #8
+ 689              		.cfi_def_cfa_offset 16
+ 690 0004 00AF     		add	r7, sp, #0
+ 691              		.cfi_def_cfa_register 7
+ 692 0006 7860     		str	r0, [r7, #4]
+ 250:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c ****     EXTI_PD = (uint32_t)linex;
+ 693              		.loc 1 250 5
+ 694 0008 40F21443 		movw	r3, #1044
+ 695 000c C4F20103 		movt	r3, 16385
+ 696              		.loc 1 250 13
+ 697 0010 7A68     		ldr	r2, [r7, #4]
+ 698 0012 1A60     		str	r2, [r3]
+ 251:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_exti.c **** }
+ 699              		.loc 1 251 1
+ 700 0014 C046     		nop
+ 701 0016 BD46     		mov	sp, r7
+ 702 0018 02B0     		add	sp, sp, #8
+ 703              		@ sp needed
+ 704 001a 80BD     		pop	{r7, pc}
+ 705              		.cfi_endproc
+ 706              	.LFE69:
+ 708              		.text
+ 709              	.Letext0:
+ 710              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 711              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 712              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 713              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_exti.h"
+ 714              		.file 6 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 gd32e23x_exti.c
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:16     .text.exti_deinit:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:24     .text.exti_deinit:00000000 exti_deinit
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:77     .text.exti_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:84     .text.exti_init:00000000 exti_init
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:282    .text.exti_interrupt_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:289    .text.exti_interrupt_enable:00000000 exti_interrupt_enable
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:323    .text.exti_interrupt_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:330    .text.exti_interrupt_disable:00000000 exti_interrupt_disable
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:367    .text.exti_event_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:374    .text.exti_event_enable:00000000 exti_event_enable
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:408    .text.exti_event_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:415    .text.exti_event_disable:00000000 exti_event_disable
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:452    .text.exti_software_interrupt_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:459    .text.exti_software_interrupt_enable:00000000 exti_software_interrupt_enable
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:493    .text.exti_software_interrupt_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:500    .text.exti_software_interrupt_disable:00000000 exti_software_interrupt_disable
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:537    .text.exti_flag_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:544    .text.exti_flag_get:00000000 exti_flag_get
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:585    .text.exti_flag_clear:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:592    .text.exti_flag_clear:00000000 exti_flag_clear
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:623    .text.exti_interrupt_flag_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:630    .text.exti_interrupt_flag_get:00000000 exti_interrupt_flag_get
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:671    .text.exti_interrupt_flag_clear:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccIovPAN.s:678    .text.exti_interrupt_flag_clear:00000000 exti_interrupt_flag_clear
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.gd32e23x_exti.h.41.eeda8a82744f1ebe14aee6a9ff18e996
+
+NO UNDEFINED SYMBOLS

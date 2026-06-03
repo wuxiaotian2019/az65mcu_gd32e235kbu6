@@ -1,0 +1,1101 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"syscalls.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.data.curbrk.6120,"aw"
+  16              		.align	2
+  19              	curbrk.6120:
+  20 0000 00000000 		.word	_end
+  21              		.section	.text._sbrk,"ax",%progbits
+  22              		.align	1
+  23              		.global	_sbrk
+  24              		.arch armv8-m.base
+  25              		.syntax unified
+  26              		.code	16
+  27              		.thumb_func
+  28              		.fpu softvfp
+  30              	_sbrk:
+  31              	.LFB25:
+  32              		.file 1 "../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c"
+   1:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** /* Support files for GNU libc.  Files in the system namespace go here.
+   2:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****    Files in the C namespace (ie those that do not start with an
+   3:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****    underscore) go in .c.  */
+   4:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+   5:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <_ansi.h>
+   6:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <sys/types.h>
+   7:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <sys/stat.h>
+   8:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <sys/fcntl.h>
+   9:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <stdio.h>
+  10:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <string.h>
+  11:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <time.h>
+  12:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <sys/time.h>
+  13:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <sys/times.h>
+  14:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <errno.h>
+  15:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <reent.h>
+  16:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <unistd.h>
+  17:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #include <sys/wait.h>
+  18:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  19:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** #undef errno
+  20:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** extern int errno;
+  21:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  22:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** extern int __io_putchar(int ch) __attribute__((weak));
+  23:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** extern int __io_getchar(void) __attribute__((weak));
+  24:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  25:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** caddr_t _sbrk(int incr)
+  26:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+  33              		.loc 1 26 1
+  34              		.cfi_startproc
+  35              		@ args = 0, pretend = 0, frame = 8
+  36              		@ frame_needed = 1, uses_anonymous_args = 0
+  37 0000 80B5     		push	{r7, lr}
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  41 0002 82B0     		sub	sp, sp, #8
+  42              		.cfi_def_cfa_offset 16
+  43 0004 00AF     		add	r7, sp, #0
+  44              		.cfi_def_cfa_register 7
+  45 0006 7860     		str	r0, [r7, #4]
+  27:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   extern char _end[];
+  28:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   extern char _heap_end[];
+  29:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   static char *curbrk = _end;
+  30:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  31:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   if ((curbrk + incr < _end) || (curbrk + incr > _heap_end))
+  46              		.loc 1 31 15
+  47 0008 40F20003 		movw	r3, #:lower16:curbrk.6120
+  48 000c C0F20003 		movt	r3, #:upper16:curbrk.6120
+  49 0010 1A68     		ldr	r2, [r3]
+  50 0012 7B68     		ldr	r3, [r7, #4]
+  51 0014 D218     		adds	r2, r2, r3
+  52              		.loc 1 31 6
+  53 0016 40F20003 		movw	r3, #:lower16:_end
+  54 001a C0F20003 		movt	r3, #:upper16:_end
+  55 001e 9A42     		cmp	r2, r3
+  56 0020 0CD3     		bcc	.L2
+  57              		.loc 1 31 41 discriminator 1
+  58 0022 40F20003 		movw	r3, #:lower16:curbrk.6120
+  59 0026 C0F20003 		movt	r3, #:upper16:curbrk.6120
+  60 002a 1A68     		ldr	r2, [r3]
+  61 002c 7B68     		ldr	r3, [r7, #4]
+  62 002e D218     		adds	r2, r2, r3
+  63              		.loc 1 31 30 discriminator 1
+  64 0030 40F20003 		movw	r3, #:lower16:_heap_end
+  65 0034 C0F20003 		movt	r3, #:upper16:_heap_end
+  66 0038 9A42     		cmp	r2, r3
+  67 003a 02D9     		bls	.L3
+  68              	.L2:
+  32:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****     return NULL - 1;
+  69              		.loc 1 32 17
+  70 003c 0123     		movs	r3, #1
+  71 003e 5B42     		rsbs	r3, r3, #0
+  72 0040 13E0     		b	.L4
+  73              	.L3:
+  33:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  34:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   curbrk += incr;
+  74              		.loc 1 34 10
+  75 0042 40F20003 		movw	r3, #:lower16:curbrk.6120
+  76 0046 C0F20003 		movt	r3, #:upper16:curbrk.6120
+  77 004a 1A68     		ldr	r2, [r3]
+  78 004c 7B68     		ldr	r3, [r7, #4]
+  79 004e D218     		adds	r2, r2, r3
+  80 0050 40F20003 		movw	r3, #:lower16:curbrk.6120
+  81 0054 C0F20003 		movt	r3, #:upper16:curbrk.6120
+  82 0058 1A60     		str	r2, [r3]
+  35:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   return curbrk - incr;
+  83              		.loc 1 35 17
+  84 005a 40F20003 		movw	r3, #:lower16:curbrk.6120
+  85 005e C0F20003 		movt	r3, #:upper16:curbrk.6120
+  86 0062 1A68     		ldr	r2, [r3]
+  87 0064 7B68     		ldr	r3, [r7, #4]
+  88 0066 5B42     		rsbs	r3, r3, #0
+  89 0068 D318     		adds	r3, r2, r3
+  90              	.L4:
+  36:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+  91              		.loc 1 36 1
+  92 006a 1800     		movs	r0, r3
+  93 006c BD46     		mov	sp, r7
+  94 006e 02B0     		add	sp, sp, #8
+  95              		@ sp needed
+  96 0070 80BD     		pop	{r7, pc}
+  97              		.cfi_endproc
+  98              	.LFE25:
+ 100              		.section	.text._gettimeofday,"ax",%progbits
+ 101              		.align	1
+ 102              		.global	_gettimeofday
+ 103              		.syntax unified
+ 104              		.code	16
+ 105              		.thumb_func
+ 106              		.fpu softvfp
+ 108              	_gettimeofday:
+ 109              	.LFB26:
+  37:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  38:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** /*
+  39:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****  * _gettimeofday primitive (Stub function)
+  40:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****  * */
+  41:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _gettimeofday (struct timeval * tp, struct timezone * tzp)
+  42:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 110              		.loc 1 42 1
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 8
+ 113              		@ frame_needed = 1, uses_anonymous_args = 0
+ 114 0000 80B5     		push	{r7, lr}
+ 115              		.cfi_def_cfa_offset 8
+ 116              		.cfi_offset 7, -8
+ 117              		.cfi_offset 14, -4
+ 118 0002 82B0     		sub	sp, sp, #8
+ 119              		.cfi_def_cfa_offset 16
+ 120 0004 00AF     		add	r7, sp, #0
+ 121              		.cfi_def_cfa_register 7
+ 122 0006 7860     		str	r0, [r7, #4]
+ 123 0008 3960     		str	r1, [r7]
+  43:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   /* Return fixed data for the timezone.  */
+  44:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   if (tzp)
+ 124              		.loc 1 44 6
+ 125 000a 3B68     		ldr	r3, [r7]
+ 126 000c 2BB1     		cbz	r3, .L6
+  45:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****     {
+  46:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****       tzp->tz_minuteswest = 0;
+ 127              		.loc 1 46 27
+ 128 000e 3B68     		ldr	r3, [r7]
+ 129 0010 0022     		movs	r2, #0
+ 130 0012 1A60     		str	r2, [r3]
+  47:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****       tzp->tz_dsttime = 0;
+ 131              		.loc 1 47 23
+ 132 0014 3B68     		ldr	r3, [r7]
+ 133 0016 0022     		movs	r2, #0
+ 134 0018 5A60     		str	r2, [r3, #4]
+ 135              	.L6:
+  48:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****     }
+  49:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  50:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****   return 0;
+ 136              		.loc 1 50 10
+ 137 001a 0023     		movs	r3, #0
+  51:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 138              		.loc 1 51 1
+ 139 001c 1800     		movs	r0, r3
+ 140 001e BD46     		mov	sp, r7
+ 141 0020 02B0     		add	sp, sp, #8
+ 142              		@ sp needed
+ 143 0022 80BD     		pop	{r7, pc}
+ 144              		.cfi_endproc
+ 145              	.LFE26:
+ 147              		.section	.text.initialise_monitor_handles,"ax",%progbits
+ 148              		.align	1
+ 149              		.global	initialise_monitor_handles
+ 150              		.syntax unified
+ 151              		.code	16
+ 152              		.thumb_func
+ 153              		.fpu softvfp
+ 155              	initialise_monitor_handles:
+ 156              	.LFB27:
+  52:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** void initialise_monitor_handles()
+  53:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 157              		.loc 1 53 1
+ 158              		.cfi_startproc
+ 159              		@ args = 0, pretend = 0, frame = 0
+ 160              		@ frame_needed = 1, uses_anonymous_args = 0
+ 161 0000 80B5     		push	{r7, lr}
+ 162              		.cfi_def_cfa_offset 8
+ 163              		.cfi_offset 7, -8
+ 164              		.cfi_offset 14, -4
+ 165 0002 00AF     		add	r7, sp, #0
+ 166              		.cfi_def_cfa_register 7
+  54:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 167              		.loc 1 54 1
+ 168 0004 C046     		nop
+ 169 0006 BD46     		mov	sp, r7
+ 170              		@ sp needed
+ 171 0008 80BD     		pop	{r7, pc}
+ 172              		.cfi_endproc
+ 173              	.LFE27:
+ 175              		.section	.text._getpid,"ax",%progbits
+ 176              		.align	1
+ 177              		.global	_getpid
+ 178              		.syntax unified
+ 179              		.code	16
+ 180              		.thumb_func
+ 181              		.fpu softvfp
+ 183              	_getpid:
+ 184              	.LFB28:
+  55:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  56:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _getpid(void)
+  57:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 185              		.loc 1 57 1
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 0
+ 188              		@ frame_needed = 1, uses_anonymous_args = 0
+ 189 0000 80B5     		push	{r7, lr}
+ 190              		.cfi_def_cfa_offset 8
+ 191              		.cfi_offset 7, -8
+ 192              		.cfi_offset 14, -4
+ 193 0002 00AF     		add	r7, sp, #0
+ 194              		.cfi_def_cfa_register 7
+  58:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return 1;
+ 195              		.loc 1 58 9
+ 196 0004 0123     		movs	r3, #1
+  59:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 197              		.loc 1 59 1
+ 198 0006 1800     		movs	r0, r3
+ 199 0008 BD46     		mov	sp, r7
+ 200              		@ sp needed
+ 201 000a 80BD     		pop	{r7, pc}
+ 202              		.cfi_endproc
+ 203              	.LFE28:
+ 205              		.section	.text._kill,"ax",%progbits
+ 206              		.align	1
+ 207              		.global	_kill
+ 208              		.syntax unified
+ 209              		.code	16
+ 210              		.thumb_func
+ 211              		.fpu softvfp
+ 213              	_kill:
+ 214              	.LFB29:
+  60:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  61:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _kill(int pid, int sig)
+  62:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 215              		.loc 1 62 1
+ 216              		.cfi_startproc
+ 217              		@ args = 0, pretend = 0, frame = 8
+ 218              		@ frame_needed = 1, uses_anonymous_args = 0
+ 219 0000 80B5     		push	{r7, lr}
+ 220              		.cfi_def_cfa_offset 8
+ 221              		.cfi_offset 7, -8
+ 222              		.cfi_offset 14, -4
+ 223 0002 82B0     		sub	sp, sp, #8
+ 224              		.cfi_def_cfa_offset 16
+ 225 0004 00AF     		add	r7, sp, #0
+ 226              		.cfi_def_cfa_register 7
+ 227 0006 7860     		str	r0, [r7, #4]
+ 228 0008 3960     		str	r1, [r7]
+  63:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	errno = EINVAL;
+ 229              		.loc 1 63 8
+ 230 000a 40F20003 		movw	r3, #:lower16:errno
+ 231 000e C0F20003 		movt	r3, #:upper16:errno
+ 232 0012 1622     		movs	r2, #22
+ 233 0014 1A60     		str	r2, [r3]
+  64:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 234              		.loc 1 64 9
+ 235 0016 0123     		movs	r3, #1
+ 236 0018 5B42     		rsbs	r3, r3, #0
+  65:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 237              		.loc 1 65 1
+ 238 001a 1800     		movs	r0, r3
+ 239 001c BD46     		mov	sp, r7
+ 240 001e 02B0     		add	sp, sp, #8
+ 241              		@ sp needed
+ 242 0020 80BD     		pop	{r7, pc}
+ 243              		.cfi_endproc
+ 244              	.LFE29:
+ 246              		.section	.text._exit,"ax",%progbits
+ 247              		.align	1
+ 248              		.global	_exit
+ 249              		.syntax unified
+ 250              		.code	16
+ 251              		.thumb_func
+ 252              		.fpu softvfp
+ 254              	_exit:
+ 255              	.LFB30:
+  66:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  67:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** void _exit (int status)
+  68:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 256              		.loc 1 68 1
+ 257              		.cfi_startproc
+ 258              		@ args = 0, pretend = 0, frame = 8
+ 259              		@ frame_needed = 1, uses_anonymous_args = 0
+ 260 0000 80B5     		push	{r7, lr}
+ 261              		.cfi_def_cfa_offset 8
+ 262              		.cfi_offset 7, -8
+ 263              		.cfi_offset 14, -4
+ 264 0002 82B0     		sub	sp, sp, #8
+ 265              		.cfi_def_cfa_offset 16
+ 266 0004 00AF     		add	r7, sp, #0
+ 267              		.cfi_def_cfa_register 7
+ 268 0006 7860     		str	r0, [r7, #4]
+  69:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	_kill(status, -1);
+ 269              		.loc 1 69 2
+ 270 0008 0123     		movs	r3, #1
+ 271 000a 5A42     		rsbs	r2, r3, #0
+ 272 000c 7B68     		ldr	r3, [r7, #4]
+ 273 000e 1100     		movs	r1, r2
+ 274 0010 1800     		movs	r0, r3
+ 275 0012 FFF7FEFF 		bl	_kill
+ 276              	.L14:
+  70:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	while (1) {}
+ 277              		.loc 1 70 8 discriminator 1
+ 278 0016 FEE7     		b	.L14
+ 279              		.cfi_endproc
+ 280              	.LFE30:
+ 282              		.section	.text._write,"ax",%progbits
+ 283              		.align	1
+ 284              		.global	_write
+ 285              		.syntax unified
+ 286              		.code	16
+ 287              		.thumb_func
+ 288              		.fpu softvfp
+ 290              	_write:
+ 291              	.LFB31:
+  71:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+  72:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  73:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _write(int file, char *ptr, int len)
+  74:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 292              		.loc 1 74 1
+ 293              		.cfi_startproc
+ 294              		@ args = 0, pretend = 0, frame = 24
+ 295              		@ frame_needed = 1, uses_anonymous_args = 0
+ 296 0000 80B5     		push	{r7, lr}
+ 297              		.cfi_def_cfa_offset 8
+ 298              		.cfi_offset 7, -8
+ 299              		.cfi_offset 14, -4
+ 300 0002 86B0     		sub	sp, sp, #24
+ 301              		.cfi_def_cfa_offset 32
+ 302 0004 00AF     		add	r7, sp, #0
+ 303              		.cfi_def_cfa_register 7
+ 304 0006 F860     		str	r0, [r7, #12]
+ 305 0008 B960     		str	r1, [r7, #8]
+ 306 000a 7A60     		str	r2, [r7, #4]
+  75:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	int DataIdx;
+  76:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  77:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 		for (DataIdx = 0; DataIdx < len; DataIdx++)
+ 307              		.loc 1 77 16
+ 308 000c 0023     		movs	r3, #0
+ 309 000e 7B61     		str	r3, [r7, #20]
+ 310              		.loc 1 77 3
+ 311 0010 0AE0     		b	.L16
+ 312              	.L17:
+  78:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 		{
+  79:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 		   __io_putchar( *ptr++ );
+ 313              		.loc 1 79 24 discriminator 3
+ 314 0012 BB68     		ldr	r3, [r7, #8]
+ 315 0014 5A1C     		adds	r2, r3, #1
+ 316 0016 BA60     		str	r2, [r7, #8]
+ 317              		.loc 1 79 20 discriminator 3
+ 318 0018 1B78     		ldrb	r3, [r3]
+ 319 001a 5BB2     		sxtb	r3, r3
+ 320              		.loc 1 79 6 discriminator 3
+ 321 001c 1800     		movs	r0, r3
+ 322 001e FFF7FEFF 		bl	__io_putchar
+  77:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 		{
+ 323              		.loc 1 77 43 discriminator 3
+ 324 0022 7B69     		ldr	r3, [r7, #20]
+ 325 0024 0133     		adds	r3, r3, #1
+ 326 0026 7B61     		str	r3, [r7, #20]
+ 327              	.L16:
+  77:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 		{
+ 328              		.loc 1 77 3 discriminator 1
+ 329 0028 7A69     		ldr	r2, [r7, #20]
+ 330 002a 7B68     		ldr	r3, [r7, #4]
+ 331 002c 9A42     		cmp	r2, r3
+ 332 002e F0DB     		blt	.L17
+  80:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 		}
+  81:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return len;
+ 333              		.loc 1 81 9
+ 334 0030 7B68     		ldr	r3, [r7, #4]
+  82:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 335              		.loc 1 82 1
+ 336 0032 1800     		movs	r0, r3
+ 337 0034 BD46     		mov	sp, r7
+ 338 0036 06B0     		add	sp, sp, #24
+ 339              		@ sp needed
+ 340 0038 80BD     		pop	{r7, pc}
+ 341              		.cfi_endproc
+ 342              	.LFE31:
+ 344              		.section	.text._close,"ax",%progbits
+ 345              		.align	1
+ 346              		.global	_close
+ 347              		.syntax unified
+ 348              		.code	16
+ 349              		.thumb_func
+ 350              		.fpu softvfp
+ 352              	_close:
+ 353              	.LFB32:
+  83:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  84:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _close(int file)
+  85:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 354              		.loc 1 85 1
+ 355              		.cfi_startproc
+ 356              		@ args = 0, pretend = 0, frame = 8
+ 357              		@ frame_needed = 1, uses_anonymous_args = 0
+ 358 0000 80B5     		push	{r7, lr}
+ 359              		.cfi_def_cfa_offset 8
+ 360              		.cfi_offset 7, -8
+ 361              		.cfi_offset 14, -4
+ 362 0002 82B0     		sub	sp, sp, #8
+ 363              		.cfi_def_cfa_offset 16
+ 364 0004 00AF     		add	r7, sp, #0
+ 365              		.cfi_def_cfa_register 7
+ 366 0006 7860     		str	r0, [r7, #4]
+  86:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 367              		.loc 1 86 9
+ 368 0008 0123     		movs	r3, #1
+ 369 000a 5B42     		rsbs	r3, r3, #0
+  87:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 370              		.loc 1 87 1
+ 371 000c 1800     		movs	r0, r3
+ 372 000e BD46     		mov	sp, r7
+ 373 0010 02B0     		add	sp, sp, #8
+ 374              		@ sp needed
+ 375 0012 80BD     		pop	{r7, pc}
+ 376              		.cfi_endproc
+ 377              	.LFE32:
+ 379              		.section	.text._fstat,"ax",%progbits
+ 380              		.align	1
+ 381              		.global	_fstat
+ 382              		.syntax unified
+ 383              		.code	16
+ 384              		.thumb_func
+ 385              		.fpu softvfp
+ 387              	_fstat:
+ 388              	.LFB33:
+  88:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  89:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _fstat(int file, struct stat *st)
+  90:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 389              		.loc 1 90 1
+ 390              		.cfi_startproc
+ 391              		@ args = 0, pretend = 0, frame = 8
+ 392              		@ frame_needed = 1, uses_anonymous_args = 0
+ 393 0000 80B5     		push	{r7, lr}
+ 394              		.cfi_def_cfa_offset 8
+ 395              		.cfi_offset 7, -8
+ 396              		.cfi_offset 14, -4
+ 397 0002 82B0     		sub	sp, sp, #8
+ 398              		.cfi_def_cfa_offset 16
+ 399 0004 00AF     		add	r7, sp, #0
+ 400              		.cfi_def_cfa_register 7
+ 401 0006 7860     		str	r0, [r7, #4]
+ 402 0008 3960     		str	r1, [r7]
+  91:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	st->st_mode = S_IFCHR;
+ 403              		.loc 1 91 14
+ 404 000a 3B68     		ldr	r3, [r7]
+ 405 000c 42F20002 		movw	r2, #8192
+ 406 0010 5A60     		str	r2, [r3, #4]
+  92:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return 0;
+ 407              		.loc 1 92 9
+ 408 0012 0023     		movs	r3, #0
+  93:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 409              		.loc 1 93 1
+ 410 0014 1800     		movs	r0, r3
+ 411 0016 BD46     		mov	sp, r7
+ 412 0018 02B0     		add	sp, sp, #8
+ 413              		@ sp needed
+ 414 001a 80BD     		pop	{r7, pc}
+ 415              		.cfi_endproc
+ 416              	.LFE33:
+ 418              		.section	.text._isatty,"ax",%progbits
+ 419              		.align	1
+ 420              		.global	_isatty
+ 421              		.syntax unified
+ 422              		.code	16
+ 423              		.thumb_func
+ 424              		.fpu softvfp
+ 426              	_isatty:
+ 427              	.LFB34:
+  94:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+  95:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _isatty(int file)
+  96:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 428              		.loc 1 96 1
+ 429              		.cfi_startproc
+ 430              		@ args = 0, pretend = 0, frame = 8
+ 431              		@ frame_needed = 1, uses_anonymous_args = 0
+ 432 0000 80B5     		push	{r7, lr}
+ 433              		.cfi_def_cfa_offset 8
+ 434              		.cfi_offset 7, -8
+ 435              		.cfi_offset 14, -4
+ 436 0002 82B0     		sub	sp, sp, #8
+ 437              		.cfi_def_cfa_offset 16
+ 438 0004 00AF     		add	r7, sp, #0
+ 439              		.cfi_def_cfa_register 7
+ 440 0006 7860     		str	r0, [r7, #4]
+  97:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return 1;
+ 441              		.loc 1 97 9
+ 442 0008 0123     		movs	r3, #1
+  98:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 443              		.loc 1 98 1
+ 444 000a 1800     		movs	r0, r3
+ 445 000c BD46     		mov	sp, r7
+ 446 000e 02B0     		add	sp, sp, #8
+ 447              		@ sp needed
+ 448 0010 80BD     		pop	{r7, pc}
+ 449              		.cfi_endproc
+ 450              	.LFE34:
+ 452              		.section	.text._lseek,"ax",%progbits
+ 453              		.align	1
+ 454              		.global	_lseek
+ 455              		.syntax unified
+ 456              		.code	16
+ 457              		.thumb_func
+ 458              		.fpu softvfp
+ 460              	_lseek:
+ 461              	.LFB35:
+  99:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 100:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _lseek(int file, int ptr, int dir)
+ 101:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 462              		.loc 1 101 1
+ 463              		.cfi_startproc
+ 464              		@ args = 0, pretend = 0, frame = 16
+ 465              		@ frame_needed = 1, uses_anonymous_args = 0
+ 466 0000 80B5     		push	{r7, lr}
+ 467              		.cfi_def_cfa_offset 8
+ 468              		.cfi_offset 7, -8
+ 469              		.cfi_offset 14, -4
+ 470 0002 84B0     		sub	sp, sp, #16
+ 471              		.cfi_def_cfa_offset 24
+ 472 0004 00AF     		add	r7, sp, #0
+ 473              		.cfi_def_cfa_register 7
+ 474 0006 F860     		str	r0, [r7, #12]
+ 475 0008 B960     		str	r1, [r7, #8]
+ 476 000a 7A60     		str	r2, [r7, #4]
+ 102:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return 0;
+ 477              		.loc 1 102 9
+ 478 000c 0023     		movs	r3, #0
+ 103:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 479              		.loc 1 103 1
+ 480 000e 1800     		movs	r0, r3
+ 481 0010 BD46     		mov	sp, r7
+ 482 0012 04B0     		add	sp, sp, #16
+ 483              		@ sp needed
+ 484 0014 80BD     		pop	{r7, pc}
+ 485              		.cfi_endproc
+ 486              	.LFE35:
+ 488              		.section	.text._read,"ax",%progbits
+ 489              		.align	1
+ 490              		.global	_read
+ 491              		.syntax unified
+ 492              		.code	16
+ 493              		.thumb_func
+ 494              		.fpu softvfp
+ 496              	_read:
+ 497              	.LFB36:
+ 104:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 105:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _read(int file, char *ptr, int len)
+ 106:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 498              		.loc 1 106 1
+ 499              		.cfi_startproc
+ 500              		@ args = 0, pretend = 0, frame = 24
+ 501              		@ frame_needed = 1, uses_anonymous_args = 0
+ 502 0000 80B5     		push	{r7, lr}
+ 503              		.cfi_def_cfa_offset 8
+ 504              		.cfi_offset 7, -8
+ 505              		.cfi_offset 14, -4
+ 506 0002 86B0     		sub	sp, sp, #24
+ 507              		.cfi_def_cfa_offset 32
+ 508 0004 00AF     		add	r7, sp, #0
+ 509              		.cfi_def_cfa_register 7
+ 510 0006 F860     		str	r0, [r7, #12]
+ 511 0008 B960     		str	r1, [r7, #8]
+ 512 000a 7A60     		str	r2, [r7, #4]
+ 107:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	int DataIdx;
+ 108:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 109:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	for (DataIdx = 0; DataIdx < len; DataIdx++)
+ 513              		.loc 1 109 15
+ 514 000c 0023     		movs	r3, #0
+ 515 000e 7B61     		str	r3, [r7, #20]
+ 516              		.loc 1 109 2
+ 517 0010 0AE0     		b	.L28
+ 518              	.L29:
+ 110:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	{
+ 111:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	  *ptr++ = __io_getchar();
+ 519              		.loc 1 111 13 discriminator 3
+ 520 0012 FFF7FEFF 		bl	__io_getchar
+ 521 0016 0100     		movs	r1, r0
+ 522              		.loc 1 111 8 discriminator 3
+ 523 0018 BB68     		ldr	r3, [r7, #8]
+ 524 001a 5A1C     		adds	r2, r3, #1
+ 525 001c BA60     		str	r2, [r7, #8]
+ 526              		.loc 1 111 11 discriminator 3
+ 527 001e 4AB2     		sxtb	r2, r1
+ 528 0020 1A70     		strb	r2, [r3]
+ 109:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	{
+ 529              		.loc 1 109 42 discriminator 3
+ 530 0022 7B69     		ldr	r3, [r7, #20]
+ 531 0024 0133     		adds	r3, r3, #1
+ 532 0026 7B61     		str	r3, [r7, #20]
+ 533              	.L28:
+ 109:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	{
+ 534              		.loc 1 109 2 discriminator 1
+ 535 0028 7A69     		ldr	r2, [r7, #20]
+ 536 002a 7B68     		ldr	r3, [r7, #4]
+ 537 002c 9A42     		cmp	r2, r3
+ 538 002e F0DB     		blt	.L29
+ 112:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	}
+ 113:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 114:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c ****    return len;
+ 539              		.loc 1 114 11
+ 540 0030 7B68     		ldr	r3, [r7, #4]
+ 115:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 541              		.loc 1 115 1
+ 542 0032 1800     		movs	r0, r3
+ 543 0034 BD46     		mov	sp, r7
+ 544 0036 06B0     		add	sp, sp, #24
+ 545              		@ sp needed
+ 546 0038 80BD     		pop	{r7, pc}
+ 547              		.cfi_endproc
+ 548              	.LFE36:
+ 550              		.section	.text._open,"ax",%progbits
+ 551              		.align	1
+ 552              		.global	_open
+ 553              		.syntax unified
+ 554              		.code	16
+ 555              		.thumb_func
+ 556              		.fpu softvfp
+ 558              	_open:
+ 559              	.LFB37:
+ 116:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 117:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _open(char *path, int flags, ...)
+ 118:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 560              		.loc 1 118 1
+ 561              		.cfi_startproc
+ 562              		@ args = 4, pretend = 12, frame = 8
+ 563              		@ frame_needed = 1, uses_anonymous_args = 1
+ 564 0000 0EB4     		push	{r1, r2, r3}
+ 565              		.cfi_def_cfa_offset 12
+ 566 0002 80B5     		push	{r7, lr}
+ 567              		.cfi_def_cfa_offset 20
+ 568              		.cfi_offset 7, -20
+ 569              		.cfi_offset 14, -16
+ 570 0004 83B0     		sub	sp, sp, #12
+ 571              		.cfi_def_cfa_offset 32
+ 572 0006 00AF     		add	r7, sp, #0
+ 573              		.cfi_def_cfa_register 7
+ 574 0008 7860     		str	r0, [r7, #4]
+ 119:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	/* Pretend like we always fail */
+ 120:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 575              		.loc 1 120 9
+ 576 000a 0123     		movs	r3, #1
+ 577 000c 5B42     		rsbs	r3, r3, #0
+ 121:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 578              		.loc 1 121 1
+ 579 000e 1800     		movs	r0, r3
+ 580 0010 BD46     		mov	sp, r7
+ 581 0012 03B0     		add	sp, sp, #12
+ 582              		@ sp needed
+ 583 0014 80BC     		pop	{r7}
+ 584 0016 08BC     		pop	{r3}
+ 585 0018 03B0     		add	sp, sp, #12
+ 586 001a 1847     		bx	r3
+ 587              		.cfi_endproc
+ 588              	.LFE37:
+ 590              		.section	.text._wait,"ax",%progbits
+ 591              		.align	1
+ 592              		.global	_wait
+ 593              		.syntax unified
+ 594              		.code	16
+ 595              		.thumb_func
+ 596              		.fpu softvfp
+ 598              	_wait:
+ 599              	.LFB38:
+ 122:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 123:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _wait(int *status)
+ 124:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 600              		.loc 1 124 1
+ 601              		.cfi_startproc
+ 602              		@ args = 0, pretend = 0, frame = 8
+ 603              		@ frame_needed = 1, uses_anonymous_args = 0
+ 604 0000 80B5     		push	{r7, lr}
+ 605              		.cfi_def_cfa_offset 8
+ 606              		.cfi_offset 7, -8
+ 607              		.cfi_offset 14, -4
+ 608 0002 82B0     		sub	sp, sp, #8
+ 609              		.cfi_def_cfa_offset 16
+ 610 0004 00AF     		add	r7, sp, #0
+ 611              		.cfi_def_cfa_register 7
+ 612 0006 7860     		str	r0, [r7, #4]
+ 125:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	errno = ECHILD;
+ 613              		.loc 1 125 8
+ 614 0008 40F20003 		movw	r3, #:lower16:errno
+ 615 000c C0F20003 		movt	r3, #:upper16:errno
+ 616 0010 0A22     		movs	r2, #10
+ 617 0012 1A60     		str	r2, [r3]
+ 126:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 618              		.loc 1 126 9
+ 619 0014 0123     		movs	r3, #1
+ 620 0016 5B42     		rsbs	r3, r3, #0
+ 127:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 621              		.loc 1 127 1
+ 622 0018 1800     		movs	r0, r3
+ 623 001a BD46     		mov	sp, r7
+ 624 001c 02B0     		add	sp, sp, #8
+ 625              		@ sp needed
+ 626 001e 80BD     		pop	{r7, pc}
+ 627              		.cfi_endproc
+ 628              	.LFE38:
+ 630              		.section	.text._unlink,"ax",%progbits
+ 631              		.align	1
+ 632              		.global	_unlink
+ 633              		.syntax unified
+ 634              		.code	16
+ 635              		.thumb_func
+ 636              		.fpu softvfp
+ 638              	_unlink:
+ 639              	.LFB39:
+ 128:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 129:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _unlink(char *name)
+ 130:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 640              		.loc 1 130 1
+ 641              		.cfi_startproc
+ 642              		@ args = 0, pretend = 0, frame = 8
+ 643              		@ frame_needed = 1, uses_anonymous_args = 0
+ 644 0000 80B5     		push	{r7, lr}
+ 645              		.cfi_def_cfa_offset 8
+ 646              		.cfi_offset 7, -8
+ 647              		.cfi_offset 14, -4
+ 648 0002 82B0     		sub	sp, sp, #8
+ 649              		.cfi_def_cfa_offset 16
+ 650 0004 00AF     		add	r7, sp, #0
+ 651              		.cfi_def_cfa_register 7
+ 652 0006 7860     		str	r0, [r7, #4]
+ 131:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	errno = ENOENT;
+ 653              		.loc 1 131 8
+ 654 0008 40F20003 		movw	r3, #:lower16:errno
+ 655 000c C0F20003 		movt	r3, #:upper16:errno
+ 656 0010 0222     		movs	r2, #2
+ 657 0012 1A60     		str	r2, [r3]
+ 132:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 658              		.loc 1 132 9
+ 659 0014 0123     		movs	r3, #1
+ 660 0016 5B42     		rsbs	r3, r3, #0
+ 133:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 661              		.loc 1 133 1
+ 662 0018 1800     		movs	r0, r3
+ 663 001a BD46     		mov	sp, r7
+ 664 001c 02B0     		add	sp, sp, #8
+ 665              		@ sp needed
+ 666 001e 80BD     		pop	{r7, pc}
+ 667              		.cfi_endproc
+ 668              	.LFE39:
+ 670              		.section	.text._times,"ax",%progbits
+ 671              		.align	1
+ 672              		.global	_times
+ 673              		.syntax unified
+ 674              		.code	16
+ 675              		.thumb_func
+ 676              		.fpu softvfp
+ 678              	_times:
+ 679              	.LFB40:
+ 134:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 135:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _times(struct tms *buf)
+ 136:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 680              		.loc 1 136 1
+ 681              		.cfi_startproc
+ 682              		@ args = 0, pretend = 0, frame = 8
+ 683              		@ frame_needed = 1, uses_anonymous_args = 0
+ 684 0000 80B5     		push	{r7, lr}
+ 685              		.cfi_def_cfa_offset 8
+ 686              		.cfi_offset 7, -8
+ 687              		.cfi_offset 14, -4
+ 688 0002 82B0     		sub	sp, sp, #8
+ 689              		.cfi_def_cfa_offset 16
+ 690 0004 00AF     		add	r7, sp, #0
+ 691              		.cfi_def_cfa_register 7
+ 692 0006 7860     		str	r0, [r7, #4]
+ 137:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 693              		.loc 1 137 9
+ 694 0008 0123     		movs	r3, #1
+ 695 000a 5B42     		rsbs	r3, r3, #0
+ 138:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 696              		.loc 1 138 1
+ 697 000c 1800     		movs	r0, r3
+ 698 000e BD46     		mov	sp, r7
+ 699 0010 02B0     		add	sp, sp, #8
+ 700              		@ sp needed
+ 701 0012 80BD     		pop	{r7, pc}
+ 702              		.cfi_endproc
+ 703              	.LFE40:
+ 705              		.section	.text._stat,"ax",%progbits
+ 706              		.align	1
+ 707              		.global	_stat
+ 708              		.syntax unified
+ 709              		.code	16
+ 710              		.thumb_func
+ 711              		.fpu softvfp
+ 713              	_stat:
+ 714              	.LFB41:
+ 139:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 140:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _stat(char *file, struct stat *st)
+ 141:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 715              		.loc 1 141 1
+ 716              		.cfi_startproc
+ 717              		@ args = 0, pretend = 0, frame = 8
+ 718              		@ frame_needed = 1, uses_anonymous_args = 0
+ 719 0000 80B5     		push	{r7, lr}
+ 720              		.cfi_def_cfa_offset 8
+ 721              		.cfi_offset 7, -8
+ 722              		.cfi_offset 14, -4
+ 723 0002 82B0     		sub	sp, sp, #8
+ 724              		.cfi_def_cfa_offset 16
+ 725 0004 00AF     		add	r7, sp, #0
+ 726              		.cfi_def_cfa_register 7
+ 727 0006 7860     		str	r0, [r7, #4]
+ 728 0008 3960     		str	r1, [r7]
+ 142:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	st->st_mode = S_IFCHR;
+ 729              		.loc 1 142 14
+ 730 000a 3B68     		ldr	r3, [r7]
+ 731 000c 42F20002 		movw	r2, #8192
+ 732 0010 5A60     		str	r2, [r3, #4]
+ 143:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return 0;
+ 733              		.loc 1 143 9
+ 734 0012 0023     		movs	r3, #0
+ 144:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 735              		.loc 1 144 1
+ 736 0014 1800     		movs	r0, r3
+ 737 0016 BD46     		mov	sp, r7
+ 738 0018 02B0     		add	sp, sp, #8
+ 739              		@ sp needed
+ 740 001a 80BD     		pop	{r7, pc}
+ 741              		.cfi_endproc
+ 742              	.LFE41:
+ 744              		.section	.text._link,"ax",%progbits
+ 745              		.align	1
+ 746              		.global	_link
+ 747              		.syntax unified
+ 748              		.code	16
+ 749              		.thumb_func
+ 750              		.fpu softvfp
+ 752              	_link:
+ 753              	.LFB42:
+ 145:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 146:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _link(char *old, char *new)
+ 147:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 754              		.loc 1 147 1
+ 755              		.cfi_startproc
+ 756              		@ args = 0, pretend = 0, frame = 8
+ 757              		@ frame_needed = 1, uses_anonymous_args = 0
+ 758 0000 80B5     		push	{r7, lr}
+ 759              		.cfi_def_cfa_offset 8
+ 760              		.cfi_offset 7, -8
+ 761              		.cfi_offset 14, -4
+ 762 0002 82B0     		sub	sp, sp, #8
+ 763              		.cfi_def_cfa_offset 16
+ 764 0004 00AF     		add	r7, sp, #0
+ 765              		.cfi_def_cfa_register 7
+ 766 0006 7860     		str	r0, [r7, #4]
+ 767 0008 3960     		str	r1, [r7]
+ 148:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	errno = EMLINK;
+ 768              		.loc 1 148 8
+ 769 000a 40F20003 		movw	r3, #:lower16:errno
+ 770 000e C0F20003 		movt	r3, #:upper16:errno
+ 771 0012 1F22     		movs	r2, #31
+ 772 0014 1A60     		str	r2, [r3]
+ 149:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 773              		.loc 1 149 9
+ 774 0016 0123     		movs	r3, #1
+ 775 0018 5B42     		rsbs	r3, r3, #0
+ 150:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 776              		.loc 1 150 1
+ 777 001a 1800     		movs	r0, r3
+ 778 001c BD46     		mov	sp, r7
+ 779 001e 02B0     		add	sp, sp, #8
+ 780              		@ sp needed
+ 781 0020 80BD     		pop	{r7, pc}
+ 782              		.cfi_endproc
+ 783              	.LFE42:
+ 785              		.section	.text._fork,"ax",%progbits
+ 786              		.align	1
+ 787              		.global	_fork
+ 788              		.syntax unified
+ 789              		.code	16
+ 790              		.thumb_func
+ 791              		.fpu softvfp
+ 793              	_fork:
+ 794              	.LFB43:
+ 151:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 152:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _fork(void)
+ 153:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 795              		.loc 1 153 1
+ 796              		.cfi_startproc
+ 797              		@ args = 0, pretend = 0, frame = 0
+ 798              		@ frame_needed = 1, uses_anonymous_args = 0
+ 799 0000 80B5     		push	{r7, lr}
+ 800              		.cfi_def_cfa_offset 8
+ 801              		.cfi_offset 7, -8
+ 802              		.cfi_offset 14, -4
+ 803 0002 00AF     		add	r7, sp, #0
+ 804              		.cfi_def_cfa_register 7
+ 154:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	errno = EAGAIN;
+ 805              		.loc 1 154 8
+ 806 0004 40F20003 		movw	r3, #:lower16:errno
+ 807 0008 C0F20003 		movt	r3, #:upper16:errno
+ 808 000c 0B22     		movs	r2, #11
+ 809 000e 1A60     		str	r2, [r3]
+ 155:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 810              		.loc 1 155 9
+ 811 0010 0123     		movs	r3, #1
+ 812 0012 5B42     		rsbs	r3, r3, #0
+ 156:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 813              		.loc 1 156 1
+ 814 0014 1800     		movs	r0, r3
+ 815 0016 BD46     		mov	sp, r7
+ 816              		@ sp needed
+ 817 0018 80BD     		pop	{r7, pc}
+ 818              		.cfi_endproc
+ 819              	.LFE43:
+ 821              		.section	.text._execve,"ax",%progbits
+ 822              		.align	1
+ 823              		.global	_execve
+ 824              		.syntax unified
+ 825              		.code	16
+ 826              		.thumb_func
+ 827              		.fpu softvfp
+ 829              	_execve:
+ 830              	.LFB44:
+ 157:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 
+ 158:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** int _execve(char *name, char **argv, char **env)
+ 159:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** {
+ 831              		.loc 1 159 1
+ 832              		.cfi_startproc
+ 833              		@ args = 0, pretend = 0, frame = 16
+ 834              		@ frame_needed = 1, uses_anonymous_args = 0
+ 835 0000 80B5     		push	{r7, lr}
+ 836              		.cfi_def_cfa_offset 8
+ 837              		.cfi_offset 7, -8
+ 838              		.cfi_offset 14, -4
+ 839 0002 84B0     		sub	sp, sp, #16
+ 840              		.cfi_def_cfa_offset 24
+ 841 0004 00AF     		add	r7, sp, #0
+ 842              		.cfi_def_cfa_register 7
+ 843 0006 F860     		str	r0, [r7, #12]
+ 844 0008 B960     		str	r1, [r7, #8]
+ 845 000a 7A60     		str	r2, [r7, #4]
+ 160:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	errno = ENOMEM;
+ 846              		.loc 1 160 8
+ 847 000c 40F20003 		movw	r3, #:lower16:errno
+ 848 0010 C0F20003 		movt	r3, #:upper16:errno
+ 849 0014 0C22     		movs	r2, #12
+ 850 0016 1A60     		str	r2, [r3]
+ 161:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** 	return -1;
+ 851              		.loc 1 161 9
+ 852 0018 0123     		movs	r3, #1
+ 853 001a 5B42     		rsbs	r3, r3, #0
+ 162:../Firmware/CMSIS/GD/GD32E23x/Source/syscalls.c **** }
+ 854              		.loc 1 162 1
+ 855 001c 1800     		movs	r0, r3
+ 856 001e BD46     		mov	sp, r7
+ 857 0020 04B0     		add	sp, sp, #16
+ 858              		@ sp needed
+ 859 0022 80BD     		pop	{r7, pc}
+ 860              		.cfi_endproc
+ 861              	.LFE44:
+ 863              		.weak	__io_getchar
+ 864              		.weak	__io_putchar
+ 865              		.text
+ 866              	.Letext0:
+ 867              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 868              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 869              		.file 4 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 870              		.file 5 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 871              		.file 6 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 872              		.file 7 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 873              		.file 8 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 874              		.file 9 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 875              		.file 10 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 876              		.file 11 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 877              		.file 12 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 878              		.file 13 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 879              		.file 14 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 880              		.file 15 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+DEFINED SYMBOLS
+                            *ABS*:00000000 syscalls.c
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:16     .data.curbrk.6120:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:19     .data.curbrk.6120:00000000 curbrk.6120
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:22     .text._sbrk:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:30     .text._sbrk:00000000 _sbrk
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:101    .text._gettimeofday:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:108    .text._gettimeofday:00000000 _gettimeofday
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:148    .text.initialise_monitor_handles:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:155    .text.initialise_monitor_handles:00000000 initialise_monitor_handles
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:176    .text._getpid:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:183    .text._getpid:00000000 _getpid
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:206    .text._kill:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:213    .text._kill:00000000 _kill
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:247    .text._exit:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:254    .text._exit:00000000 _exit
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:283    .text._write:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:290    .text._write:00000000 _write
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:345    .text._close:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:352    .text._close:00000000 _close
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:380    .text._fstat:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:387    .text._fstat:00000000 _fstat
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:419    .text._isatty:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:426    .text._isatty:00000000 _isatty
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:453    .text._lseek:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:460    .text._lseek:00000000 _lseek
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:489    .text._read:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:496    .text._read:00000000 _read
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:551    .text._open:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:558    .text._open:00000000 _open
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:591    .text._wait:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:598    .text._wait:00000000 _wait
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:631    .text._unlink:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:638    .text._unlink:00000000 _unlink
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:671    .text._times:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:678    .text._times:00000000 _times
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:706    .text._stat:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:713    .text._stat:00000000 _stat
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:745    .text._link:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:752    .text._link:00000000 _link
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:786    .text._fork:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:793    .text._fork:00000000 _fork
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:822    .text._execve:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbLQR2s.s:829    .text._execve:00000000 _execve
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.newlib.h.18.ac66930cc5dc086504ebba5cc05ab7f1
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.features.h.22.fad1cec3bc7ff06488171438dbdcfd02
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.39.144cf5ddcd53cbfdac30259dc1a6c87f
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.time.h.14.849270cc7997ccc4e05edd146e568a9f
+                           .group:00000000 wm4.stddef.h.155.ba788add86a0e365f264484f110c3c29
+                           .group:00000000 wm4.time.h.2.4581ce0ffb6627cfc02162c94bf846c9
+                           .group:00000000 wm4.time.h.25.0e6a0fdbc9955f5707ed54246ed2e089
+                           .group:00000000 wm4.time.h.162.796fecef3e6a40c4fe27297168cad6e6
+                           .group:00000000 wm4.stat.h.71.d65ac61ff88c651e198008cfb38bda9c
+                           .group:00000000 wm4._default_fcntl.h.6.df3386424b3ee5f6687d504667e7c081
+                           .group:00000000 wm4.fcntl.h.9.9336f33d7f5028f694c75e6e224e0cf7
+                           .group:00000000 wm4.stdio.h.27.3fc80220048df77954e38daec3bb9670
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.stdio.h.47.1f5845210bb9053bbca9ed76fc4018da
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.time.h.40.21796b0a96e98e2cce591182d528098d
+                           .group:00000000 wm4.errno.h.2.ba016d646105af6cad23be83630b6a3f
+                           .group:00000000 wm4.errno.h.9.1ecd7b1049497a0ab61da0f6cbd4b0c6
+                           .group:00000000 wm4.reent.h.91.b3ea049ebc5486622b61409b78486f84
+                           .group:00000000 wm4.unistd.h.2.39165d5b7784d1815ef4b0c4be6df560
+                           .group:00000000 wm4.unistd.h.170.da6e816043042c61475c2b1f58468b37
+                           .group:00000000 wm4.wait.h.2.c6881838e675605d6b0b25538f5f97e0
+
+UNDEFINED SYMBOLS
+_end
+_heap_end
+errno
+__io_putchar
+__io_getchar

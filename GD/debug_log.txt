@@ -1,0 +1,7 @@
+GD-Link GDB Server 1.6.5.35165
+Copyright (C) 2025 GigaDevice
+Please attention!
+    The chip is GD32E235K8T6. However, the model specified in the debugging configuration is GD32E235K8U6.
+    Subsequent operations will be executed based on the model you have selected.
+    If there are any issues, please modify it to match the actual chip model and try again.
+we got a new connection, port=5099, client_count=1, ip=127.0.0.1, client port=14778

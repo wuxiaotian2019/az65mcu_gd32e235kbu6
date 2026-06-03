@@ -1,0 +1,1493 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"GD5F1GQ4xExxG.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.spi_nand_cs_sel,"ax",%progbits
+  16              		.align	1
+  17              		.arch armv8-m.base
+  18              		.syntax unified
+  19              		.code	16
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	spi_nand_cs_sel:
+  24              	.LFB58:
+  25              		.file 1 "../inc/Spi_nand_driver.h"
+   1:../inc/Spi_nand_driver.h **** /*
+   2:../inc/Spi_nand_driver.h ****  * SPDX-FileCopyrightText: 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   3:../inc/Spi_nand_driver.h ****  * SPDX-License-Identifier: LicenseRef-Unisoc-General-1.0
+   4:../inc/Spi_nand_driver.h ****  *
+   5:../inc/Spi_nand_driver.h ****  * Copyright 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   6:../inc/Spi_nand_driver.h ****  * Licensed under the Unisoc General Software License, version 1.0 (the License);
+   7:../inc/Spi_nand_driver.h ****  * you may not use this file except in compliance with the License.
+   8:../inc/Spi_nand_driver.h ****  * You may obtain a copy of the License at
+   9:../inc/Spi_nand_driver.h ****  * https://www.unisoc.com/en_us/license/UNISOC_GENERAL_LICENSE_V1.0-EN_US
+  10:../inc/Spi_nand_driver.h ****  * Software distributed under the License is distributed on an "AS IS" BASIS,
+  11:../inc/Spi_nand_driver.h ****  * WITHOUT WARRANTIES OF ANY KIND, either express or implied.
+  12:../inc/Spi_nand_driver.h ****  * See the Unisoc General Software License, version 1.0 for more details.
+  13:../inc/Spi_nand_driver.h ****  */
+  14:../inc/Spi_nand_driver.h **** 
+  15:../inc/Spi_nand_driver.h **** #ifndef _SPI_NAND_DRIVER_H
+  16:../inc/Spi_nand_driver.h **** #define _SPI_NAND_DRIVER_H
+  17:../inc/Spi_nand_driver.h **** 
+  18:../inc/Spi_nand_driver.h **** #include "gd32e23x.h"
+  19:../inc/Spi_nand_driver.h **** //#include "gd32e235c_eval.h"
+  20:../inc/Spi_nand_driver.h **** #include <stdint.h>
+  21:../inc/Spi_nand_driver.h **** 
+  22:../inc/Spi_nand_driver.h **** /* NAND memory command */
+  23:../inc/Spi_nand_driver.h **** #define NAND_WRITEENABLE				0x06
+  24:../inc/Spi_nand_driver.h **** #define NAND_WEITEDISABLE				0x04
+  25:../inc/Spi_nand_driver.h **** #define NAND_GETREGS					0x0F
+  26:../inc/Spi_nand_driver.h **** #define NAND_SETREGS					0x1F
+  27:../inc/Spi_nand_driver.h **** #define NAND_PAGEREADTOCATCH				0x13
+  28:../inc/Spi_nand_driver.h **** #define NAND_NEXTPAGECACHEREAD				0x31
+  29:../inc/Spi_nand_driver.h **** #define NAND_LASTPAGECACHEREAD				0x3F
+  30:../inc/Spi_nand_driver.h **** #define NAND_READFROMCATCH				0x03
+  31:../inc/Spi_nand_driver.h **** #define NAND_READID					0x9F
+  32:../inc/Spi_nand_driver.h **** #define NAND_PROGRAMLOAD				0x02
+  33:../inc/Spi_nand_driver.h **** #define NAND_PROGRAMEXECUTE				0x10
+  34:../inc/Spi_nand_driver.h **** #define NAND_PROGRAMLOADRANDOMDATA			0x84
+  35:../inc/Spi_nand_driver.h **** #define NAND_BLOCKERASE					0xD8
+  36:../inc/Spi_nand_driver.h **** #define NAND_RESET					0xFF
+  37:../inc/Spi_nand_driver.h **** #define DUMMY_BYTE					0xA5
+  38:../inc/Spi_nand_driver.h **** 
+  39:../inc/Spi_nand_driver.h **** #define NAND_OK	0
+  40:../inc/Spi_nand_driver.h **** #define NAND_FAIL 1
+  41:../inc/Spi_nand_driver.h **** 
+  42:../inc/Spi_nand_driver.h **** #ifndef READ_NANDFLASH_ECC_ERROR
+  43:../inc/Spi_nand_driver.h **** #define READ_NANDFLASH_ECC_ERROR			0x9A
+  44:../inc/Spi_nand_driver.h **** #endif
+  45:../inc/Spi_nand_driver.h **** /* NAND regs add */
+  46:../inc/Spi_nand_driver.h **** #define NAND_REGS_PROTECTION				0xA0
+  47:../inc/Spi_nand_driver.h **** #define NAND_REGS_FEATURE				0xB0
+  48:../inc/Spi_nand_driver.h **** #define NAND_REGS_STATUS				0xC0
+  49:../inc/Spi_nand_driver.h **** 
+  50:../inc/Spi_nand_driver.h **** #define SPI_NANDFLASH_CS_LOW()		gpio_bit_reset(GPIOA,GPIO_PIN_4)
+  51:../inc/Spi_nand_driver.h **** #define SPI_NANDFLASH_CS_HIGH()		while(RESET != spi_i2s_flag_get(SPI0,SPI_FLAG_TRANS));\
+  52:../inc/Spi_nand_driver.h **** 				gpio_bit_set(GPIOA,GPIO_PIN_4) //
+  53:../inc/Spi_nand_driver.h **** 
+  54:../inc/Spi_nand_driver.h **** extern int NAND_PAGE_SIZE;
+  55:../inc/Spi_nand_driver.h **** extern int NAND_PAGE_PER_BLK;
+  56:../inc/Spi_nand_driver.h **** /* NAND Status */
+  57:../inc/Spi_nand_driver.h **** /* ECC results: */
+  58:../inc/Spi_nand_driver.h **** /* 00 No errors	*/
+  59:../inc/Spi_nand_driver.h **** /* 01 Bit error detected and corrected, error bit number = 1~7 */
+  60:../inc/Spi_nand_driver.h **** /* 10 Bit errors greater than 8 bits detected and not corrected	*/
+  61:../inc/Spi_nand_driver.h **** /* 11 Bit error detected and corrected, error bit number = 8 */
+  62:../inc/Spi_nand_driver.h **** #define NAND_STATUS_ECCS2				0x40
+  63:../inc/Spi_nand_driver.h **** #define NAND_STATUS_ECCS1				0x20
+  64:../inc/Spi_nand_driver.h **** #define NAND_STATUS_ECCS0				0x10
+  65:../inc/Spi_nand_driver.h **** #define NAND_STATUS_PROGRAMFAIL				0x08	/* program fail */
+  66:../inc/Spi_nand_driver.h **** #define NAND_STATUS_ERASEFAIL				0x04	/* erase fail */
+  67:../inc/Spi_nand_driver.h **** #define NAND_STATUS_WEL					0x02	/* write enable */
+  68:../inc/Spi_nand_driver.h **** /* Busy:PROGRAM EXECUTE, PAGE READ, BLOCK ERASE, RESET */
+  69:../inc/Spi_nand_driver.h **** #define NAND_STATUS_QIP					0x01
+  70:../inc/Spi_nand_driver.h **** 
+  71:../inc/Spi_nand_driver.h **** typedef struct __SPARE_AREA {
+  72:../inc/Spi_nand_driver.h ****  uint16_t BlockStatus;
+  73:../inc/Spi_nand_driver.h ****  uint16_t LogicalIndex;
+  74:../inc/Spi_nand_driver.h **** }SPARE_AREA;
+  75:../inc/Spi_nand_driver.h **** 
+  76:../inc/Spi_nand_driver.h **** typedef struct
+  77:../inc/Spi_nand_driver.h **** {
+  78:../inc/Spi_nand_driver.h ****  uint16_t Block;
+  79:../inc/Spi_nand_driver.h ****  uint16_t Page;
+  80:../inc/Spi_nand_driver.h ****  uint16_t Area;
+  81:../inc/Spi_nand_driver.h **** } NAND_ADDRESS;
+  82:../inc/Spi_nand_driver.h **** 
+  83:../inc/Spi_nand_driver.h **** typedef struct
+  84:../inc/Spi_nand_driver.h **** {
+  85:../inc/Spi_nand_driver.h ****  uint8_t Maker_ID;
+  86:../inc/Spi_nand_driver.h ****  uint8_t Device_ID;
+  87:../inc/Spi_nand_driver.h **** }NAND_IDTypeDef;
+  88:../inc/Spi_nand_driver.h **** 
+  89:../inc/Spi_nand_driver.h **** typedef struct{
+  90:../inc/Spi_nand_driver.h **** 	void (*spinand_setregs)(uint8_t regs, uint8_t data);
+  91:../inc/Spi_nand_driver.h **** 	uint8_t (*spinand_getregs)(uint8_t regs);
+  92:../inc/Spi_nand_driver.h **** 	void (*spinand_readfromcatch)(uint8_t *pBuffer, NAND_ADDRESS Address, uint32_t length);
+  93:../inc/Spi_nand_driver.h **** 	void (*spinand_readtocatch)(NAND_ADDRESS Address);
+  94:../inc/Spi_nand_driver.h **** 	void (*spinand_writeenable)(void);
+  95:../inc/Spi_nand_driver.h **** 	uint8_t (*spinand_blockerase)(uint32_t BlockID);
+  96:../inc/Spi_nand_driver.h **** 	void (*spinand_eccenable)(void);
+  97:../inc/Spi_nand_driver.h **** 	void (*spinand_eccdisable)(void);
+  98:../inc/Spi_nand_driver.h **** 	uint8_t (*spinand_checkecc)(void);
+  99:../inc/Spi_nand_driver.h **** 	void (*spinand_config)(void);
+ 100:../inc/Spi_nand_driver.h **** 	void (*spinand_recovery)(void);
+ 101:../inc/Spi_nand_driver.h **** 	void (*spinand_check_blockstatus)(NAND_ADDRESS address,SPARE_AREA *block_statue);
+ 102:../inc/Spi_nand_driver.h **** }SPINAND_OPERATIONS_T;
+ 103:../inc/Spi_nand_driver.h **** 
+ 104:../inc/Spi_nand_driver.h **** typedef struct{
+ 105:../inc/Spi_nand_driver.h **** 	uint8_t dev_id[5];	// ID of spinand driver product ic
+ 106:../inc/Spi_nand_driver.h **** 	SPINAND_OPERATIONS_T *spinnad_operation;	//spi nand operation
+ 107:../inc/Spi_nand_driver.h **** 	uint32_t pagesize;
+ 108:../inc/Spi_nand_driver.h **** 	uint32_t page_per_blk;
+ 109:../inc/Spi_nand_driver.h **** }SPINAND_CFG_INFO_T;
+ 110:../inc/Spi_nand_driver.h **** 
+ 111:../inc/Spi_nand_driver.h **** int spi_nandflash_init(uint32_t polarity_phase_clock);
+ 112:../inc/Spi_nand_driver.h **** uint8_t spi_nand_rw_byte(uint8_t byte);
+ 113:../inc/Spi_nand_driver.h **** #define true 1
+ 114:../inc/Spi_nand_driver.h **** #define false 0
+ 115:../inc/Spi_nand_driver.h **** static inline void spi_nand_cs_sel(uint8_t sel)
+ 116:../inc/Spi_nand_driver.h **** {
+  26              		.loc 1 116 1
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 1, uses_anonymous_args = 0
+  30 0000 80B5     		push	{r7, lr}
+  31              		.cfi_def_cfa_offset 8
+  32              		.cfi_offset 7, -8
+  33              		.cfi_offset 14, -4
+  34 0002 82B0     		sub	sp, sp, #8
+  35              		.cfi_def_cfa_offset 16
+  36 0004 00AF     		add	r7, sp, #0
+  37              		.cfi_def_cfa_register 7
+  38 0006 0200     		movs	r2, r0
+  39 0008 FB1D     		adds	r3, r7, #7
+  40 000a 1A70     		strb	r2, [r3]
+ 117:../inc/Spi_nand_driver.h **** 	if (sel) {
+  41              		.loc 1 117 5
+  42 000c FB1D     		adds	r3, r7, #7
+  43 000e 1B78     		ldrb	r3, [r3]
+  44 0010 33B1     		cbz	r3, .L5
+ 118:../inc/Spi_nand_driver.h **** 		SPI_NANDFLASH_CS_LOW();
+  45              		.loc 1 118 3
+  46 0012 9023     		movs	r3, #144
+  47 0014 DB05     		lsls	r3, r3, #23
+  48 0016 1021     		movs	r1, #16
+  49 0018 1800     		movs	r0, r3
+  50 001a FFF7FEFF 		bl	gpio_bit_reset
+ 119:../inc/Spi_nand_driver.h **** 		return;
+  51              		.loc 1 119 3
+  52 001e 11E0     		b	.L1
+  53              	.L5:
+ 120:../inc/Spi_nand_driver.h **** 	}
+ 121:../inc/Spi_nand_driver.h **** 	SPI_NANDFLASH_CS_HIGH();
+  54              		.loc 1 121 2
+  55 0020 C046     		nop
+  56              	.L4:
+  57              		.loc 1 121 2 is_stmt 0 discriminator 1
+  58 0022 43F20003 		movw	r3, #12288
+  59 0026 C4F20103 		movt	r3, 16385
+  60 002a 8021     		movs	r1, #128
+  61 002c 1800     		movs	r0, r3
+  62 002e FFF7FEFF 		bl	spi_i2s_flag_get
+  63 0032 0300     		movs	r3, r0
+  64 0034 002B     		cmp	r3, #0
+  65 0036 F4D1     		bne	.L4
+  66              		.loc 1 121 2 discriminator 2
+  67 0038 9023     		movs	r3, #144
+  68 003a DB05     		lsls	r3, r3, #23
+  69 003c 1021     		movs	r1, #16
+  70 003e 1800     		movs	r0, r3
+  71 0040 FFF7FEFF 		bl	gpio_bit_set
+  72              	.L1:
+ 122:../inc/Spi_nand_driver.h **** }
+  73              		.loc 1 122 1 is_stmt 1
+  74 0044 BD46     		mov	sp, r7
+  75 0046 02B0     		add	sp, sp, #8
+  76              		@ sp needed
+  77 0048 80BD     		pop	{r7, pc}
+  78              		.cfi_endproc
+  79              	.LFE58:
+  81              		.section	.text.spi_nand_set_feature,"ax",%progbits
+  82              		.align	1
+  83              		.global	spi_nand_set_feature
+  84              		.syntax unified
+  85              		.code	16
+  86              		.thumb_func
+  87              		.fpu softvfp
+  89              	spi_nand_set_feature:
+  90              	.LFB62:
+  91              		.file 2 "../src/drivers/nand/GD5F1GQ4xExxG.c"
+   1:../src/drivers/nand/GD5F1GQ4xExxG.c **** /*
+   2:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * SPDX-FileCopyrightText: 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   3:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * SPDX-License-Identifier: LicenseRef-Unisoc-General-1.0
+   4:../src/drivers/nand/GD5F1GQ4xExxG.c ****  *
+   5:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * Copyright 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   6:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * Licensed under the Unisoc General Software License, version 1.0 (the License);
+   7:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * you may not use this file except in compliance with the License.
+   8:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * You may obtain a copy of the License at
+   9:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * https://www.unisoc.com/en_us/license/UNISOC_GENERAL_LICENSE_V1.0-EN_US
+  10:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * Software distributed under the License is distributed on an "AS IS" BASIS,
+  11:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * WITHOUT WARRANTIES OF ANY KIND, either express or implied.
+  12:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * See the Unisoc General Software License, version 1.0 for more details.
+  13:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+  14:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  15:../src/drivers/nand/GD5F1GQ4xExxG.c **** #include "GD5F1GQ4xExxG.h"
+  16:../src/drivers/nand/GD5F1GQ4xExxG.c **** #include "gd32e23x.h"
+  17:../src/drivers/nand/GD5F1GQ4xExxG.c **** #include <stdio.h>
+  18:../src/drivers/nand/GD5F1GQ4xExxG.c **** #include "systick.h"
+  19:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  20:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+  21:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Set NAND flash feature
+  22:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param regs feature address
+  23:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param data Data to write
+  24:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+  25:../src/drivers/nand/GD5F1GQ4xExxG.c **** void spi_nand_set_feature(uint8_t regs, uint8_t data)
+  26:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+  92              		.loc 2 26 1
+  93              		.cfi_startproc
+  94              		@ args = 0, pretend = 0, frame = 8
+  95              		@ frame_needed = 1, uses_anonymous_args = 0
+  96 0000 80B5     		push	{r7, lr}
+  97              		.cfi_def_cfa_offset 8
+  98              		.cfi_offset 7, -8
+  99              		.cfi_offset 14, -4
+ 100 0002 82B0     		sub	sp, sp, #8
+ 101              		.cfi_def_cfa_offset 16
+ 102 0004 00AF     		add	r7, sp, #0
+ 103              		.cfi_def_cfa_register 7
+ 104 0006 0200     		movs	r2, r0
+ 105 0008 FB1D     		adds	r3, r7, #7
+ 106 000a 1A70     		strb	r2, [r3]
+ 107 000c BB1D     		adds	r3, r7, #6
+ 108 000e 0A1C     		adds	r2, r1, #0
+ 109 0010 1A70     		strb	r2, [r3]
+  27:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(true);
+ 110              		.loc 2 27 2
+ 111 0012 0120     		movs	r0, #1
+ 112 0014 FFF7FEFF 		bl	spi_nand_cs_sel
+  28:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  29:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(NAND_SETREGS);
+ 113              		.loc 2 29 2
+ 114 0018 1F20     		movs	r0, #31
+ 115 001a FFF7FEFF 		bl	spi_nand_rw_byte
+  30:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(regs);
+ 116              		.loc 2 30 2
+ 117 001e FB1D     		adds	r3, r7, #7
+ 118 0020 1B78     		ldrb	r3, [r3]
+ 119 0022 1800     		movs	r0, r3
+ 120 0024 FFF7FEFF 		bl	spi_nand_rw_byte
+  31:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(data);
+ 121              		.loc 2 31 2
+ 122 0028 BB1D     		adds	r3, r7, #6
+ 123 002a 1B78     		ldrb	r3, [r3]
+ 124 002c 1800     		movs	r0, r3
+ 125 002e FFF7FEFF 		bl	spi_nand_rw_byte
+  32:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  33:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(false);
+ 126              		.loc 2 33 2
+ 127 0032 0020     		movs	r0, #0
+ 128 0034 FFF7FEFF 		bl	spi_nand_cs_sel
+  34:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 129              		.loc 2 34 1
+ 130 0038 C046     		nop
+ 131 003a BD46     		mov	sp, r7
+ 132 003c 02B0     		add	sp, sp, #8
+ 133              		@ sp needed
+ 134 003e 80BD     		pop	{r7, pc}
+ 135              		.cfi_endproc
+ 136              	.LFE62:
+ 138              		.section	.text.spi_nand_get_feature,"ax",%progbits
+ 139              		.align	1
+ 140              		.global	spi_nand_get_feature
+ 141              		.syntax unified
+ 142              		.code	16
+ 143              		.thumb_func
+ 144              		.fpu softvfp
+ 146              	spi_nand_get_feature:
+ 147              	.LFB63:
+  35:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  36:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+  37:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Get NAND flash feature value
+  38:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param regs feature address
+  39:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @return feature value
+  40:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+  41:../src/drivers/nand/GD5F1GQ4xExxG.c **** uint8_t spi_nand_get_feature(uint8_t regs)
+  42:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 148              		.loc 2 42 1
+ 149              		.cfi_startproc
+ 150              		@ args = 0, pretend = 0, frame = 16
+ 151              		@ frame_needed = 1, uses_anonymous_args = 0
+ 152 0000 B0B5     		push	{r4, r5, r7, lr}
+ 153              		.cfi_def_cfa_offset 16
+ 154              		.cfi_offset 4, -16
+ 155              		.cfi_offset 5, -12
+ 156              		.cfi_offset 7, -8
+ 157              		.cfi_offset 14, -4
+ 158 0002 84B0     		sub	sp, sp, #16
+ 159              		.cfi_def_cfa_offset 32
+ 160 0004 00AF     		add	r7, sp, #0
+ 161              		.cfi_def_cfa_register 7
+ 162 0006 0200     		movs	r2, r0
+ 163 0008 FB1D     		adds	r3, r7, #7
+ 164 000a 1A70     		strb	r2, [r3]
+  43:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint8_t temp = 0;
+ 165              		.loc 2 43 10
+ 166 000c 0F24     		movs	r4, #15
+ 167 000e 3B19     		adds	r3, r7, r4
+ 168 0010 0022     		movs	r2, #0
+ 169 0012 1A70     		strb	r2, [r3]
+  44:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  45:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(true);
+ 170              		.loc 2 45 2
+ 171 0014 0120     		movs	r0, #1
+ 172 0016 FFF7FEFF 		bl	spi_nand_cs_sel
+  46:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  47:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(NAND_GETREGS);
+ 173              		.loc 2 47 2
+ 174 001a 0F20     		movs	r0, #15
+ 175 001c FFF7FEFF 		bl	spi_nand_rw_byte
+  48:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(regs);
+ 176              		.loc 2 48 2
+ 177 0020 FB1D     		adds	r3, r7, #7
+ 178 0022 1B78     		ldrb	r3, [r3]
+ 179 0024 1800     		movs	r0, r3
+ 180 0026 FFF7FEFF 		bl	spi_nand_rw_byte
+  49:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	temp = spi_nand_rw_byte(DUMMY_BYTE);
+ 181              		.loc 2 49 9
+ 182 002a 2500     		movs	r5, r4
+ 183 002c 3C19     		adds	r4, r7, r4
+ 184 002e A520     		movs	r0, #165
+ 185 0030 FFF7FEFF 		bl	spi_nand_rw_byte
+ 186 0034 0300     		movs	r3, r0
+ 187 0036 2370     		strb	r3, [r4]
+  50:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  51:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(false);
+ 188              		.loc 2 51 2
+ 189 0038 0020     		movs	r0, #0
+ 190 003a FFF7FEFF 		bl	spi_nand_cs_sel
+  52:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  53:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	return temp;
+ 191              		.loc 2 53 9
+ 192 003e 7B19     		adds	r3, r7, r5
+ 193 0040 1B78     		ldrb	r3, [r3]
+  54:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 194              		.loc 2 54 1
+ 195 0042 1800     		movs	r0, r3
+ 196 0044 BD46     		mov	sp, r7
+ 197 0046 04B0     		add	sp, sp, #16
+ 198              		@ sp needed
+ 199 0048 B0BD     		pop	{r4, r5, r7, pc}
+ 200              		.cfi_endproc
+ 201              	.LFE63:
+ 203              		.section	.text.spi_nand_read_from_cache,"ax",%progbits
+ 204              		.align	1
+ 205              		.global	spi_nand_read_from_cache
+ 206              		.syntax unified
+ 207              		.code	16
+ 208              		.thumb_func
+ 209              		.fpu softvfp
+ 211              	spi_nand_read_from_cache:
+ 212              	.LFB64:
+  55:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  56:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+  57:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Read data from NAND flash cache
+  58:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param pBuffer Buffer to store data
+  59:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param Address Address to read from
+  60:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param length Number of bytes to read
+  61:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+  62:../src/drivers/nand/GD5F1GQ4xExxG.c **** void spi_nand_read_from_cache(uint8_t *pBuffer, NAND_ADDRESS Address, uint32_t length)
+  63:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 213              		.loc 2 63 1
+ 214              		.cfi_startproc
+ 215              		@ args = 0, pretend = 0, frame = 24
+ 216              		@ frame_needed = 1, uses_anonymous_args = 0
+ 217 0000 90B5     		push	{r4, r7, lr}
+ 218              		.cfi_def_cfa_offset 12
+ 219              		.cfi_offset 4, -12
+ 220              		.cfi_offset 7, -8
+ 221              		.cfi_offset 14, -4
+ 222 0002 87B0     		sub	sp, sp, #28
+ 223              		.cfi_def_cfa_offset 40
+ 224 0004 00AF     		add	r7, sp, #0
+ 225              		.cfi_def_cfa_register 7
+ 226 0006 F860     		str	r0, [r7, #12]
+ 227 0008 381D     		adds	r0, r7, #4
+ 228 000a 0160     		str	r1, [r0]
+ 229 000c 4260     		str	r2, [r0, #4]
+ 230 000e 3B60     		str	r3, [r7]
+  64:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint32_t i = 0;
+ 231              		.loc 2 64 11
+ 232 0010 0023     		movs	r3, #0
+ 233 0012 7B61     		str	r3, [r7, #20]
+  65:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  66:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(true);
+ 234              		.loc 2 66 2
+ 235 0014 0120     		movs	r0, #1
+ 236 0016 FFF7FEFF 		bl	spi_nand_cs_sel
+  67:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(NAND_READFROMCATCH);
+ 237              		.loc 2 67 2
+ 238 001a 0320     		movs	r0, #3
+ 239 001c FFF7FEFF 		bl	spi_nand_rw_byte
+  68:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((Address.Area >> 8) & 0xFF);
+ 240              		.loc 2 68 27
+ 241 0020 3B1D     		adds	r3, r7, #4
+ 242 0022 9B88     		ldrh	r3, [r3, #4]
+ 243              		.loc 2 68 2
+ 244 0024 1B0A     		lsrs	r3, r3, #8
+ 245 0026 9BB2     		uxth	r3, r3
+ 246 0028 DBB2     		uxtb	r3, r3
+ 247 002a 1800     		movs	r0, r3
+ 248 002c FFF7FEFF 		bl	spi_nand_rw_byte
+  69:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((Address.Area) & 0xFF);
+ 249              		.loc 2 69 27
+ 250 0030 3B1D     		adds	r3, r7, #4
+ 251 0032 9B88     		ldrh	r3, [r3, #4]
+ 252              		.loc 2 69 2
+ 253 0034 DBB2     		uxtb	r3, r3
+ 254 0036 1800     		movs	r0, r3
+ 255 0038 FFF7FEFF 		bl	spi_nand_rw_byte
+  70:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(DUMMY_BYTE);
+ 256              		.loc 2 70 2
+ 257 003c A520     		movs	r0, #165
+ 258 003e FFF7FEFF 		bl	spi_nand_rw_byte
+  71:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  72:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	for(i = 0; i < length; i++)
+ 259              		.loc 2 72 8
+ 260 0042 0023     		movs	r3, #0
+ 261 0044 7B61     		str	r3, [r7, #20]
+ 262              		.loc 2 72 2
+ 263 0046 0AE0     		b	.L10
+ 264              	.L11:
+  73:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		*pBuffer++ = spi_nand_rw_byte(DUMMY_BYTE);
+ 265              		.loc 2 73 11 discriminator 3
+ 266 0048 FC68     		ldr	r4, [r7, #12]
+ 267 004a 631C     		adds	r3, r4, #1
+ 268 004c FB60     		str	r3, [r7, #12]
+ 269              		.loc 2 73 16 discriminator 3
+ 270 004e A520     		movs	r0, #165
+ 271 0050 FFF7FEFF 		bl	spi_nand_rw_byte
+ 272 0054 0300     		movs	r3, r0
+ 273              		.loc 2 73 14 discriminator 3
+ 274 0056 2370     		strb	r3, [r4]
+  72:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		*pBuffer++ = spi_nand_rw_byte(DUMMY_BYTE);
+ 275              		.loc 2 72 26 discriminator 3
+ 276 0058 7B69     		ldr	r3, [r7, #20]
+ 277 005a 0133     		adds	r3, r3, #1
+ 278 005c 7B61     		str	r3, [r7, #20]
+ 279              	.L10:
+  72:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		*pBuffer++ = spi_nand_rw_byte(DUMMY_BYTE);
+ 280              		.loc 2 72 2 discriminator 1
+ 281 005e 7A69     		ldr	r2, [r7, #20]
+ 282 0060 3B68     		ldr	r3, [r7]
+ 283 0062 9A42     		cmp	r2, r3
+ 284 0064 F0D3     		bcc	.L11
+  74:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  75:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(false);
+ 285              		.loc 2 75 2
+ 286 0066 0020     		movs	r0, #0
+ 287 0068 FFF7FEFF 		bl	spi_nand_cs_sel
+  76:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 288              		.loc 2 76 1
+ 289 006c C046     		nop
+ 290 006e BD46     		mov	sp, r7
+ 291 0070 07B0     		add	sp, sp, #28
+ 292              		@ sp needed
+ 293 0072 90BD     		pop	{r4, r7, pc}
+ 294              		.cfi_endproc
+ 295              	.LFE64:
+ 297              		.section	.text.spi_nand_read2cache,"ax",%progbits
+ 298              		.align	1
+ 299              		.global	spi_nand_read2cache
+ 300              		.syntax unified
+ 301              		.code	16
+ 302              		.thumb_func
+ 303              		.fpu softvfp
+ 305              	spi_nand_read2cache:
+ 306              	.LFB65:
+  77:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  78:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+  79:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Read data to NAND flash cache
+  80:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param Address Address to read from
+  81:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+  82:../src/drivers/nand/GD5F1GQ4xExxG.c **** void spi_nand_read2cache(NAND_ADDRESS Address)
+  83:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 307              		.loc 2 83 1
+ 308              		.cfi_startproc
+ 309              		@ args = 0, pretend = 0, frame = 16
+ 310              		@ frame_needed = 1, uses_anonymous_args = 0
+ 311 0000 80B5     		push	{r7, lr}
+ 312              		.cfi_def_cfa_offset 8
+ 313              		.cfi_offset 7, -8
+ 314              		.cfi_offset 14, -4
+ 315 0002 84B0     		sub	sp, sp, #16
+ 316              		.cfi_def_cfa_offset 24
+ 317 0004 00AF     		add	r7, sp, #0
+ 318              		.cfi_def_cfa_register 7
+ 319 0006 3B00     		movs	r3, r7
+ 320 0008 1860     		str	r0, [r3]
+ 321 000a 5960     		str	r1, [r3, #4]
+  84:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint32_t block_add = ((Address.Block & 0x3ff) << 6) | (Address.Page & 0x3f);
+ 322              		.loc 2 84 32
+ 323 000c 3B00     		movs	r3, r7
+ 324 000e 1B88     		ldrh	r3, [r3]
+ 325              		.loc 2 84 48
+ 326 0010 9B01     		lsls	r3, r3, #6
+ 327 0012 1B04     		lsls	r3, r3, #16
+ 328 0014 1A0C     		lsrs	r2, r3, #16
+ 329              		.loc 2 84 64
+ 330 0016 3B00     		movs	r3, r7
+ 331 0018 5B88     		ldrh	r3, [r3, #2]
+ 332              		.loc 2 84 70
+ 333 001a 1900     		movs	r1, r3
+ 334 001c 3F23     		movs	r3, #63
+ 335 001e 0B40     		ands	r3, r1
+ 336              		.loc 2 84 54
+ 337 0020 1343     		orrs	r3, r2
+ 338              		.loc 2 84 11
+ 339 0022 FB60     		str	r3, [r7, #12]
+  85:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  86:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(true);
+ 340              		.loc 2 86 2
+ 341 0024 0120     		movs	r0, #1
+ 342 0026 FFF7FEFF 		bl	spi_nand_cs_sel
+  87:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  88:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(NAND_PAGEREADTOCATCH);
+ 343              		.loc 2 88 2
+ 344 002a 1320     		movs	r0, #19
+ 345 002c FFF7FEFF 		bl	spi_nand_rw_byte
+  89:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((uint8_t)((block_add) >> 16));
+ 346              		.loc 2 89 41
+ 347 0030 FB68     		ldr	r3, [r7, #12]
+ 348 0032 1B0C     		lsrs	r3, r3, #16
+ 349              		.loc 2 89 2
+ 350 0034 DBB2     		uxtb	r3, r3
+ 351 0036 1800     		movs	r0, r3
+ 352 0038 FFF7FEFF 		bl	spi_nand_rw_byte
+  90:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((uint8_t)((block_add) >> 8));
+ 353              		.loc 2 90 41
+ 354 003c FB68     		ldr	r3, [r7, #12]
+ 355 003e 1B0A     		lsrs	r3, r3, #8
+ 356              		.loc 2 90 2
+ 357 0040 DBB2     		uxtb	r3, r3
+ 358 0042 1800     		movs	r0, r3
+ 359 0044 FFF7FEFF 		bl	spi_nand_rw_byte
+  91:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((uint8_t)block_add);
+ 360              		.loc 2 91 2
+ 361 0048 FB68     		ldr	r3, [r7, #12]
+ 362 004a DBB2     		uxtb	r3, r3
+ 363 004c 1800     		movs	r0, r3
+ 364 004e FFF7FEFF 		bl	spi_nand_rw_byte
+  92:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  93:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(false);
+ 365              		.loc 2 93 2
+ 366 0052 0020     		movs	r0, #0
+ 367 0054 FFF7FEFF 		bl	spi_nand_cs_sel
+  94:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  95:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	while((spi_nand_get_feature(NAND_REGS_STATUS) & NAND_STATUS_QIP) != 0);
+ 368              		.loc 2 95 7
+ 369 0058 C046     		nop
+ 370              	.L13:
+ 371              		.loc 2 95 9 discriminator 1
+ 372 005a C020     		movs	r0, #192
+ 373 005c FFF7FEFF 		bl	spi_nand_get_feature
+ 374 0060 0300     		movs	r3, r0
+ 375              		.loc 2 95 48 discriminator 1
+ 376 0062 1A00     		movs	r2, r3
+ 377 0064 0123     		movs	r3, #1
+ 378 0066 1340     		ands	r3, r2
+ 379              		.loc 2 95 7 discriminator 1
+ 380 0068 002B     		cmp	r3, #0
+ 381 006a F6D1     		bne	.L13
+  96:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 382              		.loc 2 96 1
+ 383 006c C046     		nop
+ 384 006e C046     		nop
+ 385 0070 BD46     		mov	sp, r7
+ 386 0072 04B0     		add	sp, sp, #16
+ 387              		@ sp needed
+ 388 0074 80BD     		pop	{r7, pc}
+ 389              		.cfi_endproc
+ 390              	.LFE65:
+ 392              		.section	.text.spi_nand_write_enable,"ax",%progbits
+ 393              		.align	1
+ 394              		.global	spi_nand_write_enable
+ 395              		.syntax unified
+ 396              		.code	16
+ 397              		.thumb_func
+ 398              		.fpu softvfp
+ 400              	spi_nand_write_enable:
+ 401              	.LFB66:
+  97:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+  98:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+  99:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Enable NAND flash write
+ 100:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+ 101:../src/drivers/nand/GD5F1GQ4xExxG.c **** void spi_nand_write_enable(void)
+ 102:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 402              		.loc 2 102 1
+ 403              		.cfi_startproc
+ 404              		@ args = 0, pretend = 0, frame = 0
+ 405              		@ frame_needed = 1, uses_anonymous_args = 0
+ 406 0000 80B5     		push	{r7, lr}
+ 407              		.cfi_def_cfa_offset 8
+ 408              		.cfi_offset 7, -8
+ 409              		.cfi_offset 14, -4
+ 410 0002 00AF     		add	r7, sp, #0
+ 411              		.cfi_def_cfa_register 7
+ 103:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(true);
+ 412              		.loc 2 103 2
+ 413 0004 0120     		movs	r0, #1
+ 414 0006 FFF7FEFF 		bl	spi_nand_cs_sel
+ 104:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 105:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(NAND_WRITEENABLE);
+ 415              		.loc 2 105 2
+ 416 000a 0620     		movs	r0, #6
+ 417 000c FFF7FEFF 		bl	spi_nand_rw_byte
+ 106:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 107:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(false);
+ 418              		.loc 2 107 2
+ 419 0010 0020     		movs	r0, #0
+ 420 0012 FFF7FEFF 		bl	spi_nand_cs_sel
+ 108:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 421              		.loc 2 108 1
+ 422 0016 C046     		nop
+ 423 0018 BD46     		mov	sp, r7
+ 424              		@ sp needed
+ 425 001a 80BD     		pop	{r7, pc}
+ 426              		.cfi_endproc
+ 427              	.LFE66:
+ 429              		.section	.text.spi_nand_program_excute,"ax",%progbits
+ 430              		.align	1
+ 431              		.syntax unified
+ 432              		.code	16
+ 433              		.thumb_func
+ 434              		.fpu softvfp
+ 436              	spi_nand_program_excute:
+ 437              	.LFB67:
+ 109:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 110:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+ 111:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Execute NAND flash program
+ 112:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param WriteAddr Write address
+ 113:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @return Status register value
+ 114:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+ 115:../src/drivers/nand/GD5F1GQ4xExxG.c **** static uint8_t spi_nand_program_excute(uint32_t WriteAddr)
+ 116:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 438              		.loc 2 116 1
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 8
+ 441              		@ frame_needed = 1, uses_anonymous_args = 0
+ 442 0000 80B5     		push	{r7, lr}
+ 443              		.cfi_def_cfa_offset 8
+ 444              		.cfi_offset 7, -8
+ 445              		.cfi_offset 14, -4
+ 446 0002 82B0     		sub	sp, sp, #8
+ 447              		.cfi_def_cfa_offset 16
+ 448 0004 00AF     		add	r7, sp, #0
+ 449              		.cfi_def_cfa_register 7
+ 450 0006 7860     		str	r0, [r7, #4]
+ 117:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_write_enable();
+ 451              		.loc 2 117 2
+ 452 0008 FFF7FEFF 		bl	spi_nand_write_enable
+ 118:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 119:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(true);
+ 453              		.loc 2 119 2
+ 454 000c 0120     		movs	r0, #1
+ 455 000e FFF7FEFF 		bl	spi_nand_cs_sel
+ 120:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 121:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(NAND_PROGRAMEXECUTE);
+ 456              		.loc 2 121 2
+ 457 0012 1020     		movs	r0, #16
+ 458 0014 FFF7FEFF 		bl	spi_nand_rw_byte
+ 122:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((WriteAddr & 0xFF0000) >> 16);
+ 459              		.loc 2 122 42
+ 460 0018 7B68     		ldr	r3, [r7, #4]
+ 461 001a 1B0C     		lsrs	r3, r3, #16
+ 462              		.loc 2 122 2
+ 463 001c DBB2     		uxtb	r3, r3
+ 464 001e 1800     		movs	r0, r3
+ 465 0020 FFF7FEFF 		bl	spi_nand_rw_byte
+ 123:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((WriteAddr & 0xFF00) >> 8);
+ 466              		.loc 2 123 40
+ 467 0024 7B68     		ldr	r3, [r7, #4]
+ 468 0026 1B0A     		lsrs	r3, r3, #8
+ 469              		.loc 2 123 2
+ 470 0028 DBB2     		uxtb	r3, r3
+ 471 002a 1800     		movs	r0, r3
+ 472 002c FFF7FEFF 		bl	spi_nand_rw_byte
+ 124:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(WriteAddr & 0xFF);
+ 473              		.loc 2 124 2
+ 474 0030 7B68     		ldr	r3, [r7, #4]
+ 475 0032 DBB2     		uxtb	r3, r3
+ 476 0034 1800     		movs	r0, r3
+ 477 0036 FFF7FEFF 		bl	spi_nand_rw_byte
+ 125:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 126:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(false);
+ 478              		.loc 2 126 2
+ 479 003a 0020     		movs	r0, #0
+ 480 003c FFF7FEFF 		bl	spi_nand_cs_sel
+ 127:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 128:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	while((spi_nand_get_feature(NAND_REGS_STATUS) & NAND_STATUS_QIP) != 0);
+ 481              		.loc 2 128 7
+ 482 0040 C046     		nop
+ 483              	.L16:
+ 484              		.loc 2 128 9 discriminator 1
+ 485 0042 C020     		movs	r0, #192
+ 486 0044 FFF7FEFF 		bl	spi_nand_get_feature
+ 487 0048 0300     		movs	r3, r0
+ 488              		.loc 2 128 48 discriminator 1
+ 489 004a 1A00     		movs	r2, r3
+ 490 004c 0123     		movs	r3, #1
+ 491 004e 1340     		ands	r3, r2
+ 492              		.loc 2 128 7 discriminator 1
+ 493 0050 002B     		cmp	r3, #0
+ 494 0052 F6D1     		bne	.L16
+ 129:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 130:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	return spi_nand_get_feature(NAND_REGS_STATUS);
+ 495              		.loc 2 130 9
+ 496 0054 C020     		movs	r0, #192
+ 497 0056 FFF7FEFF 		bl	spi_nand_get_feature
+ 498 005a 0300     		movs	r3, r0
+ 131:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 499              		.loc 2 131 1
+ 500 005c 1800     		movs	r0, r3
+ 501 005e BD46     		mov	sp, r7
+ 502 0060 02B0     		add	sp, sp, #8
+ 503              		@ sp needed
+ 504 0062 80BD     		pop	{r7, pc}
+ 505              		.cfi_endproc
+ 506              	.LFE67:
+ 508              		.section	.text.spi_nand_page_program,"ax",%progbits
+ 509              		.align	1
+ 510              		.syntax unified
+ 511              		.code	16
+ 512              		.thumb_func
+ 513              		.fpu softvfp
+ 515              	spi_nand_page_program:
+ 516              	.LFB68:
+ 132:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 133:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+ 134:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Load data to NAND flash program buffer
+ 135:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param pBuffer Data buffer
+ 136:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param WriteAddr Write address
+ 137:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param NumByteToWrite Number of bytes to write
+ 138:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+ 139:../src/drivers/nand/GD5F1GQ4xExxG.c **** static void spi_nand_page_program(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToWrite)
+ 140:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 517              		.loc 2 140 1
+ 518              		.cfi_startproc
+ 519              		@ args = 0, pretend = 0, frame = 16
+ 520              		@ frame_needed = 1, uses_anonymous_args = 0
+ 521 0000 80B5     		push	{r7, lr}
+ 522              		.cfi_def_cfa_offset 8
+ 523              		.cfi_offset 7, -8
+ 524              		.cfi_offset 14, -4
+ 525 0002 84B0     		sub	sp, sp, #16
+ 526              		.cfi_def_cfa_offset 24
+ 527 0004 00AF     		add	r7, sp, #0
+ 528              		.cfi_def_cfa_register 7
+ 529 0006 F860     		str	r0, [r7, #12]
+ 530 0008 B960     		str	r1, [r7, #8]
+ 531 000a BB1D     		adds	r3, r7, #6
+ 532 000c 1A80     		strh	r2, [r3]
+ 141:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(true);
+ 533              		.loc 2 141 2
+ 534 000e 0120     		movs	r0, #1
+ 535 0010 FFF7FEFF 		bl	spi_nand_cs_sel
+ 142:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 143:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(NAND_PROGRAMLOAD);
+ 536              		.loc 2 143 2
+ 537 0014 0220     		movs	r0, #2
+ 538 0016 FFF7FEFF 		bl	spi_nand_rw_byte
+ 144:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((WriteAddr & 0xFF00) >> 8);
+ 539              		.loc 2 144 40
+ 540 001a BB68     		ldr	r3, [r7, #8]
+ 541 001c 1B0A     		lsrs	r3, r3, #8
+ 542              		.loc 2 144 2
+ 543 001e DBB2     		uxtb	r3, r3
+ 544 0020 1800     		movs	r0, r3
+ 545 0022 FFF7FEFF 		bl	spi_nand_rw_byte
+ 145:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(WriteAddr & 0xFF);
+ 546              		.loc 2 145 2
+ 547 0026 BB68     		ldr	r3, [r7, #8]
+ 548 0028 DBB2     		uxtb	r3, r3
+ 549 002a 1800     		movs	r0, r3
+ 550 002c FFF7FEFF 		bl	spi_nand_rw_byte
+ 146:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 147:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	while (NumByteToWrite--) {
+ 551              		.loc 2 147 8
+ 552 0030 07E0     		b	.L19
+ 553              	.L20:
+ 148:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		spi_nand_rw_byte(*pBuffer);
+ 554              		.loc 2 148 3
+ 555 0032 FB68     		ldr	r3, [r7, #12]
+ 556 0034 1B78     		ldrb	r3, [r3]
+ 557 0036 1800     		movs	r0, r3
+ 558 0038 FFF7FEFF 		bl	spi_nand_rw_byte
+ 149:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		pBuffer++;
+ 559              		.loc 2 149 10
+ 560 003c FB68     		ldr	r3, [r7, #12]
+ 561 003e 0133     		adds	r3, r3, #1
+ 562 0040 FB60     		str	r3, [r7, #12]
+ 563              	.L19:
+ 147:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		spi_nand_rw_byte(*pBuffer);
+ 564              		.loc 2 147 23
+ 565 0042 BB1D     		adds	r3, r7, #6
+ 566 0044 1B88     		ldrh	r3, [r3]
+ 567 0046 BA1D     		adds	r2, r7, #6
+ 568 0048 591E     		subs	r1, r3, #1
+ 569 004a 1180     		strh	r1, [r2]
+ 147:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		spi_nand_rw_byte(*pBuffer);
+ 570              		.loc 2 147 8
+ 571 004c 002B     		cmp	r3, #0
+ 572 004e F0D1     		bne	.L20
+ 150:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	}
+ 151:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 152:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(false);
+ 573              		.loc 2 152 2
+ 574 0050 0020     		movs	r0, #0
+ 575 0052 FFF7FEFF 		bl	spi_nand_cs_sel
+ 153:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 576              		.loc 2 153 1
+ 577 0056 C046     		nop
+ 578 0058 BD46     		mov	sp, r7
+ 579 005a 04B0     		add	sp, sp, #16
+ 580              		@ sp needed
+ 581 005c 80BD     		pop	{r7, pc}
+ 582              		.cfi_endproc
+ 583              	.LFE68:
+ 585              		.section	.text.spi_nand_write_page,"ax",%progbits
+ 586              		.align	1
+ 587              		.syntax unified
+ 588              		.code	16
+ 589              		.thumb_func
+ 590              		.fpu softvfp
+ 592              	spi_nand_write_page:
+ 593              	.LFB69:
+ 154:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 155:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+ 156:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Write data to NAND flash
+ 157:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param Address Write address
+ 158:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param pBuffer Data buffer
+ 159:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param DataLen Number of bytes to write
+ 160:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @return Write status
+ 161:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+ 162:../src/drivers/nand/GD5F1GQ4xExxG.c **** static uint8_t spi_nand_write_page(NAND_ADDRESS Address, uint8_t* pBuffer, uint16_t DataLen)
+ 163:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 594              		.loc 2 163 1
+ 595              		.cfi_startproc
+ 596              		@ args = 0, pretend = 0, frame = 24
+ 597              		@ frame_needed = 1, uses_anonymous_args = 0
+ 598 0000 B0B5     		push	{r4, r5, r7, lr}
+ 599              		.cfi_def_cfa_offset 16
+ 600              		.cfi_offset 4, -16
+ 601              		.cfi_offset 5, -12
+ 602              		.cfi_offset 7, -8
+ 603              		.cfi_offset 14, -4
+ 604 0002 86B0     		sub	sp, sp, #24
+ 605              		.cfi_def_cfa_offset 40
+ 606 0004 00AF     		add	r7, sp, #0
+ 607              		.cfi_def_cfa_register 7
+ 608 0006 0825     		movs	r5, #8
+ 609 0008 7C19     		adds	r4, r7, r5
+ 610 000a 2060     		str	r0, [r4]
+ 611 000c 6160     		str	r1, [r4, #4]
+ 612 000e 7A60     		str	r2, [r7, #4]
+ 613 0010 1A00     		movs	r2, r3
+ 614 0012 BB1C     		adds	r3, r7, #2
+ 615 0014 1A80     		strh	r2, [r3]
+ 164:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint32_t block_add = ((Address.Block & 0x3ff) << 6) | (Address.Page & 0x3f);
+ 616              		.loc 2 164 32
+ 617 0016 2900     		movs	r1, r5
+ 618 0018 7B18     		adds	r3, r7, r1
+ 619 001a 1B88     		ldrh	r3, [r3]
+ 620              		.loc 2 164 48
+ 621 001c 9B01     		lsls	r3, r3, #6
+ 622 001e 1B04     		lsls	r3, r3, #16
+ 623 0020 1A0C     		lsrs	r2, r3, #16
+ 624              		.loc 2 164 64
+ 625 0022 0800     		movs	r0, r1
+ 626 0024 7B18     		adds	r3, r7, r1
+ 627 0026 5B88     		ldrh	r3, [r3, #2]
+ 628              		.loc 2 164 70
+ 629 0028 1900     		movs	r1, r3
+ 630 002a 3F23     		movs	r3, #63
+ 631 002c 0B40     		ands	r3, r1
+ 632              		.loc 2 164 54
+ 633 002e 1343     		orrs	r3, r2
+ 634              		.loc 2 164 11
+ 635 0030 7B61     		str	r3, [r7, #20]
+ 165:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 166:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_page_program(pBuffer, Address.Area, DataLen);
+ 636              		.loc 2 166 40
+ 637 0032 3B18     		adds	r3, r7, r0
+ 638 0034 9B88     		ldrh	r3, [r3, #4]
+ 639              		.loc 2 166 2
+ 640 0036 1900     		movs	r1, r3
+ 641 0038 BB1C     		adds	r3, r7, #2
+ 642 003a 1A88     		ldrh	r2, [r3]
+ 643 003c 7B68     		ldr	r3, [r7, #4]
+ 644 003e 1800     		movs	r0, r3
+ 645 0040 FFF7FEFF 		bl	spi_nand_page_program
+ 167:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 168:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	return spi_nand_program_excute(block_add);
+ 646              		.loc 2 168 9
+ 647 0044 7B69     		ldr	r3, [r7, #20]
+ 648 0046 1800     		movs	r0, r3
+ 649 0048 FFF7FEFF 		bl	spi_nand_program_excute
+ 650 004c 0300     		movs	r3, r0
+ 169:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 651              		.loc 2 169 1
+ 652 004e 1800     		movs	r0, r3
+ 653 0050 BD46     		mov	sp, r7
+ 654 0052 06B0     		add	sp, sp, #24
+ 655              		@ sp needed
+ 656 0054 B0BD     		pop	{r4, r5, r7, pc}
+ 657              		.cfi_endproc
+ 658              	.LFE69:
+ 660              		.section	.text.spi_nand_enable_ecc,"ax",%progbits
+ 661              		.align	1
+ 662              		.global	spi_nand_enable_ecc
+ 663              		.syntax unified
+ 664              		.code	16
+ 665              		.thumb_func
+ 666              		.fpu softvfp
+ 668              	spi_nand_enable_ecc:
+ 669              	.LFB70:
+ 170:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 171:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+ 172:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Enable NAND flash ECC
+ 173:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+ 174:../src/drivers/nand/GD5F1GQ4xExxG.c **** void spi_nand_enable_ecc(void)
+ 175:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 670              		.loc 2 175 1
+ 671              		.cfi_startproc
+ 672              		@ args = 0, pretend = 0, frame = 8
+ 673              		@ frame_needed = 1, uses_anonymous_args = 0
+ 674 0000 90B5     		push	{r4, r7, lr}
+ 675              		.cfi_def_cfa_offset 12
+ 676              		.cfi_offset 4, -12
+ 677              		.cfi_offset 7, -8
+ 678              		.cfi_offset 14, -4
+ 679 0002 83B0     		sub	sp, sp, #12
+ 680              		.cfi_def_cfa_offset 24
+ 681 0004 00AF     		add	r7, sp, #0
+ 682              		.cfi_def_cfa_register 7
+ 176:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint8_t getStatus = 0;
+ 683              		.loc 2 176 10
+ 684 0006 FB1D     		adds	r3, r7, #7
+ 685 0008 0022     		movs	r2, #0
+ 686 000a 1A70     		strb	r2, [r3]
+ 177:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 178:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	getStatus = spi_nand_get_feature(NAND_REGS_FEATURE);
+ 687              		.loc 2 178 14
+ 688 000c FC1D     		adds	r4, r7, #7
+ 689 000e B020     		movs	r0, #176
+ 690 0010 FFF7FEFF 		bl	spi_nand_get_feature
+ 691 0014 0300     		movs	r3, r0
+ 692 0016 2370     		strb	r3, [r4]
+ 179:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	getStatus |= 1 << 4;
+ 693              		.loc 2 179 12
+ 694 0018 FB1D     		adds	r3, r7, #7
+ 695 001a FA1D     		adds	r2, r7, #7
+ 696 001c 1278     		ldrb	r2, [r2]
+ 697 001e 1021     		movs	r1, #16
+ 698 0020 0A43     		orrs	r2, r1
+ 699 0022 1A70     		strb	r2, [r3]
+ 180:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_set_feature(NAND_REGS_FEATURE, getStatus);
+ 700              		.loc 2 180 2
+ 701 0024 FB1D     		adds	r3, r7, #7
+ 702 0026 1B78     		ldrb	r3, [r3]
+ 703 0028 1900     		movs	r1, r3
+ 704 002a B020     		movs	r0, #176
+ 705 002c FFF7FEFF 		bl	spi_nand_set_feature
+ 181:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 706              		.loc 2 181 1
+ 707 0030 C046     		nop
+ 708 0032 BD46     		mov	sp, r7
+ 709 0034 03B0     		add	sp, sp, #12
+ 710              		@ sp needed
+ 711 0036 90BD     		pop	{r4, r7, pc}
+ 712              		.cfi_endproc
+ 713              	.LFE70:
+ 715              		.section	.text.spi_nand_disable_ecc,"ax",%progbits
+ 716              		.align	1
+ 717              		.global	spi_nand_disable_ecc
+ 718              		.syntax unified
+ 719              		.code	16
+ 720              		.thumb_func
+ 721              		.fpu softvfp
+ 723              	spi_nand_disable_ecc:
+ 724              	.LFB71:
+ 182:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 183:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+ 184:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Disable NAND flash ECC
+ 185:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+ 186:../src/drivers/nand/GD5F1GQ4xExxG.c **** void spi_nand_disable_ecc(void)
+ 187:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 725              		.loc 2 187 1
+ 726              		.cfi_startproc
+ 727              		@ args = 0, pretend = 0, frame = 8
+ 728              		@ frame_needed = 1, uses_anonymous_args = 0
+ 729 0000 90B5     		push	{r4, r7, lr}
+ 730              		.cfi_def_cfa_offset 12
+ 731              		.cfi_offset 4, -12
+ 732              		.cfi_offset 7, -8
+ 733              		.cfi_offset 14, -4
+ 734 0002 83B0     		sub	sp, sp, #12
+ 735              		.cfi_def_cfa_offset 24
+ 736 0004 00AF     		add	r7, sp, #0
+ 737              		.cfi_def_cfa_register 7
+ 188:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint8_t getStatus = 0;
+ 738              		.loc 2 188 10
+ 739 0006 FB1D     		adds	r3, r7, #7
+ 740 0008 0022     		movs	r2, #0
+ 741 000a 1A70     		strb	r2, [r3]
+ 189:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 190:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	getStatus = spi_nand_get_feature(NAND_REGS_FEATURE);
+ 742              		.loc 2 190 14
+ 743 000c FC1D     		adds	r4, r7, #7
+ 744 000e B020     		movs	r0, #176
+ 745 0010 FFF7FEFF 		bl	spi_nand_get_feature
+ 746 0014 0300     		movs	r3, r0
+ 747 0016 2370     		strb	r3, [r4]
+ 191:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	getStatus &= ~(1 << 4);
+ 748              		.loc 2 191 12
+ 749 0018 FB1D     		adds	r3, r7, #7
+ 750 001a FA1D     		adds	r2, r7, #7
+ 751 001c 1278     		ldrb	r2, [r2]
+ 752 001e 1021     		movs	r1, #16
+ 753 0020 8A43     		bics	r2, r1
+ 754 0022 1A70     		strb	r2, [r3]
+ 192:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_set_feature(NAND_REGS_FEATURE, getStatus);
+ 755              		.loc 2 192 2
+ 756 0024 FB1D     		adds	r3, r7, #7
+ 757 0026 1B78     		ldrb	r3, [r3]
+ 758 0028 1900     		movs	r1, r3
+ 759 002a B020     		movs	r0, #176
+ 760 002c FFF7FEFF 		bl	spi_nand_set_feature
+ 193:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 761              		.loc 2 193 1
+ 762 0030 C046     		nop
+ 763 0032 BD46     		mov	sp, r7
+ 764 0034 03B0     		add	sp, sp, #12
+ 765              		@ sp needed
+ 766 0036 90BD     		pop	{r4, r7, pc}
+ 767              		.cfi_endproc
+ 768              	.LFE71:
+ 770              		.section	.text.spi_nand_check_ecc,"ax",%progbits
+ 771              		.align	1
+ 772              		.global	spi_nand_check_ecc
+ 773              		.syntax unified
+ 774              		.code	16
+ 775              		.thumb_func
+ 776              		.fpu softvfp
+ 778              	spi_nand_check_ecc:
+ 779              	.LFB72:
+ 194:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 195:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+ 196:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Check NAND flash ECC status
+ 197:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @return NAND_OK if no error, NAND_FAIL if error
+ 198:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+ 199:../src/drivers/nand/GD5F1GQ4xExxG.c **** uint8_t spi_nand_check_ecc(void)
+ 200:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 780              		.loc 2 200 1
+ 781              		.cfi_startproc
+ 782              		@ args = 0, pretend = 0, frame = 8
+ 783              		@ frame_needed = 1, uses_anonymous_args = 0
+ 784 0000 90B5     		push	{r4, r7, lr}
+ 785              		.cfi_def_cfa_offset 12
+ 786              		.cfi_offset 4, -12
+ 787              		.cfi_offset 7, -8
+ 788              		.cfi_offset 14, -4
+ 789 0002 83B0     		sub	sp, sp, #12
+ 790              		.cfi_def_cfa_offset 24
+ 791 0004 00AF     		add	r7, sp, #0
+ 792              		.cfi_def_cfa_register 7
+ 201:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint8_t getStatus = 0;
+ 793              		.loc 2 201 10
+ 794 0006 FB1D     		adds	r3, r7, #7
+ 795 0008 0022     		movs	r2, #0
+ 796 000a 1A70     		strb	r2, [r3]
+ 202:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 203:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	getStatus = spi_nand_get_feature(NAND_REGS_FEATURE);
+ 797              		.loc 2 203 14
+ 798 000c FC1D     		adds	r4, r7, #7
+ 799 000e B020     		movs	r0, #176
+ 800 0010 FFF7FEFF 		bl	spi_nand_get_feature
+ 801 0014 0300     		movs	r3, r0
+ 802 0016 2370     		strb	r3, [r4]
+ 204:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	if(((getStatus & NAND_STATUS_ECCS1) == NAND_STATUS_ECCS1) &&
+ 803              		.loc 2 204 17
+ 804 0018 FB1D     		adds	r3, r7, #7
+ 805 001a 1B78     		ldrb	r3, [r3]
+ 806 001c 2022     		movs	r2, #32
+ 807 001e 1340     		ands	r3, r2
+ 808              		.loc 2 204 4
+ 809 0020 33B1     		cbz	r3, .L26
+ 205:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		((getStatus & NAND_STATUS_ECCS0) == 0))
+ 810              		.loc 2 205 15 discriminator 1
+ 811 0022 FB1D     		adds	r3, r7, #7
+ 812 0024 1B78     		ldrb	r3, [r3]
+ 813 0026 1022     		movs	r2, #16
+ 814 0028 1340     		ands	r3, r2
+ 204:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	if(((getStatus & NAND_STATUS_ECCS1) == NAND_STATUS_ECCS1) &&
+ 815              		.loc 2 204 60 discriminator 1
+ 816 002a 0BB9     		cbnz	r3, .L26
+ 206:../src/drivers/nand/GD5F1GQ4xExxG.c **** 		return NAND_FAIL;
+ 817              		.loc 2 206 10
+ 818 002c 0123     		movs	r3, #1
+ 819 002e 00E0     		b	.L27
+ 820              	.L26:
+ 207:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 208:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	return NAND_OK;
+ 821              		.loc 2 208 9
+ 822 0030 0023     		movs	r3, #0
+ 823              	.L27:
+ 209:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 824              		.loc 2 209 1
+ 825 0032 1800     		movs	r0, r3
+ 826 0034 BD46     		mov	sp, r7
+ 827 0036 03B0     		add	sp, sp, #12
+ 828              		@ sp needed
+ 829 0038 90BD     		pop	{r4, r7, pc}
+ 830              		.cfi_endproc
+ 831              	.LFE72:
+ 833              		.section	.text.spi_nand_erase_blk,"ax",%progbits
+ 834              		.align	1
+ 835              		.global	spi_nand_erase_blk
+ 836              		.syntax unified
+ 837              		.code	16
+ 838              		.thumb_func
+ 839              		.fpu softvfp
+ 841              	spi_nand_erase_blk:
+ 842              	.LFB73:
+ 210:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 211:../src/drivers/nand/GD5F1GQ4xExxG.c **** /**
+ 212:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @brief Erase NAND flash block
+ 213:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @param BlockID Block number to erase
+ 214:../src/drivers/nand/GD5F1GQ4xExxG.c ****  * @return Status register value
+ 215:../src/drivers/nand/GD5F1GQ4xExxG.c ****  */
+ 216:../src/drivers/nand/GD5F1GQ4xExxG.c **** uint8_t spi_nand_erase_blk(uint32_t BlockID)
+ 217:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 843              		.loc 2 217 1
+ 844              		.cfi_startproc
+ 845              		@ args = 0, pretend = 0, frame = 16
+ 846              		@ frame_needed = 1, uses_anonymous_args = 0
+ 847 0000 80B5     		push	{r7, lr}
+ 848              		.cfi_def_cfa_offset 8
+ 849              		.cfi_offset 7, -8
+ 850              		.cfi_offset 14, -4
+ 851 0002 84B0     		sub	sp, sp, #16
+ 852              		.cfi_def_cfa_offset 24
+ 853 0004 00AF     		add	r7, sp, #0
+ 854              		.cfi_def_cfa_register 7
+ 855 0006 7860     		str	r0, [r7, #4]
+ 218:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint32_t Blockaddr = ((BlockID & 0x3ff) << 6);
+ 856              		.loc 2 218 42
+ 857 0008 7B68     		ldr	r3, [r7, #4]
+ 858 000a 9B01     		lsls	r3, r3, #6
+ 859              		.loc 2 218 11
+ 860 000c 1B04     		lsls	r3, r3, #16
+ 861 000e 1B0C     		lsrs	r3, r3, #16
+ 862 0010 FB60     		str	r3, [r7, #12]
+ 219:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 220:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_write_enable();
+ 863              		.loc 2 220 2
+ 864 0012 FFF7FEFF 		bl	spi_nand_write_enable
+ 221:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 222:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(true);
+ 865              		.loc 2 222 2
+ 866 0016 0120     		movs	r0, #1
+ 867 0018 FFF7FEFF 		bl	spi_nand_cs_sel
+ 223:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 224:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(NAND_BLOCKERASE);
+ 868              		.loc 2 224 2
+ 869 001c D820     		movs	r0, #216
+ 870 001e FFF7FEFF 		bl	spi_nand_rw_byte
+ 225:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((Blockaddr & 0xFF0000) >> 16);
+ 871              		.loc 2 225 42
+ 872 0022 FB68     		ldr	r3, [r7, #12]
+ 873 0024 1B0C     		lsrs	r3, r3, #16
+ 874              		.loc 2 225 2
+ 875 0026 DBB2     		uxtb	r3, r3
+ 876 0028 1800     		movs	r0, r3
+ 877 002a FFF7FEFF 		bl	spi_nand_rw_byte
+ 226:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte((Blockaddr & 0xFF00) >> 8);
+ 878              		.loc 2 226 40
+ 879 002e FB68     		ldr	r3, [r7, #12]
+ 880 0030 1B0A     		lsrs	r3, r3, #8
+ 881              		.loc 2 226 2
+ 882 0032 DBB2     		uxtb	r3, r3
+ 883 0034 1800     		movs	r0, r3
+ 884 0036 FFF7FEFF 		bl	spi_nand_rw_byte
+ 227:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_rw_byte(Blockaddr & 0xFF);
+ 885              		.loc 2 227 2
+ 886 003a FB68     		ldr	r3, [r7, #12]
+ 887 003c DBB2     		uxtb	r3, r3
+ 888 003e 1800     		movs	r0, r3
+ 889 0040 FFF7FEFF 		bl	spi_nand_rw_byte
+ 228:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 229:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_cs_sel(false);
+ 890              		.loc 2 229 2
+ 891 0044 0020     		movs	r0, #0
+ 892 0046 FFF7FEFF 		bl	spi_nand_cs_sel
+ 230:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 231:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	while((spi_nand_get_feature(NAND_REGS_STATUS) & NAND_STATUS_QIP) != 0);
+ 893              		.loc 2 231 7
+ 894 004a C046     		nop
+ 895              	.L29:
+ 896              		.loc 2 231 9 discriminator 1
+ 897 004c C020     		movs	r0, #192
+ 898 004e FFF7FEFF 		bl	spi_nand_get_feature
+ 899 0052 0300     		movs	r3, r0
+ 900              		.loc 2 231 48 discriminator 1
+ 901 0054 1A00     		movs	r2, r3
+ 902 0056 0123     		movs	r3, #1
+ 903 0058 1340     		ands	r3, r2
+ 904              		.loc 2 231 7 discriminator 1
+ 905 005a 002B     		cmp	r3, #0
+ 906 005c F6D1     		bne	.L29
+ 232:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 233:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	return spi_nand_get_feature(NAND_REGS_STATUS);
+ 907              		.loc 2 233 9
+ 908 005e C020     		movs	r0, #192
+ 909 0060 FFF7FEFF 		bl	spi_nand_get_feature
+ 910 0064 0300     		movs	r3, r0
+ 234:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 911              		.loc 2 234 1
+ 912 0066 1800     		movs	r0, r3
+ 913 0068 BD46     		mov	sp, r7
+ 914 006a 04B0     		add	sp, sp, #16
+ 915              		@ sp needed
+ 916 006c 80BD     		pop	{r7, pc}
+ 917              		.cfi_endproc
+ 918              	.LFE73:
+ 920              		.section	.text.spi_nand_config,"ax",%progbits
+ 921              		.align	1
+ 922              		.global	spi_nand_config
+ 923              		.syntax unified
+ 924              		.code	16
+ 925              		.thumb_func
+ 926              		.fpu softvfp
+ 928              	spi_nand_config:
+ 929              	.LFB74:
+ 235:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 236:../src/drivers/nand/GD5F1GQ4xExxG.c **** void spi_nand_config(void)
+ 237:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 930              		.loc 2 237 1
+ 931              		.cfi_startproc
+ 932              		@ args = 0, pretend = 0, frame = 0
+ 933              		@ frame_needed = 1, uses_anonymous_args = 0
+ 934 0000 80B5     		push	{r7, lr}
+ 935              		.cfi_def_cfa_offset 8
+ 936              		.cfi_offset 7, -8
+ 937              		.cfi_offset 14, -4
+ 938 0002 00AF     		add	r7, sp, #0
+ 939              		.cfi_def_cfa_register 7
+ 238:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_reset();
+ 940              		.loc 2 238 2
+ 941 0004 FFF7FEFF 		bl	spi_nand_reset
+ 239:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	delay_1ms(2);
+ 942              		.loc 2 239 2
+ 943 0008 0220     		movs	r0, #2
+ 944 000a FFF7FEFF 		bl	delay_1ms
+ 240:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 945              		.loc 2 240 1
+ 946 000e C046     		nop
+ 947 0010 BD46     		mov	sp, r7
+ 948              		@ sp needed
+ 949 0012 80BD     		pop	{r7, pc}
+ 950              		.cfi_endproc
+ 951              	.LFE74:
+ 953              		.section	.text.spi_nand_check_blk_sts,"ax",%progbits
+ 954              		.align	1
+ 955              		.global	spi_nand_check_blk_sts
+ 956              		.syntax unified
+ 957              		.code	16
+ 958              		.thumb_func
+ 959              		.fpu softvfp
+ 961              	spi_nand_check_blk_sts:
+ 962              	.LFB75:
+ 241:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 242:../src/drivers/nand/GD5F1GQ4xExxG.c **** void spi_nand_check_blk_sts(NAND_ADDRESS address, SPARE_AREA *block_statue)
+ 243:../src/drivers/nand/GD5F1GQ4xExxG.c **** {
+ 963              		.loc 2 243 1
+ 964              		.cfi_startproc
+ 965              		@ args = 0, pretend = 0, frame = 24
+ 966              		@ frame_needed = 1, uses_anonymous_args = 0
+ 967 0000 90B5     		push	{r4, r7, lr}
+ 968              		.cfi_def_cfa_offset 12
+ 969              		.cfi_offset 4, -12
+ 970              		.cfi_offset 7, -8
+ 971              		.cfi_offset 14, -4
+ 972 0002 87B0     		sub	sp, sp, #28
+ 973              		.cfi_def_cfa_offset 40
+ 974 0004 00AF     		add	r7, sp, #0
+ 975              		.cfi_def_cfa_register 7
+ 976 0006 0824     		movs	r4, #8
+ 977 0008 3B19     		adds	r3, r7, r4
+ 978 000a 1860     		str	r0, [r3]
+ 979 000c 5960     		str	r1, [r3, #4]
+ 980 000e 7A60     		str	r2, [r7, #4]
+ 244:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	uint8_t Buffer[4];
+ 245:../src/drivers/nand/GD5F1GQ4xExxG.c **** 
+ 246:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	address.Page = 0;
+ 981              		.loc 2 246 15
+ 982 0010 2100     		movs	r1, r4
+ 983 0012 7B18     		adds	r3, r7, r1
+ 984 0014 0022     		movs	r2, #0
+ 985 0016 5A80     		strh	r2, [r3, #2]
+ 247:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_read2cache(address);
+ 986              		.loc 2 247 2
+ 987 0018 0C00     		movs	r4, r1
+ 988 001a 7B18     		adds	r3, r7, r1
+ 989 001c 1868     		ldr	r0, [r3]
+ 990 001e 5968     		ldr	r1, [r3, #4]
+ 991 0020 FFF7FEFF 		bl	spi_nand_read2cache
+ 248:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	spi_nand_read_from_cache(Buffer, address, 4);
+ 992              		.loc 2 248 2
+ 993 0024 3A19     		adds	r2, r7, r4
+ 994 0026 1424     		movs	r4, #20
+ 995 0028 3819     		adds	r0, r7, r4
+ 996 002a 0423     		movs	r3, #4
+ 997 002c 1168     		ldr	r1, [r2]
+ 998 002e 5268     		ldr	r2, [r2, #4]
+ 999 0030 FFF7FEFF 		bl	spi_nand_read_from_cache
+ 249:../src/drivers/nand/GD5F1GQ4xExxG.c **** 	*block_statue = *(SPARE_AREA *)Buffer;
+ 1000              		.loc 2 249 33
+ 1001 0034 3B19     		adds	r3, r7, r4
+ 1002              		.loc 2 249 16
+ 1003 0036 7A68     		ldr	r2, [r7, #4]
+ 1004 0038 1000     		movs	r0, r2
+ 1005 003a 1900     		movs	r1, r3
+ 1006 003c 0423     		movs	r3, #4
+ 1007 003e 1A00     		movs	r2, r3
+ 1008 0040 FFF7FEFF 		bl	memcpy
+ 250:../src/drivers/nand/GD5F1GQ4xExxG.c **** }
+ 1009              		.loc 2 250 1
+ 1010 0044 C046     		nop
+ 1011 0046 BD46     		mov	sp, r7
+ 1012 0048 07B0     		add	sp, sp, #28
+ 1013              		@ sp needed
+ 1014 004a 90BD     		pop	{r4, r7, pc}
+ 1015              		.cfi_endproc
+ 1016              	.LFE75:
+ 1018              		.global	g_spinand_gd
+ 1019              		.section	.data.g_spinand_gd,"aw"
+ 1020              		.align	2
+ 1023              	g_spinand_gd:
+ 1024 0000 00000000 		.word	spi_nand_set_feature
+ 1025 0004 00000000 		.word	spi_nand_get_feature
+ 1026 0008 00000000 		.word	spi_nand_read_from_cache
+ 1027 000c 00000000 		.word	spi_nand_read2cache
+ 1028 0010 00000000 		.word	spi_nand_write_enable
+ 1029 0014 00000000 		.word	spi_nand_erase_blk
+ 1030 0018 00000000 		.word	spi_nand_enable_ecc
+ 1031 001c 00000000 		.word	spi_nand_disable_ecc
+ 1032 0020 00000000 		.word	spi_nand_check_ecc
+ 1033 0024 00000000 		.word	spi_nand_config
+ 1034 0028 00000000 		.word	0
+ 1035 002c 00000000 		.word	spi_nand_check_blk_sts
+ 1036              		.text
+ 1037              	.Letext0:
+ 1038              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 1039              		.file 4 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 1040              		.file 5 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 1041              		.file 6 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+ 1042              		.file 7 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 1043              		.file 8 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 1044              		.file 9 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 1045              		.file 10 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 1046              		.file 11 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 1047              		.file 12 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 GD5F1GQ4xExxG.c
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:16     .text.spi_nand_cs_sel:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:23     .text.spi_nand_cs_sel:00000000 spi_nand_cs_sel
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:82     .text.spi_nand_set_feature:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:89     .text.spi_nand_set_feature:00000000 spi_nand_set_feature
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:139    .text.spi_nand_get_feature:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:146    .text.spi_nand_get_feature:00000000 spi_nand_get_feature
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:204    .text.spi_nand_read_from_cache:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:211    .text.spi_nand_read_from_cache:00000000 spi_nand_read_from_cache
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:298    .text.spi_nand_read2cache:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:305    .text.spi_nand_read2cache:00000000 spi_nand_read2cache
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:393    .text.spi_nand_write_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:400    .text.spi_nand_write_enable:00000000 spi_nand_write_enable
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:430    .text.spi_nand_program_excute:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:436    .text.spi_nand_program_excute:00000000 spi_nand_program_excute
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:509    .text.spi_nand_page_program:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:515    .text.spi_nand_page_program:00000000 spi_nand_page_program
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:586    .text.spi_nand_write_page:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:592    .text.spi_nand_write_page:00000000 spi_nand_write_page
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:661    .text.spi_nand_enable_ecc:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:668    .text.spi_nand_enable_ecc:00000000 spi_nand_enable_ecc
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:716    .text.spi_nand_disable_ecc:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:723    .text.spi_nand_disable_ecc:00000000 spi_nand_disable_ecc
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:771    .text.spi_nand_check_ecc:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:778    .text.spi_nand_check_ecc:00000000 spi_nand_check_ecc
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:834    .text.spi_nand_erase_blk:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:841    .text.spi_nand_erase_blk:00000000 spi_nand_erase_blk
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:921    .text.spi_nand_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:928    .text.spi_nand_config:00000000 spi_nand_config
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:954    .text.spi_nand_check_blk_sts:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:961    .text.spi_nand_check_blk_sts:00000000 spi_nand_check_blk_sts
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:1023   .data.g_spinand_gd:00000000 g_spinand_gd
+C:\Users\sen.he\AppData\Local\Temp\ccbKQoiv.s:1020   .data.g_spinand_gd:00000000 $d
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.Spi_nand_driver.h.16.fadacb45494f178a00212993489e2bbe
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+
+UNDEFINED SYMBOLS
+gpio_bit_reset
+spi_i2s_flag_get
+gpio_bit_set
+spi_nand_rw_byte
+spi_nand_reset
+delay_1ms
+memcpy

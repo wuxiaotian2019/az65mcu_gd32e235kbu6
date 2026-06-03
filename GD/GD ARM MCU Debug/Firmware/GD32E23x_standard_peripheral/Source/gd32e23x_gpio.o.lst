@@ -1,0 +1,1542 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"gd32e23x_gpio.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.gpio_deinit,"ax",%progbits
+  16              		.align	1
+  17              		.global	gpio_deinit
+  18              		.arch armv8-m.base
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	gpio_deinit:
+  25              	.LFB58:
+  26              		.file 1 "../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c"
+   1:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+   2:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \file    gd32e23x_gpio.c
+   3:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief   GPIO driver
+   4:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+   5:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \version 2025-08-08, V2.4.0, firmware for GD32E23x
+   6:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+   7:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+   8:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*
+   9:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     Copyright (c) 2025, GigaDevice Semiconductor Inc.
+  10:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+  11:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     All rights reserved.
+  12:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+  13:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     Redistribution and use in source and binary forms, with or without modification,
+  14:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** are permitted provided that the following conditions are met:
+  15:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+  16:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  17:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****        list of conditions and the following disclaimer.
+  18:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  19:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****        this list of conditions and the following disclaimer in the documentation
+  20:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****        and/or other materials provided with the distribution.
+  21:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  22:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****        may be used to endorse or promote products derived from this software without
+  23:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****        specific prior written permission.
+  24:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+  25:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  26:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  27:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  28:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  29:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  30:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  31:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  32:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  33:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  34:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** OF SUCH DAMAGE.
+  35:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+  36:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+  37:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** #include "gd32e23x_gpio.h"
+  38:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+  39:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+  40:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      reset GPIO port
+  41:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+  42:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+  43:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+  44:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+  45:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+  46:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+  47:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_deinit(uint32_t gpio_periph)
+  48:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+  27              		.loc 1 48 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 82B0     		sub	sp, sp, #8
+  36              		.cfi_def_cfa_offset 16
+  37 0004 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  39 0006 7860     		str	r0, [r7, #4]
+  49:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     switch(gpio_periph) {
+  40              		.loc 1 49 5
+  41 0008 7A68     		ldr	r2, [r7, #4]
+  42 000a 41F20043 		movw	r3, #5120
+  43 000e C4F60003 		movt	r3, 18432
+  44 0012 9A42     		cmp	r2, r3
+  45 0014 3CD0     		beq	.L2
+  46 0016 7A68     		ldr	r2, [r7, #4]
+  47 0018 41F20043 		movw	r3, #5120
+  48 001c C4F60003 		movt	r3, 18432
+  49 0020 9A42     		cmp	r2, r3
+  50 0022 3ED8     		bhi	.L8
+  51 0024 7A68     		ldr	r2, [r7, #4]
+  52 0026 40F60003 		movw	r3, #2048
+  53 002a C4F60003 		movt	r3, 18432
+  54 002e 9A42     		cmp	r2, r3
+  55 0030 25D0     		beq	.L4
+  56 0032 7A68     		ldr	r2, [r7, #4]
+  57 0034 40F60003 		movw	r3, #2048
+  58 0038 C4F60003 		movt	r3, 18432
+  59 003c 9A42     		cmp	r2, r3
+  60 003e 30D8     		bhi	.L8
+  61 0040 7A68     		ldr	r2, [r7, #4]
+  62 0042 9023     		movs	r3, #144
+  63 0044 DB05     		lsls	r3, r3, #23
+  64 0046 9A42     		cmp	r2, r3
+  65 0048 07D0     		beq	.L5
+  66 004a 7A68     		ldr	r2, [r7, #4]
+  67 004c 40F20043 		movw	r3, #1024
+  68 0050 C4F60003 		movt	r3, 18432
+  69 0054 9A42     		cmp	r2, r3
+  70 0056 09D0     		beq	.L6
+  50:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     case GPIOA:
+  51:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         /* reset GPIOA */
+  52:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_enable(RCU_GPIOARST);
+  53:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_disable(RCU_GPIOARST);
+  54:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+  55:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     case GPIOB:
+  56:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         /* reset GPIOB */
+  57:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_enable(RCU_GPIOBRST);
+  58:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_disable(RCU_GPIOBRST);
+  59:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+  60:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     case GPIOC:
+  61:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         /* reset GPIOC */
+  62:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_enable(RCU_GPIOCRST);
+  63:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_disable(RCU_GPIOCRST);
+  64:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+  65:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     case GPIOF:
+  66:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         /* reset GPIOF */
+  67:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_enable(RCU_GPIOFRST);
+  68:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_disable(RCU_GPIOFRST);
+  69:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+  70:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     default:
+  71:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+  71              		.loc 1 71 9
+  72 0058 23E0     		b	.L8
+  73              	.L5:
+  52:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_disable(RCU_GPIOARST);
+  74              		.loc 1 52 9
+  75 005a 40F61120 		movw	r0, #2577
+  76 005e FFF7FEFF 		bl	rcu_periph_reset_enable
+  53:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+  77              		.loc 1 53 9
+  78 0062 40F61120 		movw	r0, #2577
+  79 0066 FFF7FEFF 		bl	rcu_periph_reset_disable
+  54:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     case GPIOB:
+  80              		.loc 1 54 9
+  81 006a 1BE0     		b	.L7
+  82              	.L6:
+  57:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_disable(RCU_GPIOBRST);
+  83              		.loc 1 57 9
+  84 006c 40F61220 		movw	r0, #2578
+  85 0070 FFF7FEFF 		bl	rcu_periph_reset_enable
+  58:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+  86              		.loc 1 58 9
+  87 0074 40F61220 		movw	r0, #2578
+  88 0078 FFF7FEFF 		bl	rcu_periph_reset_disable
+  59:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     case GPIOC:
+  89              		.loc 1 59 9
+  90 007c 12E0     		b	.L7
+  91              	.L4:
+  62:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_disable(RCU_GPIOCRST);
+  92              		.loc 1 62 9
+  93 007e 40F61320 		movw	r0, #2579
+  94 0082 FFF7FEFF 		bl	rcu_periph_reset_enable
+  63:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+  95              		.loc 1 63 9
+  96 0086 40F61320 		movw	r0, #2579
+  97 008a FFF7FEFF 		bl	rcu_periph_reset_disable
+  64:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     case GPIOF:
+  98              		.loc 1 64 9
+  99 008e 09E0     		b	.L7
+ 100              	.L2:
+  67:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         rcu_periph_reset_disable(RCU_GPIOFRST);
+ 101              		.loc 1 67 9
+ 102 0090 40F61620 		movw	r0, #2582
+ 103 0094 FFF7FEFF 		bl	rcu_periph_reset_enable
+  68:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         break;
+ 104              		.loc 1 68 9
+ 105 0098 40F61620 		movw	r0, #2582
+ 106 009c FFF7FEFF 		bl	rcu_periph_reset_disable
+  69:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     default:
+ 107              		.loc 1 69 9
+ 108 00a0 00E0     		b	.L7
+ 109              	.L8:
+ 110              		.loc 1 71 9
+ 111 00a2 C046     		nop
+ 112              	.L7:
+  72:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+  73:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 113              		.loc 1 73 1
+ 114 00a4 C046     		nop
+ 115 00a6 BD46     		mov	sp, r7
+ 116 00a8 02B0     		add	sp, sp, #8
+ 117              		@ sp needed
+ 118 00aa 80BD     		pop	{r7, pc}
+ 119              		.cfi_endproc
+ 120              	.LFE58:
+ 122              		.section	.text.gpio_mode_set,"ax",%progbits
+ 123              		.align	1
+ 124              		.global	gpio_mode_set
+ 125              		.syntax unified
+ 126              		.code	16
+ 127              		.thumb_func
+ 128              		.fpu softvfp
+ 130              	gpio_mode_set:
+ 131              	.LFB59:
+  74:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+  75:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+  76:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      set GPIO mode
+  77:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+  78:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+  79:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+  80:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  mode: gpio pin mode
+  81:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_MODE_INPUT: input mode
+  82:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_MODE_OUTPUT: output mode
+  83:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_MODE_AF: alternate function mode
+  84:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_MODE_ANALOG: analog mode
+  85:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pull_up_down: gpio pin with pull-up or pull-down resistor
+  86:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PUPD_NONE: floating mode, no pull-up and pull-down resistors
+  87:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PUPD_PULLUP: with pull-up resistor
+  88:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PUPD_PULLDOWN:with pull-down resistor
+  89:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+  90:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+  91:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+  92:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+  93:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+  94:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+  95:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_mode_set(uint32_t gpio_periph, uint32_t mode, uint32_t pull_up_down, uint32_t pin)
+  96:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 132              		.loc 1 96 1
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 32
+ 135              		@ frame_needed = 1, uses_anonymous_args = 0
+ 136 0000 80B5     		push	{r7, lr}
+ 137              		.cfi_def_cfa_offset 8
+ 138              		.cfi_offset 7, -8
+ 139              		.cfi_offset 14, -4
+ 140 0002 88B0     		sub	sp, sp, #32
+ 141              		.cfi_def_cfa_offset 40
+ 142 0004 00AF     		add	r7, sp, #0
+ 143              		.cfi_def_cfa_register 7
+ 144 0006 F860     		str	r0, [r7, #12]
+ 145 0008 B960     		str	r1, [r7, #8]
+ 146 000a 7A60     		str	r2, [r7, #4]
+ 147 000c 3B60     		str	r3, [r7]
+  97:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     uint16_t i;
+  98:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     uint32_t ctl, pupd;
+  99:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 100:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     ctl = GPIO_CTL(gpio_periph);
+ 148              		.loc 1 100 11
+ 149 000e FB68     		ldr	r3, [r7, #12]
+ 150              		.loc 1 100 9
+ 151 0010 1B68     		ldr	r3, [r3]
+ 152 0012 BB61     		str	r3, [r7, #24]
+ 101:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     pupd = GPIO_PUD(gpio_periph);
+ 153              		.loc 1 101 12
+ 154 0014 FB68     		ldr	r3, [r7, #12]
+ 155 0016 0C33     		adds	r3, r3, #12
+ 156              		.loc 1 101 10
+ 157 0018 1B68     		ldr	r3, [r3]
+ 158 001a 7B61     		str	r3, [r7, #20]
+ 102:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 103:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     for(i = 0U; i < 16U; i++) {
+ 159              		.loc 1 103 11
+ 160 001c 1E23     		movs	r3, #30
+ 161 001e FB18     		adds	r3, r7, r3
+ 162 0020 0022     		movs	r2, #0
+ 163 0022 1A80     		strh	r2, [r3]
+ 164              		.loc 1 103 5
+ 165 0024 34E0     		b	.L10
+ 166              	.L12:
+ 104:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 167              		.loc 1 104 16
+ 168 0026 1E21     		movs	r1, #30
+ 169 0028 7B18     		adds	r3, r7, r1
+ 170 002a 1B88     		ldrh	r3, [r3]
+ 171 002c 0122     		movs	r2, #1
+ 172 002e 9A40     		lsls	r2, r2, r3
+ 173 0030 1300     		movs	r3, r2
+ 174              		.loc 1 104 22
+ 175 0032 3A68     		ldr	r2, [r7]
+ 176 0034 1340     		ands	r3, r2
+ 177              		.loc 1 104 11
+ 178 0036 2BB3     		cbz	r3, .L11
+ 105:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             /* clear the specified pin mode bits */
+ 106:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             ctl &= ~GPIO_MODE_MASK(i);
+ 179              		.loc 1 106 21
+ 180 0038 7B18     		adds	r3, r7, r1
+ 181 003a 1B88     		ldrh	r3, [r3]
+ 182 003c 5B00     		lsls	r3, r3, #1
+ 183 003e 0322     		movs	r2, #3
+ 184 0040 9A40     		lsls	r2, r2, r3
+ 185 0042 1300     		movs	r3, r2
+ 186              		.loc 1 106 20
+ 187 0044 DA43     		mvns	r2, r3
+ 188              		.loc 1 106 17
+ 189 0046 BB69     		ldr	r3, [r7, #24]
+ 190 0048 1340     		ands	r3, r2
+ 191 004a BB61     		str	r3, [r7, #24]
+ 107:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             /* set the specified pin mode bits */
+ 108:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             ctl |= GPIO_MODE_SET(i, mode);
+ 192              		.loc 1 108 20
+ 193 004c 7B18     		adds	r3, r7, r1
+ 194 004e 1B88     		ldrh	r3, [r3]
+ 195 0050 5B00     		lsls	r3, r3, #1
+ 196 0052 BA68     		ldr	r2, [r7, #8]
+ 197 0054 9A40     		lsls	r2, r2, r3
+ 198 0056 1300     		movs	r3, r2
+ 199              		.loc 1 108 17
+ 200 0058 BA69     		ldr	r2, [r7, #24]
+ 201 005a 1343     		orrs	r3, r2
+ 202 005c BB61     		str	r3, [r7, #24]
+ 109:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 110:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             /* clear the specified pin pupd bits */
+ 111:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             pupd &= ~GPIO_PUPD_MASK(i);
+ 203              		.loc 1 111 22
+ 204 005e 7B18     		adds	r3, r7, r1
+ 205 0060 1B88     		ldrh	r3, [r3]
+ 206 0062 5B00     		lsls	r3, r3, #1
+ 207 0064 0322     		movs	r2, #3
+ 208 0066 9A40     		lsls	r2, r2, r3
+ 209 0068 1300     		movs	r3, r2
+ 210              		.loc 1 111 21
+ 211 006a DA43     		mvns	r2, r3
+ 212              		.loc 1 111 18
+ 213 006c 7B69     		ldr	r3, [r7, #20]
+ 214 006e 1340     		ands	r3, r2
+ 215 0070 7B61     		str	r3, [r7, #20]
+ 112:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             /* set the specified pin pupd bits */
+ 113:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             pupd |= GPIO_PUPD_SET(i, pull_up_down);
+ 216              		.loc 1 113 21
+ 217 0072 7B18     		adds	r3, r7, r1
+ 218 0074 1B88     		ldrh	r3, [r3]
+ 219 0076 5B00     		lsls	r3, r3, #1
+ 220 0078 7A68     		ldr	r2, [r7, #4]
+ 221 007a 9A40     		lsls	r2, r2, r3
+ 222 007c 1300     		movs	r3, r2
+ 223              		.loc 1 113 18
+ 224 007e 7A69     		ldr	r2, [r7, #20]
+ 225 0080 1343     		orrs	r3, r2
+ 226 0082 7B61     		str	r3, [r7, #20]
+ 227              	.L11:
+ 103:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 228              		.loc 1 103 27 discriminator 2
+ 229 0084 1E21     		movs	r1, #30
+ 230 0086 7B18     		adds	r3, r7, r1
+ 231 0088 1A88     		ldrh	r2, [r3]
+ 232 008a 7B18     		adds	r3, r7, r1
+ 233 008c 0132     		adds	r2, r2, #1
+ 234 008e 1A80     		strh	r2, [r3]
+ 235              	.L10:
+ 103:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 236              		.loc 1 103 5 discriminator 1
+ 237 0090 1E23     		movs	r3, #30
+ 238 0092 FB18     		adds	r3, r7, r3
+ 239 0094 1B88     		ldrh	r3, [r3]
+ 240 0096 0F2B     		cmp	r3, #15
+ 241 0098 C5D9     		bls	.L12
+ 114:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         }
+ 115:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 116:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 117:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_CTL(gpio_periph) = ctl;
+ 242              		.loc 1 117 5
+ 243 009a FB68     		ldr	r3, [r7, #12]
+ 244              		.loc 1 117 27
+ 245 009c BA69     		ldr	r2, [r7, #24]
+ 246 009e 1A60     		str	r2, [r3]
+ 118:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_PUD(gpio_periph) = pupd;
+ 247              		.loc 1 118 5
+ 248 00a0 FB68     		ldr	r3, [r7, #12]
+ 249 00a2 0C33     		adds	r3, r3, #12
+ 250              		.loc 1 118 27
+ 251 00a4 7A69     		ldr	r2, [r7, #20]
+ 252 00a6 1A60     		str	r2, [r3]
+ 119:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 253              		.loc 1 119 1
+ 254 00a8 C046     		nop
+ 255 00aa BD46     		mov	sp, r7
+ 256 00ac 08B0     		add	sp, sp, #32
+ 257              		@ sp needed
+ 258 00ae 80BD     		pop	{r7, pc}
+ 259              		.cfi_endproc
+ 260              	.LFE59:
+ 262              		.section	.text.gpio_output_options_set,"ax",%progbits
+ 263              		.align	1
+ 264              		.global	gpio_output_options_set
+ 265              		.syntax unified
+ 266              		.code	16
+ 267              		.thumb_func
+ 268              		.fpu softvfp
+ 270              	gpio_output_options_set:
+ 271              	.LFB60:
+ 120:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 121:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 122:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      set GPIO output type and speed
+ 123:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 124:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 125:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 126:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  otype: gpio pin output mode
+ 127:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_OTYPE_PP: push pull mode
+ 128:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_OTYPE_OD: open drain mode
+ 129:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  speed: gpio pin output max speed
+ 130:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_OSPEED_2MHZ: output max speed 2MHz
+ 131:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_OSPEED_10MHZ: output max speed 10MHz
+ 132:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_OSPEED_50MHZ: output max speed 50MHz
+ 133:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 134:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 135:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 136:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 137:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 138:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 139:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_output_options_set(uint32_t gpio_periph, uint8_t otype, uint32_t speed, uint32_t pin)
+ 140:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 272              		.loc 1 140 1
+ 273              		.cfi_startproc
+ 274              		@ args = 0, pretend = 0, frame = 24
+ 275              		@ frame_needed = 1, uses_anonymous_args = 0
+ 276 0000 80B5     		push	{r7, lr}
+ 277              		.cfi_def_cfa_offset 8
+ 278              		.cfi_offset 7, -8
+ 279              		.cfi_offset 14, -4
+ 280 0002 86B0     		sub	sp, sp, #24
+ 281              		.cfi_def_cfa_offset 32
+ 282 0004 00AF     		add	r7, sp, #0
+ 283              		.cfi_def_cfa_register 7
+ 284 0006 F860     		str	r0, [r7, #12]
+ 285 0008 7A60     		str	r2, [r7, #4]
+ 286 000a 3B60     		str	r3, [r7]
+ 287 000c 0B20     		movs	r0, #11
+ 288 000e 3B18     		adds	r3, r7, r0
+ 289 0010 0A1C     		adds	r2, r1, #0
+ 290 0012 1A70     		strb	r2, [r3]
+ 141:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     uint16_t i;
+ 142:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     uint32_t ospeed;
+ 143:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 144:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     if(GPIO_OTYPE_OD == otype) {
+ 291              		.loc 1 144 7
+ 292 0014 3B18     		adds	r3, r7, r0
+ 293 0016 1B78     		ldrb	r3, [r3]
+ 294 0018 012B     		cmp	r3, #1
+ 295 001a 08D1     		bne	.L14
+ 145:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         GPIO_OMODE(gpio_periph) |= (uint32_t)pin;
+ 296              		.loc 1 145 33
+ 297 001c FB68     		ldr	r3, [r7, #12]
+ 298 001e 0433     		adds	r3, r3, #4
+ 299 0020 1968     		ldr	r1, [r3]
+ 300 0022 FB68     		ldr	r3, [r7, #12]
+ 301 0024 0433     		adds	r3, r3, #4
+ 302 0026 3A68     		ldr	r2, [r7]
+ 303 0028 0A43     		orrs	r2, r1
+ 304 002a 1A60     		str	r2, [r3]
+ 305 002c 08E0     		b	.L15
+ 306              	.L14:
+ 146:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     } else {
+ 147:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         GPIO_OMODE(gpio_periph) &= (uint32_t)(~pin);
+ 307              		.loc 1 147 33
+ 308 002e FB68     		ldr	r3, [r7, #12]
+ 309 0030 0433     		adds	r3, r3, #4
+ 310 0032 1A68     		ldr	r2, [r3]
+ 311              		.loc 1 147 47
+ 312 0034 3B68     		ldr	r3, [r7]
+ 313 0036 D943     		mvns	r1, r3
+ 314              		.loc 1 147 33
+ 315 0038 FB68     		ldr	r3, [r7, #12]
+ 316 003a 0433     		adds	r3, r3, #4
+ 317 003c 0A40     		ands	r2, r1
+ 318 003e 1A60     		str	r2, [r3]
+ 319              	.L15:
+ 148:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 149:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 150:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     /* get the specified pin output speed bits value */
+ 151:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     ospeed = GPIO_OSPD(gpio_periph);
+ 320              		.loc 1 151 14
+ 321 0040 FB68     		ldr	r3, [r7, #12]
+ 322 0042 0833     		adds	r3, r3, #8
+ 323              		.loc 1 151 12
+ 324 0044 1B68     		ldr	r3, [r3]
+ 325 0046 3B61     		str	r3, [r7, #16]
+ 152:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 153:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     for(i = 0U; i < 16U; i++) {
+ 326              		.loc 1 153 11
+ 327 0048 1623     		movs	r3, #22
+ 328 004a FB18     		adds	r3, r7, r3
+ 329 004c 0022     		movs	r2, #0
+ 330 004e 1A80     		strh	r2, [r3]
+ 331              		.loc 1 153 5
+ 332 0050 21E0     		b	.L16
+ 333              	.L18:
+ 154:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 334              		.loc 1 154 16
+ 335 0052 1621     		movs	r1, #22
+ 336 0054 7B18     		adds	r3, r7, r1
+ 337 0056 1B88     		ldrh	r3, [r3]
+ 338 0058 0122     		movs	r2, #1
+ 339 005a 9A40     		lsls	r2, r2, r3
+ 340 005c 1300     		movs	r3, r2
+ 341              		.loc 1 154 22
+ 342 005e 3A68     		ldr	r2, [r7]
+ 343 0060 1340     		ands	r3, r2
+ 344              		.loc 1 154 11
+ 345 0062 93B1     		cbz	r3, .L17
+ 155:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             /* clear the specified pin output speed bits */
+ 156:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             ospeed &= ~GPIO_OSPEED_MASK(i);
+ 346              		.loc 1 156 24
+ 347 0064 7B18     		adds	r3, r7, r1
+ 348 0066 1B88     		ldrh	r3, [r3]
+ 349 0068 5B00     		lsls	r3, r3, #1
+ 350 006a 0322     		movs	r2, #3
+ 351 006c 9A40     		lsls	r2, r2, r3
+ 352 006e 1300     		movs	r3, r2
+ 353              		.loc 1 156 23
+ 354 0070 DA43     		mvns	r2, r3
+ 355              		.loc 1 156 20
+ 356 0072 3B69     		ldr	r3, [r7, #16]
+ 357 0074 1340     		ands	r3, r2
+ 358 0076 3B61     		str	r3, [r7, #16]
+ 157:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             /* set the specified pin output speed bits */
+ 158:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             ospeed |= GPIO_OSPEED_SET(i, speed);
+ 359              		.loc 1 158 23
+ 360 0078 7B18     		adds	r3, r7, r1
+ 361 007a 1B88     		ldrh	r3, [r3]
+ 362 007c 5B00     		lsls	r3, r3, #1
+ 363 007e 7A68     		ldr	r2, [r7, #4]
+ 364 0080 9A40     		lsls	r2, r2, r3
+ 365 0082 1300     		movs	r3, r2
+ 366              		.loc 1 158 20
+ 367 0084 3A69     		ldr	r2, [r7, #16]
+ 368 0086 1343     		orrs	r3, r2
+ 369 0088 3B61     		str	r3, [r7, #16]
+ 370              	.L17:
+ 153:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 371              		.loc 1 153 27 discriminator 2
+ 372 008a 1621     		movs	r1, #22
+ 373 008c 7B18     		adds	r3, r7, r1
+ 374 008e 1A88     		ldrh	r2, [r3]
+ 375 0090 7B18     		adds	r3, r7, r1
+ 376 0092 0132     		adds	r2, r2, #1
+ 377 0094 1A80     		strh	r2, [r3]
+ 378              	.L16:
+ 153:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 379              		.loc 1 153 5 discriminator 1
+ 380 0096 1623     		movs	r3, #22
+ 381 0098 FB18     		adds	r3, r7, r3
+ 382 009a 1B88     		ldrh	r3, [r3]
+ 383 009c 0F2B     		cmp	r3, #15
+ 384 009e D8D9     		bls	.L18
+ 159:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         }
+ 160:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 161:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_OSPD(gpio_periph) = ospeed;
+ 385              		.loc 1 161 5
+ 386 00a0 FB68     		ldr	r3, [r7, #12]
+ 387 00a2 0833     		adds	r3, r3, #8
+ 388              		.loc 1 161 28
+ 389 00a4 3A69     		ldr	r2, [r7, #16]
+ 390 00a6 1A60     		str	r2, [r3]
+ 162:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 391              		.loc 1 162 1
+ 392 00a8 C046     		nop
+ 393 00aa BD46     		mov	sp, r7
+ 394 00ac 06B0     		add	sp, sp, #24
+ 395              		@ sp needed
+ 396 00ae 80BD     		pop	{r7, pc}
+ 397              		.cfi_endproc
+ 398              	.LFE60:
+ 400              		.section	.text.gpio_bit_set,"ax",%progbits
+ 401              		.align	1
+ 402              		.global	gpio_bit_set
+ 403              		.syntax unified
+ 404              		.code	16
+ 405              		.thumb_func
+ 406              		.fpu softvfp
+ 408              	gpio_bit_set:
+ 409              	.LFB61:
+ 163:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 164:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 165:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      set GPIO pin bit
+ 166:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 167:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 168:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 169:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 170:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 171:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 172:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 173:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 174:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 175:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_bit_set(uint32_t gpio_periph, uint32_t pin)
+ 176:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 410              		.loc 1 176 1
+ 411              		.cfi_startproc
+ 412              		@ args = 0, pretend = 0, frame = 8
+ 413              		@ frame_needed = 1, uses_anonymous_args = 0
+ 414 0000 80B5     		push	{r7, lr}
+ 415              		.cfi_def_cfa_offset 8
+ 416              		.cfi_offset 7, -8
+ 417              		.cfi_offset 14, -4
+ 418 0002 82B0     		sub	sp, sp, #8
+ 419              		.cfi_def_cfa_offset 16
+ 420 0004 00AF     		add	r7, sp, #0
+ 421              		.cfi_def_cfa_register 7
+ 422 0006 7860     		str	r0, [r7, #4]
+ 423 0008 3960     		str	r1, [r7]
+ 177:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_BOP(gpio_periph) = (uint32_t)pin;
+ 424              		.loc 1 177 5
+ 425 000a 7B68     		ldr	r3, [r7, #4]
+ 426 000c 1833     		adds	r3, r3, #24
+ 427              		.loc 1 177 27
+ 428 000e 3A68     		ldr	r2, [r7]
+ 429 0010 1A60     		str	r2, [r3]
+ 178:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 430              		.loc 1 178 1
+ 431 0012 C046     		nop
+ 432 0014 BD46     		mov	sp, r7
+ 433 0016 02B0     		add	sp, sp, #8
+ 434              		@ sp needed
+ 435 0018 80BD     		pop	{r7, pc}
+ 436              		.cfi_endproc
+ 437              	.LFE61:
+ 439              		.section	.text.gpio_bit_reset,"ax",%progbits
+ 440              		.align	1
+ 441              		.global	gpio_bit_reset
+ 442              		.syntax unified
+ 443              		.code	16
+ 444              		.thumb_func
+ 445              		.fpu softvfp
+ 447              	gpio_bit_reset:
+ 448              	.LFB62:
+ 179:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 180:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 181:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      reset GPIO pin bit
+ 182:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 183:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 184:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 185:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 186:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 187:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 188:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 189:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 190:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 191:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_bit_reset(uint32_t gpio_periph, uint32_t pin)
+ 192:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 449              		.loc 1 192 1
+ 450              		.cfi_startproc
+ 451              		@ args = 0, pretend = 0, frame = 8
+ 452              		@ frame_needed = 1, uses_anonymous_args = 0
+ 453 0000 80B5     		push	{r7, lr}
+ 454              		.cfi_def_cfa_offset 8
+ 455              		.cfi_offset 7, -8
+ 456              		.cfi_offset 14, -4
+ 457 0002 82B0     		sub	sp, sp, #8
+ 458              		.cfi_def_cfa_offset 16
+ 459 0004 00AF     		add	r7, sp, #0
+ 460              		.cfi_def_cfa_register 7
+ 461 0006 7860     		str	r0, [r7, #4]
+ 462 0008 3960     		str	r1, [r7]
+ 193:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_BC(gpio_periph) = (uint32_t)pin;
+ 463              		.loc 1 193 5
+ 464 000a 7B68     		ldr	r3, [r7, #4]
+ 465 000c 2833     		adds	r3, r3, #40
+ 466              		.loc 1 193 26
+ 467 000e 3A68     		ldr	r2, [r7]
+ 468 0010 1A60     		str	r2, [r3]
+ 194:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 469              		.loc 1 194 1
+ 470 0012 C046     		nop
+ 471 0014 BD46     		mov	sp, r7
+ 472 0016 02B0     		add	sp, sp, #8
+ 473              		@ sp needed
+ 474 0018 80BD     		pop	{r7, pc}
+ 475              		.cfi_endproc
+ 476              	.LFE62:
+ 478              		.section	.text.gpio_bit_write,"ax",%progbits
+ 479              		.align	1
+ 480              		.global	gpio_bit_write
+ 481              		.syntax unified
+ 482              		.code	16
+ 483              		.thumb_func
+ 484              		.fpu softvfp
+ 486              	gpio_bit_write:
+ 487              	.LFB63:
+ 195:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 196:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 197:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      write data to the specified GPIO pin
+ 198:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 199:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 200:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 201:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 202:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 203:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 204:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  bit_value: SET or RESET
+ 205:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        RESET: clear the port pin
+ 206:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        SET: set the port pin
+ 207:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 208:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 209:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 210:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_bit_write(uint32_t gpio_periph, uint32_t pin, bit_status bit_value)
+ 211:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 488              		.loc 1 211 1
+ 489              		.cfi_startproc
+ 490              		@ args = 0, pretend = 0, frame = 16
+ 491              		@ frame_needed = 1, uses_anonymous_args = 0
+ 492 0000 80B5     		push	{r7, lr}
+ 493              		.cfi_def_cfa_offset 8
+ 494              		.cfi_offset 7, -8
+ 495              		.cfi_offset 14, -4
+ 496 0002 84B0     		sub	sp, sp, #16
+ 497              		.cfi_def_cfa_offset 24
+ 498 0004 00AF     		add	r7, sp, #0
+ 499              		.cfi_def_cfa_register 7
+ 500 0006 F860     		str	r0, [r7, #12]
+ 501 0008 B960     		str	r1, [r7, #8]
+ 502 000a FB1D     		adds	r3, r7, #7
+ 503 000c 1A70     		strb	r2, [r3]
+ 212:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     if(RESET != bit_value) {
+ 504              		.loc 1 212 7
+ 505 000e FB1D     		adds	r3, r7, #7
+ 506 0010 1B78     		ldrb	r3, [r3]
+ 507 0012 23B1     		cbz	r3, .L22
+ 213:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         GPIO_BOP(gpio_periph) = (uint32_t)pin;
+ 508              		.loc 1 213 9
+ 509 0014 FB68     		ldr	r3, [r7, #12]
+ 510 0016 1833     		adds	r3, r3, #24
+ 511              		.loc 1 213 31
+ 512 0018 BA68     		ldr	r2, [r7, #8]
+ 513 001a 1A60     		str	r2, [r3]
+ 214:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     } else {
+ 215:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         GPIO_BC(gpio_periph) = (uint32_t)pin;
+ 216:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 217:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 514              		.loc 1 217 1
+ 515 001c 03E0     		b	.L24
+ 516              	.L22:
+ 215:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 517              		.loc 1 215 9
+ 518 001e FB68     		ldr	r3, [r7, #12]
+ 519 0020 2833     		adds	r3, r3, #40
+ 215:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 520              		.loc 1 215 30
+ 521 0022 BA68     		ldr	r2, [r7, #8]
+ 522 0024 1A60     		str	r2, [r3]
+ 523              	.L24:
+ 524              		.loc 1 217 1
+ 525 0026 C046     		nop
+ 526 0028 BD46     		mov	sp, r7
+ 527 002a 04B0     		add	sp, sp, #16
+ 528              		@ sp needed
+ 529 002c 80BD     		pop	{r7, pc}
+ 530              		.cfi_endproc
+ 531              	.LFE63:
+ 533              		.section	.text.gpio_port_write,"ax",%progbits
+ 534              		.align	1
+ 535              		.global	gpio_port_write
+ 536              		.syntax unified
+ 537              		.code	16
+ 538              		.thumb_func
+ 539              		.fpu softvfp
+ 541              	gpio_port_write:
+ 542              	.LFB64:
+ 218:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 219:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 220:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      write data to the specified GPIO port
+ 221:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 222:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 223:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 224:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  data: specify the value to be written to the port output control register
+ 225:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 226:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 227:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 228:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_port_write(uint32_t gpio_periph, uint16_t data)
+ 229:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 543              		.loc 1 229 1
+ 544              		.cfi_startproc
+ 545              		@ args = 0, pretend = 0, frame = 8
+ 546              		@ frame_needed = 1, uses_anonymous_args = 0
+ 547 0000 80B5     		push	{r7, lr}
+ 548              		.cfi_def_cfa_offset 8
+ 549              		.cfi_offset 7, -8
+ 550              		.cfi_offset 14, -4
+ 551 0002 82B0     		sub	sp, sp, #8
+ 552              		.cfi_def_cfa_offset 16
+ 553 0004 00AF     		add	r7, sp, #0
+ 554              		.cfi_def_cfa_register 7
+ 555 0006 7860     		str	r0, [r7, #4]
+ 556 0008 0A00     		movs	r2, r1
+ 557 000a BB1C     		adds	r3, r7, #2
+ 558 000c 1A80     		strh	r2, [r3]
+ 230:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_OCTL(gpio_periph) = (uint32_t)data;
+ 559              		.loc 1 230 5
+ 560 000e 7B68     		ldr	r3, [r7, #4]
+ 561 0010 1433     		adds	r3, r3, #20
+ 562              		.loc 1 230 30
+ 563 0012 BA1C     		adds	r2, r7, #2
+ 564 0014 1288     		ldrh	r2, [r2]
+ 565              		.loc 1 230 28
+ 566 0016 1A60     		str	r2, [r3]
+ 231:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 567              		.loc 1 231 1
+ 568 0018 C046     		nop
+ 569 001a BD46     		mov	sp, r7
+ 570 001c 02B0     		add	sp, sp, #8
+ 571              		@ sp needed
+ 572 001e 80BD     		pop	{r7, pc}
+ 573              		.cfi_endproc
+ 574              	.LFE64:
+ 576              		.section	.text.gpio_input_bit_get,"ax",%progbits
+ 577              		.align	1
+ 578              		.global	gpio_input_bit_get
+ 579              		.syntax unified
+ 580              		.code	16
+ 581              		.thumb_func
+ 582              		.fpu softvfp
+ 584              	gpio_input_bit_get:
+ 585              	.LFB65:
+ 232:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 233:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 234:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      get GPIO pin input status
+ 235:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 236:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 237:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 238:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 239:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 240:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 241:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 242:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     SET or RESET
+ 243:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 244:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** FlagStatus gpio_input_bit_get(uint32_t gpio_periph, uint32_t pin)
+ 245:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 586              		.loc 1 245 1
+ 587              		.cfi_startproc
+ 588              		@ args = 0, pretend = 0, frame = 8
+ 589              		@ frame_needed = 1, uses_anonymous_args = 0
+ 590 0000 80B5     		push	{r7, lr}
+ 591              		.cfi_def_cfa_offset 8
+ 592              		.cfi_offset 7, -8
+ 593              		.cfi_offset 14, -4
+ 594 0002 82B0     		sub	sp, sp, #8
+ 595              		.cfi_def_cfa_offset 16
+ 596 0004 00AF     		add	r7, sp, #0
+ 597              		.cfi_def_cfa_register 7
+ 598 0006 7860     		str	r0, [r7, #4]
+ 599 0008 3960     		str	r1, [r7]
+ 246:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     if((uint32_t)RESET != (GPIO_ISTAT(gpio_periph) & (pin))) {
+ 600              		.loc 1 246 28
+ 601 000a 7B68     		ldr	r3, [r7, #4]
+ 602 000c 1033     		adds	r3, r3, #16
+ 603 000e 1B68     		ldr	r3, [r3]
+ 604              		.loc 1 246 52
+ 605 0010 3A68     		ldr	r2, [r7]
+ 606 0012 1340     		ands	r3, r2
+ 607              		.loc 1 246 7
+ 608 0014 0BB1     		cbz	r3, .L27
+ 247:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         return SET;
+ 609              		.loc 1 247 16
+ 610 0016 0123     		movs	r3, #1
+ 611 0018 00E0     		b	.L28
+ 612              	.L27:
+ 248:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     } else {
+ 249:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         return RESET;
+ 613              		.loc 1 249 16
+ 614 001a 0023     		movs	r3, #0
+ 615              	.L28:
+ 250:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 251:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 616              		.loc 1 251 1
+ 617 001c 1800     		movs	r0, r3
+ 618 001e BD46     		mov	sp, r7
+ 619 0020 02B0     		add	sp, sp, #8
+ 620              		@ sp needed
+ 621 0022 80BD     		pop	{r7, pc}
+ 622              		.cfi_endproc
+ 623              	.LFE65:
+ 625              		.section	.text.gpio_input_port_get,"ax",%progbits
+ 626              		.align	1
+ 627              		.global	gpio_input_port_get
+ 628              		.syntax unified
+ 629              		.code	16
+ 630              		.thumb_func
+ 631              		.fpu softvfp
+ 633              	gpio_input_port_get:
+ 634              	.LFB66:
+ 252:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 253:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 254:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      get GPIO all pins input status
+ 255:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 256:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 257:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 258:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 259:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     state of GPIO all pins
+ 260:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 261:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** uint16_t gpio_input_port_get(uint32_t gpio_periph)
+ 262:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 635              		.loc 1 262 1
+ 636              		.cfi_startproc
+ 637              		@ args = 0, pretend = 0, frame = 8
+ 638              		@ frame_needed = 1, uses_anonymous_args = 0
+ 639 0000 80B5     		push	{r7, lr}
+ 640              		.cfi_def_cfa_offset 8
+ 641              		.cfi_offset 7, -8
+ 642              		.cfi_offset 14, -4
+ 643 0002 82B0     		sub	sp, sp, #8
+ 644              		.cfi_def_cfa_offset 16
+ 645 0004 00AF     		add	r7, sp, #0
+ 646              		.cfi_def_cfa_register 7
+ 647 0006 7860     		str	r0, [r7, #4]
+ 263:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     return (uint16_t)GPIO_ISTAT(gpio_periph);
+ 648              		.loc 1 263 22
+ 649 0008 7B68     		ldr	r3, [r7, #4]
+ 650 000a 1033     		adds	r3, r3, #16
+ 651 000c 1B68     		ldr	r3, [r3]
+ 652              		.loc 1 263 12
+ 653 000e 9BB2     		uxth	r3, r3
+ 264:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 654              		.loc 1 264 1
+ 655 0010 1800     		movs	r0, r3
+ 656 0012 BD46     		mov	sp, r7
+ 657 0014 02B0     		add	sp, sp, #8
+ 658              		@ sp needed
+ 659 0016 80BD     		pop	{r7, pc}
+ 660              		.cfi_endproc
+ 661              	.LFE66:
+ 663              		.section	.text.gpio_output_bit_get,"ax",%progbits
+ 664              		.align	1
+ 665              		.global	gpio_output_bit_get
+ 666              		.syntax unified
+ 667              		.code	16
+ 668              		.thumb_func
+ 669              		.fpu softvfp
+ 671              	gpio_output_bit_get:
+ 672              	.LFB67:
+ 265:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 266:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 267:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      get GPIO pin output status
+ 268:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 269:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 270:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 271:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 272:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 273:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 274:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 275:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     SET or RESET
+ 276:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 277:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** FlagStatus gpio_output_bit_get(uint32_t gpio_periph, uint32_t pin)
+ 278:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 673              		.loc 1 278 1
+ 674              		.cfi_startproc
+ 675              		@ args = 0, pretend = 0, frame = 8
+ 676              		@ frame_needed = 1, uses_anonymous_args = 0
+ 677 0000 80B5     		push	{r7, lr}
+ 678              		.cfi_def_cfa_offset 8
+ 679              		.cfi_offset 7, -8
+ 680              		.cfi_offset 14, -4
+ 681 0002 82B0     		sub	sp, sp, #8
+ 682              		.cfi_def_cfa_offset 16
+ 683 0004 00AF     		add	r7, sp, #0
+ 684              		.cfi_def_cfa_register 7
+ 685 0006 7860     		str	r0, [r7, #4]
+ 686 0008 3960     		str	r1, [r7]
+ 279:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     if((uint32_t)RESET != (GPIO_OCTL(gpio_periph) & (pin))) {
+ 687              		.loc 1 279 28
+ 688 000a 7B68     		ldr	r3, [r7, #4]
+ 689 000c 1433     		adds	r3, r3, #20
+ 690 000e 1B68     		ldr	r3, [r3]
+ 691              		.loc 1 279 51
+ 692 0010 3A68     		ldr	r2, [r7]
+ 693 0012 1340     		ands	r3, r2
+ 694              		.loc 1 279 7
+ 695 0014 0BB1     		cbz	r3, .L32
+ 280:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         return SET;
+ 696              		.loc 1 280 16
+ 697 0016 0123     		movs	r3, #1
+ 698 0018 00E0     		b	.L33
+ 699              	.L32:
+ 281:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     } else {
+ 282:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         return RESET;
+ 700              		.loc 1 282 16
+ 701 001a 0023     		movs	r3, #0
+ 702              	.L33:
+ 283:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 284:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 703              		.loc 1 284 1
+ 704 001c 1800     		movs	r0, r3
+ 705 001e BD46     		mov	sp, r7
+ 706 0020 02B0     		add	sp, sp, #8
+ 707              		@ sp needed
+ 708 0022 80BD     		pop	{r7, pc}
+ 709              		.cfi_endproc
+ 710              	.LFE67:
+ 712              		.section	.text.gpio_output_port_get,"ax",%progbits
+ 713              		.align	1
+ 714              		.global	gpio_output_port_get
+ 715              		.syntax unified
+ 716              		.code	16
+ 717              		.thumb_func
+ 718              		.fpu softvfp
+ 720              	gpio_output_port_get:
+ 721              	.LFB68:
+ 285:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 286:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 287:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      get GPIO all pins output status
+ 288:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 289:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 290:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 291:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 292:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     state of GPIO all pins
+ 293:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 294:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** uint16_t gpio_output_port_get(uint32_t gpio_periph)
+ 295:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 722              		.loc 1 295 1
+ 723              		.cfi_startproc
+ 724              		@ args = 0, pretend = 0, frame = 8
+ 725              		@ frame_needed = 1, uses_anonymous_args = 0
+ 726 0000 80B5     		push	{r7, lr}
+ 727              		.cfi_def_cfa_offset 8
+ 728              		.cfi_offset 7, -8
+ 729              		.cfi_offset 14, -4
+ 730 0002 82B0     		sub	sp, sp, #8
+ 731              		.cfi_def_cfa_offset 16
+ 732 0004 00AF     		add	r7, sp, #0
+ 733              		.cfi_def_cfa_register 7
+ 734 0006 7860     		str	r0, [r7, #4]
+ 296:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     return (uint16_t)GPIO_OCTL(gpio_periph);
+ 735              		.loc 1 296 22
+ 736 0008 7B68     		ldr	r3, [r7, #4]
+ 737 000a 1433     		adds	r3, r3, #20
+ 738 000c 1B68     		ldr	r3, [r3]
+ 739              		.loc 1 296 12
+ 740 000e 9BB2     		uxth	r3, r3
+ 297:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 741              		.loc 1 297 1
+ 742 0010 1800     		movs	r0, r3
+ 743 0012 BD46     		mov	sp, r7
+ 744 0014 02B0     		add	sp, sp, #8
+ 745              		@ sp needed
+ 746 0016 80BD     		pop	{r7, pc}
+ 747              		.cfi_endproc
+ 748              	.LFE68:
+ 750              		.section	.text.gpio_af_set,"ax",%progbits
+ 751              		.align	1
+ 752              		.global	gpio_af_set
+ 753              		.syntax unified
+ 754              		.code	16
+ 755              		.thumb_func
+ 756              		.fpu softvfp
+ 758              	gpio_af_set:
+ 759              	.LFB69:
+ 298:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 299:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 300:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      set GPIO alternate function
+ 301:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C)
+ 302:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 303:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C)
+ 304:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  alt_func_num: GPIO pin af function, please refer to specific device datasheet
+ 305:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_AF_0: TIMER13, TIMER14, TIMER16, SPI0, SPI1, I2S0, CK_OUT, USART0,
+ 306:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                               I2C0, I2C1, SWDIO, SWCLK
+ 307:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_AF_1: USART0, USART1, TIMER2, TIMER14, I2C0, I2C1
+ 308:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_AF_2: TIMER0, TIMER1, TIMER15, TIMER16, I2S0
+ 309:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_AF_3: I2C0, TIMER14
+ 310:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_AF_4(port A,B only): USART1, I2C0, I2C1, TIMER13
+ 311:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_AF_5(port A,B only): TIMER15, TIMER16, I2S0
+ 312:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_AF_6(port A,B only): SPI1
+ 313:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_AF_7(port A,B only): CMP
+ 314:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 315:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 316:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 317:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 318:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 319:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 320:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_af_set(uint32_t gpio_periph, uint32_t alt_func_num, uint32_t pin)
+ 321:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 760              		.loc 1 321 1
+ 761              		.cfi_startproc
+ 762              		@ args = 0, pretend = 0, frame = 32
+ 763              		@ frame_needed = 1, uses_anonymous_args = 0
+ 764 0000 80B5     		push	{r7, lr}
+ 765              		.cfi_def_cfa_offset 8
+ 766              		.cfi_offset 7, -8
+ 767              		.cfi_offset 14, -4
+ 768 0002 88B0     		sub	sp, sp, #32
+ 769              		.cfi_def_cfa_offset 40
+ 770 0004 00AF     		add	r7, sp, #0
+ 771              		.cfi_def_cfa_register 7
+ 772 0006 F860     		str	r0, [r7, #12]
+ 773 0008 B960     		str	r1, [r7, #8]
+ 774 000a 7A60     		str	r2, [r7, #4]
+ 322:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     uint16_t i;
+ 323:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     uint32_t afrl, afrh;
+ 324:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 325:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     afrl = GPIO_AFSEL0(gpio_periph);
+ 775              		.loc 1 325 12
+ 776 000c FB68     		ldr	r3, [r7, #12]
+ 777 000e 2033     		adds	r3, r3, #32
+ 778              		.loc 1 325 10
+ 779 0010 1B68     		ldr	r3, [r3]
+ 780 0012 BB61     		str	r3, [r7, #24]
+ 326:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     afrh = GPIO_AFSEL1(gpio_periph);
+ 781              		.loc 1 326 12
+ 782 0014 FB68     		ldr	r3, [r7, #12]
+ 783 0016 2433     		adds	r3, r3, #36
+ 784              		.loc 1 326 10
+ 785 0018 1B68     		ldr	r3, [r3]
+ 786 001a 7B61     		str	r3, [r7, #20]
+ 327:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 328:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     for(i = 0U; i < 8U; i++) {
+ 787              		.loc 1 328 11
+ 788 001c 1E23     		movs	r3, #30
+ 789 001e FB18     		adds	r3, r7, r3
+ 790 0020 0022     		movs	r2, #0
+ 791 0022 1A80     		strh	r2, [r3]
+ 792              		.loc 1 328 5
+ 793 0024 21E0     		b	.L37
+ 794              	.L39:
+ 329:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 795              		.loc 1 329 16
+ 796 0026 1E21     		movs	r1, #30
+ 797 0028 7B18     		adds	r3, r7, r1
+ 798 002a 1B88     		ldrh	r3, [r3]
+ 799 002c 0122     		movs	r2, #1
+ 800 002e 9A40     		lsls	r2, r2, r3
+ 801 0030 1300     		movs	r3, r2
+ 802              		.loc 1 329 22
+ 803 0032 7A68     		ldr	r2, [r7, #4]
+ 804 0034 1340     		ands	r3, r2
+ 805              		.loc 1 329 11
+ 806 0036 93B1     		cbz	r3, .L38
+ 330:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             /* clear the specified pin alternate function bits */
+ 331:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             afrl &= ~GPIO_AFR_MASK(i);
+ 807              		.loc 1 331 22
+ 808 0038 7B18     		adds	r3, r7, r1
+ 809 003a 1B88     		ldrh	r3, [r3]
+ 810 003c 9B00     		lsls	r3, r3, #2
+ 811 003e 0F22     		movs	r2, #15
+ 812 0040 9A40     		lsls	r2, r2, r3
+ 813 0042 1300     		movs	r3, r2
+ 814              		.loc 1 331 21
+ 815 0044 DA43     		mvns	r2, r3
+ 816              		.loc 1 331 18
+ 817 0046 BB69     		ldr	r3, [r7, #24]
+ 818 0048 1340     		ands	r3, r2
+ 819 004a BB61     		str	r3, [r7, #24]
+ 332:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             afrl |= GPIO_AFR_SET(i, alt_func_num);
+ 820              		.loc 1 332 21
+ 821 004c 7B18     		adds	r3, r7, r1
+ 822 004e 1B88     		ldrh	r3, [r3]
+ 823 0050 9B00     		lsls	r3, r3, #2
+ 824 0052 BA68     		ldr	r2, [r7, #8]
+ 825 0054 9A40     		lsls	r2, r2, r3
+ 826 0056 1300     		movs	r3, r2
+ 827              		.loc 1 332 18
+ 828 0058 BA69     		ldr	r2, [r7, #24]
+ 829 005a 1343     		orrs	r3, r2
+ 830 005c BB61     		str	r3, [r7, #24]
+ 831              	.L38:
+ 328:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 832              		.loc 1 328 26 discriminator 2
+ 833 005e 1E21     		movs	r1, #30
+ 834 0060 7B18     		adds	r3, r7, r1
+ 835 0062 1A88     		ldrh	r2, [r3]
+ 836 0064 7B18     		adds	r3, r7, r1
+ 837 0066 0132     		adds	r2, r2, #1
+ 838 0068 1A80     		strh	r2, [r3]
+ 839              	.L37:
+ 328:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 840              		.loc 1 328 5 discriminator 1
+ 841 006a 1E22     		movs	r2, #30
+ 842 006c BB18     		adds	r3, r7, r2
+ 843 006e 1B88     		ldrh	r3, [r3]
+ 844 0070 072B     		cmp	r3, #7
+ 845 0072 D8D9     		bls	.L39
+ 333:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         }
+ 334:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 335:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 336:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     for(i = 8U; i < 16U; i++) {
+ 846              		.loc 1 336 11
+ 847 0074 BB18     		adds	r3, r7, r2
+ 848 0076 0822     		movs	r2, #8
+ 849 0078 1A80     		strh	r2, [r3]
+ 850              		.loc 1 336 5
+ 851 007a 23E0     		b	.L40
+ 852              	.L42:
+ 337:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 853              		.loc 1 337 16
+ 854 007c 1E21     		movs	r1, #30
+ 855 007e 7B18     		adds	r3, r7, r1
+ 856 0080 1B88     		ldrh	r3, [r3]
+ 857 0082 0122     		movs	r2, #1
+ 858 0084 9A40     		lsls	r2, r2, r3
+ 859 0086 1300     		movs	r3, r2
+ 860              		.loc 1 337 22
+ 861 0088 7A68     		ldr	r2, [r7, #4]
+ 862 008a 1340     		ands	r3, r2
+ 863              		.loc 1 337 11
+ 864 008c A3B1     		cbz	r3, .L41
+ 338:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             /* clear the specified pin alternate function bits */
+ 339:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             afrh &= ~GPIO_AFR_MASK(i - 8U);
+ 865              		.loc 1 339 22
+ 866 008e 7B18     		adds	r3, r7, r1
+ 867 0090 1B88     		ldrh	r3, [r3]
+ 868 0092 083B     		subs	r3, r3, #8
+ 869 0094 9B00     		lsls	r3, r3, #2
+ 870 0096 0F22     		movs	r2, #15
+ 871 0098 9A40     		lsls	r2, r2, r3
+ 872 009a 1300     		movs	r3, r2
+ 873              		.loc 1 339 21
+ 874 009c DA43     		mvns	r2, r3
+ 875              		.loc 1 339 18
+ 876 009e 7B69     		ldr	r3, [r7, #20]
+ 877 00a0 1340     		ands	r3, r2
+ 878 00a2 7B61     		str	r3, [r7, #20]
+ 340:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****             afrh |= GPIO_AFR_SET(i - 8U, alt_func_num);
+ 879              		.loc 1 340 21
+ 880 00a4 7B18     		adds	r3, r7, r1
+ 881 00a6 1B88     		ldrh	r3, [r3]
+ 882 00a8 083B     		subs	r3, r3, #8
+ 883 00aa 9B00     		lsls	r3, r3, #2
+ 884 00ac BA68     		ldr	r2, [r7, #8]
+ 885 00ae 9A40     		lsls	r2, r2, r3
+ 886 00b0 1300     		movs	r3, r2
+ 887              		.loc 1 340 18
+ 888 00b2 7A69     		ldr	r2, [r7, #20]
+ 889 00b4 1343     		orrs	r3, r2
+ 890 00b6 7B61     		str	r3, [r7, #20]
+ 891              	.L41:
+ 336:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 892              		.loc 1 336 27 discriminator 2
+ 893 00b8 1E21     		movs	r1, #30
+ 894 00ba 7B18     		adds	r3, r7, r1
+ 895 00bc 1A88     		ldrh	r2, [r3]
+ 896 00be 7B18     		adds	r3, r7, r1
+ 897 00c0 0132     		adds	r2, r2, #1
+ 898 00c2 1A80     		strh	r2, [r3]
+ 899              	.L40:
+ 336:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         if((1U << i) & pin) {
+ 900              		.loc 1 336 5 discriminator 1
+ 901 00c4 1E23     		movs	r3, #30
+ 902 00c6 FB18     		adds	r3, r7, r3
+ 903 00c8 1B88     		ldrh	r3, [r3]
+ 904 00ca 0F2B     		cmp	r3, #15
+ 905 00cc D6D9     		bls	.L42
+ 341:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****         }
+ 342:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     }
+ 343:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 344:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_AFSEL0(gpio_periph) = afrl;
+ 906              		.loc 1 344 5
+ 907 00ce FB68     		ldr	r3, [r7, #12]
+ 908 00d0 2033     		adds	r3, r3, #32
+ 909              		.loc 1 344 30
+ 910 00d2 BA69     		ldr	r2, [r7, #24]
+ 911 00d4 1A60     		str	r2, [r3]
+ 345:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_AFSEL1(gpio_periph) = afrh;
+ 912              		.loc 1 345 5
+ 913 00d6 FB68     		ldr	r3, [r7, #12]
+ 914 00d8 2433     		adds	r3, r3, #36
+ 915              		.loc 1 345 30
+ 916 00da 7A69     		ldr	r2, [r7, #20]
+ 917 00dc 1A60     		str	r2, [r3]
+ 346:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 918              		.loc 1 346 1
+ 919 00de C046     		nop
+ 920 00e0 BD46     		mov	sp, r7
+ 921 00e2 08B0     		add	sp, sp, #32
+ 922              		@ sp needed
+ 923 00e4 80BD     		pop	{r7, pc}
+ 924              		.cfi_endproc
+ 925              	.LFE69:
+ 927              		.section	.text.gpio_pin_lock,"ax",%progbits
+ 928              		.align	1
+ 929              		.global	gpio_pin_lock
+ 930              		.syntax unified
+ 931              		.code	16
+ 932              		.thumb_func
+ 933              		.fpu softvfp
+ 935              	gpio_pin_lock:
+ 936              	.LFB70:
+ 347:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 348:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 349:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      lock GPIO pin bit
+ 350:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B)
+ 351:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 352:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B)
+ 353:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 354:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 355:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 356:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 357:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 358:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 359:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_pin_lock(uint32_t gpio_periph, uint32_t pin)
+ 360:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 937              		.loc 1 360 1
+ 938              		.cfi_startproc
+ 939              		@ args = 0, pretend = 0, frame = 16
+ 940              		@ frame_needed = 1, uses_anonymous_args = 0
+ 941 0000 80B5     		push	{r7, lr}
+ 942              		.cfi_def_cfa_offset 8
+ 943              		.cfi_offset 7, -8
+ 944              		.cfi_offset 14, -4
+ 945 0002 84B0     		sub	sp, sp, #16
+ 946              		.cfi_def_cfa_offset 24
+ 947 0004 00AF     		add	r7, sp, #0
+ 948              		.cfi_def_cfa_register 7
+ 949 0006 7860     		str	r0, [r7, #4]
+ 950 0008 3960     		str	r1, [r7]
+ 361:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     uint32_t lock = 0x00010000U;
+ 951              		.loc 1 361 14
+ 952 000a 8023     		movs	r3, #128
+ 953 000c 5B02     		lsls	r3, r3, #9
+ 954 000e FB60     		str	r3, [r7, #12]
+ 362:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     lock |= pin;
+ 955              		.loc 1 362 10
+ 956 0010 FA68     		ldr	r2, [r7, #12]
+ 957 0012 3B68     		ldr	r3, [r7]
+ 958 0014 1343     		orrs	r3, r2
+ 959 0016 FB60     		str	r3, [r7, #12]
+ 363:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 364:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     /* lock key writing sequence: write 1->write 0->write 1->read 0->read 1 */
+ 365:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_LOCK(gpio_periph) = (uint32_t)lock;
+ 960              		.loc 1 365 5
+ 961 0018 7B68     		ldr	r3, [r7, #4]
+ 962 001a 1C33     		adds	r3, r3, #28
+ 963              		.loc 1 365 28
+ 964 001c FA68     		ldr	r2, [r7, #12]
+ 965 001e 1A60     		str	r2, [r3]
+ 366:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_LOCK(gpio_periph) = (uint32_t)pin;
+ 966              		.loc 1 366 5
+ 967 0020 7B68     		ldr	r3, [r7, #4]
+ 968 0022 1C33     		adds	r3, r3, #28
+ 969              		.loc 1 366 28
+ 970 0024 3A68     		ldr	r2, [r7]
+ 971 0026 1A60     		str	r2, [r3]
+ 367:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_LOCK(gpio_periph) = (uint32_t)lock;
+ 972              		.loc 1 367 5
+ 973 0028 7B68     		ldr	r3, [r7, #4]
+ 974 002a 1C33     		adds	r3, r3, #28
+ 975              		.loc 1 367 28
+ 976 002c FA68     		ldr	r2, [r7, #12]
+ 977 002e 1A60     		str	r2, [r3]
+ 368:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     lock = GPIO_LOCK(gpio_periph);
+ 978              		.loc 1 368 12
+ 979 0030 7B68     		ldr	r3, [r7, #4]
+ 980 0032 1C33     		adds	r3, r3, #28
+ 981              		.loc 1 368 10
+ 982 0034 1B68     		ldr	r3, [r3]
+ 983 0036 FB60     		str	r3, [r7, #12]
+ 369:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     lock = GPIO_LOCK(gpio_periph);
+ 984              		.loc 1 369 12
+ 985 0038 7B68     		ldr	r3, [r7, #4]
+ 986 003a 1C33     		adds	r3, r3, #28
+ 987              		.loc 1 369 10
+ 988 003c 1B68     		ldr	r3, [r3]
+ 989 003e FB60     		str	r3, [r7, #12]
+ 370:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 990              		.loc 1 370 1
+ 991 0040 C046     		nop
+ 992 0042 BD46     		mov	sp, r7
+ 993 0044 04B0     		add	sp, sp, #16
+ 994              		@ sp needed
+ 995 0046 80BD     		pop	{r7, pc}
+ 996              		.cfi_endproc
+ 997              	.LFE70:
+ 999              		.section	.text.gpio_bit_toggle,"ax",%progbits
+ 1000              		.align	1
+ 1001              		.global	gpio_bit_toggle
+ 1002              		.syntax unified
+ 1003              		.code	16
+ 1004              		.thumb_func
+ 1005              		.fpu softvfp
+ 1007              	gpio_bit_toggle:
+ 1008              	.LFB71:
+ 371:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 372:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 373:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      toggle GPIO pin status
+ 374:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 375:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 376:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 377:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  pin: GPIO pin
+ 378:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 one or more parameters can be selected which are shown as below:
+ 379:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIO_PIN_x(x=0..15), GPIO_PIN_ALL
+ 380:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 381:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 382:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 383:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_bit_toggle(uint32_t gpio_periph, uint32_t pin)
+ 384:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 1009              		.loc 1 384 1
+ 1010              		.cfi_startproc
+ 1011              		@ args = 0, pretend = 0, frame = 8
+ 1012              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1013 0000 80B5     		push	{r7, lr}
+ 1014              		.cfi_def_cfa_offset 8
+ 1015              		.cfi_offset 7, -8
+ 1016              		.cfi_offset 14, -4
+ 1017 0002 82B0     		sub	sp, sp, #8
+ 1018              		.cfi_def_cfa_offset 16
+ 1019 0004 00AF     		add	r7, sp, #0
+ 1020              		.cfi_def_cfa_register 7
+ 1021 0006 7860     		str	r0, [r7, #4]
+ 1022 0008 3960     		str	r1, [r7]
+ 385:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_TG(gpio_periph) = (uint32_t)pin;
+ 1023              		.loc 1 385 5
+ 1024 000a 7B68     		ldr	r3, [r7, #4]
+ 1025 000c 2C33     		adds	r3, r3, #44
+ 1026              		.loc 1 385 26
+ 1027 000e 3A68     		ldr	r2, [r7]
+ 1028 0010 1A60     		str	r2, [r3]
+ 386:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 1029              		.loc 1 386 1
+ 1030 0012 C046     		nop
+ 1031 0014 BD46     		mov	sp, r7
+ 1032 0016 02B0     		add	sp, sp, #8
+ 1033              		@ sp needed
+ 1034 0018 80BD     		pop	{r7, pc}
+ 1035              		.cfi_endproc
+ 1036              	.LFE71:
+ 1038              		.section	.text.gpio_port_toggle,"ax",%progbits
+ 1039              		.align	1
+ 1040              		.global	gpio_port_toggle
+ 1041              		.syntax unified
+ 1042              		.code	16
+ 1043              		.thumb_func
+ 1044              		.fpu softvfp
+ 1046              	gpio_port_toggle:
+ 1047              	.LFB72:
+ 387:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** 
+ 388:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** /*!
+ 389:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \brief      toggle GPIO port status
+ 390:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[in]  gpio_periph: GPIOx(x = A,B,C,F)
+ 391:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****                 only one parameter can be selected which is shown as below:
+ 392:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****       \arg        GPIOx(x = A,B,C,F)
+ 393:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \param[out] none
+ 394:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     \retval     none
+ 395:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** */
+ 396:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** void gpio_port_toggle(uint32_t gpio_periph)
+ 397:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** {
+ 1048              		.loc 1 397 1
+ 1049              		.cfi_startproc
+ 1050              		@ args = 0, pretend = 0, frame = 8
+ 1051              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1052 0000 80B5     		push	{r7, lr}
+ 1053              		.cfi_def_cfa_offset 8
+ 1054              		.cfi_offset 7, -8
+ 1055              		.cfi_offset 14, -4
+ 1056 0002 82B0     		sub	sp, sp, #8
+ 1057              		.cfi_def_cfa_offset 16
+ 1058 0004 00AF     		add	r7, sp, #0
+ 1059              		.cfi_def_cfa_register 7
+ 1060 0006 7860     		str	r0, [r7, #4]
+ 398:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c ****     GPIO_TG(gpio_periph) = 0x0000FFFFU;
+ 1061              		.loc 1 398 5
+ 1062 0008 7B68     		ldr	r3, [r7, #4]
+ 1063 000a 2C33     		adds	r3, r3, #44
+ 1064              		.loc 1 398 26
+ 1065 000c 4FF6FF72 		movw	r2, #65535
+ 1066 0010 1A60     		str	r2, [r3]
+ 399:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_gpio.c **** }
+ 1067              		.loc 1 399 1
+ 1068 0012 C046     		nop
+ 1069 0014 BD46     		mov	sp, r7
+ 1070 0016 02B0     		add	sp, sp, #8
+ 1071              		@ sp needed
+ 1072 0018 80BD     		pop	{r7, pc}
+ 1073              		.cfi_endproc
+ 1074              	.LFE72:
+ 1076              		.text
+ 1077              	.Letext0:
+ 1078              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 1079              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 1080              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 1081              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+ 1082              		.file 6 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_gpio.h"
+ 1083              		.file 7 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 gd32e23x_gpio.c
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:16     .text.gpio_deinit:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:24     .text.gpio_deinit:00000000 gpio_deinit
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:123    .text.gpio_mode_set:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:130    .text.gpio_mode_set:00000000 gpio_mode_set
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:263    .text.gpio_output_options_set:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:270    .text.gpio_output_options_set:00000000 gpio_output_options_set
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:401    .text.gpio_bit_set:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:408    .text.gpio_bit_set:00000000 gpio_bit_set
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:440    .text.gpio_bit_reset:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:447    .text.gpio_bit_reset:00000000 gpio_bit_reset
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:479    .text.gpio_bit_write:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:486    .text.gpio_bit_write:00000000 gpio_bit_write
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:534    .text.gpio_port_write:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:541    .text.gpio_port_write:00000000 gpio_port_write
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:577    .text.gpio_input_bit_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:584    .text.gpio_input_bit_get:00000000 gpio_input_bit_get
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:626    .text.gpio_input_port_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:633    .text.gpio_input_port_get:00000000 gpio_input_port_get
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:664    .text.gpio_output_bit_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:671    .text.gpio_output_bit_get:00000000 gpio_output_bit_get
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:713    .text.gpio_output_port_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:720    .text.gpio_output_port_get:00000000 gpio_output_port_get
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:751    .text.gpio_af_set:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:758    .text.gpio_af_set:00000000 gpio_af_set
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:928    .text.gpio_pin_lock:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:935    .text.gpio_pin_lock:00000000 gpio_pin_lock
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:1000   .text.gpio_bit_toggle:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:1007   .text.gpio_bit_toggle:00000000 gpio_bit_toggle
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:1039   .text.gpio_port_toggle:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccCPV7n3.s:1046   .text.gpio_port_toggle:00000000 gpio_port_toggle
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.gd32e23x_gpio.h.41.139963dacba5c3924b5a24f31e189761
+
+UNDEFINED SYMBOLS
+rcu_periph_reset_enable
+rcu_periph_reset_disable

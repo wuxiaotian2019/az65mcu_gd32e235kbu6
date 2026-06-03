@@ -1,0 +1,2691 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"gd32e23x_dma.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.dma_deinit,"ax",%progbits
+  16              		.align	1
+  17              		.global	dma_deinit
+  18              		.arch armv8-m.base
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	dma_deinit:
+  25              	.LFB58:
+  26              		.file 1 "../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c"
+   1:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+   2:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \file    gd32e23x_dma.c
+   3:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief   DMA driver
+   4:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+   5:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \version 2025-08-08, V2.4.0, firmware for GD32E23x
+   6:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+   7:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+   8:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*
+   9:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     Copyright (c) 2025, GigaDevice Semiconductor Inc.
+  10:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+  11:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     Redistribution and use in source and binary forms, with or without modification,
+  12:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** are permitted provided that the following conditions are met:
+  13:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+  14:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  15:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****        list of conditions and the following disclaimer.
+  16:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  17:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****        this list of conditions and the following disclaimer in the documentation
+  18:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****        and/or other materials provided with the distribution.
+  19:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  20:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****        may be used to endorse or promote products derived from this software without
+  21:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****        specific prior written permission.
+  22:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+  23:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  24:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  25:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  26:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  27:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  28:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  29:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  30:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  31:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  32:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** OF SUCH DAMAGE.
+  33:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+  34:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+  35:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** #include "gd32e23x_dma.h"
+  36:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+  37:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+  38:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      deinitialize DMA a channel registers
+  39:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel is deinitialized
+  40:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+  41:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+  42:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+  43:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+  44:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+  45:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_deinit(dma_channel_enum channelx)
+  46:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+  27              		.loc 1 46 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 82B0     		sub	sp, sp, #8
+  36              		.cfi_def_cfa_offset 16
+  37 0004 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  39 0006 0200     		movs	r2, r0
+  40 0008 FB1D     		adds	r3, r7, #7
+  41 000a 1A70     		strb	r2, [r3]
+  47:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* disable DMA a channel */
+  48:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) &= ~DMA_CHXCTL_CHEN;
+  42              		.loc 1 48 25
+  43 000c FB1D     		adds	r3, r7, #7
+  44 000e 1A78     		ldrb	r2, [r3]
+  45 0010 1300     		movs	r3, r2
+  46 0012 9B00     		lsls	r3, r3, #2
+  47 0014 9B18     		adds	r3, r3, r2
+  48 0016 9B00     		lsls	r3, r3, #2
+  49 0018 40F2080C 		movw	ip, #8
+  50 001c C4F2020C 		movt	ip, 16386
+  51 0020 6344     		add	r3, r3, ip
+  52 0022 1968     		ldr	r1, [r3]
+  53 0024 FB1D     		adds	r3, r7, #7
+  54 0026 1A78     		ldrb	r2, [r3]
+  55 0028 1300     		movs	r3, r2
+  56 002a 9B00     		lsls	r3, r3, #2
+  57 002c 9B18     		adds	r3, r3, r2
+  58 002e 9B00     		lsls	r3, r3, #2
+  59 0030 40F2080C 		movw	ip, #8
+  60 0034 C4F2020C 		movt	ip, 16386
+  61 0038 6344     		add	r3, r3, ip
+  62 003a 0122     		movs	r2, #1
+  63 003c 9143     		bics	r1, r2
+  64 003e 0A00     		movs	r2, r1
+  65 0040 1A60     		str	r2, [r3]
+  49:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* reset DMA channel registers */
+  50:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) = DMA_CHCTL_RESET_VALUE;
+  66              		.loc 1 50 5
+  67 0042 FB1D     		adds	r3, r7, #7
+  68 0044 1A78     		ldrb	r2, [r3]
+  69 0046 1300     		movs	r3, r2
+  70 0048 9B00     		lsls	r3, r3, #2
+  71 004a 9B18     		adds	r3, r3, r2
+  72 004c 9B00     		lsls	r3, r3, #2
+  73 004e 40F2080C 		movw	ip, #8
+  74 0052 C4F2020C 		movt	ip, 16386
+  75 0056 6344     		add	r3, r3, ip
+  76              		.loc 1 50 25
+  77 0058 0022     		movs	r2, #0
+  78 005a 1A60     		str	r2, [r3]
+  51:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCNT(channelx) = DMA_CHCNT_RESET_VALUE;
+  79              		.loc 1 51 5
+  80 005c FB1D     		adds	r3, r7, #7
+  81 005e 1A78     		ldrb	r2, [r3]
+  82 0060 1300     		movs	r3, r2
+  83 0062 9B00     		lsls	r3, r3, #2
+  84 0064 9B18     		adds	r3, r3, r2
+  85 0066 9B00     		lsls	r3, r3, #2
+  86 0068 40F20C0C 		movw	ip, #12
+  87 006c C4F2020C 		movt	ip, 16386
+  88 0070 6344     		add	r3, r3, ip
+  89              		.loc 1 51 25
+  90 0072 0022     		movs	r2, #0
+  91 0074 1A60     		str	r2, [r3]
+  52:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHPADDR(channelx) = DMA_CHPADDR_RESET_VALUE;
+  92              		.loc 1 52 5
+  93 0076 FB1D     		adds	r3, r7, #7
+  94 0078 1A78     		ldrb	r2, [r3]
+  95 007a 1300     		movs	r3, r2
+  96 007c 9B00     		lsls	r3, r3, #2
+  97 007e 9B18     		adds	r3, r3, r2
+  98 0080 9B00     		lsls	r3, r3, #2
+  99 0082 40F2100C 		movw	ip, #16
+ 100 0086 C4F2020C 		movt	ip, 16386
+ 101 008a 6344     		add	r3, r3, ip
+ 102              		.loc 1 52 27
+ 103 008c 0022     		movs	r2, #0
+ 104 008e 1A60     		str	r2, [r3]
+  53:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHMADDR(channelx) = DMA_CHMADDR_RESET_VALUE;
+ 105              		.loc 1 53 5
+ 106 0090 FB1D     		adds	r3, r7, #7
+ 107 0092 1A78     		ldrb	r2, [r3]
+ 108 0094 1300     		movs	r3, r2
+ 109 0096 9B00     		lsls	r3, r3, #2
+ 110 0098 9B18     		adds	r3, r3, r2
+ 111 009a 9B00     		lsls	r3, r3, #2
+ 112 009c 40F2140C 		movw	ip, #20
+ 113 00a0 C4F2020C 		movt	ip, 16386
+ 114 00a4 6344     		add	r3, r3, ip
+ 115              		.loc 1 53 27
+ 116 00a6 0022     		movs	r2, #0
+ 117 00a8 1A60     		str	r2, [r3]
+  54:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_INTC |= DMA_FLAG_ADD(DMA_CHINTF_RESET_VALUE, channelx);
+ 118              		.loc 1 54 14
+ 119 00aa 0423     		movs	r3, #4
+ 120 00ac C4F20203 		movt	r3, 16386
+ 121 00b0 1968     		ldr	r1, [r3]
+ 122              		.loc 1 54 17
+ 123 00b2 FB1D     		adds	r3, r7, #7
+ 124 00b4 1B78     		ldrb	r3, [r3]
+ 125 00b6 9B00     		lsls	r3, r3, #2
+ 126 00b8 0F22     		movs	r2, #15
+ 127 00ba 9A40     		lsls	r2, r2, r3
+ 128              		.loc 1 54 14
+ 129 00bc 0423     		movs	r3, #4
+ 130 00be C4F20203 		movt	r3, 16386
+ 131 00c2 0A43     		orrs	r2, r1
+ 132 00c4 1A60     		str	r2, [r3]
+  55:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 133              		.loc 1 55 1
+ 134 00c6 C046     		nop
+ 135 00c8 BD46     		mov	sp, r7
+ 136 00ca 02B0     		add	sp, sp, #8
+ 137              		@ sp needed
+ 138 00cc 80BD     		pop	{r7, pc}
+ 139              		.cfi_endproc
+ 140              	.LFE58:
+ 142              		.section	.text.dma_struct_para_init,"ax",%progbits
+ 143              		.align	1
+ 144              		.global	dma_struct_para_init
+ 145              		.syntax unified
+ 146              		.code	16
+ 147              		.thumb_func
+ 148              		.fpu softvfp
+ 150              	dma_struct_para_init:
+ 151              	.LFB59:
+  56:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+  57:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+  58:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      initialize the parameters of DMA struct with the default values
+  59:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  init_struct: the initialization data needed to initialize DMA channel
+  60:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+  61:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+  62:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+  63:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_struct_para_init(dma_parameter_struct *init_struct)
+  64:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 152              		.loc 1 64 1
+ 153              		.cfi_startproc
+ 154              		@ args = 0, pretend = 0, frame = 8
+ 155              		@ frame_needed = 1, uses_anonymous_args = 0
+ 156 0000 80B5     		push	{r7, lr}
+ 157              		.cfi_def_cfa_offset 8
+ 158              		.cfi_offset 7, -8
+ 159              		.cfi_offset 14, -4
+ 160 0002 82B0     		sub	sp, sp, #8
+ 161              		.cfi_def_cfa_offset 16
+ 162 0004 00AF     		add	r7, sp, #0
+ 163              		.cfi_def_cfa_register 7
+ 164 0006 7860     		str	r0, [r7, #4]
+  65:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* set the DMA struct with the default values */
+  66:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->periph_addr  = 0U;
+ 165              		.loc 1 66 31
+ 166 0008 7B68     		ldr	r3, [r7, #4]
+ 167 000a 0022     		movs	r2, #0
+ 168 000c 1A60     		str	r2, [r3]
+  67:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->periph_width = 0U;
+ 169              		.loc 1 67 31
+ 170 000e 7B68     		ldr	r3, [r7, #4]
+ 171 0010 0022     		movs	r2, #0
+ 172 0012 5A60     		str	r2, [r3, #4]
+  68:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->periph_inc   = (uint8_t)DMA_PERIPH_INCREASE_DISABLE;
+ 173              		.loc 1 68 31
+ 174 0014 7B68     		ldr	r3, [r7, #4]
+ 175 0016 0022     		movs	r2, #0
+ 176 0018 1A76     		strb	r2, [r3, #24]
+  69:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->memory_addr  = 0U;
+ 177              		.loc 1 69 31
+ 178 001a 7B68     		ldr	r3, [r7, #4]
+ 179 001c 0022     		movs	r2, #0
+ 180 001e 9A60     		str	r2, [r3, #8]
+  70:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->memory_width = 0U;
+ 181              		.loc 1 70 31
+ 182 0020 7B68     		ldr	r3, [r7, #4]
+ 183 0022 0022     		movs	r2, #0
+ 184 0024 DA60     		str	r2, [r3, #12]
+  71:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->memory_inc   = (uint8_t)DMA_MEMORY_INCREASE_DISABLE;
+ 185              		.loc 1 71 31
+ 186 0026 7B68     		ldr	r3, [r7, #4]
+ 187 0028 0022     		movs	r2, #0
+ 188 002a 5A76     		strb	r2, [r3, #25]
+  72:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->number       = 0U;
+ 189              		.loc 1 72 31
+ 190 002c 7B68     		ldr	r3, [r7, #4]
+ 191 002e 0022     		movs	r2, #0
+ 192 0030 1A61     		str	r2, [r3, #16]
+  73:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->direction    = (uint8_t)DMA_PERIPHERAL_TO_MEMORY;
+ 193              		.loc 1 73 31
+ 194 0032 7B68     		ldr	r3, [r7, #4]
+ 195 0034 0022     		movs	r2, #0
+ 196 0036 9A76     		strb	r2, [r3, #26]
+  74:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     init_struct->priority     = (uint32_t)DMA_PRIORITY_LOW;
+ 197              		.loc 1 74 31
+ 198 0038 7B68     		ldr	r3, [r7, #4]
+ 199 003a 0022     		movs	r2, #0
+ 200 003c 5A61     		str	r2, [r3, #20]
+  75:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 201              		.loc 1 75 1
+ 202 003e C046     		nop
+ 203 0040 BD46     		mov	sp, r7
+ 204 0042 02B0     		add	sp, sp, #8
+ 205              		@ sp needed
+ 206 0044 80BD     		pop	{r7, pc}
+ 207              		.cfi_endproc
+ 208              	.LFE59:
+ 210              		.section	.text.dma_init,"ax",%progbits
+ 211              		.align	1
+ 212              		.global	dma_init
+ 213              		.syntax unified
+ 214              		.code	16
+ 215              		.thumb_func
+ 216              		.fpu softvfp
+ 218              	dma_init:
+ 219              	.LFB60:
+  76:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+  77:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+  78:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      initialize DMA channel
+  79:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel is initialized
+  80:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+  81:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+  82:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  init_struct: the data needed to initialize DMA channel
+  83:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   periph_addr: peripheral base address
+  84:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   periph_width: DMA_PERIPHERAL_WIDTH_8BIT,DMA_PERIPHERAL_WIDTH_16BIT,DMA_PERIPHERAL
+  85:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   periph_inc: DMA_PERIPH_INCREASE_ENABLE,DMA_PERIPH_INCREASE_DISABLE
+  86:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   memory_addr: memory base address
+  87:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   memory_width: DMA_MEMORY_WIDTH_8BIT,DMA_MEMORY_WIDTH_16BIT,DMA_MEMORY_WIDTH_32BIT
+  88:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   memory_inc: DMA_MEMORY_INCREASE_ENABLE,DMA_MEMORY_INCREASE_DISABLE
+  89:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   direction: DMA_PERIPHERAL_TO_MEMORY,DMA_MEMORY_TO_PERIPHERAL
+  90:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   number: the number of remaining data to be transferred by the DMA
+  91:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                   priority: DMA_PRIORITY_LOW,DMA_PRIORITY_MEDIUM,DMA_PRIORITY_HIGH,DMA_PRIORITY_ULT
+  92:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+  93:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+  94:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+  95:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_init(dma_channel_enum channelx, dma_parameter_struct *init_struct)
+  96:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 220              		.loc 1 96 1
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 16
+ 223              		@ frame_needed = 1, uses_anonymous_args = 0
+ 224 0000 80B5     		push	{r7, lr}
+ 225              		.cfi_def_cfa_offset 8
+ 226              		.cfi_offset 7, -8
+ 227              		.cfi_offset 14, -4
+ 228 0002 84B0     		sub	sp, sp, #16
+ 229              		.cfi_def_cfa_offset 24
+ 230 0004 00AF     		add	r7, sp, #0
+ 231              		.cfi_def_cfa_register 7
+ 232 0006 0200     		movs	r2, r0
+ 233 0008 3960     		str	r1, [r7]
+ 234 000a FB1D     		adds	r3, r7, #7
+ 235 000c 1A70     		strb	r2, [r3]
+  97:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     uint32_t ctl;
+  98:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+  99:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     dma_channel_disable(channelx);
+ 236              		.loc 1 99 5
+ 237 000e FB1D     		adds	r3, r7, #7
+ 238 0010 1B78     		ldrb	r3, [r3]
+ 239 0012 1800     		movs	r0, r3
+ 240 0014 FFF7FEFF 		bl	dma_channel_disable
+ 100:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 101:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* configure peripheral base address */
+ 102:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHPADDR(channelx) = init_struct->periph_addr;
+ 241              		.loc 1 102 5
+ 242 0018 FB1D     		adds	r3, r7, #7
+ 243 001a 1A78     		ldrb	r2, [r3]
+ 244 001c 1300     		movs	r3, r2
+ 245 001e 9B00     		lsls	r3, r3, #2
+ 246 0020 9B18     		adds	r3, r3, r2
+ 247 0022 9B00     		lsls	r3, r3, #2
+ 248 0024 40F2100C 		movw	ip, #16
+ 249 0028 C4F2020C 		movt	ip, 16386
+ 250 002c 6344     		add	r3, r3, ip
+ 251 002e 1A00     		movs	r2, r3
+ 252              		.loc 1 102 40
+ 253 0030 3B68     		ldr	r3, [r7]
+ 254 0032 1B68     		ldr	r3, [r3]
+ 255              		.loc 1 102 27
+ 256 0034 1360     		str	r3, [r2]
+ 103:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 104:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* configure memory base address */
+ 105:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHMADDR(channelx) = init_struct->memory_addr;
+ 257              		.loc 1 105 5
+ 258 0036 FB1D     		adds	r3, r7, #7
+ 259 0038 1A78     		ldrb	r2, [r3]
+ 260 003a 1300     		movs	r3, r2
+ 261 003c 9B00     		lsls	r3, r3, #2
+ 262 003e 9B18     		adds	r3, r3, r2
+ 263 0040 9B00     		lsls	r3, r3, #2
+ 264 0042 40F2140C 		movw	ip, #20
+ 265 0046 C4F2020C 		movt	ip, 16386
+ 266 004a 6344     		add	r3, r3, ip
+ 267 004c 1A00     		movs	r2, r3
+ 268              		.loc 1 105 40
+ 269 004e 3B68     		ldr	r3, [r7]
+ 270 0050 9B68     		ldr	r3, [r3, #8]
+ 271              		.loc 1 105 27
+ 272 0052 1360     		str	r3, [r2]
+ 106:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 107:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* configure the number of remaining data to be transferred */
+ 108:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCNT(channelx) = (init_struct->number & DMA_CHANNEL_CNT_MASK);
+ 273              		.loc 1 108 39
+ 274 0054 3B68     		ldr	r3, [r7]
+ 275 0056 1969     		ldr	r1, [r3, #16]
+ 276              		.loc 1 108 5
+ 277 0058 FB1D     		adds	r3, r7, #7
+ 278 005a 1A78     		ldrb	r2, [r3]
+ 279 005c 1300     		movs	r3, r2
+ 280 005e 9B00     		lsls	r3, r3, #2
+ 281 0060 9B18     		adds	r3, r3, r2
+ 282 0062 9B00     		lsls	r3, r3, #2
+ 283 0064 40F20C0C 		movw	ip, #12
+ 284 0068 C4F2020C 		movt	ip, 16386
+ 285 006c 6344     		add	r3, r3, ip
+ 286              		.loc 1 108 48
+ 287 006e 0A04     		lsls	r2, r1, #16
+ 288 0070 120C     		lsrs	r2, r2, #16
+ 289              		.loc 1 108 25
+ 290 0072 1A60     		str	r2, [r3]
+ 109:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 110:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* configure peripheral transfer width,memory transfer width,channel priotity */
+ 111:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl = DMA_CHCTL(channelx);
+ 291              		.loc 1 111 11
+ 292 0074 FB1D     		adds	r3, r7, #7
+ 293 0076 1A78     		ldrb	r2, [r3]
+ 294 0078 1300     		movs	r3, r2
+ 295 007a 9B00     		lsls	r3, r3, #2
+ 296 007c 9B18     		adds	r3, r3, r2
+ 297 007e 9B00     		lsls	r3, r3, #2
+ 298 0080 40F2080C 		movw	ip, #8
+ 299 0084 C4F2020C 		movt	ip, 16386
+ 300 0088 6344     		add	r3, r3, ip
+ 301              		.loc 1 111 9
+ 302 008a 1B68     		ldr	r3, [r3]
+ 303 008c FB60     		str	r3, [r7, #12]
+ 112:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl &= ~(DMA_CHXCTL_PWIDTH | DMA_CHXCTL_MWIDTH | DMA_CHXCTL_PRIO);
+ 304              		.loc 1 112 9
+ 305 008e FB68     		ldr	r3, [r7, #12]
+ 306 0090 654A     		ldr	r2, .L11
+ 307 0092 1340     		ands	r3, r2
+ 308 0094 FB60     		str	r3, [r7, #12]
+ 113:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl |= (init_struct->periph_width | init_struct->memory_width | init_struct->priority);
+ 309              		.loc 1 113 24
+ 310 0096 3B68     		ldr	r3, [r7]
+ 311 0098 5A68     		ldr	r2, [r3, #4]
+ 312              		.loc 1 113 52
+ 313 009a 3B68     		ldr	r3, [r7]
+ 314 009c DB68     		ldr	r3, [r3, #12]
+ 315              		.loc 1 113 39
+ 316 009e 1A43     		orrs	r2, r3
+ 317              		.loc 1 113 80
+ 318 00a0 3B68     		ldr	r3, [r7]
+ 319 00a2 5B69     		ldr	r3, [r3, #20]
+ 320              		.loc 1 113 67
+ 321 00a4 1343     		orrs	r3, r2
+ 322              		.loc 1 113 9
+ 323 00a6 FA68     		ldr	r2, [r7, #12]
+ 324 00a8 1343     		orrs	r3, r2
+ 325 00aa FB60     		str	r3, [r7, #12]
+ 114:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) = ctl;
+ 326              		.loc 1 114 5
+ 327 00ac FB1D     		adds	r3, r7, #7
+ 328 00ae 1A78     		ldrb	r2, [r3]
+ 329 00b0 1300     		movs	r3, r2
+ 330 00b2 9B00     		lsls	r3, r3, #2
+ 331 00b4 9B18     		adds	r3, r3, r2
+ 332 00b6 9B00     		lsls	r3, r3, #2
+ 333 00b8 40F2080C 		movw	ip, #8
+ 334 00bc C4F2020C 		movt	ip, 16386
+ 335 00c0 6344     		add	r3, r3, ip
+ 336              		.loc 1 114 25
+ 337 00c2 FA68     		ldr	r2, [r7, #12]
+ 338 00c4 1A60     		str	r2, [r3]
+ 115:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 116:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* configure peripheral increasing mode */
+ 117:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     if(DMA_PERIPH_INCREASE_ENABLE == init_struct->periph_inc) {
+ 339              		.loc 1 117 49
+ 340 00c6 3B68     		ldr	r3, [r7]
+ 341 00c8 1B7E     		ldrb	r3, [r3, #24]
+ 342              		.loc 1 117 7
+ 343 00ca 012B     		cmp	r3, #1
+ 344 00cc 1AD1     		bne	.L4
+ 118:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         DMA_CHCTL(channelx) |= DMA_CHXCTL_PNAGA;
+ 345              		.loc 1 118 29
+ 346 00ce FB1D     		adds	r3, r7, #7
+ 347 00d0 1A78     		ldrb	r2, [r3]
+ 348 00d2 1300     		movs	r3, r2
+ 349 00d4 9B00     		lsls	r3, r3, #2
+ 350 00d6 9B18     		adds	r3, r3, r2
+ 351 00d8 9B00     		lsls	r3, r3, #2
+ 352 00da 40F2080C 		movw	ip, #8
+ 353 00de C4F2020C 		movt	ip, 16386
+ 354 00e2 6344     		add	r3, r3, ip
+ 355 00e4 1968     		ldr	r1, [r3]
+ 356 00e6 FB1D     		adds	r3, r7, #7
+ 357 00e8 1A78     		ldrb	r2, [r3]
+ 358 00ea 1300     		movs	r3, r2
+ 359 00ec 9B00     		lsls	r3, r3, #2
+ 360 00ee 9B18     		adds	r3, r3, r2
+ 361 00f0 9B00     		lsls	r3, r3, #2
+ 362 00f2 40F2080C 		movw	ip, #8
+ 363 00f6 C4F2020C 		movt	ip, 16386
+ 364 00fa 6344     		add	r3, r3, ip
+ 365 00fc 4022     		movs	r2, #64
+ 366 00fe 0A43     		orrs	r2, r1
+ 367 0100 1A60     		str	r2, [r3]
+ 368 0102 1AE0     		b	.L5
+ 369              	.L4:
+ 119:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     } else {
+ 120:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         DMA_CHCTL(channelx) &= ~DMA_CHXCTL_PNAGA;
+ 370              		.loc 1 120 29
+ 371 0104 FB1D     		adds	r3, r7, #7
+ 372 0106 1A78     		ldrb	r2, [r3]
+ 373 0108 1300     		movs	r3, r2
+ 374 010a 9B00     		lsls	r3, r3, #2
+ 375 010c 9B18     		adds	r3, r3, r2
+ 376 010e 9B00     		lsls	r3, r3, #2
+ 377 0110 40F2080C 		movw	ip, #8
+ 378 0114 C4F2020C 		movt	ip, 16386
+ 379 0118 6344     		add	r3, r3, ip
+ 380 011a 1968     		ldr	r1, [r3]
+ 381 011c FB1D     		adds	r3, r7, #7
+ 382 011e 1A78     		ldrb	r2, [r3]
+ 383 0120 1300     		movs	r3, r2
+ 384 0122 9B00     		lsls	r3, r3, #2
+ 385 0124 9B18     		adds	r3, r3, r2
+ 386 0126 9B00     		lsls	r3, r3, #2
+ 387 0128 40F2080C 		movw	ip, #8
+ 388 012c C4F2020C 		movt	ip, 16386
+ 389 0130 6344     		add	r3, r3, ip
+ 390 0132 4022     		movs	r2, #64
+ 391 0134 9143     		bics	r1, r2
+ 392 0136 0A00     		movs	r2, r1
+ 393 0138 1A60     		str	r2, [r3]
+ 394              	.L5:
+ 121:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 122:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 123:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* configure memory increasing mode */
+ 124:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     if(DMA_MEMORY_INCREASE_ENABLE == init_struct->memory_inc) {
+ 395              		.loc 1 124 49
+ 396 013a 3B68     		ldr	r3, [r7]
+ 397 013c 5B7E     		ldrb	r3, [r3, #25]
+ 398              		.loc 1 124 7
+ 399 013e 012B     		cmp	r3, #1
+ 400 0140 1AD1     		bne	.L6
+ 125:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         DMA_CHCTL(channelx) |= DMA_CHXCTL_MNAGA;
+ 401              		.loc 1 125 29
+ 402 0142 FB1D     		adds	r3, r7, #7
+ 403 0144 1A78     		ldrb	r2, [r3]
+ 404 0146 1300     		movs	r3, r2
+ 405 0148 9B00     		lsls	r3, r3, #2
+ 406 014a 9B18     		adds	r3, r3, r2
+ 407 014c 9B00     		lsls	r3, r3, #2
+ 408 014e 40F2080C 		movw	ip, #8
+ 409 0152 C4F2020C 		movt	ip, 16386
+ 410 0156 6344     		add	r3, r3, ip
+ 411 0158 1968     		ldr	r1, [r3]
+ 412 015a FB1D     		adds	r3, r7, #7
+ 413 015c 1A78     		ldrb	r2, [r3]
+ 414 015e 1300     		movs	r3, r2
+ 415 0160 9B00     		lsls	r3, r3, #2
+ 416 0162 9B18     		adds	r3, r3, r2
+ 417 0164 9B00     		lsls	r3, r3, #2
+ 418 0166 40F2080C 		movw	ip, #8
+ 419 016a C4F2020C 		movt	ip, 16386
+ 420 016e 6344     		add	r3, r3, ip
+ 421 0170 8022     		movs	r2, #128
+ 422 0172 0A43     		orrs	r2, r1
+ 423 0174 1A60     		str	r2, [r3]
+ 424 0176 1AE0     		b	.L7
+ 425              	.L6:
+ 126:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     } else {
+ 127:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         DMA_CHCTL(channelx) &= ~DMA_CHXCTL_MNAGA;
+ 426              		.loc 1 127 29
+ 427 0178 FB1D     		adds	r3, r7, #7
+ 428 017a 1A78     		ldrb	r2, [r3]
+ 429 017c 1300     		movs	r3, r2
+ 430 017e 9B00     		lsls	r3, r3, #2
+ 431 0180 9B18     		adds	r3, r3, r2
+ 432 0182 9B00     		lsls	r3, r3, #2
+ 433 0184 40F2080C 		movw	ip, #8
+ 434 0188 C4F2020C 		movt	ip, 16386
+ 435 018c 6344     		add	r3, r3, ip
+ 436 018e 1968     		ldr	r1, [r3]
+ 437 0190 FB1D     		adds	r3, r7, #7
+ 438 0192 1A78     		ldrb	r2, [r3]
+ 439 0194 1300     		movs	r3, r2
+ 440 0196 9B00     		lsls	r3, r3, #2
+ 441 0198 9B18     		adds	r3, r3, r2
+ 442 019a 9B00     		lsls	r3, r3, #2
+ 443 019c 40F2080C 		movw	ip, #8
+ 444 01a0 C4F2020C 		movt	ip, 16386
+ 445 01a4 6344     		add	r3, r3, ip
+ 446 01a6 8022     		movs	r2, #128
+ 447 01a8 9143     		bics	r1, r2
+ 448 01aa 0A00     		movs	r2, r1
+ 449 01ac 1A60     		str	r2, [r3]
+ 450              	.L7:
+ 128:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 129:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 130:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* configure the direction of  data transfer */
+ 131:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     if(DMA_PERIPHERAL_TO_MEMORY == init_struct->direction) {
+ 451              		.loc 1 131 47
+ 452 01ae 3B68     		ldr	r3, [r7]
+ 453 01b0 9B7E     		ldrb	r3, [r3, #26]
+ 454              		.loc 1 131 7
+ 455 01b2 DBB9     		cbnz	r3, .L8
+ 132:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         DMA_CHCTL(channelx) &= ~DMA_CHXCTL_DIR;
+ 456              		.loc 1 132 29
+ 457 01b4 FB1D     		adds	r3, r7, #7
+ 458 01b6 1A78     		ldrb	r2, [r3]
+ 459 01b8 1300     		movs	r3, r2
+ 460 01ba 9B00     		lsls	r3, r3, #2
+ 461 01bc 9B18     		adds	r3, r3, r2
+ 462 01be 9B00     		lsls	r3, r3, #2
+ 463 01c0 40F2080C 		movw	ip, #8
+ 464 01c4 C4F2020C 		movt	ip, 16386
+ 465 01c8 6344     		add	r3, r3, ip
+ 466 01ca 1968     		ldr	r1, [r3]
+ 467 01cc FB1D     		adds	r3, r7, #7
+ 468 01ce 1A78     		ldrb	r2, [r3]
+ 469 01d0 1300     		movs	r3, r2
+ 470 01d2 9B00     		lsls	r3, r3, #2
+ 471 01d4 9B18     		adds	r3, r3, r2
+ 472 01d6 9B00     		lsls	r3, r3, #2
+ 473 01d8 40F2080C 		movw	ip, #8
+ 474 01dc C4F2020C 		movt	ip, 16386
+ 475 01e0 6344     		add	r3, r3, ip
+ 476 01e2 1022     		movs	r2, #16
+ 477 01e4 9143     		bics	r1, r2
+ 478 01e6 0A00     		movs	r2, r1
+ 479 01e8 1A60     		str	r2, [r3]
+ 133:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     } else {
+ 134:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         DMA_CHCTL(channelx) |= DMA_CHXCTL_DIR;
+ 135:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 136:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 480              		.loc 1 136 1
+ 481 01ea 19E0     		b	.L10
+ 482              	.L8:
+ 134:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 483              		.loc 1 134 29
+ 484 01ec FB1D     		adds	r3, r7, #7
+ 485 01ee 1A78     		ldrb	r2, [r3]
+ 486 01f0 1300     		movs	r3, r2
+ 487 01f2 9B00     		lsls	r3, r3, #2
+ 488 01f4 9B18     		adds	r3, r3, r2
+ 489 01f6 9B00     		lsls	r3, r3, #2
+ 490 01f8 40F2080C 		movw	ip, #8
+ 491 01fc C4F2020C 		movt	ip, 16386
+ 492 0200 6344     		add	r3, r3, ip
+ 493 0202 1968     		ldr	r1, [r3]
+ 494 0204 FB1D     		adds	r3, r7, #7
+ 495 0206 1A78     		ldrb	r2, [r3]
+ 496 0208 1300     		movs	r3, r2
+ 497 020a 9B00     		lsls	r3, r3, #2
+ 498 020c 9B18     		adds	r3, r3, r2
+ 499 020e 9B00     		lsls	r3, r3, #2
+ 500 0210 40F2080C 		movw	ip, #8
+ 501 0214 C4F2020C 		movt	ip, 16386
+ 502 0218 6344     		add	r3, r3, ip
+ 503 021a 1022     		movs	r2, #16
+ 504 021c 0A43     		orrs	r2, r1
+ 505 021e 1A60     		str	r2, [r3]
+ 506              	.L10:
+ 507              		.loc 1 136 1
+ 508 0220 C046     		nop
+ 509 0222 BD46     		mov	sp, r7
+ 510 0224 04B0     		add	sp, sp, #16
+ 511              		@ sp needed
+ 512 0226 80BD     		pop	{r7, pc}
+ 513              	.L12:
+ 514              		.align	2
+ 515              	.L11:
+ 516 0228 FFC0FFFF 		.word	-16129
+ 517              		.cfi_endproc
+ 518              	.LFE60:
+ 520              		.section	.text.dma_circulation_enable,"ax",%progbits
+ 521              		.align	1
+ 522              		.global	dma_circulation_enable
+ 523              		.syntax unified
+ 524              		.code	16
+ 525              		.thumb_func
+ 526              		.fpu softvfp
+ 528              	dma_circulation_enable:
+ 529              	.LFB61:
+ 137:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 138:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 139:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      enable DMA circulation mode
+ 140:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 141:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 142:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 143:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 144:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 145:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 146:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_circulation_enable(dma_channel_enum channelx)
+ 147:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 530              		.loc 1 147 1
+ 531              		.cfi_startproc
+ 532              		@ args = 0, pretend = 0, frame = 8
+ 533              		@ frame_needed = 1, uses_anonymous_args = 0
+ 534 0000 80B5     		push	{r7, lr}
+ 535              		.cfi_def_cfa_offset 8
+ 536              		.cfi_offset 7, -8
+ 537              		.cfi_offset 14, -4
+ 538 0002 82B0     		sub	sp, sp, #8
+ 539              		.cfi_def_cfa_offset 16
+ 540 0004 00AF     		add	r7, sp, #0
+ 541              		.cfi_def_cfa_register 7
+ 542 0006 0200     		movs	r2, r0
+ 543 0008 FB1D     		adds	r3, r7, #7
+ 544 000a 1A70     		strb	r2, [r3]
+ 148:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) |= DMA_CHXCTL_CMEN;
+ 545              		.loc 1 148 25
+ 546 000c FB1D     		adds	r3, r7, #7
+ 547 000e 1A78     		ldrb	r2, [r3]
+ 548 0010 1300     		movs	r3, r2
+ 549 0012 9B00     		lsls	r3, r3, #2
+ 550 0014 9B18     		adds	r3, r3, r2
+ 551 0016 9B00     		lsls	r3, r3, #2
+ 552 0018 40F2080C 		movw	ip, #8
+ 553 001c C4F2020C 		movt	ip, 16386
+ 554 0020 6344     		add	r3, r3, ip
+ 555 0022 1968     		ldr	r1, [r3]
+ 556 0024 FB1D     		adds	r3, r7, #7
+ 557 0026 1A78     		ldrb	r2, [r3]
+ 558 0028 1300     		movs	r3, r2
+ 559 002a 9B00     		lsls	r3, r3, #2
+ 560 002c 9B18     		adds	r3, r3, r2
+ 561 002e 9B00     		lsls	r3, r3, #2
+ 562 0030 40F2080C 		movw	ip, #8
+ 563 0034 C4F2020C 		movt	ip, 16386
+ 564 0038 6344     		add	r3, r3, ip
+ 565 003a 2022     		movs	r2, #32
+ 566 003c 0A43     		orrs	r2, r1
+ 567 003e 1A60     		str	r2, [r3]
+ 149:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 568              		.loc 1 149 1
+ 569 0040 C046     		nop
+ 570 0042 BD46     		mov	sp, r7
+ 571 0044 02B0     		add	sp, sp, #8
+ 572              		@ sp needed
+ 573 0046 80BD     		pop	{r7, pc}
+ 574              		.cfi_endproc
+ 575              	.LFE61:
+ 577              		.section	.text.dma_circulation_disable,"ax",%progbits
+ 578              		.align	1
+ 579              		.global	dma_circulation_disable
+ 580              		.syntax unified
+ 581              		.code	16
+ 582              		.thumb_func
+ 583              		.fpu softvfp
+ 585              	dma_circulation_disable:
+ 586              	.LFB62:
+ 150:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 151:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 152:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      disable DMA circulation mode
+ 153:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 154:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 155:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 156:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 157:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 158:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 159:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_circulation_disable(dma_channel_enum channelx)
+ 160:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 587              		.loc 1 160 1
+ 588              		.cfi_startproc
+ 589              		@ args = 0, pretend = 0, frame = 8
+ 590              		@ frame_needed = 1, uses_anonymous_args = 0
+ 591 0000 80B5     		push	{r7, lr}
+ 592              		.cfi_def_cfa_offset 8
+ 593              		.cfi_offset 7, -8
+ 594              		.cfi_offset 14, -4
+ 595 0002 82B0     		sub	sp, sp, #8
+ 596              		.cfi_def_cfa_offset 16
+ 597 0004 00AF     		add	r7, sp, #0
+ 598              		.cfi_def_cfa_register 7
+ 599 0006 0200     		movs	r2, r0
+ 600 0008 FB1D     		adds	r3, r7, #7
+ 601 000a 1A70     		strb	r2, [r3]
+ 161:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) &= ~DMA_CHXCTL_CMEN;
+ 602              		.loc 1 161 25
+ 603 000c FB1D     		adds	r3, r7, #7
+ 604 000e 1A78     		ldrb	r2, [r3]
+ 605 0010 1300     		movs	r3, r2
+ 606 0012 9B00     		lsls	r3, r3, #2
+ 607 0014 9B18     		adds	r3, r3, r2
+ 608 0016 9B00     		lsls	r3, r3, #2
+ 609 0018 40F2080C 		movw	ip, #8
+ 610 001c C4F2020C 		movt	ip, 16386
+ 611 0020 6344     		add	r3, r3, ip
+ 612 0022 1968     		ldr	r1, [r3]
+ 613 0024 FB1D     		adds	r3, r7, #7
+ 614 0026 1A78     		ldrb	r2, [r3]
+ 615 0028 1300     		movs	r3, r2
+ 616 002a 9B00     		lsls	r3, r3, #2
+ 617 002c 9B18     		adds	r3, r3, r2
+ 618 002e 9B00     		lsls	r3, r3, #2
+ 619 0030 40F2080C 		movw	ip, #8
+ 620 0034 C4F2020C 		movt	ip, 16386
+ 621 0038 6344     		add	r3, r3, ip
+ 622 003a 2022     		movs	r2, #32
+ 623 003c 9143     		bics	r1, r2
+ 624 003e 0A00     		movs	r2, r1
+ 625 0040 1A60     		str	r2, [r3]
+ 162:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 626              		.loc 1 162 1
+ 627 0042 C046     		nop
+ 628 0044 BD46     		mov	sp, r7
+ 629 0046 02B0     		add	sp, sp, #8
+ 630              		@ sp needed
+ 631 0048 80BD     		pop	{r7, pc}
+ 632              		.cfi_endproc
+ 633              	.LFE62:
+ 635              		.section	.text.dma_memory_to_memory_enable,"ax",%progbits
+ 636              		.align	1
+ 637              		.global	dma_memory_to_memory_enable
+ 638              		.syntax unified
+ 639              		.code	16
+ 640              		.thumb_func
+ 641              		.fpu softvfp
+ 643              	dma_memory_to_memory_enable:
+ 644              	.LFB63:
+ 163:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 164:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 165:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      enable memory to memory mode
+ 166:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 167:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 168:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 169:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 170:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 171:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 172:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_memory_to_memory_enable(dma_channel_enum channelx)
+ 173:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 645              		.loc 1 173 1
+ 646              		.cfi_startproc
+ 647              		@ args = 0, pretend = 0, frame = 8
+ 648              		@ frame_needed = 1, uses_anonymous_args = 0
+ 649 0000 80B5     		push	{r7, lr}
+ 650              		.cfi_def_cfa_offset 8
+ 651              		.cfi_offset 7, -8
+ 652              		.cfi_offset 14, -4
+ 653 0002 82B0     		sub	sp, sp, #8
+ 654              		.cfi_def_cfa_offset 16
+ 655 0004 00AF     		add	r7, sp, #0
+ 656              		.cfi_def_cfa_register 7
+ 657 0006 0200     		movs	r2, r0
+ 658 0008 FB1D     		adds	r3, r7, #7
+ 659 000a 1A70     		strb	r2, [r3]
+ 174:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) |= DMA_CHXCTL_M2M;
+ 660              		.loc 1 174 25
+ 661 000c FB1D     		adds	r3, r7, #7
+ 662 000e 1A78     		ldrb	r2, [r3]
+ 663 0010 1300     		movs	r3, r2
+ 664 0012 9B00     		lsls	r3, r3, #2
+ 665 0014 9B18     		adds	r3, r3, r2
+ 666 0016 9B00     		lsls	r3, r3, #2
+ 667 0018 40F2080C 		movw	ip, #8
+ 668 001c C4F2020C 		movt	ip, 16386
+ 669 0020 6344     		add	r3, r3, ip
+ 670 0022 1968     		ldr	r1, [r3]
+ 671 0024 FB1D     		adds	r3, r7, #7
+ 672 0026 1A78     		ldrb	r2, [r3]
+ 673 0028 1300     		movs	r3, r2
+ 674 002a 9B00     		lsls	r3, r3, #2
+ 675 002c 9B18     		adds	r3, r3, r2
+ 676 002e 9B00     		lsls	r3, r3, #2
+ 677 0030 40F2080C 		movw	ip, #8
+ 678 0034 C4F2020C 		movt	ip, 16386
+ 679 0038 6344     		add	r3, r3, ip
+ 680 003a 44F20002 		movw	r2, #16384
+ 681 003e 0A43     		orrs	r2, r1
+ 682 0040 1A60     		str	r2, [r3]
+ 175:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 683              		.loc 1 175 1
+ 684 0042 C046     		nop
+ 685 0044 BD46     		mov	sp, r7
+ 686 0046 02B0     		add	sp, sp, #8
+ 687              		@ sp needed
+ 688 0048 80BD     		pop	{r7, pc}
+ 689              		.cfi_endproc
+ 690              	.LFE63:
+ 692              		.section	.text.dma_memory_to_memory_disable,"ax",%progbits
+ 693              		.align	1
+ 694              		.global	dma_memory_to_memory_disable
+ 695              		.syntax unified
+ 696              		.code	16
+ 697              		.thumb_func
+ 698              		.fpu softvfp
+ 700              	dma_memory_to_memory_disable:
+ 701              	.LFB64:
+ 176:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 177:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 178:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      disable memory to memory mode
+ 179:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 180:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 181:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 182:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 183:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 184:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 185:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_memory_to_memory_disable(dma_channel_enum channelx)
+ 186:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 702              		.loc 1 186 1
+ 703              		.cfi_startproc
+ 704              		@ args = 0, pretend = 0, frame = 8
+ 705              		@ frame_needed = 1, uses_anonymous_args = 0
+ 706 0000 80B5     		push	{r7, lr}
+ 707              		.cfi_def_cfa_offset 8
+ 708              		.cfi_offset 7, -8
+ 709              		.cfi_offset 14, -4
+ 710 0002 82B0     		sub	sp, sp, #8
+ 711              		.cfi_def_cfa_offset 16
+ 712 0004 00AF     		add	r7, sp, #0
+ 713              		.cfi_def_cfa_register 7
+ 714 0006 0200     		movs	r2, r0
+ 715 0008 FB1D     		adds	r3, r7, #7
+ 716 000a 1A70     		strb	r2, [r3]
+ 187:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) &= ~DMA_CHXCTL_M2M;
+ 717              		.loc 1 187 25
+ 718 000c FB1D     		adds	r3, r7, #7
+ 719 000e 1A78     		ldrb	r2, [r3]
+ 720 0010 1300     		movs	r3, r2
+ 721 0012 9B00     		lsls	r3, r3, #2
+ 722 0014 9B18     		adds	r3, r3, r2
+ 723 0016 9B00     		lsls	r3, r3, #2
+ 724 0018 40F2080C 		movw	ip, #8
+ 725 001c C4F2020C 		movt	ip, 16386
+ 726 0020 6344     		add	r3, r3, ip
+ 727 0022 1968     		ldr	r1, [r3]
+ 728 0024 FB1D     		adds	r3, r7, #7
+ 729 0026 1A78     		ldrb	r2, [r3]
+ 730 0028 1300     		movs	r3, r2
+ 731 002a 9B00     		lsls	r3, r3, #2
+ 732 002c 9B18     		adds	r3, r3, r2
+ 733 002e 9B00     		lsls	r3, r3, #2
+ 734 0030 40F2080C 		movw	ip, #8
+ 735 0034 C4F2020C 		movt	ip, 16386
+ 736 0038 6344     		add	r3, r3, ip
+ 737 003a 034A     		ldr	r2, .L17
+ 738 003c 0A40     		ands	r2, r1
+ 739 003e 1A60     		str	r2, [r3]
+ 188:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 740              		.loc 1 188 1
+ 741 0040 C046     		nop
+ 742 0042 BD46     		mov	sp, r7
+ 743 0044 02B0     		add	sp, sp, #8
+ 744              		@ sp needed
+ 745 0046 80BD     		pop	{r7, pc}
+ 746              	.L18:
+ 747              		.align	2
+ 748              	.L17:
+ 749 0048 FFBFFFFF 		.word	-16385
+ 750              		.cfi_endproc
+ 751              	.LFE64:
+ 753              		.section	.text.dma_channel_enable,"ax",%progbits
+ 754              		.align	1
+ 755              		.global	dma_channel_enable
+ 756              		.syntax unified
+ 757              		.code	16
+ 758              		.thumb_func
+ 759              		.fpu softvfp
+ 761              	dma_channel_enable:
+ 762              	.LFB65:
+ 189:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 190:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 191:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      enable DMA channel
+ 192:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 193:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 194:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 195:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 196:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 197:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 198:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_channel_enable(dma_channel_enum channelx)
+ 199:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 763              		.loc 1 199 1
+ 764              		.cfi_startproc
+ 765              		@ args = 0, pretend = 0, frame = 8
+ 766              		@ frame_needed = 1, uses_anonymous_args = 0
+ 767 0000 80B5     		push	{r7, lr}
+ 768              		.cfi_def_cfa_offset 8
+ 769              		.cfi_offset 7, -8
+ 770              		.cfi_offset 14, -4
+ 771 0002 82B0     		sub	sp, sp, #8
+ 772              		.cfi_def_cfa_offset 16
+ 773 0004 00AF     		add	r7, sp, #0
+ 774              		.cfi_def_cfa_register 7
+ 775 0006 0200     		movs	r2, r0
+ 776 0008 FB1D     		adds	r3, r7, #7
+ 777 000a 1A70     		strb	r2, [r3]
+ 200:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) |= DMA_CHXCTL_CHEN;
+ 778              		.loc 1 200 25
+ 779 000c FB1D     		adds	r3, r7, #7
+ 780 000e 1A78     		ldrb	r2, [r3]
+ 781 0010 1300     		movs	r3, r2
+ 782 0012 9B00     		lsls	r3, r3, #2
+ 783 0014 9B18     		adds	r3, r3, r2
+ 784 0016 9B00     		lsls	r3, r3, #2
+ 785 0018 40F2080C 		movw	ip, #8
+ 786 001c C4F2020C 		movt	ip, 16386
+ 787 0020 6344     		add	r3, r3, ip
+ 788 0022 1968     		ldr	r1, [r3]
+ 789 0024 FB1D     		adds	r3, r7, #7
+ 790 0026 1A78     		ldrb	r2, [r3]
+ 791 0028 1300     		movs	r3, r2
+ 792 002a 9B00     		lsls	r3, r3, #2
+ 793 002c 9B18     		adds	r3, r3, r2
+ 794 002e 9B00     		lsls	r3, r3, #2
+ 795 0030 40F2080C 		movw	ip, #8
+ 796 0034 C4F2020C 		movt	ip, 16386
+ 797 0038 6344     		add	r3, r3, ip
+ 798 003a 0122     		movs	r2, #1
+ 799 003c 0A43     		orrs	r2, r1
+ 800 003e 1A60     		str	r2, [r3]
+ 201:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 801              		.loc 1 201 1
+ 802 0040 C046     		nop
+ 803 0042 BD46     		mov	sp, r7
+ 804 0044 02B0     		add	sp, sp, #8
+ 805              		@ sp needed
+ 806 0046 80BD     		pop	{r7, pc}
+ 807              		.cfi_endproc
+ 808              	.LFE65:
+ 810              		.section	.text.dma_channel_disable,"ax",%progbits
+ 811              		.align	1
+ 812              		.global	dma_channel_disable
+ 813              		.syntax unified
+ 814              		.code	16
+ 815              		.thumb_func
+ 816              		.fpu softvfp
+ 818              	dma_channel_disable:
+ 819              	.LFB66:
+ 202:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 203:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 204:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      disable DMA channel
+ 205:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 206:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 207:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 208:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 209:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 210:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 211:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_channel_disable(dma_channel_enum channelx)
+ 212:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 820              		.loc 1 212 1
+ 821              		.cfi_startproc
+ 822              		@ args = 0, pretend = 0, frame = 8
+ 823              		@ frame_needed = 1, uses_anonymous_args = 0
+ 824 0000 80B5     		push	{r7, lr}
+ 825              		.cfi_def_cfa_offset 8
+ 826              		.cfi_offset 7, -8
+ 827              		.cfi_offset 14, -4
+ 828 0002 82B0     		sub	sp, sp, #8
+ 829              		.cfi_def_cfa_offset 16
+ 830 0004 00AF     		add	r7, sp, #0
+ 831              		.cfi_def_cfa_register 7
+ 832 0006 0200     		movs	r2, r0
+ 833 0008 FB1D     		adds	r3, r7, #7
+ 834 000a 1A70     		strb	r2, [r3]
+ 213:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) &= ~DMA_CHXCTL_CHEN;
+ 835              		.loc 1 213 25
+ 836 000c FB1D     		adds	r3, r7, #7
+ 837 000e 1A78     		ldrb	r2, [r3]
+ 838 0010 1300     		movs	r3, r2
+ 839 0012 9B00     		lsls	r3, r3, #2
+ 840 0014 9B18     		adds	r3, r3, r2
+ 841 0016 9B00     		lsls	r3, r3, #2
+ 842 0018 40F2080C 		movw	ip, #8
+ 843 001c C4F2020C 		movt	ip, 16386
+ 844 0020 6344     		add	r3, r3, ip
+ 845 0022 1968     		ldr	r1, [r3]
+ 846 0024 FB1D     		adds	r3, r7, #7
+ 847 0026 1A78     		ldrb	r2, [r3]
+ 848 0028 1300     		movs	r3, r2
+ 849 002a 9B00     		lsls	r3, r3, #2
+ 850 002c 9B18     		adds	r3, r3, r2
+ 851 002e 9B00     		lsls	r3, r3, #2
+ 852 0030 40F2080C 		movw	ip, #8
+ 853 0034 C4F2020C 		movt	ip, 16386
+ 854 0038 6344     		add	r3, r3, ip
+ 855 003a 0122     		movs	r2, #1
+ 856 003c 9143     		bics	r1, r2
+ 857 003e 0A00     		movs	r2, r1
+ 858 0040 1A60     		str	r2, [r3]
+ 214:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 859              		.loc 1 214 1
+ 860 0042 C046     		nop
+ 861 0044 BD46     		mov	sp, r7
+ 862 0046 02B0     		add	sp, sp, #8
+ 863              		@ sp needed
+ 864 0048 80BD     		pop	{r7, pc}
+ 865              		.cfi_endproc
+ 866              	.LFE66:
+ 868              		.section	.text.dma_periph_address_config,"ax",%progbits
+ 869              		.align	1
+ 870              		.global	dma_periph_address_config
+ 871              		.syntax unified
+ 872              		.code	16
+ 873              		.thumb_func
+ 874              		.fpu softvfp
+ 876              	dma_periph_address_config:
+ 877              	.LFB67:
+ 215:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 216:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 217:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      set DMA peripheral base address
+ 218:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set peripheral base address
+ 219:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 220:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 221:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  address: peripheral base address
+ 222:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 223:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 224:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 225:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_periph_address_config(dma_channel_enum channelx, uint32_t address)
+ 226:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 878              		.loc 1 226 1
+ 879              		.cfi_startproc
+ 880              		@ args = 0, pretend = 0, frame = 8
+ 881              		@ frame_needed = 1, uses_anonymous_args = 0
+ 882 0000 80B5     		push	{r7, lr}
+ 883              		.cfi_def_cfa_offset 8
+ 884              		.cfi_offset 7, -8
+ 885              		.cfi_offset 14, -4
+ 886 0002 82B0     		sub	sp, sp, #8
+ 887              		.cfi_def_cfa_offset 16
+ 888 0004 00AF     		add	r7, sp, #0
+ 889              		.cfi_def_cfa_register 7
+ 890 0006 0200     		movs	r2, r0
+ 891 0008 3960     		str	r1, [r7]
+ 892 000a FB1D     		adds	r3, r7, #7
+ 893 000c 1A70     		strb	r2, [r3]
+ 227:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHPADDR(channelx) = address;
+ 894              		.loc 1 227 5
+ 895 000e FB1D     		adds	r3, r7, #7
+ 896 0010 1A78     		ldrb	r2, [r3]
+ 897 0012 1300     		movs	r3, r2
+ 898 0014 9B00     		lsls	r3, r3, #2
+ 899 0016 9B18     		adds	r3, r3, r2
+ 900 0018 9B00     		lsls	r3, r3, #2
+ 901 001a 40F2100C 		movw	ip, #16
+ 902 001e C4F2020C 		movt	ip, 16386
+ 903 0022 6344     		add	r3, r3, ip
+ 904              		.loc 1 227 27
+ 905 0024 3A68     		ldr	r2, [r7]
+ 906 0026 1A60     		str	r2, [r3]
+ 228:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 907              		.loc 1 228 1
+ 908 0028 C046     		nop
+ 909 002a BD46     		mov	sp, r7
+ 910 002c 02B0     		add	sp, sp, #8
+ 911              		@ sp needed
+ 912 002e 80BD     		pop	{r7, pc}
+ 913              		.cfi_endproc
+ 914              	.LFE67:
+ 916              		.section	.text.dma_memory_address_config,"ax",%progbits
+ 917              		.align	1
+ 918              		.global	dma_memory_address_config
+ 919              		.syntax unified
+ 920              		.code	16
+ 921              		.thumb_func
+ 922              		.fpu softvfp
+ 924              	dma_memory_address_config:
+ 925              	.LFB68:
+ 229:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 230:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 231:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      set DMA memory base address
+ 232:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set memory base address
+ 233:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 234:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 235:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  address: memory base address
+ 236:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 237:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 238:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 239:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_memory_address_config(dma_channel_enum channelx, uint32_t address)
+ 240:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 926              		.loc 1 240 1
+ 927              		.cfi_startproc
+ 928              		@ args = 0, pretend = 0, frame = 8
+ 929              		@ frame_needed = 1, uses_anonymous_args = 0
+ 930 0000 80B5     		push	{r7, lr}
+ 931              		.cfi_def_cfa_offset 8
+ 932              		.cfi_offset 7, -8
+ 933              		.cfi_offset 14, -4
+ 934 0002 82B0     		sub	sp, sp, #8
+ 935              		.cfi_def_cfa_offset 16
+ 936 0004 00AF     		add	r7, sp, #0
+ 937              		.cfi_def_cfa_register 7
+ 938 0006 0200     		movs	r2, r0
+ 939 0008 3960     		str	r1, [r7]
+ 940 000a FB1D     		adds	r3, r7, #7
+ 941 000c 1A70     		strb	r2, [r3]
+ 241:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHMADDR(channelx) = address;
+ 942              		.loc 1 241 5
+ 943 000e FB1D     		adds	r3, r7, #7
+ 944 0010 1A78     		ldrb	r2, [r3]
+ 945 0012 1300     		movs	r3, r2
+ 946 0014 9B00     		lsls	r3, r3, #2
+ 947 0016 9B18     		adds	r3, r3, r2
+ 948 0018 9B00     		lsls	r3, r3, #2
+ 949 001a 40F2140C 		movw	ip, #20
+ 950 001e C4F2020C 		movt	ip, 16386
+ 951 0022 6344     		add	r3, r3, ip
+ 952              		.loc 1 241 27
+ 953 0024 3A68     		ldr	r2, [r7]
+ 954 0026 1A60     		str	r2, [r3]
+ 242:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 955              		.loc 1 242 1
+ 956 0028 C046     		nop
+ 957 002a BD46     		mov	sp, r7
+ 958 002c 02B0     		add	sp, sp, #8
+ 959              		@ sp needed
+ 960 002e 80BD     		pop	{r7, pc}
+ 961              		.cfi_endproc
+ 962              	.LFE68:
+ 964              		.section	.text.dma_transfer_number_config,"ax",%progbits
+ 965              		.align	1
+ 966              		.global	dma_transfer_number_config
+ 967              		.syntax unified
+ 968              		.code	16
+ 969              		.thumb_func
+ 970              		.fpu softvfp
+ 972              	dma_transfer_number_config:
+ 973              	.LFB69:
+ 243:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 244:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 245:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      set the number of remaining data to be transferred by the DMA
+ 246:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set number
+ 247:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 248:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 249:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  number: the number of remaining data to be transferred by the DMA
+ 250:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 251:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 252:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 253:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_transfer_number_config(dma_channel_enum channelx, uint32_t number)
+ 254:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 974              		.loc 1 254 1
+ 975              		.cfi_startproc
+ 976              		@ args = 0, pretend = 0, frame = 8
+ 977              		@ frame_needed = 1, uses_anonymous_args = 0
+ 978 0000 80B5     		push	{r7, lr}
+ 979              		.cfi_def_cfa_offset 8
+ 980              		.cfi_offset 7, -8
+ 981              		.cfi_offset 14, -4
+ 982 0002 82B0     		sub	sp, sp, #8
+ 983              		.cfi_def_cfa_offset 16
+ 984 0004 00AF     		add	r7, sp, #0
+ 985              		.cfi_def_cfa_register 7
+ 986 0006 0200     		movs	r2, r0
+ 987 0008 3960     		str	r1, [r7]
+ 988 000a FB1D     		adds	r3, r7, #7
+ 989 000c 1A70     		strb	r2, [r3]
+ 255:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCNT(channelx) = (number & DMA_CHANNEL_CNT_MASK);
+ 990              		.loc 1 255 5
+ 991 000e FB1D     		adds	r3, r7, #7
+ 992 0010 1A78     		ldrb	r2, [r3]
+ 993 0012 1300     		movs	r3, r2
+ 994 0014 9B00     		lsls	r3, r3, #2
+ 995 0016 9B18     		adds	r3, r3, r2
+ 996 0018 9B00     		lsls	r3, r3, #2
+ 997 001a 40F20C0C 		movw	ip, #12
+ 998 001e C4F2020C 		movt	ip, 16386
+ 999 0022 6344     		add	r3, r3, ip
+ 1000              		.loc 1 255 35
+ 1001 0024 3A68     		ldr	r2, [r7]
+ 1002 0026 1204     		lsls	r2, r2, #16
+ 1003 0028 120C     		lsrs	r2, r2, #16
+ 1004              		.loc 1 255 25
+ 1005 002a 1A60     		str	r2, [r3]
+ 256:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1006              		.loc 1 256 1
+ 1007 002c C046     		nop
+ 1008 002e BD46     		mov	sp, r7
+ 1009 0030 02B0     		add	sp, sp, #8
+ 1010              		@ sp needed
+ 1011 0032 80BD     		pop	{r7, pc}
+ 1012              		.cfi_endproc
+ 1013              	.LFE69:
+ 1015              		.section	.text.dma_transfer_number_get,"ax",%progbits
+ 1016              		.align	1
+ 1017              		.global	dma_transfer_number_get
+ 1018              		.syntax unified
+ 1019              		.code	16
+ 1020              		.thumb_func
+ 1021              		.fpu softvfp
+ 1023              	dma_transfer_number_get:
+ 1024              	.LFB70:
+ 257:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 258:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 259:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      get the number of remaining data to be transferred by the DMA
+ 260:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set number
+ 261:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 262:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 263:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 264:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     the number of remaining data to be transferred by the DMA
+ 265:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 266:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** uint32_t dma_transfer_number_get(dma_channel_enum channelx)
+ 267:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1025              		.loc 1 267 1
+ 1026              		.cfi_startproc
+ 1027              		@ args = 0, pretend = 0, frame = 8
+ 1028              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1029 0000 80B5     		push	{r7, lr}
+ 1030              		.cfi_def_cfa_offset 8
+ 1031              		.cfi_offset 7, -8
+ 1032              		.cfi_offset 14, -4
+ 1033 0002 82B0     		sub	sp, sp, #8
+ 1034              		.cfi_def_cfa_offset 16
+ 1035 0004 00AF     		add	r7, sp, #0
+ 1036              		.cfi_def_cfa_register 7
+ 1037 0006 0200     		movs	r2, r0
+ 1038 0008 FB1D     		adds	r3, r7, #7
+ 1039 000a 1A70     		strb	r2, [r3]
+ 268:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     return (uint32_t)DMA_CHCNT(channelx);
+ 1040              		.loc 1 268 22
+ 1041 000c FB1D     		adds	r3, r7, #7
+ 1042 000e 1A78     		ldrb	r2, [r3]
+ 1043 0010 1300     		movs	r3, r2
+ 1044 0012 9B00     		lsls	r3, r3, #2
+ 1045 0014 9B18     		adds	r3, r3, r2
+ 1046 0016 9B00     		lsls	r3, r3, #2
+ 1047 0018 40F20C0C 		movw	ip, #12
+ 1048 001c C4F2020C 		movt	ip, 16386
+ 1049 0020 6344     		add	r3, r3, ip
+ 1050              		.loc 1 268 12
+ 1051 0022 1B68     		ldr	r3, [r3]
+ 269:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1052              		.loc 1 269 1
+ 1053 0024 1800     		movs	r0, r3
+ 1054 0026 BD46     		mov	sp, r7
+ 1055 0028 02B0     		add	sp, sp, #8
+ 1056              		@ sp needed
+ 1057 002a 80BD     		pop	{r7, pc}
+ 1058              		.cfi_endproc
+ 1059              	.LFE70:
+ 1061              		.section	.text.dma_priority_config,"ax",%progbits
+ 1062              		.align	1
+ 1063              		.global	dma_priority_config
+ 1064              		.syntax unified
+ 1065              		.code	16
+ 1066              		.thumb_func
+ 1067              		.fpu softvfp
+ 1069              	dma_priority_config:
+ 1070              	.LFB71:
+ 270:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 271:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 272:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      configure priority level of DMA channel
+ 273:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 274:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 275:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 276:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  priority: priority level of this channel
+ 277:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 278:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_PRIORITY_LOW: low priority
+ 279:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_PRIORITY_MEDIUM: medium priority
+ 280:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_PRIORITY_HIGH: high priority
+ 281:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_PRIORITY_ULTRA_HIGH: ultra high priority
+ 282:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 283:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 284:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 285:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_priority_config(dma_channel_enum channelx, uint32_t priority)
+ 286:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1071              		.loc 1 286 1
+ 1072              		.cfi_startproc
+ 1073              		@ args = 0, pretend = 0, frame = 16
+ 1074              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1075 0000 80B5     		push	{r7, lr}
+ 1076              		.cfi_def_cfa_offset 8
+ 1077              		.cfi_offset 7, -8
+ 1078              		.cfi_offset 14, -4
+ 1079 0002 84B0     		sub	sp, sp, #16
+ 1080              		.cfi_def_cfa_offset 24
+ 1081 0004 00AF     		add	r7, sp, #0
+ 1082              		.cfi_def_cfa_register 7
+ 1083 0006 0200     		movs	r2, r0
+ 1084 0008 3960     		str	r1, [r7]
+ 1085 000a FB1D     		adds	r3, r7, #7
+ 1086 000c 1A70     		strb	r2, [r3]
+ 287:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     uint32_t ctl;
+ 288:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 289:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* acquire DMA_CHxCTL register */
+ 290:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl = DMA_CHCTL(channelx);
+ 1087              		.loc 1 290 11
+ 1088 000e FB1D     		adds	r3, r7, #7
+ 1089 0010 1A78     		ldrb	r2, [r3]
+ 1090 0012 1300     		movs	r3, r2
+ 1091 0014 9B00     		lsls	r3, r3, #2
+ 1092 0016 9B18     		adds	r3, r3, r2
+ 1093 0018 9B00     		lsls	r3, r3, #2
+ 1094 001a 40F2080C 		movw	ip, #8
+ 1095 001e C4F2020C 		movt	ip, 16386
+ 1096 0022 6344     		add	r3, r3, ip
+ 1097              		.loc 1 290 9
+ 1098 0024 1B68     		ldr	r3, [r3]
+ 1099 0026 FB60     		str	r3, [r7, #12]
+ 291:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* assign regiser */
+ 292:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl &= ~DMA_CHXCTL_PRIO;
+ 1100              		.loc 1 292 9
+ 1101 0028 FB68     		ldr	r3, [r7, #12]
+ 1102 002a 0C4A     		ldr	r2, .L27
+ 1103 002c 1340     		ands	r3, r2
+ 1104 002e FB60     		str	r3, [r7, #12]
+ 293:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl |= priority;
+ 1105              		.loc 1 293 9
+ 1106 0030 FA68     		ldr	r2, [r7, #12]
+ 1107 0032 3B68     		ldr	r3, [r7]
+ 1108 0034 1343     		orrs	r3, r2
+ 1109 0036 FB60     		str	r3, [r7, #12]
+ 294:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) = ctl;
+ 1110              		.loc 1 294 5
+ 1111 0038 FB1D     		adds	r3, r7, #7
+ 1112 003a 1A78     		ldrb	r2, [r3]
+ 1113 003c 1300     		movs	r3, r2
+ 1114 003e 9B00     		lsls	r3, r3, #2
+ 1115 0040 9B18     		adds	r3, r3, r2
+ 1116 0042 9B00     		lsls	r3, r3, #2
+ 1117 0044 40F2080C 		movw	ip, #8
+ 1118 0048 C4F2020C 		movt	ip, 16386
+ 1119 004c 6344     		add	r3, r3, ip
+ 1120              		.loc 1 294 25
+ 1121 004e FA68     		ldr	r2, [r7, #12]
+ 1122 0050 1A60     		str	r2, [r3]
+ 295:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1123              		.loc 1 295 1
+ 1124 0052 C046     		nop
+ 1125 0054 BD46     		mov	sp, r7
+ 1126 0056 04B0     		add	sp, sp, #16
+ 1127              		@ sp needed
+ 1128 0058 80BD     		pop	{r7, pc}
+ 1129              	.L28:
+ 1130 005a C046     		.align	2
+ 1131              	.L27:
+ 1132 005c FFCFFFFF 		.word	-12289
+ 1133              		.cfi_endproc
+ 1134              	.LFE71:
+ 1136              		.section	.text.dma_memory_width_config,"ax",%progbits
+ 1137              		.align	1
+ 1138              		.global	dma_memory_width_config
+ 1139              		.syntax unified
+ 1140              		.code	16
+ 1141              		.thumb_func
+ 1142              		.fpu softvfp
+ 1144              	dma_memory_width_config:
+ 1145              	.LFB72:
+ 296:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 297:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 298:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      configure transfer data width of memory
+ 299:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 300:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 301:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 302:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  mwidth: transfer data width of memory
+ 303:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 304:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_MEMORY_WIDTH_8BIT: transfer data width of memory is 8-bit
+ 305:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_MEMORY_WIDTH_16BIT: transfer data width of memory is 16-bit
+ 306:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_MEMORY_WIDTH_32BIT: transfer data width of memory is 32-bit
+ 307:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 308:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 309:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 310:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_memory_width_config(dma_channel_enum channelx, uint32_t mwidth)
+ 311:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1146              		.loc 1 311 1
+ 1147              		.cfi_startproc
+ 1148              		@ args = 0, pretend = 0, frame = 16
+ 1149              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1150 0000 80B5     		push	{r7, lr}
+ 1151              		.cfi_def_cfa_offset 8
+ 1152              		.cfi_offset 7, -8
+ 1153              		.cfi_offset 14, -4
+ 1154 0002 84B0     		sub	sp, sp, #16
+ 1155              		.cfi_def_cfa_offset 24
+ 1156 0004 00AF     		add	r7, sp, #0
+ 1157              		.cfi_def_cfa_register 7
+ 1158 0006 0200     		movs	r2, r0
+ 1159 0008 3960     		str	r1, [r7]
+ 1160 000a FB1D     		adds	r3, r7, #7
+ 1161 000c 1A70     		strb	r2, [r3]
+ 312:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     uint32_t ctl;
+ 313:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 314:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* acquire DMA_CHxCTL register */
+ 315:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl = DMA_CHCTL(channelx);
+ 1162              		.loc 1 315 11
+ 1163 000e FB1D     		adds	r3, r7, #7
+ 1164 0010 1A78     		ldrb	r2, [r3]
+ 1165 0012 1300     		movs	r3, r2
+ 1166 0014 9B00     		lsls	r3, r3, #2
+ 1167 0016 9B18     		adds	r3, r3, r2
+ 1168 0018 9B00     		lsls	r3, r3, #2
+ 1169 001a 40F2080C 		movw	ip, #8
+ 1170 001e C4F2020C 		movt	ip, 16386
+ 1171 0022 6344     		add	r3, r3, ip
+ 1172              		.loc 1 315 9
+ 1173 0024 1B68     		ldr	r3, [r3]
+ 1174 0026 FB60     		str	r3, [r7, #12]
+ 316:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* assign regiser */
+ 317:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl &= ~DMA_CHXCTL_MWIDTH;
+ 1175              		.loc 1 317 9
+ 1176 0028 FB68     		ldr	r3, [r7, #12]
+ 1177 002a 0C4A     		ldr	r2, .L30
+ 1178 002c 1340     		ands	r3, r2
+ 1179 002e FB60     		str	r3, [r7, #12]
+ 318:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl |= mwidth;
+ 1180              		.loc 1 318 9
+ 1181 0030 FA68     		ldr	r2, [r7, #12]
+ 1182 0032 3B68     		ldr	r3, [r7]
+ 1183 0034 1343     		orrs	r3, r2
+ 1184 0036 FB60     		str	r3, [r7, #12]
+ 319:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) = ctl;
+ 1185              		.loc 1 319 5
+ 1186 0038 FB1D     		adds	r3, r7, #7
+ 1187 003a 1A78     		ldrb	r2, [r3]
+ 1188 003c 1300     		movs	r3, r2
+ 1189 003e 9B00     		lsls	r3, r3, #2
+ 1190 0040 9B18     		adds	r3, r3, r2
+ 1191 0042 9B00     		lsls	r3, r3, #2
+ 1192 0044 40F2080C 		movw	ip, #8
+ 1193 0048 C4F2020C 		movt	ip, 16386
+ 1194 004c 6344     		add	r3, r3, ip
+ 1195              		.loc 1 319 25
+ 1196 004e FA68     		ldr	r2, [r7, #12]
+ 1197 0050 1A60     		str	r2, [r3]
+ 320:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1198              		.loc 1 320 1
+ 1199 0052 C046     		nop
+ 1200 0054 BD46     		mov	sp, r7
+ 1201 0056 04B0     		add	sp, sp, #16
+ 1202              		@ sp needed
+ 1203 0058 80BD     		pop	{r7, pc}
+ 1204              	.L31:
+ 1205 005a C046     		.align	2
+ 1206              	.L30:
+ 1207 005c FFF3FFFF 		.word	-3073
+ 1208              		.cfi_endproc
+ 1209              	.LFE72:
+ 1211              		.section	.text.dma_periph_width_config,"ax",%progbits
+ 1212              		.align	1
+ 1213              		.global	dma_periph_width_config
+ 1214              		.syntax unified
+ 1215              		.code	16
+ 1216              		.thumb_func
+ 1217              		.fpu softvfp
+ 1219              	dma_periph_width_config:
+ 1220              	.LFB73:
+ 321:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 322:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 323:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      configure transfer data width of peripheral
+ 324:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 325:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 326:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 327:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  pwidth: transfer data width of peripheral
+ 328:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 329:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_PERIPHERAL_WIDTH_8BIT: transfer data width of peripheral is 8-bit
+ 330:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_PERIPHERAL_WIDTH_16BIT: transfer data width of peripheral is 16-bit
+ 331:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_PERIPHERAL_WIDTH_32BIT: transfer data width of peripheral is 32-bit
+ 332:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 333:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 334:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 335:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_periph_width_config(dma_channel_enum channelx, uint32_t pwidth)
+ 336:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1221              		.loc 1 336 1
+ 1222              		.cfi_startproc
+ 1223              		@ args = 0, pretend = 0, frame = 16
+ 1224              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1225 0000 80B5     		push	{r7, lr}
+ 1226              		.cfi_def_cfa_offset 8
+ 1227              		.cfi_offset 7, -8
+ 1228              		.cfi_offset 14, -4
+ 1229 0002 84B0     		sub	sp, sp, #16
+ 1230              		.cfi_def_cfa_offset 24
+ 1231 0004 00AF     		add	r7, sp, #0
+ 1232              		.cfi_def_cfa_register 7
+ 1233 0006 0200     		movs	r2, r0
+ 1234 0008 3960     		str	r1, [r7]
+ 1235 000a FB1D     		adds	r3, r7, #7
+ 1236 000c 1A70     		strb	r2, [r3]
+ 337:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     uint32_t ctl;
+ 338:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 339:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* acquire DMA_CHxCTL register */
+ 340:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl = DMA_CHCTL(channelx);
+ 1237              		.loc 1 340 11
+ 1238 000e FB1D     		adds	r3, r7, #7
+ 1239 0010 1A78     		ldrb	r2, [r3]
+ 1240 0012 1300     		movs	r3, r2
+ 1241 0014 9B00     		lsls	r3, r3, #2
+ 1242 0016 9B18     		adds	r3, r3, r2
+ 1243 0018 9B00     		lsls	r3, r3, #2
+ 1244 001a 40F2080C 		movw	ip, #8
+ 1245 001e C4F2020C 		movt	ip, 16386
+ 1246 0022 6344     		add	r3, r3, ip
+ 1247              		.loc 1 340 9
+ 1248 0024 1B68     		ldr	r3, [r3]
+ 1249 0026 FB60     		str	r3, [r7, #12]
+ 341:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     /* assign regiser */
+ 342:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl &= ~DMA_CHXCTL_PWIDTH;
+ 1250              		.loc 1 342 9
+ 1251 0028 FB68     		ldr	r3, [r7, #12]
+ 1252 002a 0C4A     		ldr	r2, .L33
+ 1253 002c 1340     		ands	r3, r2
+ 1254 002e FB60     		str	r3, [r7, #12]
+ 343:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     ctl |= pwidth;
+ 1255              		.loc 1 343 9
+ 1256 0030 FA68     		ldr	r2, [r7, #12]
+ 1257 0032 3B68     		ldr	r3, [r7]
+ 1258 0034 1343     		orrs	r3, r2
+ 1259 0036 FB60     		str	r3, [r7, #12]
+ 344:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) = ctl;
+ 1260              		.loc 1 344 5
+ 1261 0038 FB1D     		adds	r3, r7, #7
+ 1262 003a 1A78     		ldrb	r2, [r3]
+ 1263 003c 1300     		movs	r3, r2
+ 1264 003e 9B00     		lsls	r3, r3, #2
+ 1265 0040 9B18     		adds	r3, r3, r2
+ 1266 0042 9B00     		lsls	r3, r3, #2
+ 1267 0044 40F2080C 		movw	ip, #8
+ 1268 0048 C4F2020C 		movt	ip, 16386
+ 1269 004c 6344     		add	r3, r3, ip
+ 1270              		.loc 1 344 25
+ 1271 004e FA68     		ldr	r2, [r7, #12]
+ 1272 0050 1A60     		str	r2, [r3]
+ 345:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1273              		.loc 1 345 1
+ 1274 0052 C046     		nop
+ 1275 0054 BD46     		mov	sp, r7
+ 1276 0056 04B0     		add	sp, sp, #16
+ 1277              		@ sp needed
+ 1278 0058 80BD     		pop	{r7, pc}
+ 1279              	.L34:
+ 1280 005a C046     		.align	2
+ 1281              	.L33:
+ 1282 005c FFFCFFFF 		.word	-769
+ 1283              		.cfi_endproc
+ 1284              	.LFE73:
+ 1286              		.section	.text.dma_memory_increase_enable,"ax",%progbits
+ 1287              		.align	1
+ 1288              		.global	dma_memory_increase_enable
+ 1289              		.syntax unified
+ 1290              		.code	16
+ 1291              		.thumb_func
+ 1292              		.fpu softvfp
+ 1294              	dma_memory_increase_enable:
+ 1295              	.LFB74:
+ 346:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 347:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 348:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      enable next address increasement algorithm of memory
+ 349:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 350:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 351:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 352:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 353:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 354:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 355:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_memory_increase_enable(dma_channel_enum channelx)
+ 356:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1296              		.loc 1 356 1
+ 1297              		.cfi_startproc
+ 1298              		@ args = 0, pretend = 0, frame = 8
+ 1299              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1300 0000 80B5     		push	{r7, lr}
+ 1301              		.cfi_def_cfa_offset 8
+ 1302              		.cfi_offset 7, -8
+ 1303              		.cfi_offset 14, -4
+ 1304 0002 82B0     		sub	sp, sp, #8
+ 1305              		.cfi_def_cfa_offset 16
+ 1306 0004 00AF     		add	r7, sp, #0
+ 1307              		.cfi_def_cfa_register 7
+ 1308 0006 0200     		movs	r2, r0
+ 1309 0008 FB1D     		adds	r3, r7, #7
+ 1310 000a 1A70     		strb	r2, [r3]
+ 357:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) |= DMA_CHXCTL_MNAGA;
+ 1311              		.loc 1 357 25
+ 1312 000c FB1D     		adds	r3, r7, #7
+ 1313 000e 1A78     		ldrb	r2, [r3]
+ 1314 0010 1300     		movs	r3, r2
+ 1315 0012 9B00     		lsls	r3, r3, #2
+ 1316 0014 9B18     		adds	r3, r3, r2
+ 1317 0016 9B00     		lsls	r3, r3, #2
+ 1318 0018 40F2080C 		movw	ip, #8
+ 1319 001c C4F2020C 		movt	ip, 16386
+ 1320 0020 6344     		add	r3, r3, ip
+ 1321 0022 1968     		ldr	r1, [r3]
+ 1322 0024 FB1D     		adds	r3, r7, #7
+ 1323 0026 1A78     		ldrb	r2, [r3]
+ 1324 0028 1300     		movs	r3, r2
+ 1325 002a 9B00     		lsls	r3, r3, #2
+ 1326 002c 9B18     		adds	r3, r3, r2
+ 1327 002e 9B00     		lsls	r3, r3, #2
+ 1328 0030 40F2080C 		movw	ip, #8
+ 1329 0034 C4F2020C 		movt	ip, 16386
+ 1330 0038 6344     		add	r3, r3, ip
+ 1331 003a 8022     		movs	r2, #128
+ 1332 003c 0A43     		orrs	r2, r1
+ 1333 003e 1A60     		str	r2, [r3]
+ 358:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1334              		.loc 1 358 1
+ 1335 0040 C046     		nop
+ 1336 0042 BD46     		mov	sp, r7
+ 1337 0044 02B0     		add	sp, sp, #8
+ 1338              		@ sp needed
+ 1339 0046 80BD     		pop	{r7, pc}
+ 1340              		.cfi_endproc
+ 1341              	.LFE74:
+ 1343              		.section	.text.dma_memory_increase_disable,"ax",%progbits
+ 1344              		.align	1
+ 1345              		.global	dma_memory_increase_disable
+ 1346              		.syntax unified
+ 1347              		.code	16
+ 1348              		.thumb_func
+ 1349              		.fpu softvfp
+ 1351              	dma_memory_increase_disable:
+ 1352              	.LFB75:
+ 359:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 360:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 361:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      disable next address increasement algorithm of memory
+ 362:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 363:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 364:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 365:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 366:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 367:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 368:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_memory_increase_disable(dma_channel_enum channelx)
+ 369:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1353              		.loc 1 369 1
+ 1354              		.cfi_startproc
+ 1355              		@ args = 0, pretend = 0, frame = 8
+ 1356              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1357 0000 80B5     		push	{r7, lr}
+ 1358              		.cfi_def_cfa_offset 8
+ 1359              		.cfi_offset 7, -8
+ 1360              		.cfi_offset 14, -4
+ 1361 0002 82B0     		sub	sp, sp, #8
+ 1362              		.cfi_def_cfa_offset 16
+ 1363 0004 00AF     		add	r7, sp, #0
+ 1364              		.cfi_def_cfa_register 7
+ 1365 0006 0200     		movs	r2, r0
+ 1366 0008 FB1D     		adds	r3, r7, #7
+ 1367 000a 1A70     		strb	r2, [r3]
+ 370:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) &= ~DMA_CHXCTL_MNAGA;
+ 1368              		.loc 1 370 25
+ 1369 000c FB1D     		adds	r3, r7, #7
+ 1370 000e 1A78     		ldrb	r2, [r3]
+ 1371 0010 1300     		movs	r3, r2
+ 1372 0012 9B00     		lsls	r3, r3, #2
+ 1373 0014 9B18     		adds	r3, r3, r2
+ 1374 0016 9B00     		lsls	r3, r3, #2
+ 1375 0018 40F2080C 		movw	ip, #8
+ 1376 001c C4F2020C 		movt	ip, 16386
+ 1377 0020 6344     		add	r3, r3, ip
+ 1378 0022 1968     		ldr	r1, [r3]
+ 1379 0024 FB1D     		adds	r3, r7, #7
+ 1380 0026 1A78     		ldrb	r2, [r3]
+ 1381 0028 1300     		movs	r3, r2
+ 1382 002a 9B00     		lsls	r3, r3, #2
+ 1383 002c 9B18     		adds	r3, r3, r2
+ 1384 002e 9B00     		lsls	r3, r3, #2
+ 1385 0030 40F2080C 		movw	ip, #8
+ 1386 0034 C4F2020C 		movt	ip, 16386
+ 1387 0038 6344     		add	r3, r3, ip
+ 1388 003a 8022     		movs	r2, #128
+ 1389 003c 9143     		bics	r1, r2
+ 1390 003e 0A00     		movs	r2, r1
+ 1391 0040 1A60     		str	r2, [r3]
+ 371:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1392              		.loc 1 371 1
+ 1393 0042 C046     		nop
+ 1394 0044 BD46     		mov	sp, r7
+ 1395 0046 02B0     		add	sp, sp, #8
+ 1396              		@ sp needed
+ 1397 0048 80BD     		pop	{r7, pc}
+ 1398              		.cfi_endproc
+ 1399              	.LFE75:
+ 1401              		.section	.text.dma_periph_increase_enable,"ax",%progbits
+ 1402              		.align	1
+ 1403              		.global	dma_periph_increase_enable
+ 1404              		.syntax unified
+ 1405              		.code	16
+ 1406              		.thumb_func
+ 1407              		.fpu softvfp
+ 1409              	dma_periph_increase_enable:
+ 1410              	.LFB76:
+ 372:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 373:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 374:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      enable next address increasement algorithm of peripheral
+ 375:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 376:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 377:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 378:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 379:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 380:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 381:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_periph_increase_enable(dma_channel_enum channelx)
+ 382:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1411              		.loc 1 382 1
+ 1412              		.cfi_startproc
+ 1413              		@ args = 0, pretend = 0, frame = 8
+ 1414              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1415 0000 80B5     		push	{r7, lr}
+ 1416              		.cfi_def_cfa_offset 8
+ 1417              		.cfi_offset 7, -8
+ 1418              		.cfi_offset 14, -4
+ 1419 0002 82B0     		sub	sp, sp, #8
+ 1420              		.cfi_def_cfa_offset 16
+ 1421 0004 00AF     		add	r7, sp, #0
+ 1422              		.cfi_def_cfa_register 7
+ 1423 0006 0200     		movs	r2, r0
+ 1424 0008 FB1D     		adds	r3, r7, #7
+ 1425 000a 1A70     		strb	r2, [r3]
+ 383:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) |= DMA_CHXCTL_PNAGA;
+ 1426              		.loc 1 383 25
+ 1427 000c FB1D     		adds	r3, r7, #7
+ 1428 000e 1A78     		ldrb	r2, [r3]
+ 1429 0010 1300     		movs	r3, r2
+ 1430 0012 9B00     		lsls	r3, r3, #2
+ 1431 0014 9B18     		adds	r3, r3, r2
+ 1432 0016 9B00     		lsls	r3, r3, #2
+ 1433 0018 40F2080C 		movw	ip, #8
+ 1434 001c C4F2020C 		movt	ip, 16386
+ 1435 0020 6344     		add	r3, r3, ip
+ 1436 0022 1968     		ldr	r1, [r3]
+ 1437 0024 FB1D     		adds	r3, r7, #7
+ 1438 0026 1A78     		ldrb	r2, [r3]
+ 1439 0028 1300     		movs	r3, r2
+ 1440 002a 9B00     		lsls	r3, r3, #2
+ 1441 002c 9B18     		adds	r3, r3, r2
+ 1442 002e 9B00     		lsls	r3, r3, #2
+ 1443 0030 40F2080C 		movw	ip, #8
+ 1444 0034 C4F2020C 		movt	ip, 16386
+ 1445 0038 6344     		add	r3, r3, ip
+ 1446 003a 4022     		movs	r2, #64
+ 1447 003c 0A43     		orrs	r2, r1
+ 1448 003e 1A60     		str	r2, [r3]
+ 384:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1449              		.loc 1 384 1
+ 1450 0040 C046     		nop
+ 1451 0042 BD46     		mov	sp, r7
+ 1452 0044 02B0     		add	sp, sp, #8
+ 1453              		@ sp needed
+ 1454 0046 80BD     		pop	{r7, pc}
+ 1455              		.cfi_endproc
+ 1456              	.LFE76:
+ 1458              		.section	.text.dma_periph_increase_disable,"ax",%progbits
+ 1459              		.align	1
+ 1460              		.global	dma_periph_increase_disable
+ 1461              		.syntax unified
+ 1462              		.code	16
+ 1463              		.thumb_func
+ 1464              		.fpu softvfp
+ 1466              	dma_periph_increase_disable:
+ 1467              	.LFB77:
+ 385:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 386:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 387:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      disable next address increasement algorithm of peripheral
+ 388:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 389:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 390:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 391:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 392:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 393:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 394:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_periph_increase_disable(dma_channel_enum channelx)
+ 395:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1468              		.loc 1 395 1
+ 1469              		.cfi_startproc
+ 1470              		@ args = 0, pretend = 0, frame = 8
+ 1471              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1472 0000 80B5     		push	{r7, lr}
+ 1473              		.cfi_def_cfa_offset 8
+ 1474              		.cfi_offset 7, -8
+ 1475              		.cfi_offset 14, -4
+ 1476 0002 82B0     		sub	sp, sp, #8
+ 1477              		.cfi_def_cfa_offset 16
+ 1478 0004 00AF     		add	r7, sp, #0
+ 1479              		.cfi_def_cfa_register 7
+ 1480 0006 0200     		movs	r2, r0
+ 1481 0008 FB1D     		adds	r3, r7, #7
+ 1482 000a 1A70     		strb	r2, [r3]
+ 396:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) &= ~DMA_CHXCTL_PNAGA;
+ 1483              		.loc 1 396 25
+ 1484 000c FB1D     		adds	r3, r7, #7
+ 1485 000e 1A78     		ldrb	r2, [r3]
+ 1486 0010 1300     		movs	r3, r2
+ 1487 0012 9B00     		lsls	r3, r3, #2
+ 1488 0014 9B18     		adds	r3, r3, r2
+ 1489 0016 9B00     		lsls	r3, r3, #2
+ 1490 0018 40F2080C 		movw	ip, #8
+ 1491 001c C4F2020C 		movt	ip, 16386
+ 1492 0020 6344     		add	r3, r3, ip
+ 1493 0022 1968     		ldr	r1, [r3]
+ 1494 0024 FB1D     		adds	r3, r7, #7
+ 1495 0026 1A78     		ldrb	r2, [r3]
+ 1496 0028 1300     		movs	r3, r2
+ 1497 002a 9B00     		lsls	r3, r3, #2
+ 1498 002c 9B18     		adds	r3, r3, r2
+ 1499 002e 9B00     		lsls	r3, r3, #2
+ 1500 0030 40F2080C 		movw	ip, #8
+ 1501 0034 C4F2020C 		movt	ip, 16386
+ 1502 0038 6344     		add	r3, r3, ip
+ 1503 003a 4022     		movs	r2, #64
+ 1504 003c 9143     		bics	r1, r2
+ 1505 003e 0A00     		movs	r2, r1
+ 1506 0040 1A60     		str	r2, [r3]
+ 397:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1507              		.loc 1 397 1
+ 1508 0042 C046     		nop
+ 1509 0044 BD46     		mov	sp, r7
+ 1510 0046 02B0     		add	sp, sp, #8
+ 1511              		@ sp needed
+ 1512 0048 80BD     		pop	{r7, pc}
+ 1513              		.cfi_endproc
+ 1514              	.LFE77:
+ 1516              		.section	.text.dma_transfer_direction_config,"ax",%progbits
+ 1517              		.align	1
+ 1518              		.global	dma_transfer_direction_config
+ 1519              		.syntax unified
+ 1520              		.code	16
+ 1521              		.thumb_func
+ 1522              		.fpu softvfp
+ 1524              	dma_transfer_direction_config:
+ 1525              	.LFB78:
+ 398:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 399:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 400:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      configure the direction of data transfer on the channel
+ 401:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 402:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 403:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 404:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  direction: specify the direction of  data transfer
+ 405:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 406:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_PERIPHERAL_TO_MEMORY: read from peripheral and write to memory
+ 407:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_MEMORY_TO_PERIPHERAL: read from memory and write to peripheral
+ 408:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 409:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 410:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 411:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_transfer_direction_config(dma_channel_enum channelx, uint8_t direction)
+ 412:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1526              		.loc 1 412 1
+ 1527              		.cfi_startproc
+ 1528              		@ args = 0, pretend = 0, frame = 8
+ 1529              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1530 0000 80B5     		push	{r7, lr}
+ 1531              		.cfi_def_cfa_offset 8
+ 1532              		.cfi_offset 7, -8
+ 1533              		.cfi_offset 14, -4
+ 1534 0002 82B0     		sub	sp, sp, #8
+ 1535              		.cfi_def_cfa_offset 16
+ 1536 0004 00AF     		add	r7, sp, #0
+ 1537              		.cfi_def_cfa_register 7
+ 1538 0006 0200     		movs	r2, r0
+ 1539 0008 FB1D     		adds	r3, r7, #7
+ 1540 000a 1A70     		strb	r2, [r3]
+ 1541 000c BB1D     		adds	r3, r7, #6
+ 1542 000e 0A1C     		adds	r2, r1, #0
+ 1543 0010 1A70     		strb	r2, [r3]
+ 413:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     if(DMA_PERIPHERAL_TO_MEMORY == direction) {
+ 1544              		.loc 1 413 7
+ 1545 0012 BB1D     		adds	r3, r7, #6
+ 1546 0014 1B78     		ldrb	r3, [r3]
+ 1547 0016 DBB9     		cbnz	r3, .L40
+ 414:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         DMA_CHCTL(channelx) &= ~DMA_CHXCTL_DIR;
+ 1548              		.loc 1 414 29
+ 1549 0018 FB1D     		adds	r3, r7, #7
+ 1550 001a 1A78     		ldrb	r2, [r3]
+ 1551 001c 1300     		movs	r3, r2
+ 1552 001e 9B00     		lsls	r3, r3, #2
+ 1553 0020 9B18     		adds	r3, r3, r2
+ 1554 0022 9B00     		lsls	r3, r3, #2
+ 1555 0024 40F2080C 		movw	ip, #8
+ 1556 0028 C4F2020C 		movt	ip, 16386
+ 1557 002c 6344     		add	r3, r3, ip
+ 1558 002e 1968     		ldr	r1, [r3]
+ 1559 0030 FB1D     		adds	r3, r7, #7
+ 1560 0032 1A78     		ldrb	r2, [r3]
+ 1561 0034 1300     		movs	r3, r2
+ 1562 0036 9B00     		lsls	r3, r3, #2
+ 1563 0038 9B18     		adds	r3, r3, r2
+ 1564 003a 9B00     		lsls	r3, r3, #2
+ 1565 003c 40F2080C 		movw	ip, #8
+ 1566 0040 C4F2020C 		movt	ip, 16386
+ 1567 0044 6344     		add	r3, r3, ip
+ 1568 0046 1022     		movs	r2, #16
+ 1569 0048 9143     		bics	r1, r2
+ 1570 004a 0A00     		movs	r2, r1
+ 1571 004c 1A60     		str	r2, [r3]
+ 415:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     } else {
+ 416:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         DMA_CHCTL(channelx) |= DMA_CHXCTL_DIR;
+ 417:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 418:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1572              		.loc 1 418 1
+ 1573 004e 19E0     		b	.L42
+ 1574              	.L40:
+ 416:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 1575              		.loc 1 416 29
+ 1576 0050 FB1D     		adds	r3, r7, #7
+ 1577 0052 1A78     		ldrb	r2, [r3]
+ 1578 0054 1300     		movs	r3, r2
+ 1579 0056 9B00     		lsls	r3, r3, #2
+ 1580 0058 9B18     		adds	r3, r3, r2
+ 1581 005a 9B00     		lsls	r3, r3, #2
+ 1582 005c 40F2080C 		movw	ip, #8
+ 1583 0060 C4F2020C 		movt	ip, 16386
+ 1584 0064 6344     		add	r3, r3, ip
+ 1585 0066 1968     		ldr	r1, [r3]
+ 1586 0068 FB1D     		adds	r3, r7, #7
+ 1587 006a 1A78     		ldrb	r2, [r3]
+ 1588 006c 1300     		movs	r3, r2
+ 1589 006e 9B00     		lsls	r3, r3, #2
+ 1590 0070 9B18     		adds	r3, r3, r2
+ 1591 0072 9B00     		lsls	r3, r3, #2
+ 1592 0074 40F2080C 		movw	ip, #8
+ 1593 0078 C4F2020C 		movt	ip, 16386
+ 1594 007c 6344     		add	r3, r3, ip
+ 1595 007e 1022     		movs	r2, #16
+ 1596 0080 0A43     		orrs	r2, r1
+ 1597 0082 1A60     		str	r2, [r3]
+ 1598              	.L42:
+ 1599              		.loc 1 418 1
+ 1600 0084 C046     		nop
+ 1601 0086 BD46     		mov	sp, r7
+ 1602 0088 02B0     		add	sp, sp, #8
+ 1603              		@ sp needed
+ 1604 008a 80BD     		pop	{r7, pc}
+ 1605              		.cfi_endproc
+ 1606              	.LFE78:
+ 1608              		.section	.text.dma_flag_get,"ax",%progbits
+ 1609              		.align	1
+ 1610              		.global	dma_flag_get
+ 1611              		.syntax unified
+ 1612              		.code	16
+ 1613              		.thumb_func
+ 1614              		.fpu softvfp
+ 1616              	dma_flag_get:
+ 1617              	.LFB79:
+ 419:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 420:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 421:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      check DMA flag is set or not
+ 422:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to get flag
+ 423:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 424:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 425:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  flag: specify get which flag
+ 426:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 427:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_FLAG_G: global interrupt flag of channel
+ 428:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_FLAG_FTF: full transfer finish flag of channel
+ 429:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_FLAG_HTF: half transfer finish flag of channel
+ 430:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_FLAG_ERR: error flag of channel
+ 431:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 432:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     FlagStatus: SET or RESET
+ 433:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 434:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** FlagStatus dma_flag_get(dma_channel_enum channelx, uint32_t flag)
+ 435:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1618              		.loc 1 435 1
+ 1619              		.cfi_startproc
+ 1620              		@ args = 0, pretend = 0, frame = 16
+ 1621              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1622 0000 80B5     		push	{r7, lr}
+ 1623              		.cfi_def_cfa_offset 8
+ 1624              		.cfi_offset 7, -8
+ 1625              		.cfi_offset 14, -4
+ 1626 0002 84B0     		sub	sp, sp, #16
+ 1627              		.cfi_def_cfa_offset 24
+ 1628 0004 00AF     		add	r7, sp, #0
+ 1629              		.cfi_def_cfa_register 7
+ 1630 0006 0200     		movs	r2, r0
+ 1631 0008 3960     		str	r1, [r7]
+ 1632 000a FB1D     		adds	r3, r7, #7
+ 1633 000c 1A70     		strb	r2, [r3]
+ 436:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     FlagStatus reval;
+ 437:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 438:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     if(RESET != (DMA_INTF & DMA_FLAG_ADD(flag, channelx))) {
+ 1634              		.loc 1 438 18
+ 1635 000e 0023     		movs	r3, #0
+ 1636 0010 C4F20203 		movt	r3, 16386
+ 1637 0014 1B68     		ldr	r3, [r3]
+ 1638              		.loc 1 438 29
+ 1639 0016 FA1D     		adds	r2, r7, #7
+ 1640 0018 1278     		ldrb	r2, [r2]
+ 1641 001a 9200     		lsls	r2, r2, #2
+ 1642 001c 3968     		ldr	r1, [r7]
+ 1643 001e 9140     		lsls	r1, r1, r2
+ 1644 0020 0A00     		movs	r2, r1
+ 1645              		.loc 1 438 27
+ 1646 0022 1340     		ands	r3, r2
+ 1647              		.loc 1 438 7
+ 1648 0024 23B1     		cbz	r3, .L44
+ 439:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         reval = SET;
+ 1649              		.loc 1 439 15
+ 1650 0026 0F23     		movs	r3, #15
+ 1651 0028 FB18     		adds	r3, r7, r3
+ 1652 002a 0122     		movs	r2, #1
+ 1653 002c 1A70     		strb	r2, [r3]
+ 1654 002e 03E0     		b	.L45
+ 1655              	.L44:
+ 440:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     } else {
+ 441:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         reval = RESET;
+ 1656              		.loc 1 441 15
+ 1657 0030 0F23     		movs	r3, #15
+ 1658 0032 FB18     		adds	r3, r7, r3
+ 1659 0034 0022     		movs	r2, #0
+ 1660 0036 1A70     		strb	r2, [r3]
+ 1661              	.L45:
+ 442:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 443:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 444:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     return reval;
+ 1662              		.loc 1 444 12
+ 1663 0038 0F23     		movs	r3, #15
+ 1664 003a FB18     		adds	r3, r7, r3
+ 1665 003c 1B78     		ldrb	r3, [r3]
+ 445:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1666              		.loc 1 445 1
+ 1667 003e 1800     		movs	r0, r3
+ 1668 0040 BD46     		mov	sp, r7
+ 1669 0042 04B0     		add	sp, sp, #16
+ 1670              		@ sp needed
+ 1671 0044 80BD     		pop	{r7, pc}
+ 1672              		.cfi_endproc
+ 1673              	.LFE79:
+ 1675              		.section	.text.dma_flag_clear,"ax",%progbits
+ 1676              		.align	1
+ 1677              		.global	dma_flag_clear
+ 1678              		.syntax unified
+ 1679              		.code	16
+ 1680              		.thumb_func
+ 1681              		.fpu softvfp
+ 1683              	dma_flag_clear:
+ 1684              	.LFB80:
+ 446:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 447:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 448:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      clear DMA a channel flag
+ 449:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to clear flag
+ 450:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 451:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 452:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  flag: specify get which flag
+ 453:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 454:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_FLAG_G: global interrupt flag of channel
+ 455:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_FLAG_FTF: full transfer finish flag of channel
+ 456:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_FLAG_HTF: half transfer finish flag of channel
+ 457:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_FLAG_ERR: error flag of channel
+ 458:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 459:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 460:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 461:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_flag_clear(dma_channel_enum channelx, uint32_t flag)
+ 462:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1685              		.loc 1 462 1
+ 1686              		.cfi_startproc
+ 1687              		@ args = 0, pretend = 0, frame = 8
+ 1688              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1689 0000 80B5     		push	{r7, lr}
+ 1690              		.cfi_def_cfa_offset 8
+ 1691              		.cfi_offset 7, -8
+ 1692              		.cfi_offset 14, -4
+ 1693 0002 82B0     		sub	sp, sp, #8
+ 1694              		.cfi_def_cfa_offset 16
+ 1695 0004 00AF     		add	r7, sp, #0
+ 1696              		.cfi_def_cfa_register 7
+ 1697 0006 0200     		movs	r2, r0
+ 1698 0008 3960     		str	r1, [r7]
+ 1699 000a FB1D     		adds	r3, r7, #7
+ 1700 000c 1A70     		strb	r2, [r3]
+ 463:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_INTC |= DMA_FLAG_ADD(flag, channelx);
+ 1701              		.loc 1 463 14
+ 1702 000e 0423     		movs	r3, #4
+ 1703 0010 C4F20203 		movt	r3, 16386
+ 1704 0014 1968     		ldr	r1, [r3]
+ 1705              		.loc 1 463 17
+ 1706 0016 FB1D     		adds	r3, r7, #7
+ 1707 0018 1B78     		ldrb	r3, [r3]
+ 1708 001a 9B00     		lsls	r3, r3, #2
+ 1709 001c 3A68     		ldr	r2, [r7]
+ 1710 001e 9A40     		lsls	r2, r2, r3
+ 1711              		.loc 1 463 14
+ 1712 0020 0423     		movs	r3, #4
+ 1713 0022 C4F20203 		movt	r3, 16386
+ 1714 0026 0A43     		orrs	r2, r1
+ 1715 0028 1A60     		str	r2, [r3]
+ 464:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1716              		.loc 1 464 1
+ 1717 002a C046     		nop
+ 1718 002c BD46     		mov	sp, r7
+ 1719 002e 02B0     		add	sp, sp, #8
+ 1720              		@ sp needed
+ 1721 0030 80BD     		pop	{r7, pc}
+ 1722              		.cfi_endproc
+ 1723              	.LFE80:
+ 1725              		.section	.text.dma_interrupt_flag_get,"ax",%progbits
+ 1726              		.align	1
+ 1727              		.global	dma_interrupt_flag_get
+ 1728              		.syntax unified
+ 1729              		.code	16
+ 1730              		.thumb_func
+ 1731              		.fpu softvfp
+ 1733              	dma_interrupt_flag_get:
+ 1734              	.LFB81:
+ 465:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 466:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 467:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      check DMA flag and interrupt enable bit is set or not
+ 468:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to get flag
+ 469:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 470:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 471:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  flag: specify get which flag
+ 472:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 473:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FLAG_FTF: transfer finish flag of channel
+ 474:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FLAG_HTF: half transfer finish flag of channel
+ 475:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FLAG_ERR: error flag of channel
+ 476:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 477:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     FlagStatus: SET or RESET
+ 478:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 479:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** FlagStatus dma_interrupt_flag_get(dma_channel_enum channelx, uint32_t flag)
+ 480:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1735              		.loc 1 480 1
+ 1736              		.cfi_startproc
+ 1737              		@ args = 0, pretend = 0, frame = 16
+ 1738              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1739 0000 80B5     		push	{r7, lr}
+ 1740              		.cfi_def_cfa_offset 8
+ 1741              		.cfi_offset 7, -8
+ 1742              		.cfi_offset 14, -4
+ 1743 0002 84B0     		sub	sp, sp, #16
+ 1744              		.cfi_def_cfa_offset 24
+ 1745 0004 00AF     		add	r7, sp, #0
+ 1746              		.cfi_def_cfa_register 7
+ 1747 0006 0200     		movs	r2, r0
+ 1748 0008 3960     		str	r1, [r7]
+ 1749 000a FB1D     		adds	r3, r7, #7
+ 1750 000c 1A70     		strb	r2, [r3]
+ 481:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     uint32_t interrupt_enable = 0U, interrupt_flag = 0U;
+ 1751              		.loc 1 481 14
+ 1752 000e 0023     		movs	r3, #0
+ 1753 0010 FB60     		str	r3, [r7, #12]
+ 1754              		.loc 1 481 37
+ 1755 0012 0023     		movs	r3, #0
+ 1756 0014 BB60     		str	r3, [r7, #8]
+ 482:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 483:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     switch(flag) {
+ 1757              		.loc 1 483 5
+ 1758 0016 3B68     		ldr	r3, [r7]
+ 1759 0018 082B     		cmp	r3, #8
+ 1760 001a 41D0     		beq	.L49
+ 1761 001c 3B68     		ldr	r3, [r7]
+ 1762 001e 082B     		cmp	r3, #8
+ 1763 0020 5AD8     		bhi	.L56
+ 1764 0022 3B68     		ldr	r3, [r7]
+ 1765 0024 022B     		cmp	r3, #2
+ 1766 0026 03D0     		beq	.L51
+ 1767 0028 3B68     		ldr	r3, [r7]
+ 1768 002a 042B     		cmp	r3, #4
+ 1769 002c 1CD0     		beq	.L52
+ 484:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     case DMA_INT_FLAG_FTF:
+ 485:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_flag = DMA_INTF & DMA_FLAG_ADD(flag, channelx);
+ 486:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_FTFIE;
+ 487:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 488:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     case DMA_INT_FLAG_HTF:
+ 489:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_flag = DMA_INTF & DMA_FLAG_ADD(flag, channelx);
+ 490:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_HTFIE;
+ 491:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 492:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     case DMA_INT_FLAG_ERR:
+ 493:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_flag = DMA_INTF & DMA_FLAG_ADD(flag, channelx);
+ 494:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_ERRIE;
+ 495:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 496:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     default:
+ 497:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 1770              		.loc 1 497 9
+ 1771 002e 53E0     		b	.L56
+ 1772              	.L51:
+ 485:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_FTFIE;
+ 1773              		.loc 1 485 26
+ 1774 0030 0023     		movs	r3, #0
+ 1775 0032 C4F20203 		movt	r3, 16386
+ 1776 0036 1B68     		ldr	r3, [r3]
+ 485:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_FTFIE;
+ 1777              		.loc 1 485 37
+ 1778 0038 FA1D     		adds	r2, r7, #7
+ 1779 003a 1278     		ldrb	r2, [r2]
+ 1780 003c 9200     		lsls	r2, r2, #2
+ 1781 003e 3968     		ldr	r1, [r7]
+ 1782 0040 9140     		lsls	r1, r1, r2
+ 1783 0042 0A00     		movs	r2, r1
+ 485:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_FTFIE;
+ 1784              		.loc 1 485 24
+ 1785 0044 1340     		ands	r3, r2
+ 1786 0046 BB60     		str	r3, [r7, #8]
+ 486:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 1787              		.loc 1 486 28
+ 1788 0048 FB1D     		adds	r3, r7, #7
+ 1789 004a 1A78     		ldrb	r2, [r3]
+ 1790 004c 1300     		movs	r3, r2
+ 1791 004e 9B00     		lsls	r3, r3, #2
+ 1792 0050 9B18     		adds	r3, r3, r2
+ 1793 0052 9B00     		lsls	r3, r3, #2
+ 1794 0054 40F2080C 		movw	ip, #8
+ 1795 0058 C4F2020C 		movt	ip, 16386
+ 1796 005c 6344     		add	r3, r3, ip
+ 1797 005e 1B68     		ldr	r3, [r3]
+ 486:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 1798              		.loc 1 486 26
+ 1799 0060 0222     		movs	r2, #2
+ 1800 0062 1340     		ands	r3, r2
+ 1801 0064 FB60     		str	r3, [r7, #12]
+ 487:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     case DMA_INT_FLAG_HTF:
+ 1802              		.loc 1 487 9
+ 1803 0066 38E0     		b	.L53
+ 1804              	.L52:
+ 489:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_HTFIE;
+ 1805              		.loc 1 489 26
+ 1806 0068 0023     		movs	r3, #0
+ 1807 006a C4F20203 		movt	r3, 16386
+ 1808 006e 1B68     		ldr	r3, [r3]
+ 489:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_HTFIE;
+ 1809              		.loc 1 489 37
+ 1810 0070 FA1D     		adds	r2, r7, #7
+ 1811 0072 1278     		ldrb	r2, [r2]
+ 1812 0074 9200     		lsls	r2, r2, #2
+ 1813 0076 3968     		ldr	r1, [r7]
+ 1814 0078 9140     		lsls	r1, r1, r2
+ 1815 007a 0A00     		movs	r2, r1
+ 489:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_HTFIE;
+ 1816              		.loc 1 489 24
+ 1817 007c 1340     		ands	r3, r2
+ 1818 007e BB60     		str	r3, [r7, #8]
+ 490:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 1819              		.loc 1 490 28
+ 1820 0080 FB1D     		adds	r3, r7, #7
+ 1821 0082 1A78     		ldrb	r2, [r3]
+ 1822 0084 1300     		movs	r3, r2
+ 1823 0086 9B00     		lsls	r3, r3, #2
+ 1824 0088 9B18     		adds	r3, r3, r2
+ 1825 008a 9B00     		lsls	r3, r3, #2
+ 1826 008c 40F2080C 		movw	ip, #8
+ 1827 0090 C4F2020C 		movt	ip, 16386
+ 1828 0094 6344     		add	r3, r3, ip
+ 1829 0096 1B68     		ldr	r3, [r3]
+ 490:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 1830              		.loc 1 490 26
+ 1831 0098 0422     		movs	r2, #4
+ 1832 009a 1340     		ands	r3, r2
+ 1833 009c FB60     		str	r3, [r7, #12]
+ 491:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     case DMA_INT_FLAG_ERR:
+ 1834              		.loc 1 491 9
+ 1835 009e 1CE0     		b	.L53
+ 1836              	.L49:
+ 493:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_ERRIE;
+ 1837              		.loc 1 493 26
+ 1838 00a0 0023     		movs	r3, #0
+ 1839 00a2 C4F20203 		movt	r3, 16386
+ 1840 00a6 1B68     		ldr	r3, [r3]
+ 493:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_ERRIE;
+ 1841              		.loc 1 493 37
+ 1842 00a8 FA1D     		adds	r2, r7, #7
+ 1843 00aa 1278     		ldrb	r2, [r2]
+ 1844 00ac 9200     		lsls	r2, r2, #2
+ 1845 00ae 3968     		ldr	r1, [r7]
+ 1846 00b0 9140     		lsls	r1, r1, r2
+ 1847 00b2 0A00     		movs	r2, r1
+ 493:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         interrupt_enable = DMA_CHCTL(channelx) & DMA_CHXCTL_ERRIE;
+ 1848              		.loc 1 493 24
+ 1849 00b4 1340     		ands	r3, r2
+ 1850 00b6 BB60     		str	r3, [r7, #8]
+ 494:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 1851              		.loc 1 494 28
+ 1852 00b8 FB1D     		adds	r3, r7, #7
+ 1853 00ba 1A78     		ldrb	r2, [r3]
+ 1854 00bc 1300     		movs	r3, r2
+ 1855 00be 9B00     		lsls	r3, r3, #2
+ 1856 00c0 9B18     		adds	r3, r3, r2
+ 1857 00c2 9B00     		lsls	r3, r3, #2
+ 1858 00c4 40F2080C 		movw	ip, #8
+ 1859 00c8 C4F2020C 		movt	ip, 16386
+ 1860 00cc 6344     		add	r3, r3, ip
+ 1861 00ce 1B68     		ldr	r3, [r3]
+ 494:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         break;
+ 1862              		.loc 1 494 26
+ 1863 00d0 0822     		movs	r2, #8
+ 1864 00d2 1340     		ands	r3, r2
+ 1865 00d4 FB60     		str	r3, [r7, #12]
+ 495:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     default:
+ 1866              		.loc 1 495 9
+ 1867 00d6 00E0     		b	.L53
+ 1868              	.L56:
+ 1869              		.loc 1 497 9
+ 1870 00d8 C046     		nop
+ 1871              	.L53:
+ 498:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 499:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 500:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     if(interrupt_flag && interrupt_enable) {
+ 1872              		.loc 1 500 7
+ 1873 00da BB68     		ldr	r3, [r7, #8]
+ 1874 00dc 1BB1     		cbz	r3, .L54
+ 1875              		.loc 1 500 23 discriminator 1
+ 1876 00de FB68     		ldr	r3, [r7, #12]
+ 1877 00e0 0BB1     		cbz	r3, .L54
+ 501:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         return SET;
+ 1878              		.loc 1 501 16
+ 1879 00e2 0123     		movs	r3, #1
+ 1880 00e4 00E0     		b	.L55
+ 1881              	.L54:
+ 502:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     } else {
+ 503:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****         return RESET;
+ 1882              		.loc 1 503 16
+ 1883 00e6 0023     		movs	r3, #0
+ 1884              	.L55:
+ 504:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     }
+ 505:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1885              		.loc 1 505 1
+ 1886 00e8 1800     		movs	r0, r3
+ 1887 00ea BD46     		mov	sp, r7
+ 1888 00ec 04B0     		add	sp, sp, #16
+ 1889              		@ sp needed
+ 1890 00ee 80BD     		pop	{r7, pc}
+ 1891              		.cfi_endproc
+ 1892              	.LFE81:
+ 1894              		.section	.text.dma_interrupt_flag_clear,"ax",%progbits
+ 1895              		.align	1
+ 1896              		.global	dma_interrupt_flag_clear
+ 1897              		.syntax unified
+ 1898              		.code	16
+ 1899              		.thumb_func
+ 1900              		.fpu softvfp
+ 1902              	dma_interrupt_flag_clear:
+ 1903              	.LFB82:
+ 506:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 507:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 508:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      clear DMA a channel interrupt flag
+ 509:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to clear flag
+ 510:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 511:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 512:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  flag: specify get which flag
+ 513:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 514:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FLAG_G: global interrupt flag of channel
+ 515:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FLAG_FTF: transfer finish flag of channel
+ 516:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FLAG_HTF: half transfer finish flag of channel
+ 517:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FLAG_ERR: error flag of channel
+ 518:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 519:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 520:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 521:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_interrupt_flag_clear(dma_channel_enum channelx, uint32_t flag)
+ 522:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1904              		.loc 1 522 1
+ 1905              		.cfi_startproc
+ 1906              		@ args = 0, pretend = 0, frame = 8
+ 1907              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1908 0000 80B5     		push	{r7, lr}
+ 1909              		.cfi_def_cfa_offset 8
+ 1910              		.cfi_offset 7, -8
+ 1911              		.cfi_offset 14, -4
+ 1912 0002 82B0     		sub	sp, sp, #8
+ 1913              		.cfi_def_cfa_offset 16
+ 1914 0004 00AF     		add	r7, sp, #0
+ 1915              		.cfi_def_cfa_register 7
+ 1916 0006 0200     		movs	r2, r0
+ 1917 0008 3960     		str	r1, [r7]
+ 1918 000a FB1D     		adds	r3, r7, #7
+ 1919 000c 1A70     		strb	r2, [r3]
+ 523:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_INTC |= DMA_FLAG_ADD(flag, channelx);
+ 1920              		.loc 1 523 14
+ 1921 000e 0423     		movs	r3, #4
+ 1922 0010 C4F20203 		movt	r3, 16386
+ 1923 0014 1968     		ldr	r1, [r3]
+ 1924              		.loc 1 523 17
+ 1925 0016 FB1D     		adds	r3, r7, #7
+ 1926 0018 1B78     		ldrb	r3, [r3]
+ 1927 001a 9B00     		lsls	r3, r3, #2
+ 1928 001c 3A68     		ldr	r2, [r7]
+ 1929 001e 9A40     		lsls	r2, r2, r3
+ 1930              		.loc 1 523 14
+ 1931 0020 0423     		movs	r3, #4
+ 1932 0022 C4F20203 		movt	r3, 16386
+ 1933 0026 0A43     		orrs	r2, r1
+ 1934 0028 1A60     		str	r2, [r3]
+ 524:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1935              		.loc 1 524 1
+ 1936 002a C046     		nop
+ 1937 002c BD46     		mov	sp, r7
+ 1938 002e 02B0     		add	sp, sp, #8
+ 1939              		@ sp needed
+ 1940 0030 80BD     		pop	{r7, pc}
+ 1941              		.cfi_endproc
+ 1942              	.LFE82:
+ 1944              		.section	.text.dma_interrupt_enable,"ax",%progbits
+ 1945              		.align	1
+ 1946              		.global	dma_interrupt_enable
+ 1947              		.syntax unified
+ 1948              		.code	16
+ 1949              		.thumb_func
+ 1950              		.fpu softvfp
+ 1952              	dma_interrupt_enable:
+ 1953              	.LFB83:
+ 525:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 526:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 527:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      enable DMA interrupt
+ 528:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 529:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 530:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 531:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  source: specify which interrupt to enable
+ 532:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 533:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_ERR: channel error interrupt
+ 534:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_HTF: channel half transfer finish interrupt
+ 535:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FTF: channel full transfer finish interrupt
+ 536:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 537:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 538:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 539:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_interrupt_enable(dma_channel_enum channelx, uint32_t source)
+ 540:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 1954              		.loc 1 540 1
+ 1955              		.cfi_startproc
+ 1956              		@ args = 0, pretend = 0, frame = 8
+ 1957              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1958 0000 80B5     		push	{r7, lr}
+ 1959              		.cfi_def_cfa_offset 8
+ 1960              		.cfi_offset 7, -8
+ 1961              		.cfi_offset 14, -4
+ 1962 0002 82B0     		sub	sp, sp, #8
+ 1963              		.cfi_def_cfa_offset 16
+ 1964 0004 00AF     		add	r7, sp, #0
+ 1965              		.cfi_def_cfa_register 7
+ 1966 0006 0200     		movs	r2, r0
+ 1967 0008 3960     		str	r1, [r7]
+ 1968 000a FB1D     		adds	r3, r7, #7
+ 1969 000c 1A70     		strb	r2, [r3]
+ 541:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) |= source;
+ 1970              		.loc 1 541 25
+ 1971 000e FB1D     		adds	r3, r7, #7
+ 1972 0010 1A78     		ldrb	r2, [r3]
+ 1973 0012 1300     		movs	r3, r2
+ 1974 0014 9B00     		lsls	r3, r3, #2
+ 1975 0016 9B18     		adds	r3, r3, r2
+ 1976 0018 9B00     		lsls	r3, r3, #2
+ 1977 001a 40F2080C 		movw	ip, #8
+ 1978 001e C4F2020C 		movt	ip, 16386
+ 1979 0022 6344     		add	r3, r3, ip
+ 1980 0024 1968     		ldr	r1, [r3]
+ 1981 0026 FB1D     		adds	r3, r7, #7
+ 1982 0028 1A78     		ldrb	r2, [r3]
+ 1983 002a 1300     		movs	r3, r2
+ 1984 002c 9B00     		lsls	r3, r3, #2
+ 1985 002e 9B18     		adds	r3, r3, r2
+ 1986 0030 9B00     		lsls	r3, r3, #2
+ 1987 0032 40F2080C 		movw	ip, #8
+ 1988 0036 C4F2020C 		movt	ip, 16386
+ 1989 003a 6344     		add	r3, r3, ip
+ 1990 003c 3A68     		ldr	r2, [r7]
+ 1991 003e 0A43     		orrs	r2, r1
+ 1992 0040 1A60     		str	r2, [r3]
+ 542:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 1993              		.loc 1 542 1
+ 1994 0042 C046     		nop
+ 1995 0044 BD46     		mov	sp, r7
+ 1996 0046 02B0     		add	sp, sp, #8
+ 1997              		@ sp needed
+ 1998 0048 80BD     		pop	{r7, pc}
+ 1999              		.cfi_endproc
+ 2000              	.LFE83:
+ 2002              		.section	.text.dma_interrupt_disable,"ax",%progbits
+ 2003              		.align	1
+ 2004              		.global	dma_interrupt_disable
+ 2005              		.syntax unified
+ 2006              		.code	16
+ 2007              		.thumb_func
+ 2008              		.fpu softvfp
+ 2010              	dma_interrupt_disable:
+ 2011              	.LFB84:
+ 543:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** 
+ 544:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** /*!
+ 545:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \brief      disable DMA interrupt
+ 546:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  channelx: specify which DMA channel to set
+ 547:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 548:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_CHx(x=0..4)
+ 549:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[in]  source: specify which interrupt to disable
+ 550:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****                 only one parameter can be selected which is shown as below:
+ 551:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_ERR: channel error interrupt
+ 552:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_HTF: channel half transfer finish interrupt
+ 553:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****       \arg        DMA_INT_FTF: channel full transfer finish interrupt
+ 554:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \param[out] none
+ 555:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     \retval     none
+ 556:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** */
+ 557:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** void dma_interrupt_disable(dma_channel_enum channelx, uint32_t source)
+ 558:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** {
+ 2012              		.loc 1 558 1
+ 2013              		.cfi_startproc
+ 2014              		@ args = 0, pretend = 0, frame = 8
+ 2015              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2016 0000 80B5     		push	{r7, lr}
+ 2017              		.cfi_def_cfa_offset 8
+ 2018              		.cfi_offset 7, -8
+ 2019              		.cfi_offset 14, -4
+ 2020 0002 82B0     		sub	sp, sp, #8
+ 2021              		.cfi_def_cfa_offset 16
+ 2022 0004 00AF     		add	r7, sp, #0
+ 2023              		.cfi_def_cfa_register 7
+ 2024 0006 0200     		movs	r2, r0
+ 2025 0008 3960     		str	r1, [r7]
+ 2026 000a FB1D     		adds	r3, r7, #7
+ 2027 000c 1A70     		strb	r2, [r3]
+ 559:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c ****     DMA_CHCTL(channelx) &= ~source;
+ 2028              		.loc 1 559 25
+ 2029 000e FB1D     		adds	r3, r7, #7
+ 2030 0010 1A78     		ldrb	r2, [r3]
+ 2031 0012 1300     		movs	r3, r2
+ 2032 0014 9B00     		lsls	r3, r3, #2
+ 2033 0016 9B18     		adds	r3, r3, r2
+ 2034 0018 9B00     		lsls	r3, r3, #2
+ 2035 001a 40F2080C 		movw	ip, #8
+ 2036 001e C4F2020C 		movt	ip, 16386
+ 2037 0022 6344     		add	r3, r3, ip
+ 2038 0024 1968     		ldr	r1, [r3]
+ 2039              		.loc 1 559 28
+ 2040 0026 3B68     		ldr	r3, [r7]
+ 2041 0028 D843     		mvns	r0, r3
+ 2042              		.loc 1 559 25
+ 2043 002a FB1D     		adds	r3, r7, #7
+ 2044 002c 1A78     		ldrb	r2, [r3]
+ 2045 002e 1300     		movs	r3, r2
+ 2046 0030 9B00     		lsls	r3, r3, #2
+ 2047 0032 9B18     		adds	r3, r3, r2
+ 2048 0034 9B00     		lsls	r3, r3, #2
+ 2049 0036 40F2080C 		movw	ip, #8
+ 2050 003a C4F2020C 		movt	ip, 16386
+ 2051 003e 6344     		add	r3, r3, ip
+ 2052 0040 0200     		movs	r2, r0
+ 2053 0042 0A40     		ands	r2, r1
+ 2054 0044 1A60     		str	r2, [r3]
+ 560:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dma.c **** }
+ 2055              		.loc 1 560 1
+ 2056 0046 C046     		nop
+ 2057 0048 BD46     		mov	sp, r7
+ 2058 004a 02B0     		add	sp, sp, #8
+ 2059              		@ sp needed
+ 2060 004c 80BD     		pop	{r7, pc}
+ 2061              		.cfi_endproc
+ 2062              	.LFE84:
+ 2064              		.text
+ 2065              	.Letext0:
+ 2066              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 2067              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 2068              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 2069              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dma.h"
+ 2070              		.file 6 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 gd32e23x_dma.c
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:16     .text.dma_deinit:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:24     .text.dma_deinit:00000000 dma_deinit
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:143    .text.dma_struct_para_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:150    .text.dma_struct_para_init:00000000 dma_struct_para_init
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:211    .text.dma_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:218    .text.dma_init:00000000 dma_init
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:818    .text.dma_channel_disable:00000000 dma_channel_disable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:516    .text.dma_init:00000228 $d
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:521    .text.dma_circulation_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:528    .text.dma_circulation_enable:00000000 dma_circulation_enable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:578    .text.dma_circulation_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:585    .text.dma_circulation_disable:00000000 dma_circulation_disable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:636    .text.dma_memory_to_memory_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:643    .text.dma_memory_to_memory_enable:00000000 dma_memory_to_memory_enable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:693    .text.dma_memory_to_memory_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:700    .text.dma_memory_to_memory_disable:00000000 dma_memory_to_memory_disable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:749    .text.dma_memory_to_memory_disable:00000048 $d
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:754    .text.dma_channel_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:761    .text.dma_channel_enable:00000000 dma_channel_enable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:811    .text.dma_channel_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:869    .text.dma_periph_address_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:876    .text.dma_periph_address_config:00000000 dma_periph_address_config
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:917    .text.dma_memory_address_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:924    .text.dma_memory_address_config:00000000 dma_memory_address_config
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:965    .text.dma_transfer_number_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:972    .text.dma_transfer_number_config:00000000 dma_transfer_number_config
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1016   .text.dma_transfer_number_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1023   .text.dma_transfer_number_get:00000000 dma_transfer_number_get
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1062   .text.dma_priority_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1069   .text.dma_priority_config:00000000 dma_priority_config
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1132   .text.dma_priority_config:0000005c $d
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1137   .text.dma_memory_width_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1144   .text.dma_memory_width_config:00000000 dma_memory_width_config
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1207   .text.dma_memory_width_config:0000005c $d
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1212   .text.dma_periph_width_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1219   .text.dma_periph_width_config:00000000 dma_periph_width_config
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1282   .text.dma_periph_width_config:0000005c $d
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1287   .text.dma_memory_increase_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1294   .text.dma_memory_increase_enable:00000000 dma_memory_increase_enable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1344   .text.dma_memory_increase_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1351   .text.dma_memory_increase_disable:00000000 dma_memory_increase_disable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1402   .text.dma_periph_increase_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1409   .text.dma_periph_increase_enable:00000000 dma_periph_increase_enable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1459   .text.dma_periph_increase_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1466   .text.dma_periph_increase_disable:00000000 dma_periph_increase_disable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1517   .text.dma_transfer_direction_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1524   .text.dma_transfer_direction_config:00000000 dma_transfer_direction_config
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1609   .text.dma_flag_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1616   .text.dma_flag_get:00000000 dma_flag_get
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1676   .text.dma_flag_clear:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1683   .text.dma_flag_clear:00000000 dma_flag_clear
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1726   .text.dma_interrupt_flag_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1733   .text.dma_interrupt_flag_get:00000000 dma_interrupt_flag_get
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1895   .text.dma_interrupt_flag_clear:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1902   .text.dma_interrupt_flag_clear:00000000 dma_interrupt_flag_clear
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1945   .text.dma_interrupt_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:1952   .text.dma_interrupt_enable:00000000 dma_interrupt_enable
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:2003   .text.dma_interrupt_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccAOUTtF.s:2010   .text.dma_interrupt_disable:00000000 dma_interrupt_disable
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.gd32e23x_dma.h.41.c0b8e76725529e697b0a0861cb609689
+
+NO UNDEFINED SYMBOLS

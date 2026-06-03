@@ -1,0 +1,834 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"main.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.rodata
+  16              		.align	2
+  17              	.LC0:
+  18 0000 6D637520 		.ascii	"mcu wakeup: %d, change baudrate to 921600!\012\000"
+  18      77616B65 
+  18      75703A20 
+  18      25642C20 
+  18      6368616E 
+  19              		.align	2
+  20              	.LC1:
+  21 002c 31313A32 		.ascii	"11:25:30\000"
+  21      353A3330 
+  21      00
+  22 0035 000000   		.align	2
+  23              	.LC2:
+  24 0038 4D617920 		.ascii	"May 19 2026\000"
+  24      31392032 
+  24      30323600 
+  25              		.align	2
+  26              	.LC3:
+  27 0044 4669726D 		.ascii	"Firmware built on: %s %s!\012\000"
+  27      77617265 
+  27      20627569 
+  27      6C74206F 
+  27      6E3A2025 
+  28 005f 00       		.align	2
+  29              	.LC4:
+  30 0060 75617274 		.ascii	"uart stat:0x%x\012\000"
+  30      20737461 
+  30      743A3078 
+  30      25780A00 
+  31              		.align	2
+  32              	.LC5:
+  33 0070 31207365 		.ascii	"1 send 0x7e!\000"
+  33      6E642030 
+  33      78376521 
+  33      00
+  34 007d 000000   		.align	2
+  35              	.LC6:
+  36 0080 32207265 		.ascii	"2 receive 0x55!global_sio_handle.buf_size:0x%x, glo"
+  36      63656976 
+  36      65203078 
+  36      35352167 
+  36      6C6F6261 
+  37 00b3 62616C5F 		.ascii	"bal_sio_handle.data_size:0x%x\012\000"
+  37      73696F5F 
+  37      68616E64 
+  37      6C652E64 
+  37      6174615F 
+  38 00d2 0000     		.align	2
+  39              	.LC7:
+  40 00d4 77616974 		.ascii	"wait for soc romcode uart enum\000"
+  40      20666F72 
+  40      20736F63 
+  40      20726F6D 
+  40      636F6465 
+  41 00f3 00       		.align	2
+  42              	.LC8:
+  43 00f4 6D637520 		.ascii	"mcu wakeup success\000"
+  43      77616B65 
+  43      75702073 
+  43      75636365 
+  43      737300
+  44 0107 00       		.align	2
+  45              	.LC9:
+  46 0108 53504C5F 		.ascii	"SPL_TRANSPORT_TIMEOUT, reset soc\000"
+  46      5452414E 
+  46      53504F52 
+  46      545F5449 
+  46      4D454F55 
+  47              		.section	.text.main,"ax",%progbits
+  48              		.align	1
+  49              		.global	main
+  50              		.arch armv8-m.base
+  51              		.syntax unified
+  52              		.code	16
+  53              		.thumb_func
+  54              		.fpu softvfp
+  56              	main:
+  57              	.LFB62:
+  58              		.file 1 "../src/main.c"
+   1:../src/main.c **** /* SPDX-License-Identifier: LicenseRef-Unisoc-General-1.0
+   2:../src/main.c ****  *
+   3:../src/main.c ****  * SPDX-FileCopyrightText: 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   4:../src/main.c ****  *
+   5:../src/main.c ****  * Copyright 2026 Unisoc (Shanghai) Technologies Co., Ltd.
+   6:../src/main.c ****  *
+   7:../src/main.c ****  * Licensed under the Unisoc General Software License, version 1.0 (the License);
+   8:../src/main.c ****  * you may not use this file except in compliance with the License.
+   9:../src/main.c ****  * You may obtain a copy of the License at
+  10:../src/main.c ****  *
+  11:../src/main.c ****  * https://www.unisoc.com/en_us/license/UNISOC_GENERAL_LICENSE_V1.0-EN_US
+  12:../src/main.c ****  *
+  13:../src/main.c ****  * Software distributed under the License is distributed on an "AS IS" BASIS,
+  14:../src/main.c ****  * WITHOUT WARRANTIES OF ANY KIND, either express or implied.
+  15:../src/main.c ****  * See the Unisoc General Software License, version 1.0 for more details.
+  16:../src/main.c ****  */
+  17:../src/main.c **** #include "gd32e23x.h"
+  18:../src/main.c **** #include "systick.h"
+  19:../src/main.c **** #include <stdio.h>
+  20:../src/main.c **** #include "main.h"
+  21:../src/main.c **** #include "gd32e235c_eval.h"
+  22:../src/main.c **** #include "Spl_stdio.h"
+  23:../src/main.c **** #include "GPIO_init.h"
+  24:../src/main.c **** #include "Uart_init.h"
+  25:../src/main.c **** #include "Process_Packet.h"
+  26:../src/main.c **** #include "sprd_config.h"
+  27:../src/main.c **** #include <timer.h>
+  28:../src/main.c **** 
+  29:../src/main.c **** /*!
+  30:../src/main.c ****     \brief      main function
+  31:../src/main.c ****     \param[in]  none
+  32:../src/main.c ****     \param[out] none
+  33:../src/main.c ****     \retval     none
+  34:../src/main.c **** */
+  35:../src/main.c **** 
+  36:../src/main.c **** int main(void)
+  37:../src/main.c **** {
+  59              		.loc 1 37 1
+  60              		.cfi_startproc
+  61              		@ args = 0, pretend = 0, frame = 8
+  62              		@ frame_needed = 1, uses_anonymous_args = 0
+  63 0000 80B5     		push	{r7, lr}
+  64              		.cfi_def_cfa_offset 8
+  65              		.cfi_offset 7, -8
+  66              		.cfi_offset 14, -4
+  67 0002 82B0     		sub	sp, sp, #8
+  68              		.cfi_def_cfa_offset 16
+  69 0004 00AF     		add	r7, sp, #0
+  70              		.cfi_def_cfa_register 7
+  38:../src/main.c ****     uint32_t last_print_time = 0, current_time = 0;
+  71              		.loc 1 38 14
+  72 0006 0023     		movs	r3, #0
+  73 0008 7B60     		str	r3, [r7, #4]
+  74              		.loc 1 38 35
+  75 000a 0023     		movs	r3, #0
+  76 000c 3B60     		str	r3, [r7]
+  77              	.L2:
+  39:../src/main.c ****     static int initialized = 0;
+  40:../src/main.c **** 
+  41:../src/main.c **** wakeup:
+  42:../src/main.c ****     systick_config();
+  78              		.loc 1 42 5
+  79 000e FFF7FEFF 		bl	systick_config
+  43:../src/main.c **** 
+  44:../src/main.c ****     /* initilize the com */
+  45:../src/main.c ****     com_gpio_init();
+  80              		.loc 1 45 5
+  81 0012 FFF7FEFF 		bl	com_gpio_init
+  46:../src/main.c ****     com_usart_init(CONFIG_BAUDRATE);
+  82              		.loc 1 46 5
+  83 0016 E123     		movs	r3, #225
+  84 0018 5B02     		lsls	r3, r3, #9
+  85 001a 1800     		movs	r0, r3
+  86 001c FFF7FEFF 		bl	com_usart_init
+  47:../src/main.c ****     com1_gpio_init();
+  87              		.loc 1 47 5
+  88 0020 FFF7FEFF 		bl	com1_gpio_init
+  48:../src/main.c **** #ifdef UART_SPEED_UP
+  49:../src/main.c ****     com1_usart_init(CONFIG_BAUDRATE_SPEEDUP);
+  89              		.loc 1 49 5
+  90 0024 E123     		movs	r3, #225
+  91 0026 1B03     		lsls	r3, r3, #12
+  92 0028 1800     		movs	r0, r3
+  93 002a FFF7FEFF 		bl	com1_usart_init
+  50:../src/main.c ****     printf("mcu wakeup: %d, change baudrate to 921600!\n", (global_sio_handle.sio_state == BSL_UART
+  94              		.loc 1 50 78
+  95 002e 40F20003 		movw	r3, #:lower16:global_sio_handle
+  96 0032 C0F20003 		movt	r3, #:upper16:global_sio_handle
+  97 0036 1B68     		ldr	r3, [r3]
+  98              		.loc 1 50 5
+  99 0038 853B     		subs	r3, r3, #133
+ 100 003a 5A42     		rsbs	r2, r3, #0
+ 101 003c 5341     		adcs	r3, r3, r2
+ 102 003e DBB2     		uxtb	r3, r3
+ 103 0040 1A00     		movs	r2, r3
+ 104 0042 40F20003 		movw	r3, #:lower16:.LC0
+ 105 0046 C0F20003 		movt	r3, #:upper16:.LC0
+ 106 004a 1100     		movs	r1, r2
+ 107 004c 1800     		movs	r0, r3
+ 108 004e FFF7FEFF 		bl	printf
+  51:../src/main.c **** #else
+  52:../src/main.c ****     com1_usart_init(CONFIG_BAUDRATE);
+  53:../src/main.c ****     printf("mcu wakeup: %d, use baudrate 115200 as default!\n", (global_sio_handle.sio_state == BSL
+  54:../src/main.c **** #endif
+  55:../src/main.c **** 
+  56:../src/main.c ****     printf("Firmware built on: %s %s!\n", __DATE__, __TIME__);
+ 109              		.loc 1 56 5
+ 110 0052 40F20002 		movw	r2, #:lower16:.LC1
+ 111 0056 C0F20002 		movt	r2, #:upper16:.LC1
+ 112 005a 40F20001 		movw	r1, #:lower16:.LC2
+ 113 005e C0F20001 		movt	r1, #:upper16:.LC2
+ 114 0062 40F20003 		movw	r3, #:lower16:.LC3
+ 115 0066 C0F20003 		movt	r3, #:upper16:.LC3
+ 116 006a 1800     		movs	r0, r3
+ 117 006c FFF7FEFF 		bl	printf
+  57:../src/main.c **** 
+  58:../src/main.c ****     gd_eval_led_init(LED5);
+ 118              		.loc 1 58 5
+ 119 0070 0420     		movs	r0, #4
+ 120 0072 FFF7FEFF 		bl	gd_eval_led_init
+  59:../src/main.c **** 
+  60:../src/main.c ****     nvic_irq_enable(USART0_IRQn, 0);
+ 121              		.loc 1 60 5
+ 122 0076 0021     		movs	r1, #0
+ 123 0078 1B20     		movs	r0, #27
+ 124 007a FFF7FEFF 		bl	nvic_irq_enable
+  61:../src/main.c ****     nvic_irq_enable(USART1_IRQn, 0);
+ 125              		.loc 1 61 5
+ 126 007e 0021     		movs	r1, #0
+ 127 0080 1C20     		movs	r0, #28
+ 128 0082 FFF7FEFF 		bl	nvic_irq_enable
+  62:../src/main.c ****     // nvic_irq_disable(SysTick_IRQn);
+  63:../src/main.c **** 
+  64:../src/main.c ****     sio_handle_init();
+ 129              		.loc 1 64 5
+ 130 0086 FFF7FEFF 		bl	sio_handle_init
+  65:../src/main.c ****     init_key_detection();
+ 131              		.loc 1 65 5
+ 132 008a FFF7FEFF 		bl	init_key_detection
+  66:../src/main.c **** 
+  67:../src/main.c ****     printf("uart stat:0x%x\n", USART_STAT(USART0));
+ 133              		.loc 1 67 5
+ 134 008e 43F61C03 		movw	r3, #14364
+ 135 0092 C4F20103 		movt	r3, 16385
+ 136 0096 1A68     		ldr	r2, [r3]
+ 137 0098 40F20003 		movw	r3, #:lower16:.LC4
+ 138 009c C0F20003 		movt	r3, #:upper16:.LC4
+ 139 00a0 1100     		movs	r1, r2
+ 140 00a2 1800     		movs	r0, r3
+ 141 00a4 FFF7FEFF 		bl	printf
+  68:../src/main.c ****     usart_interrupt_enable(USART0, USART_INT_RBNE);
+ 142              		.loc 1 68 5
+ 143 00a8 43F60003 		movw	r3, #14336
+ 144 00ac C4F20103 		movt	r3, 16385
+ 145 00b0 0521     		movs	r1, #5
+ 146 00b2 1800     		movs	r0, r3
+ 147 00b4 FFF7FEFF 		bl	usart_interrupt_enable
+  69:../src/main.c ****     usart_interrupt_enable(USART0, USART_INT_IDLE);
+ 148              		.loc 1 69 5
+ 149 00b8 43F60003 		movw	r3, #14336
+ 150 00bc C4F20103 		movt	r3, 16385
+ 151 00c0 0421     		movs	r1, #4
+ 152 00c2 1800     		movs	r0, r3
+ 153 00c4 FFF7FEFF 		bl	usart_interrupt_enable
+  70:../src/main.c ****     usart_interrupt_enable(USART0, USART_INT_ERR);
+ 154              		.loc 1 70 5
+ 155 00c8 43F60003 		movw	r3, #14336
+ 156 00cc C4F20103 		movt	r3, 16385
+ 157 00d0 40F20021 		movw	r1, #512
+ 158 00d4 1800     		movs	r0, r3
+ 159 00d6 FFF7FEFF 		bl	usart_interrupt_enable
+  71:../src/main.c ****     usart_interrupt_enable(USART0, USART_INT_AM);
+ 160              		.loc 1 71 5
+ 161 00da 43F60003 		movw	r3, #14336
+ 162 00de C4F20103 		movt	r3, 16385
+ 163 00e2 0E21     		movs	r1, #14
+ 164 00e4 1800     		movs	r0, r3
+ 165 00e6 FFF7FEFF 		bl	usart_interrupt_enable
+  72:../src/main.c ****     usart_interrupt_enable(USART0, USART_INT_PERR);
+ 166              		.loc 1 72 5
+ 167 00ea 43F60003 		movw	r3, #14336
+ 168 00ee C4F20103 		movt	r3, 16385
+ 169 00f2 0821     		movs	r1, #8
+ 170 00f4 1800     		movs	r0, r3
+ 171 00f6 FFF7FEFF 		bl	usart_interrupt_enable
+  73:../src/main.c ****     usart_receive_fifo_enable(USART0);
+ 172              		.loc 1 73 5
+ 173 00fa 43F60003 		movw	r3, #14336
+ 174 00fe C4F20103 		movt	r3, 16385
+ 175 0102 1800     		movs	r0, r3
+ 176 0104 FFF7FEFF 		bl	usart_receive_fifo_enable
+  74:../src/main.c **** 
+  75:../src/main.c ****     Timer_handler_Start(START_TIMEOUT_TIME);
+ 177              		.loc 1 75 5
+ 178 0108 41F27070 		movw	r0, #6000
+ 179 010c FFF7FEFF 		bl	Timer_handler_Start
+ 180              	.L10:
+  76:../src/main.c ****     while(1)
+  77:../src/main.c ****     {
+  78:../src/main.c ****         if (!initialized && is_long_key_or_nokey_press_power()) {
+ 181              		.loc 1 78 13
+ 182 0110 40F20003 		movw	r3, #:lower16:initialized.7595
+ 183 0114 C0F20003 		movt	r3, #:upper16:initialized.7595
+ 184 0118 1B68     		ldr	r3, [r3]
+ 185              		.loc 1 78 12
+ 186 011a 6BB9     		cbnz	r3, .L3
+ 187              		.loc 1 78 29 discriminator 1
+ 188 011c FFF7FEFF 		bl	is_long_key_or_nokey_press_power
+ 189 0120 0300     		movs	r3, r0
+ 190              		.loc 1 78 26 discriminator 1
+ 191 0122 4BB1     		cbz	r3, .L3
+ 192              	.LBB2:
+  79:../src/main.c **** #ifdef MCU_SUPPORT_LCD_DISPLAY
+  80:../src/main.c ****             lcd_display();
+ 193              		.loc 1 80 13
+ 194 0124 FFF7FEFF 		bl	lcd_display
+  81:../src/main.c **** #else
+  82:../src/main.c ****             // set led/backlight
+  83:../src/main.c ****             MCU_Set_Led_Up();
+  84:../src/main.c **** #endif
+  85:../src/main.c ****             MCU_Detect_Key_Pressed();
+ 195              		.loc 1 85 13
+ 196 0128 FFF7FEFF 		bl	MCU_Detect_Key_Pressed
+  86:../src/main.c ****             initialized = 1;
+ 197              		.loc 1 86 25
+ 198 012c 40F20003 		movw	r3, #:lower16:initialized.7595
+ 199 0130 C0F20003 		movt	r3, #:upper16:initialized.7595
+ 200 0134 0122     		movs	r2, #1
+ 201 0136 1A60     		str	r2, [r3]
+ 202              	.L3:
+ 203              	.LBE2:
+  87:../src/main.c ****         }
+  88:../src/main.c ****         Process_packets();
+ 204              		.loc 1 88 9
+ 205 0138 FFF7FEFF 		bl	Process_packets
+  89:../src/main.c ****         if (global_sio_handle.sio_state == BSL_START_FLAG) {
+ 206              		.loc 1 89 30
+ 207 013c 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 208 0140 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 209 0144 1B68     		ldr	r3, [r3]
+ 210              		.loc 1 89 12
+ 211 0146 822B     		cmp	r3, #130
+ 212 0148 3ED1     		bne	.L4
+  90:../src/main.c ****             printf("1 send 0x7e!\n");
+ 213              		.loc 1 90 13
+ 214 014a 40F20003 		movw	r3, #:lower16:.LC5
+ 215 014e C0F20003 		movt	r3, #:upper16:.LC5
+ 216 0152 1800     		movs	r0, r3
+ 217 0154 FFF7FEFF 		bl	puts
+  91:../src/main.c ****             usart_put_char(USART0,PKT_HDLC_FLAG);
+ 218              		.loc 1 91 13
+ 219 0158 43F60003 		movw	r3, #14336
+ 220 015c C4F20103 		movt	r3, 16385
+ 221 0160 7E21     		movs	r1, #126
+ 222 0162 1800     		movs	r0, r3
+ 223 0164 FFF7FEFF 		bl	usart_put_char
+  92:../src/main.c ****             delay_1ms(1);
+ 224              		.loc 1 92 13
+ 225 0168 0120     		movs	r0, #1
+ 226 016a FFF7FEFF 		bl	delay_1ms
+  93:../src/main.c ****             usart_put_char(USART0,PKT_HDLC_FLAG);
+ 227              		.loc 1 93 13
+ 228 016e 43F60003 		movw	r3, #14336
+ 229 0172 C4F20103 		movt	r3, 16385
+ 230 0176 7E21     		movs	r1, #126
+ 231 0178 1800     		movs	r0, r3
+ 232 017a FFF7FEFF 		bl	usart_put_char
+  94:../src/main.c ****             delay_1ms(1);
+ 233              		.loc 1 94 13
+ 234 017e 0120     		movs	r0, #1
+ 235 0180 FFF7FEFF 		bl	delay_1ms
+  95:../src/main.c ****             usart_put_char(USART0,PKT_HDLC_FLAG);
+ 236              		.loc 1 95 13
+ 237 0184 43F60003 		movw	r3, #14336
+ 238 0188 C4F20103 		movt	r3, 16385
+ 239 018c 7E21     		movs	r1, #126
+ 240 018e 1800     		movs	r0, r3
+ 241 0190 FFF7FEFF 		bl	usart_put_char
+  96:../src/main.c ****             delay_1ms(1);
+ 242              		.loc 1 96 13
+ 243 0194 0120     		movs	r0, #1
+ 244 0196 FFF7FEFF 		bl	delay_1ms
+  97:../src/main.c ****             usart_put_char(USART0,PKT_HDLC_FLAG);
+ 245              		.loc 1 97 13
+ 246 019a 43F60003 		movw	r3, #14336
+ 247 019e C4F20103 		movt	r3, 16385
+ 248 01a2 7E21     		movs	r1, #126
+ 249 01a4 1800     		movs	r0, r3
+ 250 01a6 FFF7FEFF 		bl	usart_put_char
+  98:../src/main.c ****             delay_1ms(1);
+ 251              		.loc 1 98 13
+ 252 01aa 0120     		movs	r0, #1
+ 253 01ac FFF7FEFF 		bl	delay_1ms
+  99:../src/main.c ****             usart_put_char(USART0,PKT_HDLC_FLAG);
+ 254              		.loc 1 99 13
+ 255 01b0 43F60003 		movw	r3, #14336
+ 256 01b4 C4F20103 		movt	r3, 16385
+ 257 01b8 7E21     		movs	r1, #126
+ 258 01ba 1800     		movs	r0, r3
+ 259 01bc FFF7FEFF 		bl	usart_put_char
+ 100:../src/main.c ****             delay_1ms(1);
+ 260              		.loc 1 100 13
+ 261 01c0 0120     		movs	r0, #1
+ 262 01c2 FFF7FEFF 		bl	delay_1ms
+ 263 01c6 A3E7     		b	.L10
+ 264              	.L4:
+ 101:../src/main.c ****         } else if(global_sio_handle.sio_state == BSL_UART_ENUM_FLAG) {
+ 265              		.loc 1 101 36
+ 266 01c8 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 267 01cc C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 268 01d0 1B68     		ldr	r3, [r3]
+ 269              		.loc 1 101 18
+ 270 01d2 832B     		cmp	r3, #131
+ 271 01d4 00D0     		beq	.LCB172
+ 272 01d6 8EE0     		b	.L6	@long jump
+ 273              	.LCB172:
+ 102:../src/main.c ****             if (global_sio_handle.buf_ptr[0]==PKT_HDLC_START) {
+ 274              		.loc 1 102 34
+ 275 01d8 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 276 01dc C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 277 01e0 5B69     		ldr	r3, [r3, #20]
+ 278              		.loc 1 102 42
+ 279 01e2 1B78     		ldrb	r3, [r3]
+ 280              		.loc 1 102 16
+ 281 01e4 552B     		cmp	r3, #85
+ 282 01e6 6CD1     		bne	.L7
+ 103:../src/main.c ****                 printf("2 receive 0x55!global_sio_handle.buf_size:0x%x, global_sio_handle.data_size
+ 283              		.loc 1 103 17
+ 284 01e8 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 285 01ec C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 286 01f0 D968     		ldr	r1, [r3, #12]
+ 287 01f2 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 288 01f6 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 289 01fa 1A69     		ldr	r2, [r3, #16]
+ 290 01fc 40F20003 		movw	r3, #:lower16:.LC6
+ 291 0200 C0F20003 		movt	r3, #:upper16:.LC6
+ 292 0204 1800     		movs	r0, r3
+ 293 0206 FFF7FEFF 		bl	printf
+ 104:../src/main.c ****                 memset(global_sio_handle.buf_ptr, 0, global_sio_handle.buf_size);
+ 294              		.loc 1 104 41
+ 295 020a 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 296 020e C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 297 0212 5869     		ldr	r0, [r3, #20]
+ 298              		.loc 1 104 17
+ 299 0214 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 300 0218 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 301 021c DB68     		ldr	r3, [r3, #12]
+ 302 021e 1A00     		movs	r2, r3
+ 303 0220 0021     		movs	r1, #0
+ 304 0222 FFF7FEFF 		bl	memset
+ 105:../src/main.c ****                 global_sio_handle.buf_size=0;
+ 305              		.loc 1 105 43
+ 306 0226 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 307 022a C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 308 022e 0022     		movs	r2, #0
+ 309 0230 DA60     		str	r2, [r3, #12]
+ 106:../src/main.c ****                 global_sio_handle.data_size=0;
+ 310              		.loc 1 106 44
+ 311 0232 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 312 0236 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 313 023a 0022     		movs	r2, #0
+ 314 023c 1A61     		str	r2, [r3, #16]
+ 107:../src/main.c ****                 global_sio_handle.pkt_state=PKT_NONE;
+ 315              		.loc 1 107 44
+ 316 023e 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 317 0242 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 318 0246 0022     		movs	r2, #0
+ 319 0248 1A71     		strb	r2, [r3, #4]
+ 108:../src/main.c ****                 // global_sio_handle.read_ptr = global_sio_handle.buf_ptr;
+ 109:../src/main.c ****                 usart_interrupt_enable(USART0, USART_INT_RBNE);
+ 320              		.loc 1 109 17
+ 321 024a 43F60003 		movw	r3, #14336
+ 322 024e C4F20103 		movt	r3, 16385
+ 323 0252 0521     		movs	r1, #5
+ 324 0254 1800     		movs	r0, r3
+ 325 0256 FFF7FEFF 		bl	usart_interrupt_enable
+ 110:../src/main.c ****                 usart_interrupt_enable(USART0, USART_INT_IDLE);
+ 326              		.loc 1 110 17
+ 327 025a 43F60003 		movw	r3, #14336
+ 328 025e C4F20103 		movt	r3, 16385
+ 329 0262 0421     		movs	r1, #4
+ 330 0264 1800     		movs	r0, r3
+ 331 0266 FFF7FEFF 		bl	usart_interrupt_enable
+ 111:../src/main.c **** 
+ 112:../src/main.c ****                 usart_put_char(USART0,PKT_HDLC_FLAG);
+ 332              		.loc 1 112 17
+ 333 026a 43F60003 		movw	r3, #14336
+ 334 026e C4F20103 		movt	r3, 16385
+ 335 0272 7E21     		movs	r1, #126
+ 336 0274 1800     		movs	r0, r3
+ 337 0276 FFF7FEFF 		bl	usart_put_char
+ 113:../src/main.c ****                 delay_1ms(1);
+ 338              		.loc 1 113 17
+ 339 027a 0120     		movs	r0, #1
+ 340 027c FFF7FEFF 		bl	delay_1ms
+ 114:../src/main.c ****                 usart_put_char(USART0,PKT_HDLC_FLAG);
+ 341              		.loc 1 114 17
+ 342 0280 43F60003 		movw	r3, #14336
+ 343 0284 C4F20103 		movt	r3, 16385
+ 344 0288 7E21     		movs	r1, #126
+ 345 028a 1800     		movs	r0, r3
+ 346 028c FFF7FEFF 		bl	usart_put_char
+ 115:../src/main.c ****                 delay_1ms(1);
+ 347              		.loc 1 115 17
+ 348 0290 0120     		movs	r0, #1
+ 349 0292 FFF7FEFF 		bl	delay_1ms
+ 116:../src/main.c ****                 usart_put_char(USART0,PKT_HDLC_FLAG);
+ 350              		.loc 1 116 17
+ 351 0296 43F60003 		movw	r3, #14336
+ 352 029a C4F20103 		movt	r3, 16385
+ 353 029e 7E21     		movs	r1, #126
+ 354 02a0 1800     		movs	r0, r3
+ 355 02a2 FFF7FEFF 		bl	usart_put_char
+ 117:../src/main.c ****                 delay_1ms(1);
+ 356              		.loc 1 117 17
+ 357 02a6 0120     		movs	r0, #1
+ 358 02a8 FFF7FEFF 		bl	delay_1ms
+ 118:../src/main.c **** 
+ 119:../src/main.c ****                 global_sio_handle.sio_state = BSL_UART_RECIVE_FLAG;
+ 359              		.loc 1 119 45
+ 360 02ac 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 361 02b0 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 362 02b4 8422     		movs	r2, #132
+ 363 02b6 1A60     		str	r2, [r3]
+ 120:../src/main.c ****                 Timer_handler_Start(TRANS_TIMEOUT_TIME);
+ 364              		.loc 1 120 17
+ 365 02b8 4EF66020 		movw	r0, #60000
+ 366 02bc FFF7FEFF 		bl	Timer_handler_Start
+ 367 02c0 26E7     		b	.L10
+ 368              	.L7:
+ 121:../src/main.c ****             } else {
+ 122:../src/main.c ****                 current_time = timer_handle.Timer_Count;
+ 369              		.loc 1 122 44
+ 370 02c2 40F20003 		movw	r3, #:lower16:timer_handle
+ 371 02c6 C0F20003 		movt	r3, #:upper16:timer_handle
+ 372 02ca 5B68     		ldr	r3, [r3, #4]
+ 373              		.loc 1 122 30
+ 374 02cc 3B60     		str	r3, [r7]
+ 123:../src/main.c ****                 if (last_print_time == 0 || current_time - last_print_time >= 1000) {
+ 375              		.loc 1 123 20
+ 376 02ce 7B68     		ldr	r3, [r7, #4]
+ 377 02d0 3BB1     		cbz	r3, .L8
+ 378              		.loc 1 123 58 discriminator 1
+ 379 02d2 3A68     		ldr	r2, [r7]
+ 380 02d4 7B68     		ldr	r3, [r7, #4]
+ 381 02d6 D31A     		subs	r3, r2, r3
+ 382              		.loc 1 123 42 discriminator 1
+ 383 02d8 40F2E732 		movw	r2, #999
+ 384 02dc 9342     		cmp	r3, r2
+ 385 02de 00D8     		bhi	.LCB263
+ 386 02e0 16E7     		b	.L10	@long jump
+ 387              	.LCB263:
+ 388              	.L8:
+ 124:../src/main.c ****                     printf("wait for soc romcode uart enum\n");
+ 389              		.loc 1 124 21
+ 390 02e2 40F20003 		movw	r3, #:lower16:.LC7
+ 391 02e6 C0F20003 		movt	r3, #:upper16:.LC7
+ 392 02ea 1800     		movs	r0, r3
+ 393 02ec FFF7FEFF 		bl	puts
+ 125:../src/main.c ****                     last_print_time = current_time;
+ 394              		.loc 1 125 37
+ 395 02f0 3B68     		ldr	r3, [r7]
+ 396 02f2 7B60     		str	r3, [r7, #4]
+ 397 02f4 0CE7     		b	.L10
+ 398              	.L6:
+ 126:../src/main.c ****                 }
+ 127:../src/main.c ****             }
+ 128:../src/main.c ****         } else if(global_sio_handle.sio_state == BSL_UART_WAKEUP_FLAG) {
+ 399              		.loc 1 128 36
+ 400 02f6 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 401 02fa C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 402 02fe 1B68     		ldr	r3, [r3]
+ 403              		.loc 1 128 18
+ 404 0300 852B     		cmp	r3, #133
+ 405 0302 12D1     		bne	.L9
+ 129:../src/main.c ****             printf("mcu wakeup success\n");
+ 406              		.loc 1 129 13
+ 407 0304 40F20003 		movw	r3, #:lower16:.LC8
+ 408 0308 C0F20003 		movt	r3, #:upper16:.LC8
+ 409 030c 1800     		movs	r0, r3
+ 410 030e FFF7FEFF 		bl	puts
+ 130:../src/main.c ****             system_clock_config();
+ 411              		.loc 1 130 13
+ 412 0312 FFF7FEFF 		bl	system_clock_config
+ 131:../src/main.c ****             rcu_usart_clock_config(RCU_USART0SRC_CKAPB2);
+ 413              		.loc 1 131 13
+ 414 0316 0020     		movs	r0, #0
+ 415 0318 FFF7FEFF 		bl	rcu_usart_clock_config
+ 132:../src/main.c ****             initialized = 0;
+ 416              		.loc 1 132 25
+ 417 031c 40F20003 		movw	r3, #:lower16:initialized.7595
+ 418 0320 C0F20003 		movt	r3, #:upper16:initialized.7595
+ 419 0324 0022     		movs	r2, #0
+ 420 0326 1A60     		str	r2, [r3]
+ 133:../src/main.c ****             goto wakeup;
+ 421              		.loc 1 133 13
+ 422 0328 71E6     		b	.L2
+ 423              	.L9:
+ 134:../src/main.c ****         } else if (global_sio_handle.sio_state == SPL_TRANSPORT_TIMEOUT) {
+ 424              		.loc 1 134 37
+ 425 032a 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 426 032e C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 427 0332 1B68     		ldr	r3, [r3]
+ 428              		.loc 1 134 19
+ 429 0334 862B     		cmp	r3, #134
+ 430 0336 00D0     		beq	.LCB299
+ 431 0338 EAE6     		b	.L10	@long jump
+ 432              	.LCB299:
+ 135:../src/main.c ****             /* reset soc for retry */
+ 136:../src/main.c ****             printf("SPL_TRANSPORT_TIMEOUT, reset soc\n");
+ 433              		.loc 1 136 13
+ 434 033a 40F20003 		movw	r3, #:lower16:.LC9
+ 435 033e C0F20003 		movt	r3, #:upper16:.LC9
+ 436 0342 1800     		movs	r0, r3
+ 437 0344 FFF7FEFF 		bl	puts
+ 137:../src/main.c ****             MCU_Set_Soc_Pbint();
+ 438              		.loc 1 137 13
+ 439 0348 FFF7FEFF 		bl	MCU_Set_Soc_Pbint
+ 138:../src/main.c ****             com_usart_change_baud(CONFIG_BAUDRATE);
+ 440              		.loc 1 138 13
+ 441 034c E123     		movs	r3, #225
+ 442 034e 5B02     		lsls	r3, r3, #9
+ 443 0350 1800     		movs	r0, r3
+ 444 0352 FFF7FEFF 		bl	com_usart_change_baud
+ 139:../src/main.c ****             Set_SPI_High_Resistance();
+ 445              		.loc 1 139 13
+ 446 0356 FFF7FEFF 		bl	Set_SPI_High_Resistance
+ 140:../src/main.c ****             sio_handle_init();
+ 447              		.loc 1 140 13
+ 448 035a FFF7FEFF 		bl	sio_handle_init
+ 141:../src/main.c ****             Timer_handler_Start(PMIC_RESET_TIME);
+ 449              		.loc 1 141 13
+ 450 035e 41F64070 		movw	r0, #8000
+ 451 0362 FFF7FEFF 		bl	Timer_handler_Start
+  78:../src/main.c **** #ifdef MCU_SUPPORT_LCD_DISPLAY
+ 452              		.loc 1 78 12
+ 453 0366 D3E6     		b	.L10
+ 454              		.cfi_endproc
+ 455              	.LFE62:
+ 457              		.section	.text.__io_putchar,"ax",%progbits
+ 458              		.align	1
+ 459              		.global	__io_putchar
+ 460              		.syntax unified
+ 461              		.code	16
+ 462              		.thumb_func
+ 463              		.fpu softvfp
+ 465              	__io_putchar:
+ 466              	.LFB63:
+ 142:../src/main.c ****         }
+ 143:../src/main.c ****     }
+ 144:../src/main.c **** }
+ 145:../src/main.c **** 
+ 146:../src/main.c **** #ifdef GD_ECLIPSE_GCC
+ 147:../src/main.c **** /* retarget the C library printf function to the USART, in Eclipse GCC environment */
+ 148:../src/main.c **** int __io_putchar(int ch)
+ 149:../src/main.c **** {
+ 467              		.loc 1 149 1
+ 468              		.cfi_startproc
+ 469              		@ args = 0, pretend = 0, frame = 8
+ 470              		@ frame_needed = 1, uses_anonymous_args = 0
+ 471 0000 80B5     		push	{r7, lr}
+ 472              		.cfi_def_cfa_offset 8
+ 473              		.cfi_offset 7, -8
+ 474              		.cfi_offset 14, -4
+ 475 0002 82B0     		sub	sp, sp, #8
+ 476              		.cfi_def_cfa_offset 16
+ 477 0004 00AF     		add	r7, sp, #0
+ 478              		.cfi_def_cfa_register 7
+ 479 0006 7860     		str	r0, [r7, #4]
+ 150:../src/main.c ****     usart_data_transmit(USART1, (uint8_t) ch);
+ 480              		.loc 1 150 33
+ 481 0008 7B68     		ldr	r3, [r7, #4]
+ 482 000a DBB2     		uxtb	r3, r3
+ 483              		.loc 1 150 5
+ 484 000c 1A00     		movs	r2, r3
+ 485 000e 44F20043 		movw	r3, #17408
+ 486 0012 C4F20003 		movt	r3, 16384
+ 487 0016 1100     		movs	r1, r2
+ 488 0018 1800     		movs	r0, r3
+ 489 001a FFF7FEFF 		bl	usart_data_transmit
+ 151:../src/main.c ****     while(RESET == usart_flag_get(USART1, USART_FLAG_TBE));
+ 490              		.loc 1 151 10
+ 491 001e C046     		nop
+ 492              	.L12:
+ 493              		.loc 1 151 20 discriminator 1
+ 494 0020 44F20043 		movw	r3, #17408
+ 495 0024 C4F20003 		movt	r3, 16384
+ 496 0028 40F20771 		movw	r1, #1799
+ 497 002c 1800     		movs	r0, r3
+ 498 002e FFF7FEFF 		bl	usart_flag_get
+ 499 0032 0300     		movs	r3, r0
+ 500              		.loc 1 151 10 discriminator 1
+ 501 0034 002B     		cmp	r3, #0
+ 502 0036 F3D0     		beq	.L12
+ 152:../src/main.c ****     return ch;
+ 503              		.loc 1 152 12
+ 504 0038 7B68     		ldr	r3, [r7, #4]
+ 153:../src/main.c **** }
+ 505              		.loc 1 153 1
+ 506 003a 1800     		movs	r0, r3
+ 507 003c BD46     		mov	sp, r7
+ 508 003e 02B0     		add	sp, sp, #8
+ 509              		@ sp needed
+ 510 0040 80BD     		pop	{r7, pc}
+ 511              		.cfi_endproc
+ 512              	.LFE63:
+ 514              		.section	.bss.initialized.7595,"aw",%nobits
+ 515              		.align	2
+ 518              	initialized.7595:
+ 519 0000 00000000 		.space	4
+ 520              		.text
+ 521              	.Letext0:
+ 522              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 523              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 524              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 525              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_usart.h"
+ 526              		.file 6 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 527              		.file 7 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 528              		.file 8 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 529              		.file 9 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 530              		.file 10 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 531              		.file 11 "../inc/gd32e235c_eval.h"
+ 532              		.file 12 "../inc/Spi_nand_driver.h"
+ 533              		.file 13 "../inc/Process_Packet.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:16     .rodata:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:17     .rodata:00000000 .LC0
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:20     .rodata:0000002c .LC1
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:23     .rodata:00000038 .LC2
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:26     .rodata:00000044 .LC3
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:29     .rodata:00000060 .LC4
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:32     .rodata:00000070 .LC5
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:35     .rodata:00000080 .LC6
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:39     .rodata:000000d4 .LC7
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:42     .rodata:000000f4 .LC8
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:45     .rodata:00000108 .LC9
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:48     .text.main:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:56     .text.main:00000000 main
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:518    .bss.initialized.7595:00000000 initialized.7595
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:458    .text.__io_putchar:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:465    .text.__io_putchar:00000000 __io_putchar
+C:\Users\sen.he\AppData\Local\Temp\ccyfhpzq.s:515    .bss.initialized.7595:00000000 $d
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4.gd32e235c_eval.h.36.7720dfbe8e4c2198d21e3451d7585c3f
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.GPIO_init.h.5.99397d96470e7c2037f26a7431d9ab35
+                           .group:00000000 wm4.Uart_init.h.2.da12282bebdb301fd5c3429fcb6ef815
+                           .group:00000000 wm4.Spi_nand_driver.h.16.fadacb45494f178a00212993489e2bbe
+                           .group:00000000 wm4.Process_Packet.h.7.a9eceab0854ecc804cf185fbeb95b7f7
+                           .group:00000000 wm4.sprd_config.h.2.47b0c27560e1734ae8ad1b6bf5bcf6fc
+
+UNDEFINED SYMBOLS
+systick_config
+com_gpio_init
+com_usart_init
+com1_gpio_init
+com1_usart_init
+global_sio_handle
+printf
+gd_eval_led_init
+nvic_irq_enable
+sio_handle_init
+init_key_detection
+usart_interrupt_enable
+usart_receive_fifo_enable
+Timer_handler_Start
+is_long_key_or_nokey_press_power
+lcd_display
+MCU_Detect_Key_Pressed
+Process_packets
+puts
+usart_put_char
+delay_1ms
+memset
+timer_handle
+system_clock_config
+rcu_usart_clock_config
+MCU_Set_Soc_Pbint
+com_usart_change_baud
+Set_SPI_High_Resistance
+usart_data_transmit
+usart_flag_get

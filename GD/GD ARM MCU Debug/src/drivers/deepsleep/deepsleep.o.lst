@@ -1,0 +1,301 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"deepsleep.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.rodata
+  16              		.align	2
+  17              	.LC0:
+  18 0000 73746172 		.ascii	"start to enter deepsleep\000"
+  18      7420746F 
+  18      20656E74 
+  18      65722064 
+  18      65657073 
+  19 0019 000000   		.align	2
+  20              	.LC1:
+  21 001c 6D637520 		.ascii	"mcu enter deepsleep\000"
+  21      656E7465 
+  21      72206465 
+  21      6570736C 
+  21      65657000 
+  22              		.section	.text.mcu_enter_deepsleep,"ax",%progbits
+  23              		.align	1
+  24              		.global	mcu_enter_deepsleep
+  25              		.arch armv8-m.base
+  26              		.syntax unified
+  27              		.code	16
+  28              		.thumb_func
+  29              		.fpu softvfp
+  31              	mcu_enter_deepsleep:
+  32              	.LFB62:
+  33              		.file 1 "../src/drivers/deepsleep/deepsleep.c"
+   1:../src/drivers/deepsleep/deepsleep.c **** #include <deepsleep.h>
+   2:../src/drivers/deepsleep/deepsleep.c **** #include "GPIO_init.h"
+   3:../src/drivers/deepsleep/deepsleep.c **** #include <Process_Packet.h>
+   4:../src/drivers/deepsleep/deepsleep.c **** #include "sprd_config.h"
+   5:../src/drivers/deepsleep/deepsleep.c **** #include <stdio.h>
+   6:../src/drivers/deepsleep/deepsleep.c **** #include <timer.h>
+   7:../src/drivers/deepsleep/deepsleep.c **** #include "Uart_init.h"
+   8:../src/drivers/deepsleep/deepsleep.c **** 
+   9:../src/drivers/deepsleep/deepsleep.c **** void mcu_enter_deepsleep(void)
+  10:../src/drivers/deepsleep/deepsleep.c **** {
+  34              		.loc 1 10 1
+  35              		.cfi_startproc
+  36              		@ args = 0, pretend = 0, frame = 0
+  37              		@ frame_needed = 1, uses_anonymous_args = 0
+  38 0000 80B5     		push	{r7, lr}
+  39              		.cfi_def_cfa_offset 8
+  40              		.cfi_offset 7, -8
+  41              		.cfi_offset 14, -4
+  42 0002 00AF     		add	r7, sp, #0
+  43              		.cfi_def_cfa_register 7
+  11:../src/drivers/deepsleep/deepsleep.c ****   printf("start to enter deepsleep\n");
+  44              		.loc 1 11 3
+  45 0004 40F20003 		movw	r3, #:lower16:.LC0
+  46 0008 C0F20003 		movt	r3, #:upper16:.LC0
+  47 000c 1800     		movs	r0, r3
+  48 000e FFF7FEFF 		bl	puts
+  12:../src/drivers/deepsleep/deepsleep.c **** 
+  13:../src/drivers/deepsleep/deepsleep.c ****   /* 2.reset PA14 for note spl bootup success */
+  14:../src/drivers/deepsleep/deepsleep.c ****   MCU_Set_Led_Down();
+  49              		.loc 1 14 3
+  50 0012 FFF7FEFF 		bl	MCU_Set_Led_Down
+  15:../src/drivers/deepsleep/deepsleep.c **** 
+  16:../src/drivers/deepsleep/deepsleep.c ****   Timer_handler_Clear();
+  51              		.loc 1 16 3
+  52 0016 FFF7FEFF 		bl	Timer_handler_Clear
+  17:../src/drivers/deepsleep/deepsleep.c ****   global_sio_handle.pkt_type = BSL_PKT_TYPE_MAX;
+  53              		.loc 1 17 30
+  54 001a 40F20003 		movw	r3, #:lower16:global_sio_handle
+  55 001e C0F20003 		movt	r3, #:upper16:global_sio_handle
+  56 0022 0122     		movs	r2, #1
+  57 0024 5242     		rsbs	r2, r2, #0
+  58 0026 DA80     		strh	r2, [r3, #6]
+  18:../src/drivers/deepsleep/deepsleep.c **** 
+  19:../src/drivers/deepsleep/deepsleep.c **** #ifdef UART_SPEED_UP
+  20:../src/drivers/deepsleep/deepsleep.c ****   com_usart_change_baud(CONFIG_BAUDRATE);
+  59              		.loc 1 20 3
+  60 0028 E123     		movs	r3, #225
+  61 002a 5B02     		lsls	r3, r3, #9
+  62 002c 1800     		movs	r0, r3
+  63 002e FFF7FEFF 		bl	com_usart_change_baud
+  21:../src/drivers/deepsleep/deepsleep.c **** #endif
+  22:../src/drivers/deepsleep/deepsleep.c **** 
+  23:../src/drivers/deepsleep/deepsleep.c ****   rcu_usart_clock_config(RCU_USART0SRC_IRC8M);
+  64              		.loc 1 23 3
+  65 0032 0320     		movs	r0, #3
+  66 0034 FFF7FEFF 		bl	rcu_usart_clock_config
+  24:../src/drivers/deepsleep/deepsleep.c **** 
+  25:../src/drivers/deepsleep/deepsleep.c ****   com_usart_init(CONFIG_BAUDRATE);
+  67              		.loc 1 25 3
+  68 0038 E123     		movs	r3, #225
+  69 003a 5B02     		lsls	r3, r3, #9
+  70 003c 1800     		movs	r0, r3
+  71 003e FFF7FEFF 		bl	com_usart_init
+  26:../src/drivers/deepsleep/deepsleep.c **** 
+  27:../src/drivers/deepsleep/deepsleep.c ****   nvic_irq_enable(USART0_IRQn, 0);
+  72              		.loc 1 27 3
+  73 0042 0021     		movs	r1, #0
+  74 0044 1B20     		movs	r0, #27
+  75 0046 FFF7FEFF 		bl	nvic_irq_enable
+  28:../src/drivers/deepsleep/deepsleep.c **** 
+  29:../src/drivers/deepsleep/deepsleep.c ****   usart_wakeup_mode_config(USART0, USART_WUM_STARTB);
+  76              		.loc 1 29 3
+  77 004a 8023     		movs	r3, #128
+  78 004c 9A03     		lsls	r2, r3, #14
+  79 004e 43F60003 		movw	r3, #14336
+  80 0052 C4F20103 		movt	r3, 16385
+  81 0056 1100     		movs	r1, r2
+  82 0058 1800     		movs	r0, r3
+  83 005a FFF7FEFF 		bl	usart_wakeup_mode_config
+  30:../src/drivers/deepsleep/deepsleep.c **** 
+  31:../src/drivers/deepsleep/deepsleep.c ****   usart_enable(USART0);
+  84              		.loc 1 31 3
+  85 005e 43F60003 		movw	r3, #14336
+  86 0062 C4F20103 		movt	r3, 16385
+  87 0066 1800     		movs	r0, r3
+  88 0068 FFF7FEFF 		bl	usart_enable
+  32:../src/drivers/deepsleep/deepsleep.c ****   /* ensure USART is enabled */
+  33:../src/drivers/deepsleep/deepsleep.c ****   while(RESET == usart_flag_get(USART0, USART_FLAG_REA));
+  89              		.loc 1 33 8
+  90 006c C046     		nop
+  91              	.L2:
+  92              		.loc 1 33 18 discriminator 1
+  93 006e 43F60003 		movw	r3, #14336
+  94 0072 C4F20103 		movt	r3, 16385
+  95 0076 40F21671 		movw	r1, #1814
+  96 007a 1800     		movs	r0, r3
+  97 007c FFF7FEFF 		bl	usart_flag_get
+  98 0080 0300     		movs	r3, r0
+  99              		.loc 1 33 8 discriminator 1
+ 100 0082 002B     		cmp	r3, #0
+ 101 0084 F3D0     		beq	.L2
+  34:../src/drivers/deepsleep/deepsleep.c **** 
+  35:../src/drivers/deepsleep/deepsleep.c ****   /* check USART is not transmitting */
+  36:../src/drivers/deepsleep/deepsleep.c ****   while(SET == usart_flag_get(USART0, USART_FLAG_BSY));
+ 102              		.loc 1 36 8
+ 103 0086 C046     		nop
+ 104              	.L3:
+ 105              		.loc 1 36 16 discriminator 1
+ 106 0088 43F60003 		movw	r3, #14336
+ 107 008c C4F20103 		movt	r3, 16385
+ 108 0090 40F21071 		movw	r1, #1808
+ 109 0094 1800     		movs	r0, r3
+ 110 0096 FFF7FEFF 		bl	usart_flag_get
+ 111 009a 0300     		movs	r3, r0
+ 112              		.loc 1 36 8 discriminator 1
+ 113 009c 012B     		cmp	r3, #1
+ 114 009e F3D0     		beq	.L3
+  37:../src/drivers/deepsleep/deepsleep.c **** 
+  38:../src/drivers/deepsleep/deepsleep.c ****   usart_wakeup_enable(USART0);
+ 115              		.loc 1 38 3
+ 116 00a0 43F60003 		movw	r3, #14336
+ 117 00a4 C4F20103 		movt	r3, 16385
+ 118 00a8 1800     		movs	r0, r3
+ 119 00aa FFF7FEFF 		bl	usart_wakeup_enable
+  39:../src/drivers/deepsleep/deepsleep.c **** 
+  40:../src/drivers/deepsleep/deepsleep.c ****   /* enable the WUIE interrupt */
+  41:../src/drivers/deepsleep/deepsleep.c ****   usart_interrupt_enable(USART0, USART_INT_WU);
+ 120              		.loc 1 41 3
+ 121 00ae 43F60003 		movw	r3, #14336
+ 122 00b2 C4F20103 		movt	r3, 16385
+ 123 00b6 40F21621 		movw	r1, #534
+ 124 00ba 1800     		movs	r0, r3
+ 125 00bc FFF7FEFF 		bl	usart_interrupt_enable
+  42:../src/drivers/deepsleep/deepsleep.c ****   rcu_periph_clock_enable(RCU_PMU);
+ 126              		.loc 1 42 3
+ 127 00c0 40F21C70 		movw	r0, #1820
+ 128 00c4 FFF7FEFF 		bl	rcu_periph_clock_enable
+  43:../src/drivers/deepsleep/deepsleep.c **** 
+  44:../src/drivers/deepsleep/deepsleep.c ****   printf("mcu enter deepsleep\n");
+ 129              		.loc 1 44 3
+ 130 00c8 40F20003 		movw	r3, #:lower16:.LC1
+ 131 00cc C0F20003 		movt	r3, #:upper16:.LC1
+ 132 00d0 1800     		movs	r0, r3
+ 133 00d2 FFF7FEFF 		bl	puts
+  45:../src/drivers/deepsleep/deepsleep.c ****   pmu_to_deepsleepmode(PMU_LDO_LOWPOWER, WFI_CMD);
+ 134              		.loc 1 45 3
+ 135 00d6 0021     		movs	r1, #0
+ 136 00d8 0120     		movs	r0, #1
+ 137 00da FFF7FEFF 		bl	pmu_to_deepsleepmode
+  46:../src/drivers/deepsleep/deepsleep.c **** 
+  47:../src/drivers/deepsleep/deepsleep.c ****   // MCU_DeepSleepMode();
+  48:../src/drivers/deepsleep/deepsleep.c **** }...
+ 138              		.loc 1 48 1
+ 139 00de C046     		nop
+ 140 00e0 BD46     		mov	sp, r7
+ 141              		@ sp needed
+ 142 00e2 80BD     		pop	{r7, pc}
+ 143              		.cfi_endproc
+ 144              	.LFE62:
+ 146              		.text
+ 147              	.Letext0:
+ 148              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 149              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 150              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 151              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+ 152              		.file 6 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_usart.h"
+ 153              		.file 7 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 154              		.file 8 "../inc/Spi_nand_driver.h"
+ 155              		.file 9 "../inc/Process_Packet.h"
+ 156              		.file 10 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 157              		.file 11 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 158              		.file 12 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 159              		.file 13 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+DEFINED SYMBOLS
+                            *ABS*:00000000 deepsleep.c
+C:\Users\sen.he\AppData\Local\Temp\ccQwTNul.s:16     .rodata:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccQwTNul.s:17     .rodata:00000000 .LC0
+C:\Users\sen.he\AppData\Local\Temp\ccQwTNul.s:20     .rodata:0000001c .LC1
+C:\Users\sen.he\AppData\Local\Temp\ccQwTNul.s:23     .text.mcu_enter_deepsleep:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccQwTNul.s:31     .text.mcu_enter_deepsleep:00000000 mcu_enter_deepsleep
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.GPIO_init.h.5.99397d96470e7c2037f26a7431d9ab35
+                           .group:00000000 wm4.Spi_nand_driver.h.16.fadacb45494f178a00212993489e2bbe
+                           .group:00000000 wm4.Process_Packet.h.7.a9eceab0854ecc804cf185fbeb95b7f7
+                           .group:00000000 wm4.sprd_config.h.2.47b0c27560e1734ae8ad1b6bf5bcf6fc
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4.gd32e235c_eval.h.36.7720dfbe8e4c2198d21e3451d7585c3f
+                           .group:00000000 wm4.Uart_init.h.8.1aae36ec8c0a464810830e31749d32ad
+
+UNDEFINED SYMBOLS
+puts
+MCU_Set_Led_Down
+Timer_handler_Clear
+global_sio_handle
+com_usart_change_baud
+rcu_usart_clock_config
+com_usart_init
+nvic_irq_enable
+usart_wakeup_mode_config
+usart_enable
+usart_flag_get
+usart_wakeup_enable
+usart_interrupt_enable
+rcu_periph_clock_enable
+pmu_to_deepsleepmode

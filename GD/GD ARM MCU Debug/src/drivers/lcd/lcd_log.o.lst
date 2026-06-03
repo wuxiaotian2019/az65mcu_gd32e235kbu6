@@ -1,0 +1,486 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"lcd_log.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.lcd_log_init,"ax",%progbits
+  16              		.align	1
+  17              		.global	lcd_log_init
+  18              		.arch armv8-m.base
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	lcd_log_init:
+  25              	.LFB58:
+  26              		.file 1 "../src/drivers/lcd/lcd_log.c"
+   1:../src/drivers/lcd/lcd_log.c **** /*!
+   2:../src/drivers/lcd/lcd_log.c ****     \file  lcd_log.c
+   3:../src/drivers/lcd/lcd_log.c ****     \brief LCD log driver
+   4:../src/drivers/lcd/lcd_log.c **** 
+   5:../src/drivers/lcd/lcd_log.c ****     \version 2026-02-26, V2.6.0, demo for GD32E23x
+   6:../src/drivers/lcd/lcd_log.c **** */
+   7:../src/drivers/lcd/lcd_log.c **** 
+   8:../src/drivers/lcd/lcd_log.c **** /*
+   9:../src/drivers/lcd/lcd_log.c ****     Copyright (c) 2026, GigaDevice Semiconductor Inc.
+  10:../src/drivers/lcd/lcd_log.c **** 
+  11:../src/drivers/lcd/lcd_log.c ****     Redistribution and use in source and binary forms, with or without modification,
+  12:../src/drivers/lcd/lcd_log.c **** are permitted provided that the following conditions are met:
+  13:../src/drivers/lcd/lcd_log.c **** 
+  14:../src/drivers/lcd/lcd_log.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  15:../src/drivers/lcd/lcd_log.c ****        list of conditions and the following disclaimer.
+  16:../src/drivers/lcd/lcd_log.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  17:../src/drivers/lcd/lcd_log.c ****        this list of conditions and the following disclaimer in the documentation
+  18:../src/drivers/lcd/lcd_log.c ****        and/or other materials provided with the distribution.
+  19:../src/drivers/lcd/lcd_log.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  20:../src/drivers/lcd/lcd_log.c ****        may be used to endorse or promote products derived from this software without
+  21:../src/drivers/lcd/lcd_log.c ****        specific prior written permission.
+  22:../src/drivers/lcd/lcd_log.c **** 
+  23:../src/drivers/lcd/lcd_log.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  24:../src/drivers/lcd/lcd_log.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  25:../src/drivers/lcd/lcd_log.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  26:../src/drivers/lcd/lcd_log.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  27:../src/drivers/lcd/lcd_log.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  28:../src/drivers/lcd/lcd_log.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  29:../src/drivers/lcd/lcd_log.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  30:../src/drivers/lcd/lcd_log.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  31:../src/drivers/lcd/lcd_log.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  32:../src/drivers/lcd/lcd_log.c **** OF SUCH DAMAGE.
+  33:../src/drivers/lcd/lcd_log.c **** */
+  34:../src/drivers/lcd/lcd_log.c **** 
+  35:../src/drivers/lcd/lcd_log.c **** #include "lcd_log.h"
+  36:../src/drivers/lcd/lcd_log.c **** 
+  37:../src/drivers/lcd/lcd_log.c **** /*!
+  38:../src/drivers/lcd/lcd_log.c ****     \brief      initialize the LCD log module
+  39:../src/drivers/lcd/lcd_log.c ****     \param[in]  none
+  40:../src/drivers/lcd/lcd_log.c ****     \param[out] none
+  41:../src/drivers/lcd/lcd_log.c ****     \retval     none
+  42:../src/drivers/lcd/lcd_log.c **** */
+  43:../src/drivers/lcd/lcd_log.c **** void lcd_log_init(void)
+  44:../src/drivers/lcd/lcd_log.c **** {
+  27              		.loc 1 44 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              		.cfi_def_cfa_register 7
+  45:../src/drivers/lcd/lcd_log.c ****     lcd_clear(BLACK);
+  37              		.loc 1 45 5
+  38 0004 0020     		movs	r0, #0
+  39 0006 FFF7FEFF 		bl	lcd_clear
+  46:../src/drivers/lcd/lcd_log.c **** }
+  40              		.loc 1 46 1
+  41 000a C046     		nop
+  42 000c BD46     		mov	sp, r7
+  43              		@ sp needed
+  44 000e 80BD     		pop	{r7, pc}
+  45              		.cfi_endproc
+  46              	.LFE58:
+  48              		.section	.text.lcd_log_deinit,"ax",%progbits
+  49              		.align	1
+  50              		.global	lcd_log_deinit
+  51              		.syntax unified
+  52              		.code	16
+  53              		.thumb_func
+  54              		.fpu softvfp
+  56              	lcd_log_deinit:
+  57              	.LFB59:
+  47:../src/drivers/lcd/lcd_log.c **** 
+  48:../src/drivers/lcd/lcd_log.c **** /*!
+  49:../src/drivers/lcd/lcd_log.c ****     \brief      de-initialize the LCD log module
+  50:../src/drivers/lcd/lcd_log.c ****     \param[in]  none
+  51:../src/drivers/lcd/lcd_log.c ****     \param[out] none
+  52:../src/drivers/lcd/lcd_log.c ****     \retval     none
+  53:../src/drivers/lcd/lcd_log.c **** */
+  54:../src/drivers/lcd/lcd_log.c **** void lcd_log_deinit(void)
+  55:../src/drivers/lcd/lcd_log.c **** {
+  58              		.loc 1 55 1
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 1, uses_anonymous_args = 0
+  62 0000 80B5     		push	{r7, lr}
+  63              		.cfi_def_cfa_offset 8
+  64              		.cfi_offset 7, -8
+  65              		.cfi_offset 14, -4
+  66 0002 00AF     		add	r7, sp, #0
+  67              		.cfi_def_cfa_register 7
+  56:../src/drivers/lcd/lcd_log.c **** }
+  68              		.loc 1 56 1
+  69 0004 C046     		nop
+  70 0006 BD46     		mov	sp, r7
+  71              		@ sp needed
+  72 0008 80BD     		pop	{r7, pc}
+  73              		.cfi_endproc
+  74              	.LFE59:
+  76              		.section	.text.lcd_log_header_set,"ax",%progbits
+  77              		.align	1
+  78              		.global	lcd_log_header_set
+  79              		.syntax unified
+  80              		.code	16
+  81              		.thumb_func
+  82              		.fpu softvfp
+  84              	lcd_log_header_set:
+  85              	.LFB60:
+  57:../src/drivers/lcd/lcd_log.c **** 
+  58:../src/drivers/lcd/lcd_log.c **** /*!
+  59:../src/drivers/lcd/lcd_log.c ****     \brief      display the application header (title) on the LCD screen
+  60:../src/drivers/lcd/lcd_log.c ****     \param[in]  p_title: pointer to the string to be displayed
+  61:../src/drivers/lcd/lcd_log.c ****     \param[in]  start_x: the start x position
+  62:../src/drivers/lcd/lcd_log.c ****     \param[out] none
+  63:../src/drivers/lcd/lcd_log.c ****     \retval     none
+  64:../src/drivers/lcd/lcd_log.c **** */
+  65:../src/drivers/lcd/lcd_log.c **** void lcd_log_header_set(uint8_t *pTitle, uint16_t StartX)
+  66:../src/drivers/lcd/lcd_log.c **** {
+  86              		.loc 1 66 1
+  87              		.cfi_startproc
+  88              		@ args = 0, pretend = 0, frame = 8
+  89              		@ frame_needed = 1, uses_anonymous_args = 0
+  90 0000 80B5     		push	{r7, lr}
+  91              		.cfi_def_cfa_offset 8
+  92              		.cfi_offset 7, -8
+  93              		.cfi_offset 14, -4
+  94 0002 84B0     		sub	sp, sp, #16
+  95              		.cfi_def_cfa_offset 24
+  96 0004 02AF     		add	r7, sp, #8
+  97              		.cfi_def_cfa 7, 16
+  98 0006 7860     		str	r0, [r7, #4]
+  99 0008 0A00     		movs	r2, r1
+ 100 000a BB1C     		adds	r3, r7, #2
+ 101 000c 1A80     		strh	r2, [r3]
+  67:../src/drivers/lcd/lcd_log.c ****     lcd_rect_color_draw(0, 0, 240, 40, BLUE);
+ 102              		.loc 1 67 5
+ 103 000e 1F23     		movs	r3, #31
+ 104 0010 0093     		str	r3, [sp]
+ 105 0012 2823     		movs	r3, #40
+ 106 0014 F022     		movs	r2, #240
+ 107 0016 0021     		movs	r1, #0
+ 108 0018 0020     		movs	r0, #0
+ 109 001a FFF7FEFF 		bl	lcd_rect_color_draw
+  68:../src/drivers/lcd/lcd_log.c **** 
+  69:../src/drivers/lcd/lcd_log.c ****     lcd_draw_font_gbk16(StartX, 10, RED, BLUE, (char *)pTitle);
+ 110              		.loc 1 69 5
+ 111 001e BB1C     		adds	r3, r7, #2
+ 112 0020 1888     		ldrh	r0, [r3]
+ 113 0022 7B68     		ldr	r3, [r7, #4]
+ 114 0024 0093     		str	r3, [sp]
+ 115 0026 1F23     		movs	r3, #31
+ 116 0028 4FF60002 		movw	r2, #63488
+ 117 002c 0A21     		movs	r1, #10
+ 118 002e FFF7FEFF 		bl	lcd_draw_font_gbk16
+  70:../src/drivers/lcd/lcd_log.c **** 
+  71:../src/drivers/lcd/lcd_log.c **** }
+ 119              		.loc 1 71 1
+ 120 0032 C046     		nop
+ 121 0034 BD46     		mov	sp, r7
+ 122 0036 02B0     		add	sp, sp, #8
+ 123              		@ sp needed
+ 124 0038 80BD     		pop	{r7, pc}
+ 125              		.cfi_endproc
+ 126              	.LFE60:
+ 128              		.section	.text.lcd_log_footer_set,"ax",%progbits
+ 129              		.align	1
+ 130              		.global	lcd_log_footer_set
+ 131              		.syntax unified
+ 132              		.code	16
+ 133              		.thumb_func
+ 134              		.fpu softvfp
+ 136              	lcd_log_footer_set:
+ 137              	.LFB61:
+  72:../src/drivers/lcd/lcd_log.c **** 
+  73:../src/drivers/lcd/lcd_log.c **** /*!
+  74:../src/drivers/lcd/lcd_log.c ****     \brief      display the application footer (status) on the LCD screen
+  75:../src/drivers/lcd/lcd_log.c ****     \param[in]  p_status: pointer to the string to be displayed
+  76:../src/drivers/lcd/lcd_log.c ****     \param[in]  start_x: the start x position
+  77:../src/drivers/lcd/lcd_log.c ****     \param[out] none
+  78:../src/drivers/lcd/lcd_log.c ****     \retval     none
+  79:../src/drivers/lcd/lcd_log.c **** */
+  80:../src/drivers/lcd/lcd_log.c **** void lcd_log_footer_set(uint8_t *pStatus, uint16_t StartX)
+  81:../src/drivers/lcd/lcd_log.c **** {
+ 138              		.loc 1 81 1
+ 139              		.cfi_startproc
+ 140              		@ args = 0, pretend = 0, frame = 8
+ 141              		@ frame_needed = 1, uses_anonymous_args = 0
+ 142 0000 80B5     		push	{r7, lr}
+ 143              		.cfi_def_cfa_offset 8
+ 144              		.cfi_offset 7, -8
+ 145              		.cfi_offset 14, -4
+ 146 0002 84B0     		sub	sp, sp, #16
+ 147              		.cfi_def_cfa_offset 24
+ 148 0004 02AF     		add	r7, sp, #8
+ 149              		.cfi_def_cfa 7, 16
+ 150 0006 7860     		str	r0, [r7, #4]
+ 151 0008 0A00     		movs	r2, r1
+ 152 000a BB1C     		adds	r3, r7, #2
+ 153 000c 1A80     		strh	r2, [r3]
+  82:../src/drivers/lcd/lcd_log.c ****     lcd_rect_color_draw(0, 280, 240, 320, BLUE);
+ 154              		.loc 1 82 5
+ 155 000e 1F23     		movs	r3, #31
+ 156 0010 0093     		str	r3, [sp]
+ 157 0012 40F24013 		movw	r3, #320
+ 158 0016 F022     		movs	r2, #240
+ 159 0018 40F21811 		movw	r1, #280
+ 160 001c 0020     		movs	r0, #0
+ 161 001e FFF7FEFF 		bl	lcd_rect_color_draw
+  83:../src/drivers/lcd/lcd_log.c **** 
+  84:../src/drivers/lcd/lcd_log.c ****     lcd_draw_font_gbk16(StartX, 290, RED, BLUE, (char *)pStatus);
+ 162              		.loc 1 84 5
+ 163 0022 BB1C     		adds	r3, r7, #2
+ 164 0024 1888     		ldrh	r0, [r3]
+ 165 0026 7B68     		ldr	r3, [r7, #4]
+ 166 0028 0093     		str	r3, [sp]
+ 167 002a 1F23     		movs	r3, #31
+ 168 002c 4FF60002 		movw	r2, #63488
+ 169 0030 40F22211 		movw	r1, #290
+ 170 0034 FFF7FEFF 		bl	lcd_draw_font_gbk16
+  85:../src/drivers/lcd/lcd_log.c **** 
+  86:../src/drivers/lcd/lcd_log.c **** }
+ 171              		.loc 1 86 1
+ 172 0038 C046     		nop
+ 173 003a BD46     		mov	sp, r7
+ 174 003c 02B0     		add	sp, sp, #8
+ 175              		@ sp needed
+ 176 003e 80BD     		pop	{r7, pc}
+ 177              		.cfi_endproc
+ 178              	.LFE61:
+ 180              		.section	.text.lcd_log_text_zone_clear,"ax",%progbits
+ 181              		.align	1
+ 182              		.global	lcd_log_text_zone_clear
+ 183              		.syntax unified
+ 184              		.code	16
+ 185              		.thumb_func
+ 186              		.fpu softvfp
+ 188              	lcd_log_text_zone_clear:
+ 189              	.LFB62:
+  87:../src/drivers/lcd/lcd_log.c **** 
+  88:../src/drivers/lcd/lcd_log.c **** /**
+  89:../src/drivers/lcd/lcd_log.c ****   * @brief  Clear the Text Zone
+  90:../src/drivers/lcd/lcd_log.c ****   * @param  None
+  91:../src/drivers/lcd/lcd_log.c ****   * @retval None
+  92:../src/drivers/lcd/lcd_log.c ****   */
+  93:../src/drivers/lcd/lcd_log.c **** void lcd_log_text_zone_clear(uint16_t StartX,
+  94:../src/drivers/lcd/lcd_log.c ****                              uint16_t StartY,
+  95:../src/drivers/lcd/lcd_log.c ****                              uint16_t EndX,
+  96:../src/drivers/lcd/lcd_log.c ****                              uint16_t EndY)
+  97:../src/drivers/lcd/lcd_log.c **** {
+ 190              		.loc 1 97 1
+ 191              		.cfi_startproc
+ 192              		@ args = 0, pretend = 0, frame = 8
+ 193              		@ frame_needed = 1, uses_anonymous_args = 0
+ 194 0000 B0B5     		push	{r4, r5, r7, lr}
+ 195              		.cfi_def_cfa_offset 16
+ 196              		.cfi_offset 4, -16
+ 197              		.cfi_offset 5, -12
+ 198              		.cfi_offset 7, -8
+ 199              		.cfi_offset 14, -4
+ 200 0002 84B0     		sub	sp, sp, #16
+ 201              		.cfi_def_cfa_offset 32
+ 202 0004 02AF     		add	r7, sp, #8
+ 203              		.cfi_def_cfa 7, 24
+ 204 0006 0500     		movs	r5, r0
+ 205 0008 0C00     		movs	r4, r1
+ 206 000a 1000     		movs	r0, r2
+ 207 000c 1900     		movs	r1, r3
+ 208 000e BB1D     		adds	r3, r7, #6
+ 209 0010 2A1C     		adds	r2, r5, #0
+ 210 0012 1A80     		strh	r2, [r3]
+ 211 0014 3B1D     		adds	r3, r7, #4
+ 212 0016 221C     		adds	r2, r4, #0
+ 213 0018 1A80     		strh	r2, [r3]
+ 214 001a BB1C     		adds	r3, r7, #2
+ 215 001c 021C     		adds	r2, r0, #0
+ 216 001e 1A80     		strh	r2, [r3]
+ 217 0020 3B00     		movs	r3, r7
+ 218 0022 0A1C     		adds	r2, r1, #0
+ 219 0024 1A80     		strh	r2, [r3]
+  98:../src/drivers/lcd/lcd_log.c ****     lcd_rect_color_draw(StartX, StartY, EndX, EndY, BLACK);
+ 220              		.loc 1 98 5
+ 221 0026 3B00     		movs	r3, r7
+ 222 0028 1C88     		ldrh	r4, [r3]
+ 223 002a BB1C     		adds	r3, r7, #2
+ 224 002c 1A88     		ldrh	r2, [r3]
+ 225 002e 3B1D     		adds	r3, r7, #4
+ 226 0030 1988     		ldrh	r1, [r3]
+ 227 0032 BB1D     		adds	r3, r7, #6
+ 228 0034 1888     		ldrh	r0, [r3]
+ 229 0036 0023     		movs	r3, #0
+ 230 0038 0093     		str	r3, [sp]
+ 231 003a 2300     		movs	r3, r4
+ 232 003c FFF7FEFF 		bl	lcd_rect_color_draw
+  99:../src/drivers/lcd/lcd_log.c **** }
+ 233              		.loc 1 99 1
+ 234 0040 C046     		nop
+ 235 0042 BD46     		mov	sp, r7
+ 236 0044 02B0     		add	sp, sp, #8
+ 237              		@ sp needed
+ 238 0046 B0BD     		pop	{r4, r5, r7, pc}
+ 239              		.cfi_endproc
+ 240              	.LFE62:
+ 242              		.section	.text.lcd_log_print,"ax",%progbits
+ 243              		.align	1
+ 244              		.global	lcd_log_print
+ 245              		.syntax unified
+ 246              		.code	16
+ 247              		.thumb_func
+ 248              		.fpu softvfp
+ 250              	lcd_log_print:
+ 251              	.LFB63:
+ 100:../src/drivers/lcd/lcd_log.c **** 
+ 101:../src/drivers/lcd/lcd_log.c **** /**
+ 102:../src/drivers/lcd/lcd_log.c ****   * @brief  Redirect the printf to the lcd
+ 103:../src/drivers/lcd/lcd_log.c ****   * @param  pStr: pointer to string to be displayed
+ 104:../src/drivers/lcd/lcd_log.c ****   * @param  Len: string length
+ 105:../src/drivers/lcd/lcd_log.c ****   * @retval None
+ 106:../src/drivers/lcd/lcd_log.c ****   */
+ 107:../src/drivers/lcd/lcd_log.c **** void lcd_log_print(uint8_t *pStr,
+ 108:../src/drivers/lcd/lcd_log.c ****                    uint16_t *pLine,
+ 109:../src/drivers/lcd/lcd_log.c ****                    uint16_t CharColor,
+ 110:../src/drivers/lcd/lcd_log.c ****                    uint16_t BackColor)
+ 111:../src/drivers/lcd/lcd_log.c **** {
+ 252              		.loc 1 111 1
+ 253              		.cfi_startproc
+ 254              		@ args = 0, pretend = 0, frame = 16
+ 255              		@ frame_needed = 1, uses_anonymous_args = 0
+ 256 0000 80B5     		push	{r7, lr}
+ 257              		.cfi_def_cfa_offset 8
+ 258              		.cfi_offset 7, -8
+ 259              		.cfi_offset 14, -4
+ 260 0002 86B0     		sub	sp, sp, #24
+ 261              		.cfi_def_cfa_offset 32
+ 262 0004 02AF     		add	r7, sp, #8
+ 263              		.cfi_def_cfa 7, 24
+ 264 0006 F860     		str	r0, [r7, #12]
+ 265 0008 B960     		str	r1, [r7, #8]
+ 266 000a 1900     		movs	r1, r3
+ 267 000c BB1D     		adds	r3, r7, #6
+ 268 000e 1A80     		strh	r2, [r3]
+ 269 0010 3B1D     		adds	r3, r7, #4
+ 270 0012 0A1C     		adds	r2, r1, #0
+ 271 0014 1A80     		strh	r2, [r3]
+ 112:../src/drivers/lcd/lcd_log.c ****     if(*pLine >= 280) {
+ 272              		.loc 1 112 8
+ 273 0016 BB68     		ldr	r3, [r7, #8]
+ 274 0018 1B88     		ldrh	r3, [r3]
+ 275              		.loc 1 112 7
+ 276 001a 40F21712 		movw	r2, #279
+ 277 001e 9342     		cmp	r3, r2
+ 278 0020 0BD9     		bls	.L7
+ 113:../src/drivers/lcd/lcd_log.c ****         *pLine = 40;
+ 279              		.loc 1 113 16
+ 280 0022 BB68     		ldr	r3, [r7, #8]
+ 281 0024 2822     		movs	r2, #40
+ 282 0026 1A80     		strh	r2, [r3]
+ 114:../src/drivers/lcd/lcd_log.c **** 
+ 115:../src/drivers/lcd/lcd_log.c ****         lcd_rect_color_draw(0, 40, 240, 280, BLACK);
+ 283              		.loc 1 115 9
+ 284 0028 0023     		movs	r3, #0
+ 285 002a 0093     		str	r3, [sp]
+ 286 002c 40F21813 		movw	r3, #280
+ 287 0030 F022     		movs	r2, #240
+ 288 0032 2821     		movs	r1, #40
+ 289 0034 0020     		movs	r0, #0
+ 290 0036 FFF7FEFF 		bl	lcd_rect_color_draw
+ 291              	.L7:
+ 116:../src/drivers/lcd/lcd_log.c ****     }
+ 117:../src/drivers/lcd/lcd_log.c **** 
+ 118:../src/drivers/lcd/lcd_log.c ****     lcd_draw_font_gbk16(2, *pLine, CharColor, BackColor, (char *)pStr);
+ 292              		.loc 1 118 5
+ 293 003a BB68     		ldr	r3, [r7, #8]
+ 294 003c 1988     		ldrh	r1, [r3]
+ 295 003e 3B1D     		adds	r3, r7, #4
+ 296 0040 1888     		ldrh	r0, [r3]
+ 297 0042 BB1D     		adds	r3, r7, #6
+ 298 0044 1A88     		ldrh	r2, [r3]
+ 299 0046 FB68     		ldr	r3, [r7, #12]
+ 300 0048 0093     		str	r3, [sp]
+ 301 004a 0300     		movs	r3, r0
+ 302 004c 0220     		movs	r0, #2
+ 303 004e FFF7FEFF 		bl	lcd_draw_font_gbk16
+ 119:../src/drivers/lcd/lcd_log.c **** 
+ 120:../src/drivers/lcd/lcd_log.c ****     *pLine += 20;
+ 304              		.loc 1 120 12
+ 305 0052 BB68     		ldr	r3, [r7, #8]
+ 306 0054 1B88     		ldrh	r3, [r3]
+ 307 0056 1433     		adds	r3, r3, #20
+ 308 0058 9AB2     		uxth	r2, r3
+ 309 005a BB68     		ldr	r3, [r7, #8]
+ 310 005c 1A80     		strh	r2, [r3]
+ 121:../src/drivers/lcd/lcd_log.c **** }
+ 311              		.loc 1 121 1
+ 312 005e C046     		nop
+ 313 0060 BD46     		mov	sp, r7
+ 314 0062 04B0     		add	sp, sp, #16
+ 315              		@ sp needed
+ 316 0064 80BD     		pop	{r7, pc}
+ 317              		.cfi_endproc
+ 318              	.LFE63:
+ 320              		.text
+ 321              	.Letext0:
+ 322              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 323              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 324              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 lcd_log.c
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:16     .text.lcd_log_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:24     .text.lcd_log_init:00000000 lcd_log_init
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:49     .text.lcd_log_deinit:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:56     .text.lcd_log_deinit:00000000 lcd_log_deinit
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:77     .text.lcd_log_header_set:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:84     .text.lcd_log_header_set:00000000 lcd_log_header_set
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:129    .text.lcd_log_footer_set:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:136    .text.lcd_log_footer_set:00000000 lcd_log_footer_set
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:181    .text.lcd_log_text_zone_clear:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:188    .text.lcd_log_text_zone_clear:00000000 lcd_log_text_zone_clear
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:243    .text.lcd_log_print:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccdj94AG.s:250    .text.lcd_log_print:00000000 lcd_log_print
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.gd32e235c_eval.h.65.b13d36a634b079e0ec800d615ab8e331
+                           .group:00000000 wm4.gd32e235c_lcd_eval.h.45.28981d4f2dc9447adf01adff08e67093
+
+UNDEFINED SYMBOLS
+lcd_clear
+lcd_rect_color_draw
+lcd_draw_font_gbk16

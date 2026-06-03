@@ -1,0 +1,977 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"gd32e235c_eval.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.rodata.GPIO_PORT,"a"
+  16              		.align	2
+  19              	GPIO_PORT:
+  20 0000 00000048 		.word	1207959552
+  21 0004 00000048 		.word	1207959552
+  22 0008 00000048 		.word	1207959552
+  23 000c 00000048 		.word	1207959552
+  24 0010 00000048 		.word	1207959552
+  25              		.section	.rodata.GPIO_PIN,"a"
+  26              		.align	2
+  29              	GPIO_PIN:
+  30 0000 00010000 		.word	256
+  31 0004 00080000 		.word	2048
+  32 0008 00100000 		.word	4096
+  33 000c 00800000 		.word	32768
+  34 0010 00400000 		.word	16384
+  35              		.section	.rodata.COM_CLK,"a"
+  36              		.align	2
+  39              	COM_CLK:
+  40 0000 0E06     		.short	1550
+  41              		.section	.rodata.COM_TX_PIN,"a"
+  42              		.align	2
+  45              	COM_TX_PIN:
+  46 0000 00020000 		.word	512
+  47              		.section	.rodata.COM_RX_PIN,"a"
+  48              		.align	2
+  51              	COM_RX_PIN:
+  52 0000 00040000 		.word	1024
+  53              		.section	.rodata.GPIO_CLK,"a"
+  54              		.align	2
+  57              	GPIO_CLK:
+  58 0000 1105     		.short	1297
+  59 0002 1105     		.short	1297
+  60 0004 1105     		.short	1297
+  61 0006 1105     		.short	1297
+  62 0008 1105     		.short	1297
+  63              		.section	.rodata.KEY_PORT,"a"
+  64              		.align	2
+  67              	KEY_PORT:
+  68 0000 00000048 		.word	1207959552
+  69 0004 00080048 		.word	1207961600
+  70              		.section	.rodata.KEY_PIN,"a"
+  71              		.align	2
+  74              	KEY_PIN:
+  75 0000 01000000 		.word	1
+  76 0004 00200000 		.word	8192
+  77              		.section	.rodata.KEY_CLK,"a"
+  78              		.align	2
+  81              	KEY_CLK:
+  82 0000 1105     		.short	1297
+  83 0002 1305     		.short	1299
+  84              		.section	.rodata.KEY_EXTI_LINE,"a"
+  85              		.align	2
+  88              	KEY_EXTI_LINE:
+  89 0000 01000000 		.word	1
+  90 0004 00200000 		.word	8192
+  91              		.section	.rodata.KEY_PORT_SOURCE,"a"
+  92              		.align	2
+  95              	KEY_PORT_SOURCE:
+  96 0000 0002     		.ascii	"\000\002"
+  97              		.section	.rodata.KEY_PIN_SOURCE,"a"
+  98              		.align	2
+ 101              	KEY_PIN_SOURCE:
+ 102 0000 000D     		.ascii	"\000\015"
+ 103              		.section	.rodata.KEY_IRQn,"a"
+ 104              		.align	2
+ 107              	KEY_IRQn:
+ 108 0000 05       		.byte	5
+ 109 0001 07       		.byte	7
+ 110              		.section	.text.gd_eval_led_init,"ax",%progbits
+ 111              		.align	1
+ 112              		.global	gd_eval_led_init
+ 113              		.arch armv8-m.base
+ 114              		.syntax unified
+ 115              		.code	16
+ 116              		.thumb_func
+ 117              		.fpu softvfp
+ 119              	gd_eval_led_init:
+ 120              	.LFB61:
+ 121              		.file 1 "../src/gd32e235c_eval.c"
+   1:../src/gd32e235c_eval.c **** /*!
+   2:../src/gd32e235c_eval.c ****     \file  gd32e235c_eval.c
+   3:../src/gd32e235c_eval.c ****     \brief firmware functions to manage leds, keys, COM ports
+   4:../src/gd32e235c_eval.c **** 
+   5:../src/gd32e235c_eval.c ****     \version 2026-02-26, V2.6.0, demo for GD32E23x
+   6:../src/gd32e235c_eval.c **** */
+   7:../src/gd32e235c_eval.c **** 
+   8:../src/gd32e235c_eval.c **** /*
+   9:../src/gd32e235c_eval.c ****     Copyright (c) 2026, GigaDevice Semiconductor Inc.
+  10:../src/gd32e235c_eval.c **** 
+  11:../src/gd32e235c_eval.c ****     Redistribution and use in source and binary forms, with or without modification,
+  12:../src/gd32e235c_eval.c **** are permitted provided that the following conditions are met:
+  13:../src/gd32e235c_eval.c **** 
+  14:../src/gd32e235c_eval.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  15:../src/gd32e235c_eval.c ****        list of conditions and the following disclaimer.
+  16:../src/gd32e235c_eval.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  17:../src/gd32e235c_eval.c ****        this list of conditions and the following disclaimer in the documentation
+  18:../src/gd32e235c_eval.c ****        and/or other materials provided with the distribution.
+  19:../src/gd32e235c_eval.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  20:../src/gd32e235c_eval.c ****        may be used to endorse or promote products derived from this software without
+  21:../src/gd32e235c_eval.c ****        specific prior written permission.
+  22:../src/gd32e235c_eval.c **** 
+  23:../src/gd32e235c_eval.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  24:../src/gd32e235c_eval.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  25:../src/gd32e235c_eval.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  26:../src/gd32e235c_eval.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  27:../src/gd32e235c_eval.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  28:../src/gd32e235c_eval.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  29:../src/gd32e235c_eval.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  30:../src/gd32e235c_eval.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  31:../src/gd32e235c_eval.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  32:../src/gd32e235c_eval.c **** OF SUCH DAMAGE.
+  33:../src/gd32e235c_eval.c **** */
+  34:../src/gd32e235c_eval.c **** 
+  35:../src/gd32e235c_eval.c **** #include "gd32e235c_eval.h"
+  36:../src/gd32e235c_eval.c **** #include <stdio.h>
+  37:../src/gd32e235c_eval.c **** 
+  38:../src/gd32e235c_eval.c **** /* private variables */
+  39:../src/gd32e235c_eval.c **** static const uint32_t GPIO_PORT[LEDn]       = {LED1_GPIO_PORT,
+  40:../src/gd32e235c_eval.c ****                                                LED2_GPIO_PORT,
+  41:../src/gd32e235c_eval.c ****                                                LED3_GPIO_PORT,
+  42:../src/gd32e235c_eval.c ****                                                LED4_GPIO_PORT,
+  43:../src/gd32e235c_eval.c ****                                                LED5_GPIO_PORT
+  44:../src/gd32e235c_eval.c **** 											   };
+  45:../src/gd32e235c_eval.c **** 
+  46:../src/gd32e235c_eval.c **** static const uint32_t GPIO_PIN[LEDn]        = {LED1_PIN,
+  47:../src/gd32e235c_eval.c ****                                                LED2_PIN,
+  48:../src/gd32e235c_eval.c ****                                                LED3_PIN,
+  49:../src/gd32e235c_eval.c ****                                                LED4_PIN,
+  50:../src/gd32e235c_eval.c ****                                                LED5_PIN
+  51:../src/gd32e235c_eval.c **** 											   };
+  52:../src/gd32e235c_eval.c **** 
+  53:../src/gd32e235c_eval.c **** static const rcu_periph_enum COM_CLK[COMn]  = {EVAL_COM_CLK};
+  54:../src/gd32e235c_eval.c **** 
+  55:../src/gd32e235c_eval.c **** static const uint32_t COM_TX_PIN[COMn]      = {EVAL_COM_TX_PIN};
+  56:../src/gd32e235c_eval.c **** 
+  57:../src/gd32e235c_eval.c **** static const uint32_t COM_RX_PIN[COMn]      = {EVAL_COM_RX_PIN};
+  58:../src/gd32e235c_eval.c **** 
+  59:../src/gd32e235c_eval.c **** static const rcu_periph_enum GPIO_CLK[LEDn] = {LED1_GPIO_CLK,
+  60:../src/gd32e235c_eval.c ****                                                LED2_GPIO_CLK,
+  61:../src/gd32e235c_eval.c ****                                                LED3_GPIO_CLK,
+  62:../src/gd32e235c_eval.c ****                                                LED4_GPIO_CLK,
+  63:../src/gd32e235c_eval.c ****                                                LED5_GPIO_CLK
+  64:../src/gd32e235c_eval.c **** 											   };
+  65:../src/gd32e235c_eval.c **** 
+  66:../src/gd32e235c_eval.c **** static const uint32_t KEY_PORT[KEYn]        = {WAKEUP_KEY_GPIO_PORT,
+  67:../src/gd32e235c_eval.c ****                                                TAMPER_KEY_GPIO_PORT
+  68:../src/gd32e235c_eval.c ****                                               };
+  69:../src/gd32e235c_eval.c **** 
+  70:../src/gd32e235c_eval.c **** static const uint32_t KEY_PIN[KEYn]         = {WAKEUP_KEY_PIN,
+  71:../src/gd32e235c_eval.c ****                                                TAMPER_KEY_PIN
+  72:../src/gd32e235c_eval.c ****                                               };
+  73:../src/gd32e235c_eval.c **** 
+  74:../src/gd32e235c_eval.c **** static const rcu_periph_enum KEY_CLK[KEYn]  = {WAKEUP_KEY_GPIO_CLK,
+  75:../src/gd32e235c_eval.c ****                                                TAMPER_KEY_GPIO_CLK
+  76:../src/gd32e235c_eval.c ****                                               };
+  77:../src/gd32e235c_eval.c **** 
+  78:../src/gd32e235c_eval.c **** static const exti_line_enum KEY_EXTI_LINE[KEYn] = {WAKEUP_KEY_EXTI_LINE,
+  79:../src/gd32e235c_eval.c ****                                                    TAMPER_KEY_EXTI_LINE
+  80:../src/gd32e235c_eval.c ****                                                   };
+  81:../src/gd32e235c_eval.c **** 
+  82:../src/gd32e235c_eval.c **** static const uint8_t KEY_PORT_SOURCE[KEYn]      = {WAKEUP_KEY_EXTI_PORT_SOURCE,
+  83:../src/gd32e235c_eval.c ****                                                    TAMPER_KEY_EXTI_PORT_SOURCE
+  84:../src/gd32e235c_eval.c ****                                                   };
+  85:../src/gd32e235c_eval.c **** 
+  86:../src/gd32e235c_eval.c **** static const uint8_t KEY_PIN_SOURCE[KEYn]       = {WAKEUP_KEY_EXTI_PIN_SOURCE,
+  87:../src/gd32e235c_eval.c ****                                                    TAMPER_KEY_EXTI_PIN_SOURCE
+  88:../src/gd32e235c_eval.c ****                                                   };
+  89:../src/gd32e235c_eval.c **** 
+  90:../src/gd32e235c_eval.c **** static const IRQn_Type KEY_IRQn[KEYn]             = {WAKEUP_KEY_EXTI_IRQn,
+  91:../src/gd32e235c_eval.c ****                                                    TAMPER_KEY_EXTI_IRQn
+  92:../src/gd32e235c_eval.c ****                                                   };
+  93:../src/gd32e235c_eval.c **** 
+  94:../src/gd32e235c_eval.c **** /* eval board low layer private functions */
+  95:../src/gd32e235c_eval.c **** /*!
+  96:../src/gd32e235c_eval.c ****     \brief      configure led GPIO
+  97:../src/gd32e235c_eval.c ****     \param[in]  lednum: specify the led to be configured
+  98:../src/gd32e235c_eval.c ****       \arg        LED1
+  99:../src/gd32e235c_eval.c ****       \arg        LED2
+ 100:../src/gd32e235c_eval.c ****       \arg        LED3
+ 101:../src/gd32e235c_eval.c ****       \arg        LED4
+ 102:../src/gd32e235c_eval.c ****     \param[out] none
+ 103:../src/gd32e235c_eval.c ****     \retval     none
+ 104:../src/gd32e235c_eval.c **** */
+ 105:../src/gd32e235c_eval.c **** void gd_eval_led_init(led_typedef_enum lednum)
+ 106:../src/gd32e235c_eval.c **** {
+ 122              		.loc 1 106 1
+ 123              		.cfi_startproc
+ 124              		@ args = 0, pretend = 0, frame = 8
+ 125              		@ frame_needed = 1, uses_anonymous_args = 0
+ 126 0000 80B5     		push	{r7, lr}
+ 127              		.cfi_def_cfa_offset 8
+ 128              		.cfi_offset 7, -8
+ 129              		.cfi_offset 14, -4
+ 130 0002 82B0     		sub	sp, sp, #8
+ 131              		.cfi_def_cfa_offset 16
+ 132 0004 00AF     		add	r7, sp, #0
+ 133              		.cfi_def_cfa_register 7
+ 134 0006 0200     		movs	r2, r0
+ 135 0008 FB1D     		adds	r3, r7, #7
+ 136 000a 1A70     		strb	r2, [r3]
+ 107:../src/gd32e235c_eval.c ****     /* enable the led clock */
+ 108:../src/gd32e235c_eval.c ****     rcu_periph_clock_enable(GPIO_CLK[lednum]);
+ 137              		.loc 1 108 5
+ 138 000c FB1D     		adds	r3, r7, #7
+ 139 000e 1A78     		ldrb	r2, [r3]
+ 140 0010 40F20003 		movw	r3, #:lower16:GPIO_CLK
+ 141 0014 C0F20003 		movt	r3, #:upper16:GPIO_CLK
+ 142 0018 5200     		lsls	r2, r2, #1
+ 143 001a D35A     		ldrh	r3, [r2, r3]
+ 144 001c 1800     		movs	r0, r3
+ 145 001e FFF7FEFF 		bl	rcu_periph_clock_enable
+ 109:../src/gd32e235c_eval.c ****     /* configure led GPIO port */
+ 110:../src/gd32e235c_eval.c ****     gpio_mode_set(GPIO_PORT[lednum], GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN[lednum]);
+ 146              		.loc 1 110 5
+ 147 0022 FB1D     		adds	r3, r7, #7
+ 148 0024 1A78     		ldrb	r2, [r3]
+ 149 0026 40F20003 		movw	r3, #:lower16:GPIO_PORT
+ 150 002a C0F20003 		movt	r3, #:upper16:GPIO_PORT
+ 151 002e 9200     		lsls	r2, r2, #2
+ 152 0030 D058     		ldr	r0, [r2, r3]
+ 153 0032 FB1D     		adds	r3, r7, #7
+ 154 0034 1A78     		ldrb	r2, [r3]
+ 155 0036 40F20003 		movw	r3, #:lower16:GPIO_PIN
+ 156 003a C0F20003 		movt	r3, #:upper16:GPIO_PIN
+ 157 003e 9200     		lsls	r2, r2, #2
+ 158 0040 D358     		ldr	r3, [r2, r3]
+ 159 0042 0022     		movs	r2, #0
+ 160 0044 0121     		movs	r1, #1
+ 161 0046 FFF7FEFF 		bl	gpio_mode_set
+ 111:../src/gd32e235c_eval.c ****     gpio_output_options_set(GPIO_PORT[lednum], GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN[lednum]);
+ 162              		.loc 1 111 5
+ 163 004a FB1D     		adds	r3, r7, #7
+ 164 004c 1A78     		ldrb	r2, [r3]
+ 165 004e 40F20003 		movw	r3, #:lower16:GPIO_PORT
+ 166 0052 C0F20003 		movt	r3, #:upper16:GPIO_PORT
+ 167 0056 9200     		lsls	r2, r2, #2
+ 168 0058 D058     		ldr	r0, [r2, r3]
+ 169 005a FB1D     		adds	r3, r7, #7
+ 170 005c 1A78     		ldrb	r2, [r3]
+ 171 005e 40F20003 		movw	r3, #:lower16:GPIO_PIN
+ 172 0062 C0F20003 		movt	r3, #:upper16:GPIO_PIN
+ 173 0066 9200     		lsls	r2, r2, #2
+ 174 0068 D358     		ldr	r3, [r2, r3]
+ 175 006a 0322     		movs	r2, #3
+ 176 006c 0021     		movs	r1, #0
+ 177 006e FFF7FEFF 		bl	gpio_output_options_set
+ 112:../src/gd32e235c_eval.c **** 
+ 113:../src/gd32e235c_eval.c ****     GPIO_BC(GPIO_PORT[lednum]) = GPIO_PIN[lednum];
+ 178              		.loc 1 113 42
+ 179 0072 FB1D     		adds	r3, r7, #7
+ 180 0074 1978     		ldrb	r1, [r3]
+ 181              		.loc 1 113 5
+ 182 0076 FB1D     		adds	r3, r7, #7
+ 183 0078 1A78     		ldrb	r2, [r3]
+ 184 007a 40F20003 		movw	r3, #:lower16:GPIO_PORT
+ 185 007e C0F20003 		movt	r3, #:upper16:GPIO_PORT
+ 186 0082 9200     		lsls	r2, r2, #2
+ 187 0084 D358     		ldr	r3, [r2, r3]
+ 188 0086 2833     		adds	r3, r3, #40
+ 189 0088 1A00     		movs	r2, r3
+ 190              		.loc 1 113 42
+ 191 008a 40F20003 		movw	r3, #:lower16:GPIO_PIN
+ 192 008e C0F20003 		movt	r3, #:upper16:GPIO_PIN
+ 193 0092 8900     		lsls	r1, r1, #2
+ 194 0094 CB58     		ldr	r3, [r1, r3]
+ 195              		.loc 1 113 32
+ 196 0096 1360     		str	r3, [r2]
+ 114:../src/gd32e235c_eval.c **** }
+ 197              		.loc 1 114 1
+ 198 0098 C046     		nop
+ 199 009a BD46     		mov	sp, r7
+ 200 009c 02B0     		add	sp, sp, #8
+ 201              		@ sp needed
+ 202 009e 80BD     		pop	{r7, pc}
+ 203              		.cfi_endproc
+ 204              	.LFE61:
+ 206              		.section	.text.gd_eval_led_on,"ax",%progbits
+ 207              		.align	1
+ 208              		.global	gd_eval_led_on
+ 209              		.syntax unified
+ 210              		.code	16
+ 211              		.thumb_func
+ 212              		.fpu softvfp
+ 214              	gd_eval_led_on:
+ 215              	.LFB62:
+ 115:../src/gd32e235c_eval.c **** 
+ 116:../src/gd32e235c_eval.c **** /*!
+ 117:../src/gd32e235c_eval.c ****     \brief      turn on selected led
+ 118:../src/gd32e235c_eval.c ****     \param[in]  lednum: specify the led to be turned on
+ 119:../src/gd32e235c_eval.c ****       \arg        LED1
+ 120:../src/gd32e235c_eval.c ****       \arg        LED2
+ 121:../src/gd32e235c_eval.c ****       \arg        LED3
+ 122:../src/gd32e235c_eval.c ****       \arg        LED4
+ 123:../src/gd32e235c_eval.c ****     \param[out] none
+ 124:../src/gd32e235c_eval.c ****     \retval     none
+ 125:../src/gd32e235c_eval.c **** */
+ 126:../src/gd32e235c_eval.c **** void gd_eval_led_on(led_typedef_enum lednum)
+ 127:../src/gd32e235c_eval.c **** {
+ 216              		.loc 1 127 1
+ 217              		.cfi_startproc
+ 218              		@ args = 0, pretend = 0, frame = 8
+ 219              		@ frame_needed = 1, uses_anonymous_args = 0
+ 220 0000 80B5     		push	{r7, lr}
+ 221              		.cfi_def_cfa_offset 8
+ 222              		.cfi_offset 7, -8
+ 223              		.cfi_offset 14, -4
+ 224 0002 82B0     		sub	sp, sp, #8
+ 225              		.cfi_def_cfa_offset 16
+ 226 0004 00AF     		add	r7, sp, #0
+ 227              		.cfi_def_cfa_register 7
+ 228 0006 0200     		movs	r2, r0
+ 229 0008 FB1D     		adds	r3, r7, #7
+ 230 000a 1A70     		strb	r2, [r3]
+ 128:../src/gd32e235c_eval.c ****     GPIO_BOP(GPIO_PORT[lednum]) = GPIO_PIN[lednum];
+ 231              		.loc 1 128 43
+ 232 000c FB1D     		adds	r3, r7, #7
+ 233 000e 1978     		ldrb	r1, [r3]
+ 234              		.loc 1 128 5
+ 235 0010 FB1D     		adds	r3, r7, #7
+ 236 0012 1A78     		ldrb	r2, [r3]
+ 237 0014 40F20003 		movw	r3, #:lower16:GPIO_PORT
+ 238 0018 C0F20003 		movt	r3, #:upper16:GPIO_PORT
+ 239 001c 9200     		lsls	r2, r2, #2
+ 240 001e D358     		ldr	r3, [r2, r3]
+ 241 0020 1833     		adds	r3, r3, #24
+ 242 0022 1A00     		movs	r2, r3
+ 243              		.loc 1 128 43
+ 244 0024 40F20003 		movw	r3, #:lower16:GPIO_PIN
+ 245 0028 C0F20003 		movt	r3, #:upper16:GPIO_PIN
+ 246 002c 8900     		lsls	r1, r1, #2
+ 247 002e CB58     		ldr	r3, [r1, r3]
+ 248              		.loc 1 128 33
+ 249 0030 1360     		str	r3, [r2]
+ 129:../src/gd32e235c_eval.c **** }
+ 250              		.loc 1 129 1
+ 251 0032 C046     		nop
+ 252 0034 BD46     		mov	sp, r7
+ 253 0036 02B0     		add	sp, sp, #8
+ 254              		@ sp needed
+ 255 0038 80BD     		pop	{r7, pc}
+ 256              		.cfi_endproc
+ 257              	.LFE62:
+ 259              		.section	.text.gd_eval_led_off,"ax",%progbits
+ 260              		.align	1
+ 261              		.global	gd_eval_led_off
+ 262              		.syntax unified
+ 263              		.code	16
+ 264              		.thumb_func
+ 265              		.fpu softvfp
+ 267              	gd_eval_led_off:
+ 268              	.LFB63:
+ 130:../src/gd32e235c_eval.c **** 
+ 131:../src/gd32e235c_eval.c **** /*!
+ 132:../src/gd32e235c_eval.c ****     \brief      turn off selected led
+ 133:../src/gd32e235c_eval.c ****     \param[in]  lednum: specify the led to be turned off
+ 134:../src/gd32e235c_eval.c ****       \arg        LED1
+ 135:../src/gd32e235c_eval.c ****       \arg        LED2
+ 136:../src/gd32e235c_eval.c ****       \arg        LED3
+ 137:../src/gd32e235c_eval.c ****       \arg        LED4
+ 138:../src/gd32e235c_eval.c ****     \param[out] none
+ 139:../src/gd32e235c_eval.c ****     \retval     none
+ 140:../src/gd32e235c_eval.c **** */
+ 141:../src/gd32e235c_eval.c **** void gd_eval_led_off(led_typedef_enum lednum)
+ 142:../src/gd32e235c_eval.c **** {
+ 269              		.loc 1 142 1
+ 270              		.cfi_startproc
+ 271              		@ args = 0, pretend = 0, frame = 8
+ 272              		@ frame_needed = 1, uses_anonymous_args = 0
+ 273 0000 80B5     		push	{r7, lr}
+ 274              		.cfi_def_cfa_offset 8
+ 275              		.cfi_offset 7, -8
+ 276              		.cfi_offset 14, -4
+ 277 0002 82B0     		sub	sp, sp, #8
+ 278              		.cfi_def_cfa_offset 16
+ 279 0004 00AF     		add	r7, sp, #0
+ 280              		.cfi_def_cfa_register 7
+ 281 0006 0200     		movs	r2, r0
+ 282 0008 FB1D     		adds	r3, r7, #7
+ 283 000a 1A70     		strb	r2, [r3]
+ 143:../src/gd32e235c_eval.c ****     GPIO_BC(GPIO_PORT[lednum]) = GPIO_PIN[lednum];
+ 284              		.loc 1 143 42
+ 285 000c FB1D     		adds	r3, r7, #7
+ 286 000e 1978     		ldrb	r1, [r3]
+ 287              		.loc 1 143 5
+ 288 0010 FB1D     		adds	r3, r7, #7
+ 289 0012 1A78     		ldrb	r2, [r3]
+ 290 0014 40F20003 		movw	r3, #:lower16:GPIO_PORT
+ 291 0018 C0F20003 		movt	r3, #:upper16:GPIO_PORT
+ 292 001c 9200     		lsls	r2, r2, #2
+ 293 001e D358     		ldr	r3, [r2, r3]
+ 294 0020 2833     		adds	r3, r3, #40
+ 295 0022 1A00     		movs	r2, r3
+ 296              		.loc 1 143 42
+ 297 0024 40F20003 		movw	r3, #:lower16:GPIO_PIN
+ 298 0028 C0F20003 		movt	r3, #:upper16:GPIO_PIN
+ 299 002c 8900     		lsls	r1, r1, #2
+ 300 002e CB58     		ldr	r3, [r1, r3]
+ 301              		.loc 1 143 32
+ 302 0030 1360     		str	r3, [r2]
+ 144:../src/gd32e235c_eval.c **** }
+ 303              		.loc 1 144 1
+ 304 0032 C046     		nop
+ 305 0034 BD46     		mov	sp, r7
+ 306 0036 02B0     		add	sp, sp, #8
+ 307              		@ sp needed
+ 308 0038 80BD     		pop	{r7, pc}
+ 309              		.cfi_endproc
+ 310              	.LFE63:
+ 312              		.section	.text.gd_eval_led_toggle,"ax",%progbits
+ 313              		.align	1
+ 314              		.global	gd_eval_led_toggle
+ 315              		.syntax unified
+ 316              		.code	16
+ 317              		.thumb_func
+ 318              		.fpu softvfp
+ 320              	gd_eval_led_toggle:
+ 321              	.LFB64:
+ 145:../src/gd32e235c_eval.c **** 
+ 146:../src/gd32e235c_eval.c **** /*!
+ 147:../src/gd32e235c_eval.c ****     \brief      toggle selected led
+ 148:../src/gd32e235c_eval.c ****     \param[in]  lednum: specify the led to be toggled
+ 149:../src/gd32e235c_eval.c ****       \arg        LED1
+ 150:../src/gd32e235c_eval.c ****       \arg        LED2
+ 151:../src/gd32e235c_eval.c ****       \arg        LED3
+ 152:../src/gd32e235c_eval.c ****       \arg        LED4
+ 153:../src/gd32e235c_eval.c ****     \param[out] none
+ 154:../src/gd32e235c_eval.c ****     \retval     none
+ 155:../src/gd32e235c_eval.c **** */
+ 156:../src/gd32e235c_eval.c **** void gd_eval_led_toggle(led_typedef_enum lednum)
+ 157:../src/gd32e235c_eval.c **** {
+ 322              		.loc 1 157 1
+ 323              		.cfi_startproc
+ 324              		@ args = 0, pretend = 0, frame = 8
+ 325              		@ frame_needed = 1, uses_anonymous_args = 0
+ 326 0000 80B5     		push	{r7, lr}
+ 327              		.cfi_def_cfa_offset 8
+ 328              		.cfi_offset 7, -8
+ 329              		.cfi_offset 14, -4
+ 330 0002 82B0     		sub	sp, sp, #8
+ 331              		.cfi_def_cfa_offset 16
+ 332 0004 00AF     		add	r7, sp, #0
+ 333              		.cfi_def_cfa_register 7
+ 334 0006 0200     		movs	r2, r0
+ 335 0008 FB1D     		adds	r3, r7, #7
+ 336 000a 1A70     		strb	r2, [r3]
+ 158:../src/gd32e235c_eval.c ****     GPIO_TG(GPIO_PORT[lednum]) = GPIO_PIN[lednum];
+ 337              		.loc 1 158 42
+ 338 000c FB1D     		adds	r3, r7, #7
+ 339 000e 1978     		ldrb	r1, [r3]
+ 340              		.loc 1 158 5
+ 341 0010 FB1D     		adds	r3, r7, #7
+ 342 0012 1A78     		ldrb	r2, [r3]
+ 343 0014 40F20003 		movw	r3, #:lower16:GPIO_PORT
+ 344 0018 C0F20003 		movt	r3, #:upper16:GPIO_PORT
+ 345 001c 9200     		lsls	r2, r2, #2
+ 346 001e D358     		ldr	r3, [r2, r3]
+ 347 0020 2C33     		adds	r3, r3, #44
+ 348 0022 1A00     		movs	r2, r3
+ 349              		.loc 1 158 42
+ 350 0024 40F20003 		movw	r3, #:lower16:GPIO_PIN
+ 351 0028 C0F20003 		movt	r3, #:upper16:GPIO_PIN
+ 352 002c 8900     		lsls	r1, r1, #2
+ 353 002e CB58     		ldr	r3, [r1, r3]
+ 354              		.loc 1 158 32
+ 355 0030 1360     		str	r3, [r2]
+ 159:../src/gd32e235c_eval.c **** }
+ 356              		.loc 1 159 1
+ 357 0032 C046     		nop
+ 358 0034 BD46     		mov	sp, r7
+ 359 0036 02B0     		add	sp, sp, #8
+ 360              		@ sp needed
+ 361 0038 80BD     		pop	{r7, pc}
+ 362              		.cfi_endproc
+ 363              	.LFE64:
+ 365              		.section	.text.gd_eval_key_init,"ax",%progbits
+ 366              		.align	1
+ 367              		.global	gd_eval_key_init
+ 368              		.syntax unified
+ 369              		.code	16
+ 370              		.thumb_func
+ 371              		.fpu softvfp
+ 373              	gd_eval_key_init:
+ 374              	.LFB65:
+ 160:../src/gd32e235c_eval.c **** 
+ 161:../src/gd32e235c_eval.c **** /*!
+ 162:../src/gd32e235c_eval.c ****     \brief      configure key
+ 163:../src/gd32e235c_eval.c ****     \param[in]  keynum: specify the key to be configured
+ 164:../src/gd32e235c_eval.c ****       \arg        KEY_TAMPER: tamper key
+ 165:../src/gd32e235c_eval.c ****       \arg        KEY_WAKEUP: wakeup key
+ 166:../src/gd32e235c_eval.c ****     \param[in]  keymode: specify button mode
+ 167:../src/gd32e235c_eval.c ****       \arg        KEY_MODE_GPIO: key will be used as simple IO
+ 168:../src/gd32e235c_eval.c ****       \arg        KEY_MODE_EXTI: key will be connected to EXTI line with interrupt
+ 169:../src/gd32e235c_eval.c ****     \param[out] none
+ 170:../src/gd32e235c_eval.c ****     \retval     none
+ 171:../src/gd32e235c_eval.c **** */
+ 172:../src/gd32e235c_eval.c **** void gd_eval_key_init(key_typedef_enum keynum, keymode_typedef_enum keymode)
+ 173:../src/gd32e235c_eval.c **** {
+ 375              		.loc 1 173 1
+ 376              		.cfi_startproc
+ 377              		@ args = 0, pretend = 0, frame = 8
+ 378              		@ frame_needed = 1, uses_anonymous_args = 0
+ 379 0000 80B5     		push	{r7, lr}
+ 380              		.cfi_def_cfa_offset 8
+ 381              		.cfi_offset 7, -8
+ 382              		.cfi_offset 14, -4
+ 383 0002 82B0     		sub	sp, sp, #8
+ 384              		.cfi_def_cfa_offset 16
+ 385 0004 00AF     		add	r7, sp, #0
+ 386              		.cfi_def_cfa_register 7
+ 387 0006 0200     		movs	r2, r0
+ 388 0008 FB1D     		adds	r3, r7, #7
+ 389 000a 1A70     		strb	r2, [r3]
+ 390 000c BB1D     		adds	r3, r7, #6
+ 391 000e 0A1C     		adds	r2, r1, #0
+ 392 0010 1A70     		strb	r2, [r3]
+ 174:../src/gd32e235c_eval.c ****     /* enable the key clock */
+ 175:../src/gd32e235c_eval.c ****     rcu_periph_clock_enable(KEY_CLK[keynum]);
+ 393              		.loc 1 175 5
+ 394 0012 FB1D     		adds	r3, r7, #7
+ 395 0014 1A78     		ldrb	r2, [r3]
+ 396 0016 40F20003 		movw	r3, #:lower16:KEY_CLK
+ 397 001a C0F20003 		movt	r3, #:upper16:KEY_CLK
+ 398 001e 5200     		lsls	r2, r2, #1
+ 399 0020 D35A     		ldrh	r3, [r2, r3]
+ 400 0022 1800     		movs	r0, r3
+ 401 0024 FFF7FEFF 		bl	rcu_periph_clock_enable
+ 176:../src/gd32e235c_eval.c ****     rcu_periph_clock_enable(RCU_CFGCMP);
+ 402              		.loc 1 176 5
+ 403 0028 40F20060 		movw	r0, #1536
+ 404 002c FFF7FEFF 		bl	rcu_periph_clock_enable
+ 177:../src/gd32e235c_eval.c **** 
+ 178:../src/gd32e235c_eval.c ****     /* configure button pin as input */
+ 179:../src/gd32e235c_eval.c ****     gpio_mode_set(KEY_PORT[keynum], GPIO_MODE_INPUT, GPIO_PUPD_NONE, KEY_PIN[keynum]);
+ 405              		.loc 1 179 5
+ 406 0030 FB1D     		adds	r3, r7, #7
+ 407 0032 1A78     		ldrb	r2, [r3]
+ 408 0034 40F20003 		movw	r3, #:lower16:KEY_PORT
+ 409 0038 C0F20003 		movt	r3, #:upper16:KEY_PORT
+ 410 003c 9200     		lsls	r2, r2, #2
+ 411 003e D058     		ldr	r0, [r2, r3]
+ 412 0040 FB1D     		adds	r3, r7, #7
+ 413 0042 1A78     		ldrb	r2, [r3]
+ 414 0044 40F20003 		movw	r3, #:lower16:KEY_PIN
+ 415 0048 C0F20003 		movt	r3, #:upper16:KEY_PIN
+ 416 004c 9200     		lsls	r2, r2, #2
+ 417 004e D358     		ldr	r3, [r2, r3]
+ 418 0050 0022     		movs	r2, #0
+ 419 0052 0021     		movs	r1, #0
+ 420 0054 FFF7FEFF 		bl	gpio_mode_set
+ 180:../src/gd32e235c_eval.c **** 
+ 181:../src/gd32e235c_eval.c ****     if(keymode == KEY_MODE_EXTI) {
+ 421              		.loc 1 181 7
+ 422 0058 BB1D     		adds	r3, r7, #6
+ 423 005a 1B78     		ldrb	r3, [r3]
+ 424 005c 012B     		cmp	r3, #1
+ 425 005e 33D1     		bne	.L7
+ 182:../src/gd32e235c_eval.c ****         /* enable and set key EXTI interrupt to the lowest priority */
+ 183:../src/gd32e235c_eval.c ****         nvic_irq_enable(KEY_IRQn[keynum], 2U);
+ 426              		.loc 1 183 9
+ 427 0060 FB1D     		adds	r3, r7, #7
+ 428 0062 1A78     		ldrb	r2, [r3]
+ 429 0064 40F20003 		movw	r3, #:lower16:KEY_IRQn
+ 430 0068 C0F20003 		movt	r3, #:upper16:KEY_IRQn
+ 431 006c 9B56     		ldrsb	r3, [r3, r2]
+ 432 006e 0221     		movs	r1, #2
+ 433 0070 1800     		movs	r0, r3
+ 434 0072 FFF7FEFF 		bl	nvic_irq_enable
+ 184:../src/gd32e235c_eval.c **** 
+ 185:../src/gd32e235c_eval.c ****         /* connect key EXTI line to key GPIO pin */
+ 186:../src/gd32e235c_eval.c ****         syscfg_exti_line_config(KEY_PORT_SOURCE[keynum], KEY_PIN_SOURCE[keynum]);
+ 435              		.loc 1 186 9
+ 436 0076 FB1D     		adds	r3, r7, #7
+ 437 0078 1A78     		ldrb	r2, [r3]
+ 438 007a 40F20003 		movw	r3, #:lower16:KEY_PORT_SOURCE
+ 439 007e C0F20003 		movt	r3, #:upper16:KEY_PORT_SOURCE
+ 440 0082 985C     		ldrb	r0, [r3, r2]
+ 441 0084 FB1D     		adds	r3, r7, #7
+ 442 0086 1A78     		ldrb	r2, [r3]
+ 443 0088 40F20003 		movw	r3, #:lower16:KEY_PIN_SOURCE
+ 444 008c C0F20003 		movt	r3, #:upper16:KEY_PIN_SOURCE
+ 445 0090 9B5C     		ldrb	r3, [r3, r2]
+ 446 0092 1900     		movs	r1, r3
+ 447 0094 FFF7FEFF 		bl	syscfg_exti_line_config
+ 187:../src/gd32e235c_eval.c **** 
+ 188:../src/gd32e235c_eval.c ****         /* configure key EXTI line */
+ 189:../src/gd32e235c_eval.c ****         exti_init(KEY_EXTI_LINE[keynum], EXTI_INTERRUPT, EXTI_TRIG_FALLING);
+ 448              		.loc 1 189 9
+ 449 0098 FB1D     		adds	r3, r7, #7
+ 450 009a 1A78     		ldrb	r2, [r3]
+ 451 009c 40F20003 		movw	r3, #:lower16:KEY_EXTI_LINE
+ 452 00a0 C0F20003 		movt	r3, #:upper16:KEY_EXTI_LINE
+ 453 00a4 9200     		lsls	r2, r2, #2
+ 454 00a6 D358     		ldr	r3, [r2, r3]
+ 455 00a8 0122     		movs	r2, #1
+ 456 00aa 0021     		movs	r1, #0
+ 457 00ac 1800     		movs	r0, r3
+ 458 00ae FFF7FEFF 		bl	exti_init
+ 190:../src/gd32e235c_eval.c ****         exti_interrupt_flag_clear(KEY_EXTI_LINE[keynum]);
+ 459              		.loc 1 190 9
+ 460 00b2 FB1D     		adds	r3, r7, #7
+ 461 00b4 1A78     		ldrb	r2, [r3]
+ 462 00b6 40F20003 		movw	r3, #:lower16:KEY_EXTI_LINE
+ 463 00ba C0F20003 		movt	r3, #:upper16:KEY_EXTI_LINE
+ 464 00be 9200     		lsls	r2, r2, #2
+ 465 00c0 D358     		ldr	r3, [r2, r3]
+ 466 00c2 1800     		movs	r0, r3
+ 467 00c4 FFF7FEFF 		bl	exti_interrupt_flag_clear
+ 468              	.L7:
+ 191:../src/gd32e235c_eval.c ****     }
+ 192:../src/gd32e235c_eval.c **** }
+ 469              		.loc 1 192 1
+ 470 00c8 C046     		nop
+ 471 00ca BD46     		mov	sp, r7
+ 472 00cc 02B0     		add	sp, sp, #8
+ 473              		@ sp needed
+ 474 00ce 80BD     		pop	{r7, pc}
+ 475              		.cfi_endproc
+ 476              	.LFE65:
+ 478              		.section	.text.gd_eval_key_state_get,"ax",%progbits
+ 479              		.align	1
+ 480              		.global	gd_eval_key_state_get
+ 481              		.syntax unified
+ 482              		.code	16
+ 483              		.thumb_func
+ 484              		.fpu softvfp
+ 486              	gd_eval_key_state_get:
+ 487              	.LFB66:
+ 193:../src/gd32e235c_eval.c **** 
+ 194:../src/gd32e235c_eval.c **** /*!
+ 195:../src/gd32e235c_eval.c ****     \brief      return the selected key state
+ 196:../src/gd32e235c_eval.c ****     \param[in]  keynum: specify the key to be checked
+ 197:../src/gd32e235c_eval.c ****       \arg        KEY_TAMPER: tamper key
+ 198:../src/gd32e235c_eval.c ****       \arg        KEY_WAKEUP: wakeup key
+ 199:../src/gd32e235c_eval.c ****     \param[out] none
+ 200:../src/gd32e235c_eval.c ****     \retval     the key's GPIO pin value
+ 201:../src/gd32e235c_eval.c **** */
+ 202:../src/gd32e235c_eval.c **** uint8_t gd_eval_key_state_get(key_typedef_enum keynum)
+ 203:../src/gd32e235c_eval.c **** {
+ 488              		.loc 1 203 1
+ 489              		.cfi_startproc
+ 490              		@ args = 0, pretend = 0, frame = 8
+ 491              		@ frame_needed = 1, uses_anonymous_args = 0
+ 492 0000 80B5     		push	{r7, lr}
+ 493              		.cfi_def_cfa_offset 8
+ 494              		.cfi_offset 7, -8
+ 495              		.cfi_offset 14, -4
+ 496 0002 82B0     		sub	sp, sp, #8
+ 497              		.cfi_def_cfa_offset 16
+ 498 0004 00AF     		add	r7, sp, #0
+ 499              		.cfi_def_cfa_register 7
+ 500 0006 0200     		movs	r2, r0
+ 501 0008 FB1D     		adds	r3, r7, #7
+ 502 000a 1A70     		strb	r2, [r3]
+ 204:../src/gd32e235c_eval.c ****     return gpio_input_bit_get(KEY_PORT[keynum], KEY_PIN[keynum]);
+ 503              		.loc 1 204 12
+ 504 000c FB1D     		adds	r3, r7, #7
+ 505 000e 1A78     		ldrb	r2, [r3]
+ 506 0010 40F20003 		movw	r3, #:lower16:KEY_PORT
+ 507 0014 C0F20003 		movt	r3, #:upper16:KEY_PORT
+ 508 0018 9200     		lsls	r2, r2, #2
+ 509 001a D058     		ldr	r0, [r2, r3]
+ 510 001c FB1D     		adds	r3, r7, #7
+ 511 001e 1A78     		ldrb	r2, [r3]
+ 512 0020 40F20003 		movw	r3, #:lower16:KEY_PIN
+ 513 0024 C0F20003 		movt	r3, #:upper16:KEY_PIN
+ 514 0028 9200     		lsls	r2, r2, #2
+ 515 002a D358     		ldr	r3, [r2, r3]
+ 516 002c 1900     		movs	r1, r3
+ 517 002e FFF7FEFF 		bl	gpio_input_bit_get
+ 518 0032 0300     		movs	r3, r0
+ 205:../src/gd32e235c_eval.c **** }
+ 519              		.loc 1 205 1
+ 520 0034 1800     		movs	r0, r3
+ 521 0036 BD46     		mov	sp, r7
+ 522 0038 02B0     		add	sp, sp, #8
+ 523              		@ sp needed
+ 524 003a 80BD     		pop	{r7, pc}
+ 525              		.cfi_endproc
+ 526              	.LFE66:
+ 528              		.section	.text.gd_eval_com_init,"ax",%progbits
+ 529              		.align	1
+ 530              		.global	gd_eval_com_init
+ 531              		.syntax unified
+ 532              		.code	16
+ 533              		.thumb_func
+ 534              		.fpu softvfp
+ 536              	gd_eval_com_init:
+ 537              	.LFB67:
+ 206:../src/gd32e235c_eval.c **** 
+ 207:../src/gd32e235c_eval.c **** /*!
+ 208:../src/gd32e235c_eval.c ****     \brief      configure COM port
+ 209:../src/gd32e235c_eval.c ****     \param[in]  com: COM on the board
+ 210:../src/gd32e235c_eval.c ****       \arg        EVAL_COM: COM on the board
+ 211:../src/gd32e235c_eval.c ****     \param[out] none
+ 212:../src/gd32e235c_eval.c ****     \retval     none
+ 213:../src/gd32e235c_eval.c **** */
+ 214:../src/gd32e235c_eval.c **** void gd_eval_com_init(uint32_t com)
+ 215:../src/gd32e235c_eval.c **** {
+ 538              		.loc 1 215 1
+ 539              		.cfi_startproc
+ 540              		@ args = 0, pretend = 0, frame = 16
+ 541              		@ frame_needed = 1, uses_anonymous_args = 0
+ 542 0000 80B5     		push	{r7, lr}
+ 543              		.cfi_def_cfa_offset 8
+ 544              		.cfi_offset 7, -8
+ 545              		.cfi_offset 14, -4
+ 546 0002 84B0     		sub	sp, sp, #16
+ 547              		.cfi_def_cfa_offset 24
+ 548 0004 00AF     		add	r7, sp, #0
+ 549              		.cfi_def_cfa_register 7
+ 550 0006 7860     		str	r0, [r7, #4]
+ 216:../src/gd32e235c_eval.c ****     uint32_t COM_ID;
+ 217:../src/gd32e235c_eval.c **** 
+ 218:../src/gd32e235c_eval.c ****     COM_ID = 0U;
+ 551              		.loc 1 218 12
+ 552 0008 0023     		movs	r3, #0
+ 553 000a FB60     		str	r3, [r7, #12]
+ 219:../src/gd32e235c_eval.c **** 
+ 220:../src/gd32e235c_eval.c ****     /* enable COM GPIO clock */
+ 221:../src/gd32e235c_eval.c ****     rcu_periph_clock_enable(EVAL_COM_GPIO_CLK);
+ 554              		.loc 1 221 5
+ 555 000c 40F21150 		movw	r0, #1297
+ 556 0010 FFF7FEFF 		bl	rcu_periph_clock_enable
+ 222:../src/gd32e235c_eval.c **** 
+ 223:../src/gd32e235c_eval.c ****     /* enable USART clock */
+ 224:../src/gd32e235c_eval.c ****     rcu_periph_clock_enable(COM_CLK[COM_ID]);
+ 557              		.loc 1 224 5
+ 558 0014 40F20E63 		movw	r3, #1550
+ 559 0018 1800     		movs	r0, r3
+ 560 001a FFF7FEFF 		bl	rcu_periph_clock_enable
+ 225:../src/gd32e235c_eval.c **** 
+ 226:../src/gd32e235c_eval.c ****     /* connect port to USARTx_Tx */
+ 227:../src/gd32e235c_eval.c ****     gpio_af_set(EVAL_COM_GPIO_PORT, EVAL_COM_AF, COM_TX_PIN[COM_ID]);
+ 561              		.loc 1 227 5
+ 562 001e 40F20022 		movw	r2, #512
+ 563 0022 9023     		movs	r3, #144
+ 564 0024 DB05     		lsls	r3, r3, #23
+ 565 0026 0121     		movs	r1, #1
+ 566 0028 1800     		movs	r0, r3
+ 567 002a FFF7FEFF 		bl	gpio_af_set
+ 228:../src/gd32e235c_eval.c **** 
+ 229:../src/gd32e235c_eval.c ****     /* connect port to USARTx_Rx */
+ 230:../src/gd32e235c_eval.c ****     gpio_af_set(EVAL_COM_GPIO_PORT, EVAL_COM_AF, COM_RX_PIN[COM_ID]);
+ 568              		.loc 1 230 5
+ 569 002e 40F20042 		movw	r2, #1024
+ 570 0032 9023     		movs	r3, #144
+ 571 0034 DB05     		lsls	r3, r3, #23
+ 572 0036 0121     		movs	r1, #1
+ 573 0038 1800     		movs	r0, r3
+ 574 003a FFF7FEFF 		bl	gpio_af_set
+ 231:../src/gd32e235c_eval.c **** 
+ 232:../src/gd32e235c_eval.c ****     /* configure USART Tx as alternate function push-pull */
+ 233:../src/gd32e235c_eval.c ****     gpio_mode_set(EVAL_COM_GPIO_PORT, GPIO_MODE_AF, GPIO_PUPD_PULLUP, COM_TX_PIN[COM_ID]);
+ 575              		.loc 1 233 5
+ 576 003e 40F20022 		movw	r2, #512
+ 577 0042 9023     		movs	r3, #144
+ 578 0044 D805     		lsls	r0, r3, #23
+ 579 0046 1300     		movs	r3, r2
+ 580 0048 0122     		movs	r2, #1
+ 581 004a 0221     		movs	r1, #2
+ 582 004c FFF7FEFF 		bl	gpio_mode_set
+ 234:../src/gd32e235c_eval.c ****     gpio_output_options_set(EVAL_COM_GPIO_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, COM_TX_PIN[COM_ID
+ 583              		.loc 1 234 5
+ 584 0050 40F20022 		movw	r2, #512
+ 585 0054 9023     		movs	r3, #144
+ 586 0056 D805     		lsls	r0, r3, #23
+ 587 0058 1300     		movs	r3, r2
+ 588 005a 0122     		movs	r2, #1
+ 589 005c 0021     		movs	r1, #0
+ 590 005e FFF7FEFF 		bl	gpio_output_options_set
+ 235:../src/gd32e235c_eval.c **** 
+ 236:../src/gd32e235c_eval.c ****     /* configure USART Rx as alternate function push-pull */
+ 237:../src/gd32e235c_eval.c ****     gpio_mode_set(EVAL_COM_GPIO_PORT, GPIO_MODE_AF, GPIO_PUPD_PULLUP, COM_RX_PIN[COM_ID]);
+ 591              		.loc 1 237 5
+ 592 0062 40F20042 		movw	r2, #1024
+ 593 0066 9023     		movs	r3, #144
+ 594 0068 D805     		lsls	r0, r3, #23
+ 595 006a 1300     		movs	r3, r2
+ 596 006c 0122     		movs	r2, #1
+ 597 006e 0221     		movs	r1, #2
+ 598 0070 FFF7FEFF 		bl	gpio_mode_set
+ 238:../src/gd32e235c_eval.c ****     gpio_output_options_set(EVAL_COM_GPIO_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, COM_RX_PIN[COM_ID
+ 599              		.loc 1 238 5
+ 600 0074 40F20042 		movw	r2, #1024
+ 601 0078 9023     		movs	r3, #144
+ 602 007a D805     		lsls	r0, r3, #23
+ 603 007c 1300     		movs	r3, r2
+ 604 007e 0122     		movs	r2, #1
+ 605 0080 0021     		movs	r1, #0
+ 606 0082 FFF7FEFF 		bl	gpio_output_options_set
+ 239:../src/gd32e235c_eval.c **** 
+ 240:../src/gd32e235c_eval.c ****     /* USART configure */
+ 241:../src/gd32e235c_eval.c ****     usart_deinit(com);
+ 607              		.loc 1 241 5
+ 608 0086 7B68     		ldr	r3, [r7, #4]
+ 609 0088 1800     		movs	r0, r3
+ 610 008a FFF7FEFF 		bl	usart_deinit
+ 242:../src/gd32e235c_eval.c ****     usart_baudrate_set(com, 115200U);
+ 611              		.loc 1 242 5
+ 612 008e E123     		movs	r3, #225
+ 613 0090 5A02     		lsls	r2, r3, #9
+ 614 0092 7B68     		ldr	r3, [r7, #4]
+ 615 0094 1100     		movs	r1, r2
+ 616 0096 1800     		movs	r0, r3
+ 617 0098 FFF7FEFF 		bl	usart_baudrate_set
+ 243:../src/gd32e235c_eval.c ****     usart_receive_config(com, USART_RECEIVE_ENABLE);
+ 618              		.loc 1 243 5
+ 619 009c 7B68     		ldr	r3, [r7, #4]
+ 620 009e 0421     		movs	r1, #4
+ 621 00a0 1800     		movs	r0, r3
+ 622 00a2 FFF7FEFF 		bl	usart_receive_config
+ 244:../src/gd32e235c_eval.c ****     usart_transmit_config(com, USART_TRANSMIT_ENABLE);
+ 623              		.loc 1 244 5
+ 624 00a6 7B68     		ldr	r3, [r7, #4]
+ 625 00a8 0821     		movs	r1, #8
+ 626 00aa 1800     		movs	r0, r3
+ 627 00ac FFF7FEFF 		bl	usart_transmit_config
+ 245:../src/gd32e235c_eval.c **** 
+ 246:../src/gd32e235c_eval.c ****     usart_enable(com);
+ 628              		.loc 1 246 5
+ 629 00b0 7B68     		ldr	r3, [r7, #4]
+ 630 00b2 1800     		movs	r0, r3
+ 631 00b4 FFF7FEFF 		bl	usart_enable
+ 247:../src/gd32e235c_eval.c **** }
+ 632              		.loc 1 247 1
+ 633 00b8 C046     		nop
+ 634 00ba BD46     		mov	sp, r7
+ 635 00bc 04B0     		add	sp, sp, #16
+ 636              		@ sp needed
+ 637 00be 80BD     		pop	{r7, pc}
+ 638              		.cfi_endproc
+ 639              	.LFE67:
+ 641              		.text
+ 642              	.Letext0:
+ 643              		.file 2 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 644              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 645              		.file 4 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 646              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+ 647              		.file 6 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_exti.h"
+ 648              		.file 7 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+ 649              		.file 8 "../inc/gd32e235c_eval.h"
+ 650              		.file 9 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 651              		.file 10 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 652              		.file 11 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 653              		.file 12 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 654              		.file 13 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 gd32e235c_eval.c
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:16     .rodata.GPIO_PORT:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:19     .rodata.GPIO_PORT:00000000 GPIO_PORT
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:26     .rodata.GPIO_PIN:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:29     .rodata.GPIO_PIN:00000000 GPIO_PIN
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:36     .rodata.COM_CLK:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:39     .rodata.COM_CLK:00000000 COM_CLK
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:42     .rodata.COM_TX_PIN:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:45     .rodata.COM_TX_PIN:00000000 COM_TX_PIN
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:48     .rodata.COM_RX_PIN:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:51     .rodata.COM_RX_PIN:00000000 COM_RX_PIN
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:54     .rodata.GPIO_CLK:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:57     .rodata.GPIO_CLK:00000000 GPIO_CLK
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:64     .rodata.KEY_PORT:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:67     .rodata.KEY_PORT:00000000 KEY_PORT
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:71     .rodata.KEY_PIN:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:74     .rodata.KEY_PIN:00000000 KEY_PIN
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:78     .rodata.KEY_CLK:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:81     .rodata.KEY_CLK:00000000 KEY_CLK
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:85     .rodata.KEY_EXTI_LINE:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:88     .rodata.KEY_EXTI_LINE:00000000 KEY_EXTI_LINE
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:92     .rodata.KEY_PORT_SOURCE:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:95     .rodata.KEY_PORT_SOURCE:00000000 KEY_PORT_SOURCE
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:98     .rodata.KEY_PIN_SOURCE:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:101    .rodata.KEY_PIN_SOURCE:00000000 KEY_PIN_SOURCE
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:104    .rodata.KEY_IRQn:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:107    .rodata.KEY_IRQn:00000000 KEY_IRQn
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:111    .text.gd_eval_led_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:119    .text.gd_eval_led_init:00000000 gd_eval_led_init
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:207    .text.gd_eval_led_on:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:214    .text.gd_eval_led_on:00000000 gd_eval_led_on
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:260    .text.gd_eval_led_off:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:267    .text.gd_eval_led_off:00000000 gd_eval_led_off
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:313    .text.gd_eval_led_toggle:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:320    .text.gd_eval_led_toggle:00000000 gd_eval_led_toggle
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:366    .text.gd_eval_key_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:373    .text.gd_eval_key_init:00000000 gd_eval_key_init
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:479    .text.gd_eval_key_state_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:486    .text.gd_eval_key_state_get:00000000 gd_eval_key_state_get
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:529    .text.gd_eval_com_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81vKmk.s:536    .text.gd_eval_com_init:00000000 gd_eval_com_init
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.gd32e235c_eval.h.65.b13d36a634b079e0ec800d615ab8e331
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_mode_set
+gpio_output_options_set
+nvic_irq_enable
+syscfg_exti_line_config
+exti_init
+exti_interrupt_flag_clear
+gpio_input_bit_get
+gpio_af_set
+usart_deinit
+usart_baudrate_set
+usart_receive_config
+usart_transmit_config
+usart_enable

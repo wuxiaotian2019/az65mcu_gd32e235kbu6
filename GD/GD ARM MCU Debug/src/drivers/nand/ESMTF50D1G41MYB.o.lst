@@ -1,0 +1,441 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"ESMTF50D1G41MYB.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.spi_nand_continue_read_disable,"ax",%progbits
+  16              		.align	1
+  17              		.arch armv8-m.base
+  18              		.syntax unified
+  19              		.code	16
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	spi_nand_continue_read_disable:
+  24              	.LFB62:
+  25              		.file 1 "../src/drivers/nand/ESMTF50D1G41MYB.c"
+   1:../src/drivers/nand/ESMTF50D1G41MYB.c **** /*
+   2:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * SPDX-FileCopyrightText: 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   3:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * SPDX-License-Identifier: LicenseRef-Unisoc-General-1.0
+   4:../src/drivers/nand/ESMTF50D1G41MYB.c ****  *
+   5:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * Copyright 2026 Unisoc (Shanghai) Technologies Co., Ltd
+   6:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * Licensed under the Unisoc General Software License, version 1.0 (the License);
+   7:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * you may not use this file except in compliance with the License.
+   8:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * You may obtain a copy of the License at
+   9:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * https://www.unisoc.com/en_us/license/UNISOC_GENERAL_LICENSE_V1.0-EN_US
+  10:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * Software distributed under the License is distributed on an "AS IS" BASIS,
+  11:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * WITHOUT WARRANTIES OF ANY KIND, either express or implied.
+  12:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * See the Unisoc General Software License, version 1.0 for more details.
+  13:../src/drivers/nand/ESMTF50D1G41MYB.c ****  */
+  14:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  15:../src/drivers/nand/ESMTF50D1G41MYB.c **** #include "ESMTF50D1G41MYB.h"
+  16:../src/drivers/nand/ESMTF50D1G41MYB.c **** #include "GD5F1GQ4xExxG.h"
+  17:../src/drivers/nand/ESMTF50D1G41MYB.c **** #include <stdio.h>
+  18:../src/drivers/nand/ESMTF50D1G41MYB.c **** #include "systick.h"
+  19:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  20:../src/drivers/nand/ESMTF50D1G41MYB.c **** /**
+  21:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * @brief Disable continuous read mode
+  22:../src/drivers/nand/ESMTF50D1G41MYB.c ****  */
+  23:../src/drivers/nand/ESMTF50D1G41MYB.c **** static void spi_nand_continue_read_disable(void)
+  24:../src/drivers/nand/ESMTF50D1G41MYB.c **** {
+  26              		.loc 1 24 1
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 1, uses_anonymous_args = 0
+  30 0000 90B5     		push	{r4, r7, lr}
+  31              		.cfi_def_cfa_offset 12
+  32              		.cfi_offset 4, -12
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 83B0     		sub	sp, sp, #12
+  36              		.cfi_def_cfa_offset 24
+  37 0004 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  25:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	uint8_t getStatus;
+  26:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  27:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	getStatus = spi_nand_get_feature(NAND_REGS_FEATURE);
+  39              		.loc 1 27 14
+  40 0006 FC1D     		adds	r4, r7, #7
+  41 0008 B020     		movs	r0, #176
+  42 000a FFF7FEFF 		bl	spi_nand_get_feature
+  43 000e 0300     		movs	r3, r0
+  44 0010 2370     		strb	r3, [r4]
+  28:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	getStatus |= (1 << 3);
+  45              		.loc 1 28 12
+  46 0012 FB1D     		adds	r3, r7, #7
+  47 0014 FA1D     		adds	r2, r7, #7
+  48 0016 1278     		ldrb	r2, [r2]
+  49 0018 0821     		movs	r1, #8
+  50 001a 0A43     		orrs	r2, r1
+  51 001c 1A70     		strb	r2, [r3]
+  29:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	spi_nand_set_feature(NAND_REGS_FEATURE, getStatus);
+  52              		.loc 1 29 2
+  53 001e FB1D     		adds	r3, r7, #7
+  54 0020 1B78     		ldrb	r3, [r3]
+  55 0022 1900     		movs	r1, r3
+  56 0024 B020     		movs	r0, #176
+  57 0026 FFF7FEFF 		bl	spi_nand_set_feature
+  30:../src/drivers/nand/ESMTF50D1G41MYB.c **** }
+  58              		.loc 1 30 1
+  59 002a C046     		nop
+  60 002c BD46     		mov	sp, r7
+  61 002e 03B0     		add	sp, sp, #12
+  62              		@ sp needed
+  63 0030 90BD     		pop	{r4, r7, pc}
+  64              		.cfi_endproc
+  65              	.LFE62:
+  67              		.section	.text.spi_nand_continue_read_enable,"ax",%progbits
+  68              		.align	1
+  69              		.syntax unified
+  70              		.code	16
+  71              		.thumb_func
+  72              		.fpu softvfp
+  74              	spi_nand_continue_read_enable:
+  75              	.LFB63:
+  31:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  32:../src/drivers/nand/ESMTF50D1G41MYB.c **** /**
+  33:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * @brief Enable continuous read mode
+  34:../src/drivers/nand/ESMTF50D1G41MYB.c ****  */
+  35:../src/drivers/nand/ESMTF50D1G41MYB.c **** static void spi_nand_continue_read_enable(void)
+  36:../src/drivers/nand/ESMTF50D1G41MYB.c **** {
+  76              		.loc 1 36 1
+  77              		.cfi_startproc
+  78              		@ args = 0, pretend = 0, frame = 8
+  79              		@ frame_needed = 1, uses_anonymous_args = 0
+  80 0000 90B5     		push	{r4, r7, lr}
+  81              		.cfi_def_cfa_offset 12
+  82              		.cfi_offset 4, -12
+  83              		.cfi_offset 7, -8
+  84              		.cfi_offset 14, -4
+  85 0002 83B0     		sub	sp, sp, #12
+  86              		.cfi_def_cfa_offset 24
+  87 0004 00AF     		add	r7, sp, #0
+  88              		.cfi_def_cfa_register 7
+  37:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	uint8_t getStatus;
+  38:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  39:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	getStatus = spi_nand_get_feature(NAND_REGS_FEATURE);
+  89              		.loc 1 39 14
+  90 0006 FC1D     		adds	r4, r7, #7
+  91 0008 B020     		movs	r0, #176
+  92 000a FFF7FEFF 		bl	spi_nand_get_feature
+  93 000e 0300     		movs	r3, r0
+  94 0010 2370     		strb	r3, [r4]
+  40:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	getStatus &= ~(1 << 3);
+  95              		.loc 1 40 12
+  96 0012 FB1D     		adds	r3, r7, #7
+  97 0014 FA1D     		adds	r2, r7, #7
+  98 0016 1278     		ldrb	r2, [r2]
+  99 0018 0821     		movs	r1, #8
+ 100 001a 8A43     		bics	r2, r1
+ 101 001c 1A70     		strb	r2, [r3]
+  41:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	spi_nand_set_feature(NAND_REGS_FEATURE, getStatus);
+ 102              		.loc 1 41 2
+ 103 001e FB1D     		adds	r3, r7, #7
+ 104 0020 1B78     		ldrb	r3, [r3]
+ 105 0022 1900     		movs	r1, r3
+ 106 0024 B020     		movs	r0, #176
+ 107 0026 FFF7FEFF 		bl	spi_nand_set_feature
+  42:../src/drivers/nand/ESMTF50D1G41MYB.c **** }
+ 108              		.loc 1 42 1
+ 109 002a C046     		nop
+ 110 002c BD46     		mov	sp, r7
+ 111 002e 03B0     		add	sp, sp, #12
+ 112              		@ sp needed
+ 113 0030 90BD     		pop	{r4, r7, pc}
+ 114              		.cfi_endproc
+ 115              	.LFE63:
+ 117              		.section	.text.esmt_spi_nand_config,"ax",%progbits
+ 118              		.align	1
+ 119              		.syntax unified
+ 120              		.code	16
+ 121              		.thumb_func
+ 122              		.fpu softvfp
+ 124              	esmt_spi_nand_config:
+ 125              	.LFB64:
+  43:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  44:../src/drivers/nand/ESMTF50D1G41MYB.c **** /**
+  45:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * @brief Configure ESMT NAND flash
+  46:../src/drivers/nand/ESMTF50D1G41MYB.c ****  */
+  47:../src/drivers/nand/ESMTF50D1G41MYB.c **** static void esmt_spi_nand_config(void)
+  48:../src/drivers/nand/ESMTF50D1G41MYB.c **** {
+ 126              		.loc 1 48 1
+ 127              		.cfi_startproc
+ 128              		@ args = 0, pretend = 0, frame = 0
+ 129              		@ frame_needed = 1, uses_anonymous_args = 0
+ 130 0000 80B5     		push	{r7, lr}
+ 131              		.cfi_def_cfa_offset 8
+ 132              		.cfi_offset 7, -8
+ 133              		.cfi_offset 14, -4
+ 134 0002 00AF     		add	r7, sp, #0
+ 135              		.cfi_def_cfa_register 7
+  49:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	spi_nand_reset();
+ 136              		.loc 1 49 2
+ 137 0004 FFF7FEFF 		bl	spi_nand_reset
+  50:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	delay_1ms(2);
+ 138              		.loc 1 50 2
+ 139 0008 0220     		movs	r0, #2
+ 140 000a FFF7FEFF 		bl	delay_1ms
+  51:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	spi_nand_continue_read_disable();
+ 141              		.loc 1 51 2
+ 142 000e FFF7FEFF 		bl	spi_nand_continue_read_disable
+  52:../src/drivers/nand/ESMTF50D1G41MYB.c **** }
+ 143              		.loc 1 52 1
+ 144 0012 C046     		nop
+ 145 0014 BD46     		mov	sp, r7
+ 146              		@ sp needed
+ 147 0016 80BD     		pop	{r7, pc}
+ 148              		.cfi_endproc
+ 149              	.LFE64:
+ 151              		.section	.text.esmt_spi_nand_recovery,"ax",%progbits
+ 152              		.align	1
+ 153              		.syntax unified
+ 154              		.code	16
+ 155              		.thumb_func
+ 156              		.fpu softvfp
+ 158              	esmt_spi_nand_recovery:
+ 159              	.LFB65:
+  53:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  54:../src/drivers/nand/ESMTF50D1G41MYB.c **** /**
+  55:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * @brief Recovery ESMT NAND flash
+  56:../src/drivers/nand/ESMTF50D1G41MYB.c ****  */
+  57:../src/drivers/nand/ESMTF50D1G41MYB.c **** static void esmt_spi_nand_recovery(void)
+  58:../src/drivers/nand/ESMTF50D1G41MYB.c **** {
+ 160              		.loc 1 58 1
+ 161              		.cfi_startproc
+ 162              		@ args = 0, pretend = 0, frame = 0
+ 163              		@ frame_needed = 1, uses_anonymous_args = 0
+ 164 0000 80B5     		push	{r7, lr}
+ 165              		.cfi_def_cfa_offset 8
+ 166              		.cfi_offset 7, -8
+ 167              		.cfi_offset 14, -4
+ 168 0002 00AF     		add	r7, sp, #0
+ 169              		.cfi_def_cfa_register 7
+  59:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	spi_nand_continue_read_enable();
+ 170              		.loc 1 59 2
+ 171 0004 FFF7FEFF 		bl	spi_nand_continue_read_enable
+  60:../src/drivers/nand/ESMTF50D1G41MYB.c **** }
+ 172              		.loc 1 60 1
+ 173 0008 C046     		nop
+ 174 000a BD46     		mov	sp, r7
+ 175              		@ sp needed
+ 176 000c 80BD     		pop	{r7, pc}
+ 177              		.cfi_endproc
+ 178              	.LFE65:
+ 180              		.section	.text.esmt_spi_nand_check_ecc,"ax",%progbits
+ 181              		.align	1
+ 182              		.syntax unified
+ 183              		.code	16
+ 184              		.thumb_func
+ 185              		.fpu softvfp
+ 187              	esmt_spi_nand_check_ecc:
+ 188              	.LFB66:
+  61:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  62:../src/drivers/nand/ESMTF50D1G41MYB.c **** /**
+  63:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * @brief Check ECC status for ESMT NAND
+  64:../src/drivers/nand/ESMTF50D1G41MYB.c ****  * @return NAND_OK if no error, NAND_FAIL if error
+  65:../src/drivers/nand/ESMTF50D1G41MYB.c ****  */
+  66:../src/drivers/nand/ESMTF50D1G41MYB.c **** static uint8_t esmt_spi_nand_check_ecc(void)
+  67:../src/drivers/nand/ESMTF50D1G41MYB.c **** {
+ 189              		.loc 1 67 1
+ 190              		.cfi_startproc
+ 191              		@ args = 0, pretend = 0, frame = 8
+ 192              		@ frame_needed = 1, uses_anonymous_args = 0
+ 193 0000 90B5     		push	{r4, r7, lr}
+ 194              		.cfi_def_cfa_offset 12
+ 195              		.cfi_offset 4, -12
+ 196              		.cfi_offset 7, -8
+ 197              		.cfi_offset 14, -4
+ 198 0002 83B0     		sub	sp, sp, #12
+ 199              		.cfi_def_cfa_offset 24
+ 200 0004 00AF     		add	r7, sp, #0
+ 201              		.cfi_def_cfa_register 7
+  68:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	uint8_t getStatus = 0;
+ 202              		.loc 1 68 10
+ 203 0006 FB1D     		adds	r3, r7, #7
+ 204 0008 0022     		movs	r2, #0
+ 205 000a 1A70     		strb	r2, [r3]
+  69:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  70:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	getStatus = spi_nand_get_feature(NAND_REGS_FEATURE);
+ 206              		.loc 1 70 14
+ 207 000c FC1D     		adds	r4, r7, #7
+ 208 000e B020     		movs	r0, #176
+ 209 0010 FFF7FEFF 		bl	spi_nand_get_feature
+ 210 0014 0300     		movs	r3, r0
+ 211 0016 2370     		strb	r3, [r4]
+  71:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	if ((((getStatus & NAND_STATUS_ECCS1) == NAND_STATUS_ECCS1) &&
+ 212              		.loc 1 71 19
+ 213 0018 FB1D     		adds	r3, r7, #7
+ 214 001a 1B78     		ldrb	r3, [r3]
+ 215 001c 2022     		movs	r2, #32
+ 216 001e 1340     		ands	r3, r2
+ 217              		.loc 1 71 5
+ 218 0020 23B1     		cbz	r3, .L6
+  72:../src/drivers/nand/ESMTF50D1G41MYB.c **** 		((getStatus & NAND_STATUS_ECCS0) == 0)) ||
+ 219              		.loc 1 72 15 discriminator 1
+ 220 0022 FB1D     		adds	r3, r7, #7
+ 221 0024 1B78     		ldrb	r3, [r3]
+ 222 0026 1022     		movs	r2, #16
+ 223 0028 1340     		ands	r3, r2
+  71:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	if ((((getStatus & NAND_STATUS_ECCS1) == NAND_STATUS_ECCS1) &&
+ 224              		.loc 1 71 62 discriminator 1
+ 225 002a 4BB1     		cbz	r3, .L7
+ 226              	.L6:
+  73:../src/drivers/nand/ESMTF50D1G41MYB.c **** 		(((getStatus & NAND_STATUS_ECCS1) == NAND_STATUS_ECCS1) &&
+ 227              		.loc 1 73 16
+ 228 002c FB1D     		adds	r3, r7, #7
+ 229 002e 1B78     		ldrb	r3, [r3]
+ 230 0030 2022     		movs	r2, #32
+ 231 0032 1340     		ands	r3, r2
+  72:../src/drivers/nand/ESMTF50D1G41MYB.c **** 		((getStatus & NAND_STATUS_ECCS0) == 0)) ||
+ 232              		.loc 1 72 43
+ 233 0034 33B1     		cbz	r3, .L8
+  74:../src/drivers/nand/ESMTF50D1G41MYB.c **** 		((getStatus & NAND_STATUS_ECCS0) == NAND_STATUS_ECCS0)))
+ 234              		.loc 1 74 15
+ 235 0036 FB1D     		adds	r3, r7, #7
+ 236 0038 1B78     		ldrb	r3, [r3]
+ 237 003a 1022     		movs	r2, #16
+ 238 003c 1340     		ands	r3, r2
+  73:../src/drivers/nand/ESMTF50D1G41MYB.c **** 		(((getStatus & NAND_STATUS_ECCS1) == NAND_STATUS_ECCS1) &&
+ 239              		.loc 1 73 59
+ 240 003e 0BB1     		cbz	r3, .L8
+ 241              	.L7:
+  75:../src/drivers/nand/ESMTF50D1G41MYB.c **** 		return NAND_FAIL;
+ 242              		.loc 1 75 10
+ 243 0040 0123     		movs	r3, #1
+ 244 0042 00E0     		b	.L9
+ 245              	.L8:
+  76:../src/drivers/nand/ESMTF50D1G41MYB.c **** 
+  77:../src/drivers/nand/ESMTF50D1G41MYB.c **** 	return NAND_OK;
+ 246              		.loc 1 77 9
+ 247 0044 0023     		movs	r3, #0
+ 248              	.L9:
+  78:../src/drivers/nand/ESMTF50D1G41MYB.c **** }
+ 249              		.loc 1 78 1
+ 250 0046 1800     		movs	r0, r3
+ 251 0048 BD46     		mov	sp, r7
+ 252 004a 03B0     		add	sp, sp, #12
+ 253              		@ sp needed
+ 254 004c 90BD     		pop	{r4, r7, pc}
+ 255              		.cfi_endproc
+ 256              	.LFE66:
+ 258              		.global	g_spinand_esmt
+ 259              		.section	.data.g_spinand_esmt,"aw"
+ 260              		.align	2
+ 263              	g_spinand_esmt:
+ 264 0000 00000000 		.word	spi_nand_set_feature
+ 265 0004 00000000 		.word	spi_nand_get_feature
+ 266 0008 00000000 		.word	spi_nand_read_from_cache
+ 267 000c 00000000 		.word	spi_nand_read2cache
+ 268 0010 00000000 		.word	spi_nand_write_enable
+ 269 0014 00000000 		.word	spi_nand_erase_blk
+ 270 0018 00000000 		.word	spi_nand_enable_ecc
+ 271 001c 00000000 		.word	spi_nand_disable_ecc
+ 272 0020 00000000 		.word	esmt_spi_nand_check_ecc
+ 273 0024 00000000 		.word	esmt_spi_nand_config
+ 274 0028 00000000 		.word	esmt_spi_nand_recovery
+ 275 002c 00000000 		.word	spi_nand_check_blk_sts
+ 276              		.text
+ 277              	.Letext0:
+ 278              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 279              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 280              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 281              		.file 5 "../inc/Spi_nand_driver.h"
+ 282              		.file 6 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 283              		.file 7 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 284              		.file 8 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 285              		.file 9 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 286              		.file 10 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+ 287              		.file 11 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 ESMTF50D1G41MYB.c
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:16     .text.spi_nand_continue_read_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:23     .text.spi_nand_continue_read_disable:00000000 spi_nand_continue_read_disable
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:68     .text.spi_nand_continue_read_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:74     .text.spi_nand_continue_read_enable:00000000 spi_nand_continue_read_enable
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:118    .text.esmt_spi_nand_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:124    .text.esmt_spi_nand_config:00000000 esmt_spi_nand_config
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:152    .text.esmt_spi_nand_recovery:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:158    .text.esmt_spi_nand_recovery:00000000 esmt_spi_nand_recovery
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:181    .text.esmt_spi_nand_check_ecc:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:187    .text.esmt_spi_nand_check_ecc:00000000 esmt_spi_nand_check_ecc
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:263    .data.g_spinand_esmt:00000000 g_spinand_esmt
+C:\Users\sen.he\AppData\Local\Temp\cc1UV48s.s:260    .data.g_spinand_esmt:00000000 $d
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.Spi_nand_driver.h.16.fadacb45494f178a00212993489e2bbe
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+
+UNDEFINED SYMBOLS
+spi_nand_get_feature
+spi_nand_set_feature
+spi_nand_reset
+delay_1ms
+spi_nand_read_from_cache
+spi_nand_read2cache
+spi_nand_write_enable
+spi_nand_erase_blk
+spi_nand_enable_ecc
+spi_nand_disable_ecc
+spi_nand_check_blk_sts

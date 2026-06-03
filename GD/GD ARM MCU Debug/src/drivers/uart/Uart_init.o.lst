@@ -1,0 +1,578 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Uart_init.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.comm	recv_data_buffer_array,240,4
+  16              		.comm	handle_data_buffer_array,240,4
+  17              		.comm	send_data_buffer_array,2048,4
+  18              		.section	.text.sio_handle_init,"ax",%progbits
+  19              		.align	1
+  20              		.global	sio_handle_init
+  21              		.arch armv8-m.base
+  22              		.syntax unified
+  23              		.code	16
+  24              		.thumb_func
+  25              		.fpu softvfp
+  27              	sio_handle_init:
+  28              	.LFB62:
+  29              		.file 1 "../src/drivers/uart/Uart_init.c"
+   1:../src/drivers/uart/Uart_init.c **** #include "Uart_init.h"
+   2:../src/drivers/uart/Uart_init.c **** #include "gd32e23x.h"
+   3:../src/drivers/uart/Uart_init.c **** #include "gd32e235c_eval.h"
+   4:../src/drivers/uart/Uart_init.c **** #include "Process_Packet.h"
+   5:../src/drivers/uart/Uart_init.c **** #include <stdio.h>
+   6:../src/drivers/uart/Uart_init.c **** #include "Spl_stdio.h"
+   7:../src/drivers/uart/Uart_init.c **** 
+   8:../src/drivers/uart/Uart_init.c **** unsigned int    recv_data_buffer_array[PKT_RECIVE_LIMIT >> 2];
+   9:../src/drivers/uart/Uart_init.c **** unsigned int    handle_data_buffer_array[PKT_RECIVE_LIMIT >> 2];
+  10:../src/drivers/uart/Uart_init.c **** unsigned int    send_data_buffer_array[PKT_SEND_LIMIT >> 2];
+  11:../src/drivers/uart/Uart_init.c **** 
+  12:../src/drivers/uart/Uart_init.c **** void sio_handle_init(void)
+  13:../src/drivers/uart/Uart_init.c **** {
+  30              		.loc 1 13 1
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 1, uses_anonymous_args = 0
+  34 0000 80B5     		push	{r7, lr}
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 00AF     		add	r7, sp, #0
+  39              		.cfi_def_cfa_register 7
+  14:../src/drivers/uart/Uart_init.c ****     global_sio_handle.pkt_state = PKT_NONE;
+  40              		.loc 1 14 33
+  41 0004 40F20003 		movw	r3, #:lower16:global_sio_handle
+  42 0008 C0F20003 		movt	r3, #:upper16:global_sio_handle
+  43 000c 0022     		movs	r2, #0
+  44 000e 1A71     		strb	r2, [r3, #4]
+  15:../src/drivers/uart/Uart_init.c ****     global_sio_handle.sio_state = BSL_UART_ENUM_FLAG;
+  45              		.loc 1 15 33
+  46 0010 40F20003 		movw	r3, #:lower16:global_sio_handle
+  47 0014 C0F20003 		movt	r3, #:upper16:global_sio_handle
+  48 0018 8322     		movs	r2, #131
+  49 001a 1A60     		str	r2, [r3]
+  16:../src/drivers/uart/Uart_init.c ****     global_sio_handle.buf_size = 0;
+  50              		.loc 1 16 32
+  51 001c 40F20003 		movw	r3, #:lower16:global_sio_handle
+  52 0020 C0F20003 		movt	r3, #:upper16:global_sio_handle
+  53 0024 0022     		movs	r2, #0
+  54 0026 DA60     		str	r2, [r3, #12]
+  17:../src/drivers/uart/Uart_init.c ****     global_sio_handle.data_size = 0;
+  55              		.loc 1 17 33
+  56 0028 40F20003 		movw	r3, #:lower16:global_sio_handle
+  57 002c C0F20003 		movt	r3, #:upper16:global_sio_handle
+  58 0030 0022     		movs	r2, #0
+  59 0032 1A61     		str	r2, [r3, #16]
+  18:../src/drivers/uart/Uart_init.c ****     global_sio_handle.buf_ptr = (unsigned char *)handle_data_buffer_array;   // 256 byte
+  60              		.loc 1 18 31
+  61 0034 40F20003 		movw	r3, #:lower16:global_sio_handle
+  62 0038 C0F20003 		movt	r3, #:upper16:global_sio_handle
+  63 003c 40F20002 		movw	r2, #:lower16:handle_data_buffer_array
+  64 0040 C0F20002 		movt	r2, #:upper16:handle_data_buffer_array
+  65 0044 5A61     		str	r2, [r3, #20]
+  19:../src/drivers/uart/Uart_init.c ****     global_sio_handle.write_ptr = (unsigned char *)send_data_buffer_array;  // 1024 byte
+  66              		.loc 1 19 33
+  67 0046 40F20003 		movw	r3, #:lower16:global_sio_handle
+  68 004a C0F20003 		movt	r3, #:upper16:global_sio_handle
+  69 004e 40F20002 		movw	r2, #:lower16:send_data_buffer_array
+  70 0052 C0F20002 		movt	r2, #:upper16:send_data_buffer_array
+  71 0056 9A61     		str	r2, [r3, #24]
+  20:../src/drivers/uart/Uart_init.c ****     global_sio_handle.read_ptr = (unsigned char *)recv_data_buffer_array;
+  72              		.loc 1 20 32
+  73 0058 40F20003 		movw	r3, #:lower16:global_sio_handle
+  74 005c C0F20003 		movt	r3, #:upper16:global_sio_handle
+  75 0060 40F20002 		movw	r2, #:lower16:recv_data_buffer_array
+  76 0064 C0F20002 		movt	r2, #:upper16:recv_data_buffer_array
+  77 0068 DA61     		str	r2, [r3, #28]
+  21:../src/drivers/uart/Uart_init.c ****     global_sio_handle.pkt_type = BSL_PKT_TYPE_MAX;
+  78              		.loc 1 21 32
+  79 006a 40F20003 		movw	r3, #:lower16:global_sio_handle
+  80 006e C0F20003 		movt	r3, #:upper16:global_sio_handle
+  81 0072 0122     		movs	r2, #1
+  82 0074 5242     		rsbs	r2, r2, #0
+  83 0076 DA80     		strh	r2, [r3, #6]
+  22:../src/drivers/uart/Uart_init.c ****     global_sio_handle.pkt_count = 0;
+  84              		.loc 1 22 33
+  85 0078 40F20003 		movw	r3, #:lower16:global_sio_handle
+  86 007c C0F20003 		movt	r3, #:upper16:global_sio_handle
+  87 0080 0022     		movs	r2, #0
+  88 0082 9A60     		str	r2, [r3, #8]
+  23:../src/drivers/uart/Uart_init.c **** }
+  89              		.loc 1 23 1
+  90 0084 C046     		nop
+  91 0086 BD46     		mov	sp, r7
+  92              		@ sp needed
+  93 0088 80BD     		pop	{r7, pc}
+  94              		.cfi_endproc
+  95              	.LFE62:
+  97              		.section	.text.com_usart_init,"ax",%progbits
+  98              		.align	1
+  99              		.global	com_usart_init
+ 100              		.syntax unified
+ 101              		.code	16
+ 102              		.thumb_func
+ 103              		.fpu softvfp
+ 105              	com_usart_init:
+ 106              	.LFB63:
+  24:../src/drivers/uart/Uart_init.c **** /*!
+  25:../src/drivers/uart/Uart_init.c ****     \brief      initilize the USART configuration of the com
+  26:../src/drivers/uart/Uart_init.c ****     \param[in]  none
+  27:../src/drivers/uart/Uart_init.c ****     \param[out] none
+  28:../src/drivers/uart/Uart_init.c ****     \retval     none
+  29:../src/drivers/uart/Uart_init.c **** */
+  30:../src/drivers/uart/Uart_init.c **** void com_usart_init(uint32_t baudval)
+  31:../src/drivers/uart/Uart_init.c **** {
+ 107              		.loc 1 31 1
+ 108              		.cfi_startproc
+ 109              		@ args = 0, pretend = 0, frame = 8
+ 110              		@ frame_needed = 1, uses_anonymous_args = 0
+ 111 0000 80B5     		push	{r7, lr}
+ 112              		.cfi_def_cfa_offset 8
+ 113              		.cfi_offset 7, -8
+ 114              		.cfi_offset 14, -4
+ 115 0002 82B0     		sub	sp, sp, #8
+ 116              		.cfi_def_cfa_offset 16
+ 117 0004 00AF     		add	r7, sp, #0
+ 118              		.cfi_def_cfa_register 7
+ 119 0006 7860     		str	r0, [r7, #4]
+  32:../src/drivers/uart/Uart_init.c ****     /* enable USART clock */
+  33:../src/drivers/uart/Uart_init.c ****     rcu_periph_clock_enable(RCU_USART0);
+ 120              		.loc 1 33 5
+ 121 0008 40F20E60 		movw	r0, #1550
+ 122 000c FFF7FEFF 		bl	rcu_periph_clock_enable
+  34:../src/drivers/uart/Uart_init.c **** 
+  35:../src/drivers/uart/Uart_init.c ****     /* USART configure */
+  36:../src/drivers/uart/Uart_init.c ****     usart_deinit(USART0);
+ 123              		.loc 1 36 5
+ 124 0010 43F60003 		movw	r3, #14336
+ 125 0014 C4F20103 		movt	r3, 16385
+ 126 0018 1800     		movs	r0, r3
+ 127 001a FFF7FEFF 		bl	usart_deinit
+  37:../src/drivers/uart/Uart_init.c ****     usart_word_length_set(USART0, USART_WL_8BIT);
+ 128              		.loc 1 37 5
+ 129 001e 43F60003 		movw	r3, #14336
+ 130 0022 C4F20103 		movt	r3, 16385
+ 131 0026 0021     		movs	r1, #0
+ 132 0028 1800     		movs	r0, r3
+ 133 002a FFF7FEFF 		bl	usart_word_length_set
+  38:../src/drivers/uart/Uart_init.c ****     usart_stop_bit_set(USART0, USART_STB_1BIT);
+ 134              		.loc 1 38 5
+ 135 002e 43F60003 		movw	r3, #14336
+ 136 0032 C4F20103 		movt	r3, 16385
+ 137 0036 0021     		movs	r1, #0
+ 138 0038 1800     		movs	r0, r3
+ 139 003a FFF7FEFF 		bl	usart_stop_bit_set
+  39:../src/drivers/uart/Uart_init.c ****     usart_parity_config(USART0, USART_PM_NONE);
+ 140              		.loc 1 39 5
+ 141 003e 43F60003 		movw	r3, #14336
+ 142 0042 C4F20103 		movt	r3, 16385
+ 143 0046 0021     		movs	r1, #0
+ 144 0048 1800     		movs	r0, r3
+ 145 004a FFF7FEFF 		bl	usart_parity_config
+  40:../src/drivers/uart/Uart_init.c ****     usart_oversample_config(USART0, USART_OVSMOD_8);
+ 146              		.loc 1 40 5
+ 147 004e 43F60003 		movw	r3, #14336
+ 148 0052 C4F20103 		movt	r3, 16385
+ 149 0056 48F20001 		movw	r1, #32768
+ 150 005a 1800     		movs	r0, r3
+ 151 005c FFF7FEFF 		bl	usart_oversample_config
+  41:../src/drivers/uart/Uart_init.c ****     usart_baudrate_set(USART0, baudval);
+ 152              		.loc 1 41 5
+ 153 0060 7A68     		ldr	r2, [r7, #4]
+ 154 0062 43F60003 		movw	r3, #14336
+ 155 0066 C4F20103 		movt	r3, 16385
+ 156 006a 1100     		movs	r1, r2
+ 157 006c 1800     		movs	r0, r3
+ 158 006e FFF7FEFF 		bl	usart_baudrate_set
+  42:../src/drivers/uart/Uart_init.c ****     usart_receive_config(USART0, USART_RECEIVE_ENABLE);
+ 159              		.loc 1 42 5
+ 160 0072 43F60003 		movw	r3, #14336
+ 161 0076 C4F20103 		movt	r3, 16385
+ 162 007a 0421     		movs	r1, #4
+ 163 007c 1800     		movs	r0, r3
+ 164 007e FFF7FEFF 		bl	usart_receive_config
+  43:../src/drivers/uart/Uart_init.c ****     usart_transmit_config(USART0, USART_TRANSMIT_ENABLE);
+ 165              		.loc 1 43 5
+ 166 0082 43F60003 		movw	r3, #14336
+ 167 0086 C4F20103 		movt	r3, 16385
+ 168 008a 0821     		movs	r1, #8
+ 169 008c 1800     		movs	r0, r3
+ 170 008e FFF7FEFF 		bl	usart_transmit_config
+  44:../src/drivers/uart/Uart_init.c **** 
+  45:../src/drivers/uart/Uart_init.c ****     usart_enable(USART0);
+ 171              		.loc 1 45 5
+ 172 0092 43F60003 		movw	r3, #14336
+ 173 0096 C4F20103 		movt	r3, 16385
+ 174 009a 1800     		movs	r0, r3
+ 175 009c FFF7FEFF 		bl	usart_enable
+  46:../src/drivers/uart/Uart_init.c **** }
+ 176              		.loc 1 46 1
+ 177 00a0 C046     		nop
+ 178 00a2 BD46     		mov	sp, r7
+ 179 00a4 02B0     		add	sp, sp, #8
+ 180              		@ sp needed
+ 181 00a6 80BD     		pop	{r7, pc}
+ 182              		.cfi_endproc
+ 183              	.LFE63:
+ 185              		.section	.text.com1_usart_init,"ax",%progbits
+ 186              		.align	1
+ 187              		.global	com1_usart_init
+ 188              		.syntax unified
+ 189              		.code	16
+ 190              		.thumb_func
+ 191              		.fpu softvfp
+ 193              	com1_usart_init:
+ 194              	.LFB64:
+  47:../src/drivers/uart/Uart_init.c **** 
+  48:../src/drivers/uart/Uart_init.c **** /*!
+  49:../src/drivers/uart/Uart_init.c ****     \brief      initilize the USART configuration of the com
+  50:../src/drivers/uart/Uart_init.c ****     \param[in]  none
+  51:../src/drivers/uart/Uart_init.c ****     \param[out] none
+  52:../src/drivers/uart/Uart_init.c ****     \retval     none
+  53:../src/drivers/uart/Uart_init.c **** */
+  54:../src/drivers/uart/Uart_init.c **** void com1_usart_init(uint32_t baudval)
+  55:../src/drivers/uart/Uart_init.c **** {	
+ 195              		.loc 1 55 1
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 8
+ 198              		@ frame_needed = 1, uses_anonymous_args = 0
+ 199 0000 80B5     		push	{r7, lr}
+ 200              		.cfi_def_cfa_offset 8
+ 201              		.cfi_offset 7, -8
+ 202              		.cfi_offset 14, -4
+ 203 0002 82B0     		sub	sp, sp, #8
+ 204              		.cfi_def_cfa_offset 16
+ 205 0004 00AF     		add	r7, sp, #0
+ 206              		.cfi_def_cfa_register 7
+ 207 0006 7860     		str	r0, [r7, #4]
+  56:../src/drivers/uart/Uart_init.c ****     /* enable USART clock */
+  57:../src/drivers/uart/Uart_init.c ****     rcu_periph_clock_enable(RCU_USART1);
+ 208              		.loc 1 57 5
+ 209 0008 40F21170 		movw	r0, #1809
+ 210 000c FFF7FEFF 		bl	rcu_periph_clock_enable
+  58:../src/drivers/uart/Uart_init.c **** 
+  59:../src/drivers/uart/Uart_init.c ****     /* USART configure */
+  60:../src/drivers/uart/Uart_init.c ****     usart_deinit(USART1);
+ 211              		.loc 1 60 5
+ 212 0010 44F20043 		movw	r3, #17408
+ 213 0014 C4F20003 		movt	r3, 16384
+ 214 0018 1800     		movs	r0, r3
+ 215 001a FFF7FEFF 		bl	usart_deinit
+  61:../src/drivers/uart/Uart_init.c ****     usart_word_length_set(USART1, USART_WL_8BIT);
+ 216              		.loc 1 61 5
+ 217 001e 44F20043 		movw	r3, #17408
+ 218 0022 C4F20003 		movt	r3, 16384
+ 219 0026 0021     		movs	r1, #0
+ 220 0028 1800     		movs	r0, r3
+ 221 002a FFF7FEFF 		bl	usart_word_length_set
+  62:../src/drivers/uart/Uart_init.c ****     usart_stop_bit_set(USART1, USART_STB_1BIT);
+ 222              		.loc 1 62 5
+ 223 002e 44F20043 		movw	r3, #17408
+ 224 0032 C4F20003 		movt	r3, 16384
+ 225 0036 0021     		movs	r1, #0
+ 226 0038 1800     		movs	r0, r3
+ 227 003a FFF7FEFF 		bl	usart_stop_bit_set
+  63:../src/drivers/uart/Uart_init.c ****     usart_parity_config(USART1, USART_PM_NONE);
+ 228              		.loc 1 63 5
+ 229 003e 44F20043 		movw	r3, #17408
+ 230 0042 C4F20003 		movt	r3, 16384
+ 231 0046 0021     		movs	r1, #0
+ 232 0048 1800     		movs	r0, r3
+ 233 004a FFF7FEFF 		bl	usart_parity_config
+  64:../src/drivers/uart/Uart_init.c ****     usart_oversample_config(USART1, USART_OVSMOD_8);
+ 234              		.loc 1 64 5
+ 235 004e 44F20043 		movw	r3, #17408
+ 236 0052 C4F20003 		movt	r3, 16384
+ 237 0056 48F20001 		movw	r1, #32768
+ 238 005a 1800     		movs	r0, r3
+ 239 005c FFF7FEFF 		bl	usart_oversample_config
+  65:../src/drivers/uart/Uart_init.c ****     usart_baudrate_set(USART1, baudval);
+ 240              		.loc 1 65 5
+ 241 0060 7A68     		ldr	r2, [r7, #4]
+ 242 0062 44F20043 		movw	r3, #17408
+ 243 0066 C4F20003 		movt	r3, 16384
+ 244 006a 1100     		movs	r1, r2
+ 245 006c 1800     		movs	r0, r3
+ 246 006e FFF7FEFF 		bl	usart_baudrate_set
+  66:../src/drivers/uart/Uart_init.c ****     usart_receive_config(USART1, USART_RECEIVE_ENABLE);
+ 247              		.loc 1 66 5
+ 248 0072 44F20043 		movw	r3, #17408
+ 249 0076 C4F20003 		movt	r3, 16384
+ 250 007a 0421     		movs	r1, #4
+ 251 007c 1800     		movs	r0, r3
+ 252 007e FFF7FEFF 		bl	usart_receive_config
+  67:../src/drivers/uart/Uart_init.c ****     usart_transmit_config(USART1, USART_TRANSMIT_ENABLE);
+ 253              		.loc 1 67 5
+ 254 0082 44F20043 		movw	r3, #17408
+ 255 0086 C4F20003 		movt	r3, 16384
+ 256 008a 0821     		movs	r1, #8
+ 257 008c 1800     		movs	r0, r3
+ 258 008e FFF7FEFF 		bl	usart_transmit_config
+  68:../src/drivers/uart/Uart_init.c **** 
+  69:../src/drivers/uart/Uart_init.c ****     usart_enable(USART1);
+ 259              		.loc 1 69 5
+ 260 0092 44F20043 		movw	r3, #17408
+ 261 0096 C4F20003 		movt	r3, 16384
+ 262 009a 1800     		movs	r0, r3
+ 263 009c FFF7FEFF 		bl	usart_enable
+  70:../src/drivers/uart/Uart_init.c **** }
+ 264              		.loc 1 70 1
+ 265 00a0 C046     		nop
+ 266 00a2 BD46     		mov	sp, r7
+ 267 00a4 02B0     		add	sp, sp, #8
+ 268              		@ sp needed
+ 269 00a6 80BD     		pop	{r7, pc}
+ 270              		.cfi_endproc
+ 271              	.LFE64:
+ 273              		.section	.text.com_usart_change_baud,"ax",%progbits
+ 274              		.align	1
+ 275              		.global	com_usart_change_baud
+ 276              		.syntax unified
+ 277              		.code	16
+ 278              		.thumb_func
+ 279              		.fpu softvfp
+ 281              	com_usart_change_baud:
+ 282              	.LFB65:
+  71:../src/drivers/uart/Uart_init.c **** 
+  72:../src/drivers/uart/Uart_init.c **** void com_usart_change_baud(uint32_t baudval)
+  73:../src/drivers/uart/Uart_init.c **** {
+ 283              		.loc 1 73 1
+ 284              		.cfi_startproc
+ 285              		@ args = 0, pretend = 0, frame = 8
+ 286              		@ frame_needed = 1, uses_anonymous_args = 0
+ 287 0000 80B5     		push	{r7, lr}
+ 288              		.cfi_def_cfa_offset 8
+ 289              		.cfi_offset 7, -8
+ 290              		.cfi_offset 14, -4
+ 291 0002 82B0     		sub	sp, sp, #8
+ 292              		.cfi_def_cfa_offset 16
+ 293 0004 00AF     		add	r7, sp, #0
+ 294              		.cfi_def_cfa_register 7
+ 295 0006 7860     		str	r0, [r7, #4]
+  74:../src/drivers/uart/Uart_init.c ****     nvic_irq_disable(USART0_IRQn);
+ 296              		.loc 1 74 5
+ 297 0008 1B20     		movs	r0, #27
+ 298 000a FFF7FEFF 		bl	nvic_irq_disable
+  75:../src/drivers/uart/Uart_init.c ****     usart_interrupt_disable(USART0, USART_INT_RBNE);
+ 299              		.loc 1 75 5
+ 300 000e 43F60003 		movw	r3, #14336
+ 301 0012 C4F20103 		movt	r3, 16385
+ 302 0016 0521     		movs	r1, #5
+ 303 0018 1800     		movs	r0, r3
+ 304 001a FFF7FEFF 		bl	usart_interrupt_disable
+  76:../src/drivers/uart/Uart_init.c ****     usart_interrupt_disable(USART0, USART_INT_IDLE);
+ 305              		.loc 1 76 5
+ 306 001e 43F60003 		movw	r3, #14336
+ 307 0022 C4F20103 		movt	r3, 16385
+ 308 0026 0421     		movs	r1, #4
+ 309 0028 1800     		movs	r0, r3
+ 310 002a FFF7FEFF 		bl	usart_interrupt_disable
+  77:../src/drivers/uart/Uart_init.c ****     com_usart_init(baudval);
+ 311              		.loc 1 77 5
+ 312 002e 7B68     		ldr	r3, [r7, #4]
+ 313 0030 1800     		movs	r0, r3
+ 314 0032 FFF7FEFF 		bl	com_usart_init
+  78:../src/drivers/uart/Uart_init.c ****     nvic_irq_enable(USART0_IRQn, 0);
+ 315              		.loc 1 78 5
+ 316 0036 0021     		movs	r1, #0
+ 317 0038 1B20     		movs	r0, #27
+ 318 003a FFF7FEFF 		bl	nvic_irq_enable
+  79:../src/drivers/uart/Uart_init.c ****     usart_interrupt_enable(USART0, USART_INT_RBNE);
+ 319              		.loc 1 79 5
+ 320 003e 43F60003 		movw	r3, #14336
+ 321 0042 C4F20103 		movt	r3, 16385
+ 322 0046 0521     		movs	r1, #5
+ 323 0048 1800     		movs	r0, r3
+ 324 004a FFF7FEFF 		bl	usart_interrupt_enable
+  80:../src/drivers/uart/Uart_init.c ****     usart_interrupt_enable(USART0, USART_INT_IDLE);
+ 325              		.loc 1 80 5
+ 326 004e 43F60003 		movw	r3, #14336
+ 327 0052 C4F20103 		movt	r3, 16385
+ 328 0056 0421     		movs	r1, #4
+ 329 0058 1800     		movs	r0, r3
+ 330 005a FFF7FEFF 		bl	usart_interrupt_enable
+  81:../src/drivers/uart/Uart_init.c **** }
+ 331              		.loc 1 81 1
+ 332 005e C046     		nop
+ 333 0060 BD46     		mov	sp, r7
+ 334 0062 02B0     		add	sp, sp, #8
+ 335              		@ sp needed
+ 336 0064 80BD     		pop	{r7, pc}
+ 337              		.cfi_endproc
+ 338              	.LFE65:
+ 340              		.section	.text.usart_put_char,"ax",%progbits
+ 341              		.align	1
+ 342              		.global	usart_put_char
+ 343              		.syntax unified
+ 344              		.code	16
+ 345              		.thumb_func
+ 346              		.fpu softvfp
+ 348              	usart_put_char:
+ 349              	.LFB66:
+  82:../src/drivers/uart/Uart_init.c **** 
+  83:../src/drivers/uart/Uart_init.c **** void usart_put_char(uint32_t usart_periph, uint32_t data)
+  84:../src/drivers/uart/Uart_init.c **** {
+ 350              		.loc 1 84 1
+ 351              		.cfi_startproc
+ 352              		@ args = 0, pretend = 0, frame = 8
+ 353              		@ frame_needed = 1, uses_anonymous_args = 0
+ 354 0000 80B5     		push	{r7, lr}
+ 355              		.cfi_def_cfa_offset 8
+ 356              		.cfi_offset 7, -8
+ 357              		.cfi_offset 14, -4
+ 358 0002 82B0     		sub	sp, sp, #8
+ 359              		.cfi_def_cfa_offset 16
+ 360 0004 00AF     		add	r7, sp, #0
+ 361              		.cfi_def_cfa_register 7
+ 362 0006 7860     		str	r0, [r7, #4]
+ 363 0008 3960     		str	r1, [r7]
+  85:../src/drivers/uart/Uart_init.c ****   usart_data_transmit(usart_periph,data); 
+ 364              		.loc 1 85 3
+ 365 000a 3A68     		ldr	r2, [r7]
+ 366 000c 7B68     		ldr	r3, [r7, #4]
+ 367 000e 1100     		movs	r1, r2
+ 368 0010 1800     		movs	r0, r3
+ 369 0012 FFF7FEFF 		bl	usart_data_transmit
+  86:../src/drivers/uart/Uart_init.c ****   while (RESET == usart_flag_get(usart_periph, USART_FLAG_TBE));
+ 370              		.loc 1 86 9
+ 371 0016 C046     		nop
+ 372              	.L6:
+ 373              		.loc 1 86 19 discriminator 1
+ 374 0018 7B68     		ldr	r3, [r7, #4]
+ 375 001a 40F20771 		movw	r1, #1799
+ 376 001e 1800     		movs	r0, r3
+ 377 0020 FFF7FEFF 		bl	usart_flag_get
+ 378 0024 0300     		movs	r3, r0
+ 379              		.loc 1 86 9 discriminator 1
+ 380 0026 002B     		cmp	r3, #0
+ 381 0028 F6D0     		beq	.L6
+  87:../src/drivers/uart/Uart_init.c **** }...
+ 382              		.loc 1 87 1
+ 383 002a C046     		nop
+ 384 002c C046     		nop
+ 385 002e BD46     		mov	sp, r7
+ 386 0030 02B0     		add	sp, sp, #8
+ 387              		@ sp needed
+ 388 0032 80BD     		pop	{r7, pc}
+ 389              		.cfi_endproc
+ 390              	.LFE66:
+ 392              		.text
+ 393              	.Letext0:
+ 394              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 395              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 396              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 397              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+ 398              		.file 6 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+ 399              		.file 7 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_usart.h"
+ 400              		.file 8 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 401              		.file 9 "../inc/Spi_nand_driver.h"
+ 402              		.file 10 "../inc/Process_Packet.h"
+ 403              		.file 11 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 404              		.file 12 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 405              		.file 13 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+ 406              		.file 14 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-n
+DEFINED SYMBOLS
+                            *ABS*:00000000 Uart_init.c
+                            *COM*:000000f0 recv_data_buffer_array
+                            *COM*:000000f0 handle_data_buffer_array
+                            *COM*:00000800 send_data_buffer_array
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:19     .text.sio_handle_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:27     .text.sio_handle_init:00000000 sio_handle_init
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:98     .text.com_usart_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:105    .text.com_usart_init:00000000 com_usart_init
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:186    .text.com1_usart_init:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:193    .text.com1_usart_init:00000000 com1_usart_init
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:274    .text.com_usart_change_baud:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:281    .text.com_usart_change_baud:00000000 com_usart_change_baud
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:341    .text.usart_put_char:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccJH5Qrv.s:348    .text.usart_put_char:00000000 usart_put_char
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.gd32e235c_eval.h.36.7720dfbe8e4c2198d21e3451d7585c3f
+                           .group:00000000 wm4.Uart_init.h.8.1aae36ec8c0a464810830e31749d32ad
+                           .group:00000000 wm4.Spi_nand_driver.h.16.fadacb45494f178a00212993489e2bbe
+                           .group:00000000 wm4.Process_Packet.h.7.a9eceab0854ecc804cf185fbeb95b7f7
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+
+UNDEFINED SYMBOLS
+global_sio_handle
+rcu_periph_clock_enable
+usart_deinit
+usart_word_length_set
+usart_stop_bit_set
+usart_parity_config
+usart_oversample_config
+usart_baudrate_set
+usart_receive_config
+usart_transmit_config
+usart_enable
+nvic_irq_disable
+usart_interrupt_disable
+nvic_irq_enable
+usart_interrupt_enable
+usart_data_transmit
+usart_flag_get

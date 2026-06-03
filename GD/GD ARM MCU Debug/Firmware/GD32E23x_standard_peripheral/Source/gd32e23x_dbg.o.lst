@@ -1,0 +1,476 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"gd32e23x_dbg.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.dbg_deinit,"ax",%progbits
+  16              		.align	1
+  17              		.global	dbg_deinit
+  18              		.arch armv8-m.base
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	dbg_deinit:
+  25              	.LFB58:
+  26              		.file 1 "../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c"
+   1:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** /*!
+   2:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \file    gd32e23x_dbg.c
+   3:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \brief   DBG driver
+   4:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+   5:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \version 2025-08-08, V2.4.0, firmware for GD32E23x
+   6:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** */
+   7:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+   8:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** /*
+   9:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     Copyright (c) 2025, GigaDevice Semiconductor Inc.
+  10:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  11:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     Redistribution and use in source and binary forms, with or without modification,
+  12:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** are permitted provided that the following conditions are met:
+  13:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  14:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  15:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****        list of conditions and the following disclaimer.
+  16:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  17:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****        this list of conditions and the following disclaimer in the documentation
+  18:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****        and/or other materials provided with the distribution.
+  19:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  20:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****        may be used to endorse or promote products derived from this software without
+  21:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****        specific prior written permission.
+  22:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  23:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  24:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  25:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  26:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  27:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  28:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  29:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  30:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  31:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  32:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** OF SUCH DAMAGE.
+  33:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** */
+  34:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  35:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** #include "gd32e23x_dbg.h"
+  36:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  37:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** #define DBG_RESET_VAL       0x00000000U
+  38:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  39:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** /*!
+  40:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \brief      deinitialize the DBG
+  41:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[in]  none
+  42:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[out] none
+  43:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \retval     none
+  44:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** */
+  45:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** void dbg_deinit(void)
+  46:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** {
+  27              		.loc 1 46 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              		.cfi_def_cfa_register 7
+  47:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     DBG_CTL0 = DBG_RESET_VAL;
+  37              		.loc 1 47 5
+  38 0004 45F60403 		movw	r3, #22532
+  39 0008 C4F20103 		movt	r3, 16385
+  40              		.loc 1 47 14
+  41 000c 0022     		movs	r2, #0
+  42 000e 1A60     		str	r2, [r3]
+  48:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     DBG_CTL1 = DBG_RESET_VAL;
+  43              		.loc 1 48 5
+  44 0010 45F60803 		movw	r3, #22536
+  45 0014 C4F20103 		movt	r3, 16385
+  46              		.loc 1 48 14
+  47 0018 0022     		movs	r2, #0
+  48 001a 1A60     		str	r2, [r3]
+  49:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** }
+  49              		.loc 1 49 1
+  50 001c C046     		nop
+  51 001e BD46     		mov	sp, r7
+  52              		@ sp needed
+  53 0020 80BD     		pop	{r7, pc}
+  54              		.cfi_endproc
+  55              	.LFE58:
+  57              		.section	.text.dbg_id_get,"ax",%progbits
+  58              		.align	1
+  59              		.global	dbg_id_get
+  60              		.syntax unified
+  61              		.code	16
+  62              		.thumb_func
+  63              		.fpu softvfp
+  65              	dbg_id_get:
+  66              	.LFB59:
+  50:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  51:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** /*!
+  52:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \brief      read DBG_ID code register
+  53:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[in]  none
+  54:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[out] none
+  55:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \retval     DBG_ID code
+  56:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** */
+  57:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** uint32_t dbg_id_get(void)
+  58:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** {
+  67              		.loc 1 58 1
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 1, uses_anonymous_args = 0
+  71 0000 80B5     		push	{r7, lr}
+  72              		.cfi_def_cfa_offset 8
+  73              		.cfi_offset 7, -8
+  74              		.cfi_offset 14, -4
+  75 0002 00AF     		add	r7, sp, #0
+  76              		.cfi_def_cfa_register 7
+  59:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     return DBG_ID;
+  77              		.loc 1 59 12
+  78 0004 45F60003 		movw	r3, #22528
+  79 0008 C4F20103 		movt	r3, 16385
+  80 000c 1B68     		ldr	r3, [r3]
+  60:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** }
+  81              		.loc 1 60 1
+  82 000e 1800     		movs	r0, r3
+  83 0010 BD46     		mov	sp, r7
+  84              		@ sp needed
+  85 0012 80BD     		pop	{r7, pc}
+  86              		.cfi_endproc
+  87              	.LFE59:
+  89              		.section	.text.dbg_low_power_enable,"ax",%progbits
+  90              		.align	1
+  91              		.global	dbg_low_power_enable
+  92              		.syntax unified
+  93              		.code	16
+  94              		.thumb_func
+  95              		.fpu softvfp
+  97              	dbg_low_power_enable:
+  98              	.LFB60:
+  61:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  62:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** /*!
+  63:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \brief      enable low power behavior when the mcu is in debug mode
+  64:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[in]  dbg_low_power:
+  65:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****                 this parameter can be any combination of the following values:
+  66:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_LOW_POWER_SLEEP: keep debugger connection during sleep mode
+  67:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_LOW_POWER_DEEPSLEEP: keep debugger connection during deepsleep mode
+  68:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_LOW_POWER_STANDBY: keep debugger connection during standby mode
+  69:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[out] none
+  70:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \retval     none
+  71:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** */
+  72:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** void dbg_low_power_enable(uint32_t dbg_low_power)
+  73:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** {
+  99              		.loc 1 73 1
+ 100              		.cfi_startproc
+ 101              		@ args = 0, pretend = 0, frame = 8
+ 102              		@ frame_needed = 1, uses_anonymous_args = 0
+ 103 0000 80B5     		push	{r7, lr}
+ 104              		.cfi_def_cfa_offset 8
+ 105              		.cfi_offset 7, -8
+ 106              		.cfi_offset 14, -4
+ 107 0002 82B0     		sub	sp, sp, #8
+ 108              		.cfi_def_cfa_offset 16
+ 109 0004 00AF     		add	r7, sp, #0
+ 110              		.cfi_def_cfa_register 7
+ 111 0006 7860     		str	r0, [r7, #4]
+  74:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     DBG_CTL0 |= dbg_low_power;
+ 112              		.loc 1 74 14
+ 113 0008 45F60403 		movw	r3, #22532
+ 114 000c C4F20103 		movt	r3, 16385
+ 115 0010 1968     		ldr	r1, [r3]
+ 116 0012 45F60403 		movw	r3, #22532
+ 117 0016 C4F20103 		movt	r3, 16385
+ 118 001a 7A68     		ldr	r2, [r7, #4]
+ 119 001c 0A43     		orrs	r2, r1
+ 120 001e 1A60     		str	r2, [r3]
+  75:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** }
+ 121              		.loc 1 75 1
+ 122 0020 C046     		nop
+ 123 0022 BD46     		mov	sp, r7
+ 124 0024 02B0     		add	sp, sp, #8
+ 125              		@ sp needed
+ 126 0026 80BD     		pop	{r7, pc}
+ 127              		.cfi_endproc
+ 128              	.LFE60:
+ 130              		.section	.text.dbg_low_power_disable,"ax",%progbits
+ 131              		.align	1
+ 132              		.global	dbg_low_power_disable
+ 133              		.syntax unified
+ 134              		.code	16
+ 135              		.thumb_func
+ 136              		.fpu softvfp
+ 138              	dbg_low_power_disable:
+ 139              	.LFB61:
+  76:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  77:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** /*!
+  78:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \brief      disable low power behavior when the mcu is in debug mode
+  79:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[in]  dbg_low_power:
+  80:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****                 this parameter can be any combination of the following values:
+  81:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_LOW_POWER_SLEEP: donot keep debugger connection during sleep mode
+  82:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_LOW_POWER_DEEPSLEEP: donot keep debugger connection during deepsleep mode
+  83:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_LOW_POWER_STANDBY: donot keep debugger connection during standby mode
+  84:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[out] none
+  85:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \retval     none
+  86:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** */
+  87:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** void dbg_low_power_disable(uint32_t dbg_low_power)
+  88:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** {
+ 140              		.loc 1 88 1
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 8
+ 143              		@ frame_needed = 1, uses_anonymous_args = 0
+ 144 0000 80B5     		push	{r7, lr}
+ 145              		.cfi_def_cfa_offset 8
+ 146              		.cfi_offset 7, -8
+ 147              		.cfi_offset 14, -4
+ 148 0002 82B0     		sub	sp, sp, #8
+ 149              		.cfi_def_cfa_offset 16
+ 150 0004 00AF     		add	r7, sp, #0
+ 151              		.cfi_def_cfa_register 7
+ 152 0006 7860     		str	r0, [r7, #4]
+  89:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     DBG_CTL0 &= ~dbg_low_power;
+ 153              		.loc 1 89 14
+ 154 0008 45F60403 		movw	r3, #22532
+ 155 000c C4F20103 		movt	r3, 16385
+ 156 0010 1A68     		ldr	r2, [r3]
+ 157              		.loc 1 89 17
+ 158 0012 7B68     		ldr	r3, [r7, #4]
+ 159 0014 D943     		mvns	r1, r3
+ 160              		.loc 1 89 14
+ 161 0016 45F60403 		movw	r3, #22532
+ 162 001a C4F20103 		movt	r3, 16385
+ 163 001e 0A40     		ands	r2, r1
+ 164 0020 1A60     		str	r2, [r3]
+  90:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** }
+ 165              		.loc 1 90 1
+ 166 0022 C046     		nop
+ 167 0024 BD46     		mov	sp, r7
+ 168 0026 02B0     		add	sp, sp, #8
+ 169              		@ sp needed
+ 170 0028 80BD     		pop	{r7, pc}
+ 171              		.cfi_endproc
+ 172              	.LFE61:
+ 174              		.section	.text.dbg_periph_enable,"ax",%progbits
+ 175              		.align	1
+ 176              		.global	dbg_periph_enable
+ 177              		.syntax unified
+ 178              		.code	16
+ 179              		.thumb_func
+ 180              		.fpu softvfp
+ 182              	dbg_periph_enable:
+ 183              	.LFB62:
+  91:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+  92:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** /*!
+  93:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \brief      enable peripheral behavior when the mcu is in debug mode
+  94:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[in]  dbg_periph: DBG peripheral
+  95:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****                 only one parameter can be selected which is shown as below:
+  96:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_FWDGT_HOLD: debug FWDGT kept when core is halted
+  97:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_WWDGT_HOLD: debug WWDGT kept when core is halted
+  98:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER0_HOLD: TIMER0 counter kept when core is halted
+  99:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER2_HOLD: TIMER2 counter kept when core is halted
+ 100:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER5_HOLD: hold TIMER5 counter when core is halted
+ 101:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER13_HOLD: hold TIMER13 counter when core is halted
+ 102:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER14_HOLD: hold TIMER14 counter when core is halted
+ 103:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER15_HOLD: hold TIMER15 counter when core is halted
+ 104:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER16_HOLD: hold TIMER16 counter when core is halted
+ 105:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_I2C0_HOLD: hold I2C0 SMBUS when core is halted
+ 106:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_I2C1_HOLD: hold I2C1 SMBUS when core is halted
+ 107:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_RTC_HOLD: hold RTC calendar and wakeup counter when core is halted
+ 108:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[out] none
+ 109:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \retval     none
+ 110:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** */
+ 111:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** void dbg_periph_enable(dbg_periph_enum dbg_periph)
+ 112:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** {
+ 184              		.loc 1 112 1
+ 185              		.cfi_startproc
+ 186              		@ args = 0, pretend = 0, frame = 8
+ 187              		@ frame_needed = 1, uses_anonymous_args = 0
+ 188 0000 80B5     		push	{r7, lr}
+ 189              		.cfi_def_cfa_offset 8
+ 190              		.cfi_offset 7, -8
+ 191              		.cfi_offset 14, -4
+ 192 0002 82B0     		sub	sp, sp, #8
+ 193              		.cfi_def_cfa_offset 16
+ 194 0004 00AF     		add	r7, sp, #0
+ 195              		.cfi_def_cfa_register 7
+ 196 0006 0200     		movs	r2, r0
+ 197 0008 BB1D     		adds	r3, r7, #6
+ 198 000a 1A80     		strh	r2, [r3]
+ 113:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     DBG_REG_VAL(dbg_periph) |= BIT(DBG_BIT_POS(dbg_periph));
+ 199              		.loc 1 113 29
+ 200 000c BB1D     		adds	r3, r7, #6
+ 201 000e 1B88     		ldrh	r3, [r3]
+ 202 0010 9B09     		lsrs	r3, r3, #6
+ 203 0012 9BB2     		uxth	r3, r3
+ 204 0014 45F6000C 		movw	ip, #22528
+ 205 0018 C4F2010C 		movt	ip, 16385
+ 206 001c 6344     		add	r3, r3, ip
+ 207 001e 1968     		ldr	r1, [r3]
+ 208              		.loc 1 113 32
+ 209 0020 BB1D     		adds	r3, r7, #6
+ 210 0022 1B88     		ldrh	r3, [r3]
+ 211 0024 1F22     		movs	r2, #31
+ 212 0026 1340     		ands	r3, r2
+ 213 0028 0122     		movs	r2, #1
+ 214 002a 9A40     		lsls	r2, r2, r3
+ 215              		.loc 1 113 29
+ 216 002c BB1D     		adds	r3, r7, #6
+ 217 002e 1B88     		ldrh	r3, [r3]
+ 218 0030 9B09     		lsrs	r3, r3, #6
+ 219 0032 9BB2     		uxth	r3, r3
+ 220 0034 45F6000C 		movw	ip, #22528
+ 221 0038 C4F2010C 		movt	ip, 16385
+ 222 003c 6344     		add	r3, r3, ip
+ 223 003e 0A43     		orrs	r2, r1
+ 224 0040 1A60     		str	r2, [r3]
+ 114:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** }
+ 225              		.loc 1 114 1
+ 226 0042 C046     		nop
+ 227 0044 BD46     		mov	sp, r7
+ 228 0046 02B0     		add	sp, sp, #8
+ 229              		@ sp needed
+ 230 0048 80BD     		pop	{r7, pc}
+ 231              		.cfi_endproc
+ 232              	.LFE62:
+ 234              		.section	.text.dbg_periph_disable,"ax",%progbits
+ 235              		.align	1
+ 236              		.global	dbg_periph_disable
+ 237              		.syntax unified
+ 238              		.code	16
+ 239              		.thumb_func
+ 240              		.fpu softvfp
+ 242              	dbg_periph_disable:
+ 243              	.LFB63:
+ 115:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** 
+ 116:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** /*!
+ 117:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \brief      disable peripheral behavior when the mcu is in debug mode
+ 118:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[in]  dbg_periph: DBG peripheral
+ 119:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****                 only one parameter can be selected which is shown as below:
+ 120:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_FWDGT_HOLD: debug FWDGT kept when core is halted
+ 121:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_WWDGT_HOLD: debug WWDGT kept when core is halted
+ 122:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER0_HOLD: TIMER0 counter kept when core is halted
+ 123:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER2_HOLD: TIMER2 counter kept when core is halted
+ 124:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER5_HOLD: hold TIMER5 counter when core is halted
+ 125:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER13_HOLD: hold TIMER13 counter when core is halted
+ 126:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER14_HOLD: hold TIMER14 counter when core is halted
+ 127:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER15_HOLD: hold TIMER15 counter when core is halted
+ 128:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_TIMER16_HOLD: hold TIMER16 counter when core is halted
+ 129:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_I2C0_HOLD: hold I2C0 SMBUS when core is halted
+ 130:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_I2C1_HOLD: hold I2C1 SMBUS when core is halted
+ 131:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****       \arg        DBG_RTC_HOLD: hold RTC calendar and wakeup counter when core is halted
+ 132:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \param[out] none
+ 133:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     \retval     none
+ 134:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** */
+ 135:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** void dbg_periph_disable(dbg_periph_enum dbg_periph)
+ 136:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** {
+ 244              		.loc 1 136 1
+ 245              		.cfi_startproc
+ 246              		@ args = 0, pretend = 0, frame = 8
+ 247              		@ frame_needed = 1, uses_anonymous_args = 0
+ 248 0000 80B5     		push	{r7, lr}
+ 249              		.cfi_def_cfa_offset 8
+ 250              		.cfi_offset 7, -8
+ 251              		.cfi_offset 14, -4
+ 252 0002 82B0     		sub	sp, sp, #8
+ 253              		.cfi_def_cfa_offset 16
+ 254 0004 00AF     		add	r7, sp, #0
+ 255              		.cfi_def_cfa_register 7
+ 256 0006 0200     		movs	r2, r0
+ 257 0008 BB1D     		adds	r3, r7, #6
+ 258 000a 1A80     		strh	r2, [r3]
+ 137:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c ****     DBG_REG_VAL(dbg_periph) &= ~BIT(DBG_BIT_POS(dbg_periph));
+ 259              		.loc 1 137 29
+ 260 000c BB1D     		adds	r3, r7, #6
+ 261 000e 1B88     		ldrh	r3, [r3]
+ 262 0010 9B09     		lsrs	r3, r3, #6
+ 263 0012 9BB2     		uxth	r3, r3
+ 264 0014 45F6000C 		movw	ip, #22528
+ 265 0018 C4F2010C 		movt	ip, 16385
+ 266 001c 6344     		add	r3, r3, ip
+ 267 001e 1A68     		ldr	r2, [r3]
+ 268              		.loc 1 137 33
+ 269 0020 BB1D     		adds	r3, r7, #6
+ 270 0022 1B88     		ldrh	r3, [r3]
+ 271 0024 1F21     		movs	r1, #31
+ 272 0026 0B40     		ands	r3, r1
+ 273 0028 0121     		movs	r1, #1
+ 274 002a 9940     		lsls	r1, r1, r3
+ 275 002c 0B00     		movs	r3, r1
+ 276              		.loc 1 137 32
+ 277 002e D943     		mvns	r1, r3
+ 278              		.loc 1 137 29
+ 279 0030 BB1D     		adds	r3, r7, #6
+ 280 0032 1B88     		ldrh	r3, [r3]
+ 281 0034 9B09     		lsrs	r3, r3, #6
+ 282 0036 9BB2     		uxth	r3, r3
+ 283 0038 45F6000C 		movw	ip, #22528
+ 284 003c C4F2010C 		movt	ip, 16385
+ 285 0040 6344     		add	r3, r3, ip
+ 286 0042 0A40     		ands	r2, r1
+ 287 0044 1A60     		str	r2, [r3]
+ 138:../Firmware/GD32E23x_standard_peripheral/Source/gd32e23x_dbg.c **** }
+ 288              		.loc 1 138 1
+ 289 0046 C046     		nop
+ 290 0048 BD46     		mov	sp, r7
+ 291 004a 02B0     		add	sp, sp, #8
+ 292              		@ sp needed
+ 293 004c 80BD     		pop	{r7, pc}
+ 294              		.cfi_endproc
+ 295              	.LFE63:
+ 297              		.text
+ 298              	.Letext0:
+ 299              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 300              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 301              		.file 4 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+ 302              		.file 5 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 gd32e23x_dbg.c
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:16     .text.dbg_deinit:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:24     .text.dbg_deinit:00000000 dbg_deinit
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:58     .text.dbg_id_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:65     .text.dbg_id_get:00000000 dbg_id_get
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:90     .text.dbg_low_power_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:97     .text.dbg_low_power_enable:00000000 dbg_low_power_enable
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:131    .text.dbg_low_power_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:138    .text.dbg_low_power_disable:00000000 dbg_low_power_disable
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:175    .text.dbg_periph_enable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:182    .text.dbg_periph_enable:00000000 dbg_periph_enable
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:235    .text.dbg_periph_disable:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\cc81xoRD.s:242    .text.dbg_periph_disable:00000000 dbg_periph_disable
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.gd32e23x_dbg.h.41.cc4b4213fa1abf56178f52edaa051e45
+
+NO UNDEFINED SYMBOLS

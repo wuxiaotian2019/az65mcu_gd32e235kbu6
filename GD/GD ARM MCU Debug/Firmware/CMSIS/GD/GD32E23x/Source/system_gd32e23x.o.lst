@@ -1,0 +1,1404 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"system_gd32e23x.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.global	SystemCoreClock
+  16              		.section	.data.SystemCoreClock,"aw"
+  17              		.align	2
+  20              	SystemCoreClock:
+  21 0000 00A24A04 		.word	72000000
+  22              		.section	.text._soft_delay_,"ax",%progbits
+  23              		.align	1
+  24              		.arch armv8-m.base
+  25              		.syntax unified
+  26              		.code	16
+  27              		.thumb_func
+  28              		.fpu softvfp
+  30              	_soft_delay_:
+  31              	.LFB58:
+  32              		.file 1 "../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c"
+   1:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+   2:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \file  system_gd32e23x.c
+   3:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief CMSIS Cortex-M23 Device Peripheral Access Layer Source File for
+   4:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****            GD32E23x Device Series
+   5:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+   6:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+   7:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /* Copyright (c) 2012 ARM LIMITED
+   8:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    Copyright (c) 2025, GigaDevice Semiconductor Inc.
+   9:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  10:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    All rights reserved.
+  11:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    Redistribution and use in source and binary forms, with or without
+  12:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    modification, are permitted provided that the following conditions are met:
+  13:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    - Redistributions of source code must retain the above copyright
+  14:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****      notice, this list of conditions and the following disclaimer.
+  15:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    - Redistributions in binary form must reproduce the above copyright
+  16:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****      notice, this list of conditions and the following disclaimer in the
+  17:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****      documentation and/or other materials provided with the distribution.
+  18:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    - Neither the name of ARM nor the names of its contributors may be used
+  19:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****      to endorse or promote products derived from this software without
+  20:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****      specific prior written permission.
+  21:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    *
+  22:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  23:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  24:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  25:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+  26:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  27:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  28:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  29:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  30:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  31:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  32:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    POSSIBILITY OF SUCH DAMAGE.
+  33:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    ---------------------------------------------------------------------------*/
+  34:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  35:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /* This file refers the CMSIS standard, some adjustments are made according to GigaDevice chips */
+  36:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  37:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #include "gd32e23x.h"
+  38:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  39:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /* system frequency define */
+  40:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define __IRC8M           (IRC8M_VALUE)            /* internal 8 MHz RC oscillator frequency */
+  41:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define __HXTAL           (HXTAL_VALUE)            /* high speed crystal oscillator frequency */
+  42:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define __SYS_OSC_CLK     (__IRC8M)                /* main oscillator frequency */
+  43:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  44:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define VECT_TAB_OFFSET  (uint32_t)0x00            /* vector table base offset */
+  45:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  46:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /* select a system clock by uncommenting the following line */
+  47:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** //#define __SYSTEM_CLOCK_8M_HXTAL              (__HXTAL)
+  48:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** //#define __SYSTEM_CLOCK_8M_IRC8M              (__IRC8M)
+  49:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** //#define __SYSTEM_CLOCK_72M_PLL_HXTAL         (uint32_t)(72000000)
+  50:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define __SYSTEM_CLOCK_72M_PLL_IRC8M_DIV2    (uint32_t)(72000000)
+  51:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  52:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /* The following is to prevent Vcore fluctuations caused by frequency switching.
+  53:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    It is strongly recommended to include it to avoid issues caused by self-removal.
+  54:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+  55:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define RCU_MODIFY(__delay)     do{                                     \
+  56:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                     volatile uint32_t i,reg;            \
+  57:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                     if(0U != (__delay)){                   \
+  58:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         reg = RCU_CFG0;                 \
+  59:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         reg &= ~(RCU_CFG0_AHBPSC);      \
+  60:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         /* CK_AHB = SYSCLK/2 */         \
+  61:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         reg |= RCU_AHB_CKSYS_DIV2;      \
+  62:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         RCU_CFG0 = reg;                 \
+  63:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         for(i=0U; i<(__delay); i++){       \
+  64:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         }                               \
+  65:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         reg = RCU_CFG0;                 \
+  66:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         reg &= ~(RCU_CFG0_AHBPSC);      \
+  67:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         reg |= RCU_AHB_CKSYS_DIV4;      \
+  68:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         /* CK_AHB = SYSCLK/4 */         \
+  69:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         RCU_CFG0 = reg;                 \
+  70:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         for(i=0U; i<(__delay); i++){       \
+  71:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         }                               \
+  72:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                     }                                   \
+  73:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                 }while(0U)
+  74:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  75:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define RCU_MODIFY_UP_2(__delay)     do{                                    \
+  76:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         volatile uint32_t i,reg;            \
+  77:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                         if(0U != (__delay)){                   \
+  78:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             for(i=0U; i<(__delay); i++){       \
+  79:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             }                               \
+  80:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             reg = RCU_CFG0;                 \
+  81:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             reg &= ~(RCU_CFG0_AHBPSC);      \
+  82:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             reg |= RCU_AHB_CKSYS_DIV2;      \
+  83:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             RCU_CFG0 = reg;                 \
+  84:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             for(i=0U; i<(__delay); i++){       \
+  85:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             }                               \
+  86:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             reg = RCU_CFG0;                 \
+  87:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             reg &= ~(RCU_CFG0_AHBPSC);      \
+  88:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             reg |= RCU_AHB_CKSYS_DIV1;      \
+  89:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                             RCU_CFG0 = reg;                 \
+  90:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                     }                                       \
+  91:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                                 }while(0U)
+  92:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  93:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define SEL_IRC8M       0x00U
+  94:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define SEL_HXTAL       0x01U
+  95:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #define SEL_PLL         0x02U
+  96:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+  97:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /* set the system clock frequency and declare the system clock configuration function */
+  98:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #ifdef __SYSTEM_CLOCK_8M_HXTAL
+  99:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** uint32_t SystemCoreClock = __SYSTEM_CLOCK_8M_HXTAL;
+ 100:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void system_clock_8m_hxtal(void);
+ 101:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 102:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #elif defined (__SYSTEM_CLOCK_72M_PLL_HXTAL)
+ 103:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** uint32_t SystemCoreClock = __SYSTEM_CLOCK_72M_PLL_HXTAL;
+ 104:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void system_clock_72m_hxtal(void);
+ 105:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 106:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #elif defined (__SYSTEM_CLOCK_72M_PLL_IRC8M_DIV2)
+ 107:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** uint32_t SystemCoreClock = __SYSTEM_CLOCK_72M_PLL_IRC8M_DIV2;
+ 108:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void system_clock_72m_irc8m(void);
+ 109:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 110:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #else
+ 111:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** uint32_t SystemCoreClock = __SYSTEM_CLOCK_8M_IRC8M;
+ 112:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void system_clock_8m_irc8m(void);
+ 113:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #endif /* __SYSTEM_CLOCK_8M_HXTAL */
+ 114:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 115:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /* configure the system clock */
+ 116:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** void system_clock_config(void);
+ 117:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void _soft_delay_(uint32_t time);
+ 118:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 119:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /* software delay to prevent the impact of Vcore fluctuations.
+ 120:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****    It is strongly recommended to include it to avoid issues caused by self-removal. */
+ 121:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void _soft_delay_(uint32_t time)
+ 122:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+  33              		.loc 1 122 1
+  34              		.cfi_startproc
+  35              		@ args = 0, pretend = 0, frame = 16
+  36              		@ frame_needed = 1, uses_anonymous_args = 0
+  37 0000 80B5     		push	{r7, lr}
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  41 0002 84B0     		sub	sp, sp, #16
+  42              		.cfi_def_cfa_offset 24
+  43 0004 00AF     		add	r7, sp, #0
+  44              		.cfi_def_cfa_register 7
+  45 0006 7860     		str	r0, [r7, #4]
+ 123:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     __IO uint32_t i;
+ 124:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     for(i=0U; i<time*10U; i++){
+  46              		.loc 1 124 10
+  47 0008 0023     		movs	r3, #0
+  48 000a FB60     		str	r3, [r7, #12]
+  49              		.loc 1 124 5
+  50 000c 02E0     		b	.L2
+  51              	.L3:
+  52              		.loc 1 124 28 discriminator 3
+  53 000e FB68     		ldr	r3, [r7, #12]
+  54 0010 0133     		adds	r3, r3, #1
+  55 0012 FB60     		str	r3, [r7, #12]
+  56              	.L2:
+  57              		.loc 1 124 21 discriminator 1
+  58 0014 7A68     		ldr	r2, [r7, #4]
+  59 0016 1300     		movs	r3, r2
+  60 0018 9B00     		lsls	r3, r3, #2
+  61 001a 9B18     		adds	r3, r3, r2
+  62 001c 5B00     		lsls	r3, r3, #1
+  63 001e 1A00     		movs	r2, r3
+  64              		.loc 1 124 16 discriminator 1
+  65 0020 FB68     		ldr	r3, [r7, #12]
+  66              		.loc 1 124 5 discriminator 1
+  67 0022 9A42     		cmp	r2, r3
+  68 0024 F3D8     		bhi	.L3
+ 125:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 126:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+  69              		.loc 1 126 1
+  70 0026 C046     		nop
+  71 0028 C046     		nop
+  72 002a BD46     		mov	sp, r7
+  73 002c 04B0     		add	sp, sp, #16
+  74              		@ sp needed
+  75 002e 80BD     		pop	{r7, pc}
+  76              		.cfi_endproc
+  77              	.LFE58:
+  79              		.section	.text.SystemInit,"ax",%progbits
+  80              		.align	1
+  81              		.global	SystemInit
+  82              		.syntax unified
+  83              		.code	16
+  84              		.thumb_func
+  85              		.fpu softvfp
+  87              	SystemInit:
+  88              	.LFB59:
+ 127:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 128:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+ 129:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief      setup the microcontroller system, initialize the system
+ 130:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[in]  none
+ 131:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[out] none
+ 132:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \retval     none
+ 133:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \note       This function contains scenarios leading to an infinite loop.
+ 134:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                 Modify according to the use's actual usage scenarios.
+ 135:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+ 136:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** void SystemInit(void)
+ 137:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+  89              		.loc 1 137 1
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 8
+  92              		@ frame_needed = 1, uses_anonymous_args = 0
+  93 0000 80B5     		push	{r7, lr}
+  94              		.cfi_def_cfa_offset 8
+  95              		.cfi_offset 7, -8
+  96              		.cfi_offset 14, -4
+  97 0002 82B0     		sub	sp, sp, #8
+  98              		.cfi_def_cfa_offset 16
+  99 0004 00AF     		add	r7, sp, #0
+ 100              		.cfi_def_cfa_register 7
+ 138:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* enable IRC8M */
+ 139:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL0 |= RCU_CTL0_IRC8MEN;
+ 101              		.loc 1 139 14
+ 102 0006 41F20003 		movw	r3, #4096
+ 103 000a C4F20203 		movt	r3, 16386
+ 104 000e 1A68     		ldr	r2, [r3]
+ 105 0010 41F20003 		movw	r3, #4096
+ 106 0014 C4F20203 		movt	r3, 16386
+ 107 0018 0121     		movs	r1, #1
+ 108 001a 0A43     		orrs	r2, r1
+ 109 001c 1A60     		str	r2, [r3]
+ 140:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while(0U == (RCU_CTL0 & RCU_CTL0_IRC8MSTB)){
+ 110              		.loc 1 140 10
+ 111 001e C046     		nop
+ 112              	.L5:
+ 113              		.loc 1 140 18 discriminator 1
+ 114 0020 41F20003 		movw	r3, #4096
+ 115 0024 C4F20203 		movt	r3, 16386
+ 116 0028 1B68     		ldr	r3, [r3]
+ 117              		.loc 1 140 27 discriminator 1
+ 118 002a 0222     		movs	r2, #2
+ 119 002c 1340     		ands	r3, r2
+ 120              		.loc 1 140 10 discriminator 1
+ 121 002e 002B     		cmp	r3, #0
+ 122 0030 F6D0     		beq	.L5
+ 141:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 142:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     if(((RCU_CFG0 & RCU_CFG0_SCSS) == RCU_SCSS_PLL)){
+ 123              		.loc 1 142 10
+ 124 0032 41F20403 		movw	r3, #4100
+ 125 0036 C4F20203 		movt	r3, 16386
+ 126 003a 1B68     		ldr	r3, [r3]
+ 127              		.loc 1 142 19
+ 128 003c 0C22     		movs	r2, #12
+ 129 003e 1340     		ands	r3, r2
+ 130              		.loc 1 142 7
+ 131 0040 082B     		cmp	r3, #8
+ 132 0042 39D1     		bne	.L6
+ 133              	.LBB2:
+ 143:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         RCU_MODIFY(0x80U);
+ 134              		.loc 1 143 9 discriminator 1
+ 135 0044 41F20403 		movw	r3, #4100
+ 136 0048 C4F20203 		movt	r3, 16386
+ 137 004c 1B68     		ldr	r3, [r3]
+ 138 004e 3B60     		str	r3, [r7]
+ 139 0050 3B68     		ldr	r3, [r7]
+ 140 0052 F022     		movs	r2, #240
+ 141 0054 9343     		bics	r3, r2
+ 142 0056 3B60     		str	r3, [r7]
+ 143 0058 3B68     		ldr	r3, [r7]
+ 144 005a 8022     		movs	r2, #128
+ 145 005c 1343     		orrs	r3, r2
+ 146 005e 3B60     		str	r3, [r7]
+ 147 0060 41F20403 		movw	r3, #4100
+ 148 0064 C4F20203 		movt	r3, 16386
+ 149 0068 3A68     		ldr	r2, [r7]
+ 150 006a 1A60     		str	r2, [r3]
+ 151 006c 0023     		movs	r3, #0
+ 152 006e 7B60     		str	r3, [r7, #4]
+ 153 0070 02E0     		b	.L7
+ 154              	.L8:
+ 155              		.loc 1 143 9 is_stmt 0 discriminator 4
+ 156 0072 7B68     		ldr	r3, [r7, #4]
+ 157 0074 0133     		adds	r3, r3, #1
+ 158 0076 7B60     		str	r3, [r7, #4]
+ 159              	.L7:
+ 160              		.loc 1 143 9 discriminator 2
+ 161 0078 7B68     		ldr	r3, [r7, #4]
+ 162 007a 7F2B     		cmp	r3, #127
+ 163 007c F9D9     		bls	.L8
+ 164              		.loc 1 143 9 discriminator 5
+ 165 007e 41F20403 		movw	r3, #4100
+ 166 0082 C4F20203 		movt	r3, 16386
+ 167 0086 1B68     		ldr	r3, [r3]
+ 168 0088 3B60     		str	r3, [r7]
+ 169 008a 3B68     		ldr	r3, [r7]
+ 170 008c F022     		movs	r2, #240
+ 171 008e 9343     		bics	r3, r2
+ 172 0090 3B60     		str	r3, [r7]
+ 173 0092 3B68     		ldr	r3, [r7]
+ 174 0094 9022     		movs	r2, #144
+ 175 0096 1343     		orrs	r3, r2
+ 176 0098 3B60     		str	r3, [r7]
+ 177 009a 41F20403 		movw	r3, #4100
+ 178 009e C4F20203 		movt	r3, 16386
+ 179 00a2 3A68     		ldr	r2, [r7]
+ 180 00a4 1A60     		str	r2, [r3]
+ 181 00a6 0023     		movs	r3, #0
+ 182 00a8 7B60     		str	r3, [r7, #4]
+ 183 00aa 02E0     		b	.L9
+ 184              	.L10:
+ 185              		.loc 1 143 9 discriminator 8
+ 186 00ac 7B68     		ldr	r3, [r7, #4]
+ 187 00ae 0133     		adds	r3, r3, #1
+ 188 00b0 7B60     		str	r3, [r7, #4]
+ 189              	.L9:
+ 190              		.loc 1 143 9 discriminator 6
+ 191 00b2 7B68     		ldr	r3, [r7, #4]
+ 192 00b4 7F2B     		cmp	r3, #127
+ 193 00b6 F9D9     		bls	.L10
+ 194              	.L6:
+ 195              	.LBE2:
+ 144:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 145:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 &= ~RCU_CFG0_SCS;
+ 196              		.loc 1 145 14 is_stmt 1
+ 197 00b8 41F20403 		movw	r3, #4100
+ 198 00bc C4F20203 		movt	r3, 16386
+ 199 00c0 1A68     		ldr	r2, [r3]
+ 200 00c2 41F20403 		movw	r3, #4100
+ 201 00c6 C4F20203 		movt	r3, 16386
+ 202 00ca 0321     		movs	r1, #3
+ 203 00cc 8A43     		bics	r2, r1
+ 204 00ce 1A60     		str	r2, [r3]
+ 146:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     _soft_delay_(100U);
+ 205              		.loc 1 146 5
+ 206 00d0 6420     		movs	r0, #100
+ 207 00d2 FFF7FEFF 		bl	_soft_delay_
+ 147:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL0 &= ~(RCU_CTL0_HXTALEN | RCU_CTL0_CKMEN | RCU_CTL0_PLLEN | RCU_CTL0_HXTALBPS);
+ 208              		.loc 1 147 14
+ 209 00d6 41F20003 		movw	r3, #4096
+ 210 00da C4F20203 		movt	r3, 16386
+ 211 00de 1968     		ldr	r1, [r3]
+ 212 00e0 41F20003 		movw	r3, #4096
+ 213 00e4 C4F20203 		movt	r3, 16386
+ 214 00e8 4FF6FF72 		movw	r2, #65535
+ 215 00ec CFF6F262 		movt	r2, 65266
+ 216 00f0 0A40     		ands	r2, r1
+ 217 00f2 1A60     		str	r2, [r3]
+ 148:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* reset RCU */
+ 149:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 &= ~(RCU_CFG0_SCS | RCU_CFG0_AHBPSC | RCU_CFG0_APB1PSC | RCU_CFG0_APB2PSC |\
+ 218              		.loc 1 149 14
+ 219 00f4 41F20403 		movw	r3, #4100
+ 220 00f8 C4F20203 		movt	r3, 16386
+ 221 00fc 1968     		ldr	r1, [r3]
+ 222 00fe 41F20403 		movw	r3, #4100
+ 223 0102 C4F20203 		movt	r3, 16386
+ 224 0106 0C22     		movs	r2, #12
+ 225 0108 C0F6FF02 		movt	r2, 2303
+ 226 010c 0A40     		ands	r2, r1
+ 227 010e 1A60     		str	r2, [r3]
+ 150:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                   RCU_CFG0_ADCPSC | RCU_CFG0_CKOUTSEL | RCU_CFG0_CKOUTDIV | RCU_CFG0_PLLDV);
+ 151:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 &= ~(RCU_CFG0_PLLSEL | RCU_CFG0_PLLMF | RCU_CFG0_PLLMF4 | RCU_CFG0_PLLDV);
+ 228              		.loc 1 151 14
+ 229 0110 41F20403 		movw	r3, #4100
+ 230 0114 C4F20203 		movt	r3, 16386
+ 231 0118 1968     		ldr	r1, [r3]
+ 232 011a 41F20403 		movw	r3, #4100
+ 233 011e C4F20203 		movt	r3, 16386
+ 234 0122 4FF6FF72 		movw	r2, #65535
+ 235 0126 C7F2C272 		movt	r2, 30658
+ 236 012a 0A40     		ands	r2, r1
+ 237 012c 1A60     		str	r2, [r3]
+ 152:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG1 &= ~(RCU_CFG1_PREDV);
+ 238              		.loc 1 152 14
+ 239 012e 41F22C03 		movw	r3, #4140
+ 240 0132 C4F20203 		movt	r3, 16386
+ 241 0136 1A68     		ldr	r2, [r3]
+ 242 0138 41F22C03 		movw	r3, #4140
+ 243 013c C4F20203 		movt	r3, 16386
+ 244 0140 0F21     		movs	r1, #15
+ 245 0142 8A43     		bics	r2, r1
+ 246 0144 1A60     		str	r2, [r3]
+ 153:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG2 &= ~(RCU_CFG2_USART0SEL | RCU_CFG2_ADCSEL);
+ 247              		.loc 1 153 14
+ 248 0146 41F23003 		movw	r3, #4144
+ 249 014a C4F20203 		movt	r3, 16386
+ 250 014e 1A68     		ldr	r2, [r3]
+ 251 0150 41F23003 		movw	r3, #4144
+ 252 0154 C4F20203 		movt	r3, 16386
+ 253 0158 1C49     		ldr	r1, .L11
+ 254 015a 0A40     		ands	r2, r1
+ 255 015c 1A60     		str	r2, [r3]
+ 154:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG2 &= ~RCU_CFG2_IRC28MDIV;
+ 256              		.loc 1 154 14
+ 257 015e 41F23003 		movw	r3, #4144
+ 258 0162 C4F20203 		movt	r3, 16386
+ 259 0166 1A68     		ldr	r2, [r3]
+ 260 0168 41F23003 		movw	r3, #4144
+ 261 016c C4F20203 		movt	r3, 16386
+ 262 0170 1749     		ldr	r1, .L11+4
+ 263 0172 0A40     		ands	r2, r1
+ 264 0174 1A60     		str	r2, [r3]
+ 155:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG2 &= ~RCU_CFG2_ADCPSC2;
+ 265              		.loc 1 155 14
+ 266 0176 41F23003 		movw	r3, #4144
+ 267 017a C4F20203 		movt	r3, 16386
+ 268 017e 1A68     		ldr	r2, [r3]
+ 269 0180 41F23003 		movw	r3, #4144
+ 270 0184 C4F20203 		movt	r3, 16386
+ 271 0188 5200     		lsls	r2, r2, #1
+ 272 018a 5208     		lsrs	r2, r2, #1
+ 273 018c 1A60     		str	r2, [r3]
+ 156:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL1 &= ~RCU_CTL1_IRC28MEN;
+ 274              		.loc 1 156 14
+ 275 018e 41F23403 		movw	r3, #4148
+ 276 0192 C4F20203 		movt	r3, 16386
+ 277 0196 1A68     		ldr	r2, [r3]
+ 278 0198 41F23403 		movw	r3, #4148
+ 279 019c C4F20203 		movt	r3, 16386
+ 280 01a0 0121     		movs	r1, #1
+ 281 01a2 8A43     		bics	r2, r1
+ 282 01a4 1A60     		str	r2, [r3]
+ 157:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_INT = 0x00000000U;
+ 283              		.loc 1 157 5
+ 284 01a6 41F20803 		movw	r3, #4104
+ 285 01aa C4F20203 		movt	r3, 16386
+ 286              		.loc 1 157 13
+ 287 01ae 0022     		movs	r2, #0
+ 288 01b0 1A60     		str	r2, [r3]
+ 158:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 159:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* configure system clock */
+ 160:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     system_clock_config();
+ 289              		.loc 1 160 5
+ 290 01b2 FFF7FEFF 		bl	system_clock_config
+ 161:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 162:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #ifdef VECT_TAB_SRAM
+ 163:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     nvic_vector_table_set(NVIC_VECTTAB_RAM,VECT_TAB_OFFSET);
+ 164:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #else
+ 165:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     nvic_vector_table_set(NVIC_VECTTAB_FLASH,VECT_TAB_OFFSET);
+ 291              		.loc 1 165 5
+ 292 01b6 8023     		movs	r3, #128
+ 293 01b8 1B05     		lsls	r3, r3, #20
+ 294 01ba 0021     		movs	r1, #0
+ 295 01bc 1800     		movs	r0, r3
+ 296 01be FFF7FEFF 		bl	nvic_vector_table_set
+ 166:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #endif
+ 167:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+ 297              		.loc 1 167 1
+ 298 01c2 C046     		nop
+ 299 01c4 BD46     		mov	sp, r7
+ 300 01c6 02B0     		add	sp, sp, #8
+ 301              		@ sp needed
+ 302 01c8 80BD     		pop	{r7, pc}
+ 303              	.L12:
+ 304 01ca C046     		.align	2
+ 305              	.L11:
+ 306 01cc FCFEFFFF 		.word	-260
+ 307 01d0 FFFFFEFF 		.word	-65537
+ 308              		.cfi_endproc
+ 309              	.LFE59:
+ 311              		.section	.text.system_clock_config,"ax",%progbits
+ 312              		.align	1
+ 313              		.global	system_clock_config
+ 314              		.syntax unified
+ 315              		.code	16
+ 316              		.thumb_func
+ 317              		.fpu softvfp
+ 319              	system_clock_config:
+ 320              	.LFB60:
+ 168:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 169:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+ 170:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief      configure the system clock
+ 171:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[in]  none
+ 172:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[out] none
+ 173:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \retval     none
+ 174:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+ 175:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** void system_clock_config(void)
+ 176:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+ 321              		.loc 1 176 1
+ 322              		.cfi_startproc
+ 323              		@ args = 0, pretend = 0, frame = 0
+ 324              		@ frame_needed = 1, uses_anonymous_args = 0
+ 325 0000 80B5     		push	{r7, lr}
+ 326              		.cfi_def_cfa_offset 8
+ 327              		.cfi_offset 7, -8
+ 328              		.cfi_offset 14, -4
+ 329 0002 00AF     		add	r7, sp, #0
+ 330              		.cfi_def_cfa_register 7
+ 177:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #ifdef __SYSTEM_CLOCK_8M_HXTAL
+ 178:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     system_clock_8m_hxtal();
+ 179:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #elif defined (__SYSTEM_CLOCK_72M_PLL_HXTAL)
+ 180:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     system_clock_72m_hxtal();
+ 181:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #elif defined (__SYSTEM_CLOCK_72M_PLL_IRC8M_DIV2)
+ 182:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     system_clock_72m_irc8m();
+ 331              		.loc 1 182 5
+ 332 0004 FFF7FEFF 		bl	system_clock_72m_irc8m
+ 183:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #elif defined (__SYSTEM_CLOCK_72M_PLL_IRC48M_DIV2)
+ 184:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     system_clock_72m_irc48m();
+ 185:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #else
+ 186:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     system_clock_8m_irc8m();
+ 187:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #endif /* __SYSTEM_CLOCK_8M_HXTAL */
+ 188:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+ 333              		.loc 1 188 1
+ 334 0008 C046     		nop
+ 335 000a BD46     		mov	sp, r7
+ 336              		@ sp needed
+ 337 000c 80BD     		pop	{r7, pc}
+ 338              		.cfi_endproc
+ 339              	.LFE60:
+ 341              		.section	.text.system_clock_72m_irc8m,"ax",%progbits
+ 342              		.align	1
+ 343              		.syntax unified
+ 344              		.code	16
+ 345              		.thumb_func
+ 346              		.fpu softvfp
+ 348              	system_clock_72m_irc8m:
+ 349              	.LFB61:
+ 189:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 190:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #ifdef __SYSTEM_CLOCK_8M_HXTAL
+ 191:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+ 192:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief      configure the system clock to 8M by HXTAL
+ 193:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[in]  none
+ 194:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[out] none
+ 195:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \retval     none
+ 196:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \note       This function contains scenarios leading to an infinite loop.
+ 197:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                 Modify according to the use's actual usage scenarios.
+ 198:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+ 199:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void system_clock_8m_hxtal(void)
+ 200:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+ 201:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t timeout = 0U;
+ 202:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t stab_flag = 0U;
+ 203:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     __IO uint32_t reg_temp;
+ 204:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 205:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* enable HXTAL */
+ 206:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL0 |= RCU_CTL0_HXTALEN;
+ 207:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 208:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until HXTAL is stable or the startup time is longer than HXTAL_STARTUP_TIMEOUT */
+ 209:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     do{
+ 210:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         timeout++;
+ 211:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         stab_flag = (RCU_CTL0 & RCU_CTL0_HXTALSTB);
+ 212:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 213:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while((0U == stab_flag) && (HXTAL_STARTUP_TIMEOUT != timeout));    
+ 214:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* if fail */
+ 215:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     if(0U == (RCU_CTL0 & RCU_CTL0_HXTALSTB)){
+ 216:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         while(1){
+ 217:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }
+ 218:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 219:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 220:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* HXTAL is stable */
+ 221:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* AHB = SYSCLK */
+ 222:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_AHB_CKSYS_DIV1;
+ 223:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* APB2 = AHB */
+ 224:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_APB2_CKAHB_DIV1;
+ 225:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* APB1 = AHB */
+ 226:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_APB1_CKAHB_DIV1;
+ 227:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 228:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp = RCU_CFG0;
+ 229:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* select HXTAL as system clock */
+ 230:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp &= ~RCU_CFG0_SCS;
+ 231:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp |= RCU_CKSYSSRC_HXTAL;
+ 232:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 = reg_temp;
+ 233:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 234:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until HXTAL is selected as system clock */
+ 235:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while(RCU_SCSS_HXTAL != (RCU_CFG0 & RCU_CFG0_SCSS)){
+ 236:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 237:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+ 238:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 239:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #elif defined (__SYSTEM_CLOCK_72M_PLL_HXTAL)
+ 240:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+ 241:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief      configure the system clock to 72M by PLL which selects HXTAL as its clock source
+ 242:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[in]  none
+ 243:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[out] none
+ 244:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \retval     none
+ 245:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \note       This function contains scenarios leading to an infinite loop.
+ 246:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                 Modify according to the use's actual usage scenarios.
+ 247:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+ 248:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void system_clock_72m_hxtal(void)
+ 249:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+ 250:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t timeout = 0U;
+ 251:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t stab_flag = 0U;
+ 252:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     __IO uint32_t reg_temp;
+ 253:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 254:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* enable HXTAL */
+ 255:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL0 |= RCU_CTL0_HXTALEN;
+ 256:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 257:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until HXTAL is stable or the startup time is longer than HXTAL_STARTUP_TIMEOUT */
+ 258:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     do{
+ 259:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         timeout++;
+ 260:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         stab_flag = (RCU_CTL0 & RCU_CTL0_HXTALSTB);
+ 261:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 262:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while((0U == stab_flag) && (HXTAL_STARTUP_TIMEOUT != timeout));
+ 263:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* if fail */
+ 264:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     if(0U == (RCU_CTL0 & RCU_CTL0_HXTALSTB)){
+ 265:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         while(1){
+ 266:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }
+ 267:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 268:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 269:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     FMC_WS = (FMC_WS & (~FMC_WS_WSCNT)) | WS_WSCNT_2;
+ 270:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 271:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* HXTAL is stable */
+ 272:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* AHB = SYSCLK/4 */
+ 273:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_AHB_CKSYS_DIV4;
+ 274:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* APB2 = AHB */
+ 275:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_APB2_CKAHB_DIV1;
+ 276:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* APB1 = AHB */
+ 277:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_APB1_CKAHB_DIV1;
+ 278:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 279:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* PLL = HXTAL * 9 = 72 MHz */
+ 280:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 &= ~(RCU_CFG0_PLLSEL | RCU_CFG0_PLLMF | RCU_CFG0_PLLDV);
+ 281:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= (RCU_PLLSRC_HXTAL | RCU_PLL_MUL9);
+ 282:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 283:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* enable PLL */
+ 284:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL0 |= RCU_CTL0_PLLEN;
+ 285:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 286:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until PLL is stable */
+ 287:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while(0U == (RCU_CTL0 & RCU_CTL0_PLLSTB)){
+ 288:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 289:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 290:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp = RCU_CFG0;
+ 291:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* select PLL as system clock */
+ 292:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp &= ~RCU_CFG0_SCS;
+ 293:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp |= RCU_CKSYSSRC_PLL;
+ 294:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 = reg_temp;
+ 295:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 296:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until PLL is selected as system clock */
+ 297:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while(RCU_SCSS_PLL != (RCU_CFG0 & RCU_CFG0_SCSS)){
+ 298:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 299:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 300:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_MODIFY_UP_2(0x80U);
+ 301:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+ 302:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 303:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #elif defined (__SYSTEM_CLOCK_72M_PLL_IRC8M_DIV2)
+ 304:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+ 305:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief      configure the system clock to 72M by PLL which selects IRC8M/2 as its clock source
+ 306:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[in]  none
+ 307:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[out] none
+ 308:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \retval     none
+ 309:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \note       This function contains scenarios leading to an infinite loop.
+ 310:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                 Modify according to the use's actual usage scenarios.
+ 311:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+ 312:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void system_clock_72m_irc8m(void)
+ 313:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+ 350              		.loc 1 313 1
+ 351              		.cfi_startproc
+ 352              		@ args = 0, pretend = 0, frame = 24
+ 353              		@ frame_needed = 1, uses_anonymous_args = 0
+ 354 0000 80B5     		push	{r7, lr}
+ 355              		.cfi_def_cfa_offset 8
+ 356              		.cfi_offset 7, -8
+ 357              		.cfi_offset 14, -4
+ 358 0002 86B0     		sub	sp, sp, #24
+ 359              		.cfi_def_cfa_offset 32
+ 360 0004 00AF     		add	r7, sp, #0
+ 361              		.cfi_def_cfa_register 7
+ 314:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t timeout = 0U;
+ 362              		.loc 1 314 14
+ 363 0006 0023     		movs	r3, #0
+ 364 0008 7B61     		str	r3, [r7, #20]
+ 315:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t stab_flag = 0U;
+ 365              		.loc 1 315 14
+ 366 000a 0023     		movs	r3, #0
+ 367 000c 3B61     		str	r3, [r7, #16]
+ 316:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     __IO uint32_t reg_temp;
+ 317:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 318:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* enable IRC8M */
+ 319:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL0 |= RCU_CTL0_IRC8MEN;
+ 368              		.loc 1 319 14
+ 369 000e 41F20003 		movw	r3, #4096
+ 370 0012 C4F20203 		movt	r3, 16386
+ 371 0016 1A68     		ldr	r2, [r3]
+ 372 0018 41F20003 		movw	r3, #4096
+ 373 001c C4F20203 		movt	r3, 16386
+ 374 0020 0121     		movs	r1, #1
+ 375 0022 0A43     		orrs	r2, r1
+ 376 0024 1A60     		str	r2, [r3]
+ 377              	.L16:
+ 320:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 321:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until IRC8M is stable or the startup time is longer than IRC8M_STARTUP_TIMEOUT */
+ 322:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     do{
+ 323:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         timeout++;
+ 378              		.loc 1 323 16 discriminator 2
+ 379 0026 7B69     		ldr	r3, [r7, #20]
+ 380 0028 0133     		adds	r3, r3, #1
+ 381 002a 7B61     		str	r3, [r7, #20]
+ 324:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         stab_flag = (RCU_CTL0 & RCU_CTL0_IRC8MSTB);
+ 382              		.loc 1 324 22 discriminator 2
+ 383 002c 41F20003 		movw	r3, #4096
+ 384 0030 C4F20203 		movt	r3, 16386
+ 385 0034 1B68     		ldr	r3, [r3]
+ 386              		.loc 1 324 19 discriminator 2
+ 387 0036 0222     		movs	r2, #2
+ 388 0038 1340     		ands	r3, r2
+ 389 003a 3B61     		str	r3, [r7, #16]
+ 325:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 326:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while((0U == stab_flag) && (IRC8M_STARTUP_TIMEOUT != timeout));
+ 390              		.loc 1 326 5 discriminator 2
+ 391 003c 3B69     		ldr	r3, [r7, #16]
+ 392 003e 23B9     		cbnz	r3, .L15
+ 393              		.loc 1 326 29 discriminator 1
+ 394 0040 7B69     		ldr	r3, [r7, #20]
+ 395 0042 40F20052 		movw	r2, #1280
+ 396 0046 9342     		cmp	r3, r2
+ 397 0048 EDD1     		bne	.L16
+ 398              	.L15:
+ 327:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 328:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* if fail */
+ 329:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     if(0U == (RCU_CTL0 & RCU_CTL0_IRC8MSTB)){
+ 399              		.loc 1 329 15
+ 400 004a 41F20003 		movw	r3, #4096
+ 401 004e C4F20203 		movt	r3, 16386
+ 402 0052 1B68     		ldr	r3, [r3]
+ 403              		.loc 1 329 24
+ 404 0054 0222     		movs	r2, #2
+ 405 0056 1340     		ands	r3, r2
+ 406              		.loc 1 329 7
+ 407 0058 03B9     		cbnz	r3, .L17
+ 408              	.L18:
+ 330:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         while(1){
+ 409              		.loc 1 330 14 discriminator 1
+ 410 005a FEE7     		b	.L18
+ 411              	.L17:
+ 331:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }
+ 332:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 333:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 334:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     FMC_WS = (FMC_WS & (~FMC_WS_WSCNT)) | WS_WSCNT_2;
+ 412              		.loc 1 334 15
+ 413 005c 42F20003 		movw	r3, #8192
+ 414 0060 C4F20203 		movt	r3, 16386
+ 415 0064 1B68     		ldr	r3, [r3]
+ 416              		.loc 1 334 22
+ 417 0066 0722     		movs	r2, #7
+ 418 0068 9343     		bics	r3, r2
+ 419 006a 1A00     		movs	r2, r3
+ 420              		.loc 1 334 5
+ 421 006c 42F20003 		movw	r3, #8192
+ 422 0070 C4F20203 		movt	r3, 16386
+ 423              		.loc 1 334 41
+ 424 0074 0221     		movs	r1, #2
+ 425 0076 0A43     		orrs	r2, r1
+ 426              		.loc 1 334 12
+ 427 0078 1A60     		str	r2, [r3]
+ 335:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 336:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* AHB = SYSCLK/4 */
+ 337:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_AHB_CKSYS_DIV4;
+ 428              		.loc 1 337 14
+ 429 007a 41F20403 		movw	r3, #4100
+ 430 007e C4F20203 		movt	r3, 16386
+ 431 0082 1A68     		ldr	r2, [r3]
+ 432 0084 41F20403 		movw	r3, #4100
+ 433 0088 C4F20203 		movt	r3, 16386
+ 434 008c 9021     		movs	r1, #144
+ 435 008e 0A43     		orrs	r2, r1
+ 436 0090 1A60     		str	r2, [r3]
+ 338:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* APB2 = AHB */
+ 339:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_APB2_CKAHB_DIV1;
+ 437              		.loc 1 339 14
+ 438 0092 41F20402 		movw	r2, #4100
+ 439 0096 C4F20202 		movt	r2, 16386
+ 440 009a 41F20403 		movw	r3, #4100
+ 441 009e C4F20203 		movt	r3, 16386
+ 442 00a2 1268     		ldr	r2, [r2]
+ 443 00a4 1A60     		str	r2, [r3]
+ 340:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* APB1 = AHB */
+ 341:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_APB1_CKAHB_DIV1;
+ 444              		.loc 1 341 14
+ 445 00a6 41F20402 		movw	r2, #4100
+ 446 00aa C4F20202 		movt	r2, 16386
+ 447 00ae 41F20403 		movw	r3, #4100
+ 448 00b2 C4F20203 		movt	r3, 16386
+ 449 00b6 1268     		ldr	r2, [r2]
+ 450 00b8 1A60     		str	r2, [r3]
+ 342:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* PLL = (IRC8M/2) * 18 = 72 MHz */
+ 343:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 &= ~(RCU_CFG0_PLLSEL | RCU_CFG0_PLLMF);
+ 451              		.loc 1 343 14
+ 452 00ba 41F20403 		movw	r3, #4100
+ 453 00be C4F20203 		movt	r3, 16386
+ 454 00c2 1968     		ldr	r1, [r3]
+ 455 00c4 41F20403 		movw	r3, #4100
+ 456 00c8 C4F20203 		movt	r3, 16386
+ 457 00cc 4FF6FF72 		movw	r2, #65535
+ 458 00d0 CFF2C272 		movt	r2, 63426
+ 459 00d4 0A40     		ands	r2, r1
+ 460 00d6 1A60     		str	r2, [r3]
+ 344:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= (RCU_PLLSRC_IRC8M_DIV2 | RCU_PLL_MUL18);
+ 461              		.loc 1 344 14
+ 462 00d8 41F20403 		movw	r3, #4100
+ 463 00dc C4F20203 		movt	r3, 16386
+ 464 00e0 1968     		ldr	r1, [r3]
+ 465 00e2 41F20403 		movw	r3, #4100
+ 466 00e6 C4F20203 		movt	r3, 16386
+ 467 00ea 0022     		movs	r2, #0
+ 468 00ec C0F60402 		movt	r2, 2052
+ 469 00f0 0A43     		orrs	r2, r1
+ 470 00f2 1A60     		str	r2, [r3]
+ 345:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 346:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* enable PLL */
+ 347:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL0 |= RCU_CTL0_PLLEN;
+ 471              		.loc 1 347 14
+ 472 00f4 41F20003 		movw	r3, #4096
+ 473 00f8 C4F20203 		movt	r3, 16386
+ 474 00fc 1A68     		ldr	r2, [r3]
+ 475 00fe 41F20003 		movw	r3, #4096
+ 476 0102 C4F20203 		movt	r3, 16386
+ 477 0106 8021     		movs	r1, #128
+ 478 0108 4904     		lsls	r1, r1, #17
+ 479 010a 0A43     		orrs	r2, r1
+ 480 010c 1A60     		str	r2, [r3]
+ 348:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 349:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until PLL is stable */
+ 350:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while(0U == (RCU_CTL0 & RCU_CTL0_PLLSTB)){
+ 481              		.loc 1 350 10
+ 482 010e C046     		nop
+ 483              	.L19:
+ 484              		.loc 1 350 18 discriminator 1
+ 485 0110 41F20003 		movw	r3, #4096
+ 486 0114 C4F20203 		movt	r3, 16386
+ 487 0118 1A68     		ldr	r2, [r3]
+ 488              		.loc 1 350 27 discriminator 1
+ 489 011a 8023     		movs	r3, #128
+ 490 011c 9B04     		lsls	r3, r3, #18
+ 491 011e 1340     		ands	r3, r2
+ 492              		.loc 1 350 10 discriminator 1
+ 493 0120 002B     		cmp	r3, #0
+ 494 0122 F5D0     		beq	.L19
+ 351:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 352:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 353:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp = RCU_CFG0;
+ 495              		.loc 1 353 16
+ 496 0124 41F20403 		movw	r3, #4100
+ 497 0128 C4F20203 		movt	r3, 16386
+ 498 012c 1B68     		ldr	r3, [r3]
+ 499              		.loc 1 353 14
+ 500 012e FB60     		str	r3, [r7, #12]
+ 354:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* select PLL as system clock */
+ 355:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp &= ~RCU_CFG0_SCS;
+ 501              		.loc 1 355 14
+ 502 0130 FB68     		ldr	r3, [r7, #12]
+ 503 0132 0322     		movs	r2, #3
+ 504 0134 9343     		bics	r3, r2
+ 505 0136 FB60     		str	r3, [r7, #12]
+ 356:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp |= RCU_CKSYSSRC_PLL;
+ 506              		.loc 1 356 14
+ 507 0138 FB68     		ldr	r3, [r7, #12]
+ 508 013a 0222     		movs	r2, #2
+ 509 013c 1343     		orrs	r3, r2
+ 510 013e FB60     		str	r3, [r7, #12]
+ 357:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 = reg_temp;
+ 511              		.loc 1 357 5
+ 512 0140 41F20403 		movw	r3, #4100
+ 513 0144 C4F20203 		movt	r3, 16386
+ 514              		.loc 1 357 14
+ 515 0148 FA68     		ldr	r2, [r7, #12]
+ 516 014a 1A60     		str	r2, [r3]
+ 358:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 359:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until PLL is selected as system clock */
+ 360:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while(RCU_SCSS_PLL != (RCU_CFG0 & RCU_CFG0_SCSS)){
+ 517              		.loc 1 360 10
+ 518 014c C046     		nop
+ 519              	.L20:
+ 520              		.loc 1 360 28 discriminator 1
+ 521 014e 41F20403 		movw	r3, #4100
+ 522 0152 C4F20203 		movt	r3, 16386
+ 523 0156 1B68     		ldr	r3, [r3]
+ 524              		.loc 1 360 37 discriminator 1
+ 525 0158 0C22     		movs	r2, #12
+ 526 015a 1340     		ands	r3, r2
+ 527              		.loc 1 360 10 discriminator 1
+ 528 015c 082B     		cmp	r3, #8
+ 529 015e F6D1     		bne	.L20
+ 530              	.LBB3:
+ 361:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 362:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 363:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_MODIFY_UP_2(0x80);
+ 531              		.loc 1 363 5 discriminator 1
+ 532 0160 0023     		movs	r3, #0
+ 533 0162 BB60     		str	r3, [r7, #8]
+ 534 0164 02E0     		b	.L21
+ 535              	.L22:
+ 536              		.loc 1 363 5 is_stmt 0 discriminator 4
+ 537 0166 BB68     		ldr	r3, [r7, #8]
+ 538 0168 0133     		adds	r3, r3, #1
+ 539 016a BB60     		str	r3, [r7, #8]
+ 540              	.L21:
+ 541              		.loc 1 363 5 discriminator 2
+ 542 016c BB68     		ldr	r3, [r7, #8]
+ 543 016e 7F2B     		cmp	r3, #127
+ 544 0170 F9D9     		bls	.L22
+ 545              		.loc 1 363 5 discriminator 5
+ 546 0172 41F20403 		movw	r3, #4100
+ 547 0176 C4F20203 		movt	r3, 16386
+ 548 017a 1B68     		ldr	r3, [r3]
+ 549 017c 7B60     		str	r3, [r7, #4]
+ 550 017e 7B68     		ldr	r3, [r7, #4]
+ 551 0180 F022     		movs	r2, #240
+ 552 0182 9343     		bics	r3, r2
+ 553 0184 7B60     		str	r3, [r7, #4]
+ 554 0186 7B68     		ldr	r3, [r7, #4]
+ 555 0188 8022     		movs	r2, #128
+ 556 018a 1343     		orrs	r3, r2
+ 557 018c 7B60     		str	r3, [r7, #4]
+ 558 018e 41F20403 		movw	r3, #4100
+ 559 0192 C4F20203 		movt	r3, 16386
+ 560 0196 7A68     		ldr	r2, [r7, #4]
+ 561 0198 1A60     		str	r2, [r3]
+ 562 019a 0023     		movs	r3, #0
+ 563 019c BB60     		str	r3, [r7, #8]
+ 564 019e 02E0     		b	.L23
+ 565              	.L24:
+ 566              		.loc 1 363 5 discriminator 8
+ 567 01a0 BB68     		ldr	r3, [r7, #8]
+ 568 01a2 0133     		adds	r3, r3, #1
+ 569 01a4 BB60     		str	r3, [r7, #8]
+ 570              	.L23:
+ 571              		.loc 1 363 5 discriminator 6
+ 572 01a6 BB68     		ldr	r3, [r7, #8]
+ 573 01a8 7F2B     		cmp	r3, #127
+ 574 01aa F9D9     		bls	.L24
+ 575              		.loc 1 363 5 discriminator 9
+ 576 01ac 41F20403 		movw	r3, #4100
+ 577 01b0 C4F20203 		movt	r3, 16386
+ 578 01b4 1B68     		ldr	r3, [r3]
+ 579 01b6 7B60     		str	r3, [r7, #4]
+ 580 01b8 7B68     		ldr	r3, [r7, #4]
+ 581 01ba F022     		movs	r2, #240
+ 582 01bc 9343     		bics	r3, r2
+ 583 01be 7B60     		str	r3, [r7, #4]
+ 584 01c0 7B68     		ldr	r3, [r7, #4]
+ 585 01c2 7B60     		str	r3, [r7, #4]
+ 586 01c4 41F20403 		movw	r3, #4100
+ 587 01c8 C4F20203 		movt	r3, 16386
+ 588 01cc 7A68     		ldr	r2, [r7, #4]
+ 589 01ce 1A60     		str	r2, [r3]
+ 590              	.LBE3:
+ 364:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+ 591              		.loc 1 364 1 is_stmt 1 discriminator 9
+ 592 01d0 C046     		nop
+ 593 01d2 BD46     		mov	sp, r7
+ 594 01d4 06B0     		add	sp, sp, #24
+ 595              		@ sp needed
+ 596 01d6 80BD     		pop	{r7, pc}
+ 597              		.cfi_endproc
+ 598              	.LFE61:
+ 600              		.section	.rodata
+ 601              		.align	2
+ 602              	.LC0:
+ 603 0000 00000000 		.ascii	"\000\000\000\000\000\000\000\000\001\002\003\004\006"
+ 603      00000000 
+ 603      01020304 
+ 603      06
+ 604 000d 070809   		.ascii	"\007\010\011"
+ 605              		.section	.text.SystemCoreClockUpdate,"ax",%progbits
+ 606              		.align	1
+ 607              		.global	SystemCoreClockUpdate
+ 608              		.syntax unified
+ 609              		.code	16
+ 610              		.thumb_func
+ 611              		.fpu softvfp
+ 613              	SystemCoreClockUpdate:
+ 614              	.LFB62:
+ 365:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 366:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #else
+ 367:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+ 368:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief      configure the system clock to 8M by IRC8M
+ 369:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[in]  none
+ 370:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[out] none
+ 371:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \retval     none
+ 372:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \note       This function contains scenarios leading to an infinite loop.
+ 373:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****                 Modify according to the use's actual usage scenarios.
+ 374:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+ 375:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** static void system_clock_8m_irc8m(void)
+ 376:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+ 377:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t timeout = 0U;
+ 378:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t stab_flag = 0U;
+ 379:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     __IO uint32_t reg_temp;
+ 380:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 381:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* enable IRC8M */
+ 382:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CTL0 |= RCU_CTL0_IRC8MEN;
+ 383:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 384:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until IRC8M is stable or the startup time is longer than IRC8M_STARTUP_TIMEOUT */
+ 385:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     do{
+ 386:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         timeout++;
+ 387:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         stab_flag = (RCU_CTL0 & RCU_CTL0_IRC8MSTB);
+ 388:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 389:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while((0U == stab_flag) && (IRC8M_STARTUP_TIMEOUT != timeout));
+ 390:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 391:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* if fail */
+ 392:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     if(0U == (RCU_CTL0 & RCU_CTL0_IRC8MSTB)){
+ 393:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         while(1){
+ 394:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }
+ 395:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 396:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 397:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* AHB = SYSCLK */
+ 398:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_AHB_CKSYS_DIV1;
+ 399:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* APB2 = AHB */
+ 400:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_APB2_CKAHB_DIV1;
+ 401:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* APB1 = AHB */
+ 402:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 |= RCU_APB1_CKAHB_DIV1;
+ 403:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 404:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp = RCU_CFG0;
+ 405:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* select IRC8M as system clock */
+ 406:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp &= ~RCU_CFG0_SCS;
+ 407:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     reg_temp |= RCU_CKSYSSRC_IRC8M;
+ 408:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     RCU_CFG0 = reg_temp;
+ 409:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     
+ 410:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* wait until IRC8M is selected as system clock */
+ 411:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     while(RCU_SCSS_IRC8M != (RCU_CFG0 & RCU_CFG0_SCSS)){
+ 412:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 413:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+ 414:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #endif /* __SYSTEM_CLOCK_8M_HXTAL */
+ 415:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 416:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+ 417:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief      update the SystemCoreClock with current core clock retrieved from cpu registers
+ 418:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[in]  none
+ 419:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[out] none
+ 420:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \retval     none
+ 421:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+ 422:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** void SystemCoreClockUpdate (void)
+ 423:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+ 615              		.loc 1 423 1
+ 616              		.cfi_startproc
+ 617              		@ args = 0, pretend = 0, frame = 48
+ 618              		@ frame_needed = 1, uses_anonymous_args = 0
+ 619 0000 90B5     		push	{r4, r7, lr}
+ 620              		.cfi_def_cfa_offset 12
+ 621              		.cfi_offset 4, -12
+ 622              		.cfi_offset 7, -8
+ 623              		.cfi_offset 14, -4
+ 624 0002 8DB0     		sub	sp, sp, #52
+ 625              		.cfi_def_cfa_offset 64
+ 626 0004 00AF     		add	r7, sp, #0
+ 627              		.cfi_def_cfa_register 7
+ 424:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t sws = 0U;
+ 628              		.loc 1 424 14
+ 629 0006 0023     		movs	r3, #0
+ 630 0008 BB62     		str	r3, [r7, #40]
+ 425:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     uint32_t pllmf = 0U, pllmf4 = 0U, pllsel = 0U, prediv = 0U, idx = 0U, clk_exp = 0U;
+ 631              		.loc 1 425 14
+ 632 000a 0023     		movs	r3, #0
+ 633 000c FB62     		str	r3, [r7, #44]
+ 634              		.loc 1 425 26
+ 635 000e 0023     		movs	r3, #0
+ 636 0010 7B62     		str	r3, [r7, #36]
+ 637              		.loc 1 425 39
+ 638 0012 0023     		movs	r3, #0
+ 639 0014 3B62     		str	r3, [r7, #32]
+ 640              		.loc 1 425 52
+ 641 0016 0023     		movs	r3, #0
+ 642 0018 FB61     		str	r3, [r7, #28]
+ 643              		.loc 1 425 65
+ 644 001a 0023     		movs	r3, #0
+ 645 001c BB61     		str	r3, [r7, #24]
+ 646              		.loc 1 425 75
+ 647 001e 0023     		movs	r3, #0
+ 648 0020 7B61     		str	r3, [r7, #20]
+ 426:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* exponent of AHB clock divider */
+ 427:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     const uint8_t ahb_exp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+ 649              		.loc 1 427 19
+ 650 0022 3A1D     		adds	r2, r7, #4
+ 651 0024 40F20003 		movw	r3, #:lower16:.LC0
+ 652 0028 C0F20003 		movt	r3, #:upper16:.LC0
+ 653 002c 13CB     		ldmia	r3!, {r0, r1, r4}
+ 654 002e 13C2     		stmia	r2!, {r0, r1, r4}
+ 655 0030 1B68     		ldr	r3, [r3]
+ 656 0032 1360     		str	r3, [r2]
+ 428:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 429:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     sws = GET_BITS(RCU_CFG0, 2, 3);
+ 657              		.loc 1 429 11
+ 658 0034 41F20403 		movw	r3, #4100
+ 659 0038 C4F20203 		movt	r3, 16386
+ 660 003c 1B68     		ldr	r3, [r3]
+ 661 003e 9B08     		lsrs	r3, r3, #2
+ 662              		.loc 1 429 9
+ 663 0040 0322     		movs	r2, #3
+ 664 0042 1340     		ands	r3, r2
+ 665 0044 BB62     		str	r3, [r7, #40]
+ 430:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     switch(sws){
+ 666              		.loc 1 430 5
+ 667 0046 BB6A     		ldr	r3, [r7, #40]
+ 668 0048 022B     		cmp	r3, #2
+ 669 004a 1DD0     		beq	.L26
+ 670 004c BB6A     		ldr	r3, [r7, #40]
+ 671 004e 022B     		cmp	r3, #2
+ 672 0050 00D9     		bls	.LCB534
+ 673 0052 6EE0     		b	.L27	@long jump
+ 674              	.LCB534:
+ 675 0054 BB6A     		ldr	r3, [r7, #40]
+ 676 0056 1BB1     		cbz	r3, .L28
+ 677 0058 BB6A     		ldr	r3, [r7, #40]
+ 678 005a 012B     		cmp	r3, #1
+ 679 005c 0AD0     		beq	.L29
+ 680 005e 68E0     		b	.L27
+ 681              	.L28:
+ 431:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* IRC8M is selected as CK_SYS */
+ 432:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     case SEL_IRC8M:
+ 433:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         SystemCoreClock = IRC8M_VALUE;
+ 682              		.loc 1 433 25
+ 683 0060 40F20003 		movw	r3, #:lower16:SystemCoreClock
+ 684 0064 C0F20003 		movt	r3, #:upper16:SystemCoreClock
+ 685 0068 41F20022 		movw	r2, #4608
+ 686 006c C0F27A02 		movt	r2, 122
+ 687 0070 1A60     		str	r2, [r3]
+ 434:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         break;
+ 688              		.loc 1 434 9
+ 689 0072 68E0     		b	.L30
+ 690              	.L29:
+ 435:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* HXTAL is selected as CK_SYS */
+ 436:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     case SEL_HXTAL:
+ 437:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         SystemCoreClock = HXTAL_VALUE;
+ 691              		.loc 1 437 25
+ 692 0074 40F20003 		movw	r3, #:lower16:SystemCoreClock
+ 693 0078 C0F20003 		movt	r3, #:upper16:SystemCoreClock
+ 694 007c 41F20022 		movw	r2, #4608
+ 695 0080 C0F27A02 		movt	r2, 122
+ 696 0084 1A60     		str	r2, [r3]
+ 438:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         break;
+ 697              		.loc 1 438 9
+ 698 0086 5EE0     		b	.L30
+ 699              	.L26:
+ 439:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* PLL is selected as CK_SYS */
+ 440:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     case SEL_PLL:
+ 441:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         /* get the value of PLLMF[3:0] */
+ 442:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         pllmf = GET_BITS(RCU_CFG0, 18, 21);
+ 700              		.loc 1 442 17
+ 701 0088 41F20403 		movw	r3, #4100
+ 702 008c C4F20203 		movt	r3, 16386
+ 703 0090 1B68     		ldr	r3, [r3]
+ 704 0092 9B0C     		lsrs	r3, r3, #18
+ 705              		.loc 1 442 15
+ 706 0094 0F22     		movs	r2, #15
+ 707 0096 1340     		ands	r3, r2
+ 708 0098 FB62     		str	r3, [r7, #44]
+ 443:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         pllmf4 = GET_BITS(RCU_CFG0, 27, 27);
+ 709              		.loc 1 443 18
+ 710 009a 41F20403 		movw	r3, #4100
+ 711 009e C4F20203 		movt	r3, 16386
+ 712 00a2 1B68     		ldr	r3, [r3]
+ 713 00a4 DB0E     		lsrs	r3, r3, #27
+ 714              		.loc 1 443 16
+ 715 00a6 0122     		movs	r2, #1
+ 716 00a8 1340     		ands	r3, r2
+ 717 00aa 7B62     		str	r3, [r7, #36]
+ 444:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         /* high 16 bits */
+ 445:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         if(1U == pllmf4){
+ 718              		.loc 1 445 11
+ 719 00ac 7B6A     		ldr	r3, [r7, #36]
+ 720 00ae 012B     		cmp	r3, #1
+ 721 00b0 03D1     		bne	.L31
+ 446:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****             pllmf += 17U;
+ 722              		.loc 1 446 19
+ 723 00b2 FB6A     		ldr	r3, [r7, #44]
+ 724 00b4 1133     		adds	r3, r3, #17
+ 725 00b6 FB62     		str	r3, [r7, #44]
+ 726 00b8 08E0     		b	.L32
+ 727              	.L31:
+ 447:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }else if(15U == pllmf){
+ 728              		.loc 1 447 17
+ 729 00ba FB6A     		ldr	r3, [r7, #44]
+ 730 00bc 0F2B     		cmp	r3, #15
+ 731 00be 02D1     		bne	.L33
+ 448:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****             pllmf = 16U;
+ 732              		.loc 1 448 19
+ 733 00c0 1023     		movs	r3, #16
+ 734 00c2 FB62     		str	r3, [r7, #44]
+ 735 00c4 02E0     		b	.L32
+ 736              	.L33:
+ 449:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         } else {
+ 450:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****             pllmf += 2U;
+ 737              		.loc 1 450 19
+ 738 00c6 FB6A     		ldr	r3, [r7, #44]
+ 739 00c8 0233     		adds	r3, r3, #2
+ 740 00ca FB62     		str	r3, [r7, #44]
+ 741              	.L32:
+ 451:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }
+ 452:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         
+ 453:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         /* PLL clock source selection, HXTAL or IRC8M/2 */
+ 454:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         pllsel = GET_BITS(RCU_CFG0, 16, 16);
+ 742              		.loc 1 454 18
+ 743 00cc 41F20403 		movw	r3, #4100
+ 744 00d0 C4F20203 		movt	r3, 16386
+ 745 00d4 1B68     		ldr	r3, [r3]
+ 746 00d6 1B0C     		lsrs	r3, r3, #16
+ 747              		.loc 1 454 16
+ 748 00d8 0122     		movs	r2, #1
+ 749 00da 1340     		ands	r3, r2
+ 750 00dc 3B62     		str	r3, [r7, #32]
+ 455:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         if(0U != pllsel){
+ 751              		.loc 1 455 11
+ 752 00de 3B6A     		ldr	r3, [r7, #32]
+ 753 00e0 BBB1     		cbz	r3, .L34
+ 456:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****             prediv = (GET_BITS(RCU_CFG1, 0, 3) + 1U);
+ 754              		.loc 1 456 23
+ 755 00e2 41F22C03 		movw	r3, #4140
+ 756 00e6 C4F20203 		movt	r3, 16386
+ 757 00ea 1B68     		ldr	r3, [r3]
+ 758 00ec 0F22     		movs	r2, #15
+ 759 00ee 1340     		ands	r3, r2
+ 760              		.loc 1 456 20
+ 761 00f0 0133     		adds	r3, r3, #1
+ 762 00f2 FB61     		str	r3, [r7, #28]
+ 457:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****             SystemCoreClock = (HXTAL_VALUE / prediv) * pllmf;
+ 763              		.loc 1 457 44
+ 764 00f4 41F20023 		movw	r3, #4608
+ 765 00f8 C0F27A03 		movt	r3, 122
+ 766 00fc FA69     		ldr	r2, [r7, #28]
+ 767 00fe B3FBF2F3 		udiv	r3, r3, r2
+ 768              		.loc 1 457 54
+ 769 0102 FA6A     		ldr	r2, [r7, #44]
+ 770 0104 5A43     		muls	r2, r3
+ 771              		.loc 1 457 29
+ 772 0106 40F20003 		movw	r3, #:lower16:SystemCoreClock
+ 773 010a C0F20003 		movt	r3, #:upper16:SystemCoreClock
+ 774 010e 1A60     		str	r2, [r3]
+ 458:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         } else {
+ 459:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****             SystemCoreClock = (IRC8M_VALUE >> 1) * pllmf;
+ 460:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }
+ 461:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         break;
+ 775              		.loc 1 461 9
+ 776 0110 19E0     		b	.L30
+ 777              	.L34:
+ 459:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }
+ 778              		.loc 1 459 50
+ 779 0112 F96A     		ldr	r1, [r7, #44]
+ 780 0114 0A00     		movs	r2, r1
+ 781 0116 5201     		lsls	r2, r2, #5
+ 782 0118 521A     		subs	r2, r2, r1
+ 783 011a 9301     		lsls	r3, r2, #6
+ 784 011c 9B1A     		subs	r3, r3, r2
+ 785 011e DB00     		lsls	r3, r3, #3
+ 786 0120 5B18     		adds	r3, r3, r1
+ 787 0122 1B02     		lsls	r3, r3, #8
+ 788 0124 1A00     		movs	r2, r3
+ 459:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         }
+ 789              		.loc 1 459 29
+ 790 0126 40F20003 		movw	r3, #:lower16:SystemCoreClock
+ 791 012a C0F20003 		movt	r3, #:upper16:SystemCoreClock
+ 792 012e 1A60     		str	r2, [r3]
+ 793              		.loc 1 461 9
+ 794 0130 09E0     		b	.L30
+ 795              	.L27:
+ 462:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* IRC8M is selected as CK_SYS */
+ 463:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     default:
+ 464:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         SystemCoreClock = IRC8M_VALUE;
+ 796              		.loc 1 464 25
+ 797 0132 40F20003 		movw	r3, #:lower16:SystemCoreClock
+ 798 0136 C0F20003 		movt	r3, #:upper16:SystemCoreClock
+ 799 013a 41F20022 		movw	r2, #4608
+ 800 013e C0F27A02 		movt	r2, 122
+ 801 0142 1A60     		str	r2, [r3]
+ 465:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****         break;
+ 802              		.loc 1 465 9
+ 803 0144 C046     		nop
+ 804              	.L30:
+ 466:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     }
+ 467:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     /* calculate AHB clock frequency */
+ 468:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     idx = GET_BITS(RCU_CFG0, 4, 7);
+ 805              		.loc 1 468 11
+ 806 0146 41F20403 		movw	r3, #4100
+ 807 014a C4F20203 		movt	r3, 16386
+ 808 014e 1B68     		ldr	r3, [r3]
+ 809 0150 1B09     		lsrs	r3, r3, #4
+ 810              		.loc 1 468 9
+ 811 0152 0F22     		movs	r2, #15
+ 812 0154 1340     		ands	r3, r2
+ 813 0156 BB61     		str	r3, [r7, #24]
+ 469:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     clk_exp = ahb_exp[idx];
+ 814              		.loc 1 469 22
+ 815 0158 3A1D     		adds	r2, r7, #4
+ 816 015a BB69     		ldr	r3, [r7, #24]
+ 817 015c D318     		adds	r3, r2, r3
+ 818 015e 1B78     		ldrb	r3, [r3]
+ 819              		.loc 1 469 13
+ 820 0160 7B61     		str	r3, [r7, #20]
+ 470:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     SystemCoreClock >>= clk_exp;
+ 821              		.loc 1 470 21
+ 822 0162 40F20003 		movw	r3, #:lower16:SystemCoreClock
+ 823 0166 C0F20003 		movt	r3, #:upper16:SystemCoreClock
+ 824 016a 1A68     		ldr	r2, [r3]
+ 825 016c 7B69     		ldr	r3, [r7, #20]
+ 826 016e DA40     		lsrs	r2, r2, r3
+ 827 0170 40F20003 		movw	r3, #:lower16:SystemCoreClock
+ 828 0174 C0F20003 		movt	r3, #:upper16:SystemCoreClock
+ 829 0178 1A60     		str	r2, [r3]
+ 471:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+ 830              		.loc 1 471 1
+ 831 017a C046     		nop
+ 832 017c BD46     		mov	sp, r7
+ 833 017e 0DB0     		add	sp, sp, #52
+ 834              		@ sp needed
+ 835 0180 90BD     		pop	{r4, r7, pc}
+ 836              		.cfi_endproc
+ 837              	.LFE62:
+ 839              		.section	.text.gd32e23x_firmware_version_get,"ax",%progbits
+ 840              		.align	1
+ 841              		.global	gd32e23x_firmware_version_get
+ 842              		.syntax unified
+ 843              		.code	16
+ 844              		.thumb_func
+ 845              		.fpu softvfp
+ 847              	gd32e23x_firmware_version_get:
+ 848              	.LFB63:
+ 472:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** 
+ 473:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** #ifdef __FIRMWARE_VERSION_DEFINE
+ 474:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** /*!
+ 475:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \brief      get firmware version
+ 476:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[in]  none
+ 477:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \param[out] none
+ 478:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     \retval     firmware version
+ 479:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** */
+ 480:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** uint32_t gd32e23x_firmware_version_get(void)
+ 481:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** {
+ 849              		.loc 1 481 1
+ 850              		.cfi_startproc
+ 851              		@ args = 0, pretend = 0, frame = 0
+ 852              		@ frame_needed = 1, uses_anonymous_args = 0
+ 853 0000 80B5     		push	{r7, lr}
+ 854              		.cfi_def_cfa_offset 8
+ 855              		.cfi_offset 7, -8
+ 856              		.cfi_offset 14, -4
+ 857 0002 00AF     		add	r7, sp, #0
+ 858              		.cfi_def_cfa_register 7
+ 482:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c ****     return (uint32_t)__GD32E23x_STDPERIPH_VERSION;
+ 859              		.loc 1 482 12
+ 860 0004 0023     		movs	r3, #0
+ 861 0006 C0F20323 		movt	r3, 515
+ 483:../Firmware/CMSIS/GD/GD32E23x/Source/system_gd32e23x.c **** }
+ 862              		.loc 1 483 1
+ 863 000a 1800     		movs	r0, r3
+ 864 000c BD46     		mov	sp, r7
+ 865              		@ sp needed
+ 866 000e 80BD     		pop	{r7, pc}
+ 867              		.cfi_endproc
+ 868              	.LFE63:
+ 870              		.text
+ 871              	.Letext0:
+ 872              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 873              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 874              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 875              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_dbg.h"
+ 876              		.file 6 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_rcu.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 system_gd32e23x.c
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:20     .data.SystemCoreClock:00000000 SystemCoreClock
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:17     .data.SystemCoreClock:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:23     .text._soft_delay_:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:30     .text._soft_delay_:00000000 _soft_delay_
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:80     .text.SystemInit:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:87     .text.SystemInit:00000000 SystemInit
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:319    .text.system_clock_config:00000000 system_clock_config
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:306    .text.SystemInit:000001cc $d
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:312    .text.system_clock_config:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:348    .text.system_clock_72m_irc8m:00000000 system_clock_72m_irc8m
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:342    .text.system_clock_72m_irc8m:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:601    .rodata:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:602    .rodata:00000000 .LC0
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:606    .text.SystemCoreClockUpdate:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:613    .text.SystemCoreClockUpdate:00000000 SystemCoreClockUpdate
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:840    .text.gd32e23x_firmware_version_get:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccVgiiyC.s:847    .text.gd32e23x_firmware_version_get:00000000 gd32e23x_firmware_version_get
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+
+UNDEFINED SYMBOLS
+nvic_vector_table_set

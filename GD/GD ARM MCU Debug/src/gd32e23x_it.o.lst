@@ -1,0 +1,961 @@
+   1              		.cpu cortex-m23
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"gd32e23x_it.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.NMI_Handler,"ax",%progbits
+  16              		.align	1
+  17              		.global	NMI_Handler
+  18              		.arch armv8-m.base
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	NMI_Handler:
+  25              	.LFB62:
+  26              		.file 1 "../src/gd32e23x_it.c"
+   1:../src/gd32e23x_it.c **** /*!
+   2:../src/gd32e23x_it.c ****     \file    gd32e23x_it.c
+   3:../src/gd32e23x_it.c ****     \brief   interrupt service routines
+   4:../src/gd32e23x_it.c **** 
+   5:../src/gd32e23x_it.c ****     \version 2025-08-08, V2.4.0, firmware for GD32E23x
+   6:../src/gd32e23x_it.c **** */
+   7:../src/gd32e23x_it.c **** 
+   8:../src/gd32e23x_it.c **** /*
+   9:../src/gd32e23x_it.c ****     Copyright (c) 2025, GigaDevice Semiconductor Inc.
+  10:../src/gd32e23x_it.c **** 
+  11:../src/gd32e23x_it.c ****     Redistribution and use in source and binary forms, with or without modification,
+  12:../src/gd32e23x_it.c **** are permitted provided that the following conditions are met:
+  13:../src/gd32e23x_it.c **** 
+  14:../src/gd32e23x_it.c ****     1. Redistributions of source code must retain the above copyright notice, this
+  15:../src/gd32e23x_it.c ****        list of conditions and the following disclaimer.
+  16:../src/gd32e23x_it.c ****     2. Redistributions in binary form must reproduce the above copyright notice,
+  17:../src/gd32e23x_it.c ****        this list of conditions and the following disclaimer in the documentation
+  18:../src/gd32e23x_it.c ****        and/or other materials provided with the distribution.
+  19:../src/gd32e23x_it.c ****     3. Neither the name of the copyright holder nor the names of its contributors
+  20:../src/gd32e23x_it.c ****        may be used to endorse or promote products derived from this software without
+  21:../src/gd32e23x_it.c ****        specific prior written permission.
+  22:../src/gd32e23x_it.c **** 
+  23:../src/gd32e23x_it.c ****     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  24:../src/gd32e23x_it.c **** AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  25:../src/gd32e23x_it.c **** WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  26:../src/gd32e23x_it.c **** IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  27:../src/gd32e23x_it.c **** INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  28:../src/gd32e23x_it.c **** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  29:../src/gd32e23x_it.c **** PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  30:../src/gd32e23x_it.c **** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  31:../src/gd32e23x_it.c **** ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  32:../src/gd32e23x_it.c **** OF SUCH DAMAGE.
+  33:../src/gd32e23x_it.c **** */
+  34:../src/gd32e23x_it.c **** 
+  35:../src/gd32e23x_it.c **** #include "gd32e23x_it.h"
+  36:../src/gd32e23x_it.c **** #include "main.h"
+  37:../src/gd32e23x_it.c **** #include <stdio.h>
+  38:../src/gd32e23x_it.c **** #include "systick.h"
+  39:../src/gd32e23x_it.c **** #include "Process_Packet.h"
+  40:../src/gd32e23x_it.c **** #include "sprd_config.h"
+  41:../src/gd32e23x_it.c **** #include "GPIO_init.h"
+  42:../src/gd32e23x_it.c **** #include "Spl_stdio.h"
+  43:../src/gd32e23x_it.c **** 
+  44:../src/gd32e23x_it.c **** #define SRAM_PARITY_CHECK_ERROR_HANDLE(s)    do{}while(1)
+  45:../src/gd32e23x_it.c **** 
+  46:../src/gd32e23x_it.c **** /*!
+  47:../src/gd32e23x_it.c ****     \brief      this function handles NMI exception
+  48:../src/gd32e23x_it.c ****     \param[in]  none
+  49:../src/gd32e23x_it.c ****     \param[out] none
+  50:../src/gd32e23x_it.c ****     \retval     none
+  51:../src/gd32e23x_it.c **** */
+  52:../src/gd32e23x_it.c **** void NMI_Handler(void)
+  53:../src/gd32e23x_it.c **** {
+  27              		.loc 1 53 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              		.cfi_def_cfa_register 7
+  54:../src/gd32e23x_it.c ****     if(SET == syscfg_flag_get(SYSCFG_SRAM_PCEF)) {
+  37              		.loc 1 54 15
+  38 0004 40F20010 		movw	r0, #256
+  39 0008 FFF7FEFF 		bl	syscfg_flag_get
+  40 000c 0300     		movs	r3, r0
+  41              		.loc 1 54 7
+  42 000e 012B     		cmp	r3, #1
+  43 0010 00D1     		bne	.L2
+  44              	.L3:
+  55:../src/gd32e23x_it.c ****         SRAM_PARITY_CHECK_ERROR_HANDLE("SRAM parity check error error\r\n");
+  45              		.loc 1 55 9 discriminator 1
+  46 0012 FEE7     		b	.L3
+  47              	.L2:
+  56:../src/gd32e23x_it.c ****     } else {
+  57:../src/gd32e23x_it.c ****         /* if NMI exception occurs, go to infinite loop */
+  58:../src/gd32e23x_it.c ****         /* HXTAL clock monitor NMI error or NMI pin error */
+  59:../src/gd32e23x_it.c ****         while(1) {
+  48              		.loc 1 59 14 discriminator 2
+  49 0014 FEE7     		b	.L2
+  50              		.cfi_endproc
+  51              	.LFE62:
+  53              		.section	.text.HardFault_Handler,"ax",%progbits
+  54              		.align	1
+  55              		.global	HardFault_Handler
+  56              		.syntax unified
+  57              		.code	16
+  58              		.thumb_func
+  59              		.fpu softvfp
+  61              	HardFault_Handler:
+  62              	.LFB63:
+  60:../src/gd32e23x_it.c ****         }
+  61:../src/gd32e23x_it.c ****     }
+  62:../src/gd32e23x_it.c **** }
+  63:../src/gd32e23x_it.c **** 
+  64:../src/gd32e23x_it.c **** /*!
+  65:../src/gd32e23x_it.c ****     \brief      this function handles HardFault exception
+  66:../src/gd32e23x_it.c ****     \param[in]  none
+  67:../src/gd32e23x_it.c ****     \param[out] none
+  68:../src/gd32e23x_it.c ****     \retval     none
+  69:../src/gd32e23x_it.c **** */
+  70:../src/gd32e23x_it.c **** void HardFault_Handler(void)
+  71:../src/gd32e23x_it.c **** {
+  63              		.loc 1 71 1
+  64              		.cfi_startproc
+  65              		@ args = 0, pretend = 0, frame = 0
+  66              		@ frame_needed = 1, uses_anonymous_args = 0
+  67 0000 80B5     		push	{r7, lr}
+  68              		.cfi_def_cfa_offset 8
+  69              		.cfi_offset 7, -8
+  70              		.cfi_offset 14, -4
+  71 0002 00AF     		add	r7, sp, #0
+  72              		.cfi_def_cfa_register 7
+  73              	.L5:
+  72:../src/gd32e23x_it.c ****     /* if Hard Fault exception occurs, go to infinite loop */
+  73:../src/gd32e23x_it.c ****     while(1) {
+  74              		.loc 1 73 10 discriminator 1
+  75 0004 FEE7     		b	.L5
+  76              		.cfi_endproc
+  77              	.LFE63:
+  79              		.section	.text.SVC_Handler,"ax",%progbits
+  80              		.align	1
+  81              		.global	SVC_Handler
+  82              		.syntax unified
+  83              		.code	16
+  84              		.thumb_func
+  85              		.fpu softvfp
+  87              	SVC_Handler:
+  88              	.LFB64:
+  74:../src/gd32e23x_it.c ****     }
+  75:../src/gd32e23x_it.c **** }
+  76:../src/gd32e23x_it.c **** 
+  77:../src/gd32e23x_it.c **** /*!
+  78:../src/gd32e23x_it.c ****     \brief      this function handles SVC exception
+  79:../src/gd32e23x_it.c ****     \param[in]  none
+  80:../src/gd32e23x_it.c ****     \param[out] none
+  81:../src/gd32e23x_it.c ****     \retval     none
+  82:../src/gd32e23x_it.c **** */
+  83:../src/gd32e23x_it.c **** void SVC_Handler(void)
+  84:../src/gd32e23x_it.c **** {
+  89              		.loc 1 84 1
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 1, uses_anonymous_args = 0
+  93 0000 80B5     		push	{r7, lr}
+  94              		.cfi_def_cfa_offset 8
+  95              		.cfi_offset 7, -8
+  96              		.cfi_offset 14, -4
+  97 0002 00AF     		add	r7, sp, #0
+  98              		.cfi_def_cfa_register 7
+  99              	.L7:
+  85:../src/gd32e23x_it.c ****     /* if SVC exception occurs, go to infinite loop */
+  86:../src/gd32e23x_it.c ****     while(1) {
+ 100              		.loc 1 86 10 discriminator 1
+ 101 0004 FEE7     		b	.L7
+ 102              		.cfi_endproc
+ 103              	.LFE64:
+ 105              		.section	.text.PendSV_Handler,"ax",%progbits
+ 106              		.align	1
+ 107              		.global	PendSV_Handler
+ 108              		.syntax unified
+ 109              		.code	16
+ 110              		.thumb_func
+ 111              		.fpu softvfp
+ 113              	PendSV_Handler:
+ 114              	.LFB65:
+  87:../src/gd32e23x_it.c ****     }
+  88:../src/gd32e23x_it.c **** }
+  89:../src/gd32e23x_it.c **** 
+  90:../src/gd32e23x_it.c **** /*!
+  91:../src/gd32e23x_it.c ****     \brief      this function handles PendSV exception
+  92:../src/gd32e23x_it.c ****     \param[in]  none
+  93:../src/gd32e23x_it.c ****     \param[out] none
+  94:../src/gd32e23x_it.c ****     \retval     none
+  95:../src/gd32e23x_it.c **** */
+  96:../src/gd32e23x_it.c **** void PendSV_Handler(void)
+  97:../src/gd32e23x_it.c **** {
+ 115              		.loc 1 97 1
+ 116              		.cfi_startproc
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 1, uses_anonymous_args = 0
+ 119 0000 80B5     		push	{r7, lr}
+ 120              		.cfi_def_cfa_offset 8
+ 121              		.cfi_offset 7, -8
+ 122              		.cfi_offset 14, -4
+ 123 0002 00AF     		add	r7, sp, #0
+ 124              		.cfi_def_cfa_register 7
+ 125              	.L9:
+  98:../src/gd32e23x_it.c ****     /* if PendSV exception occurs, go to infinite loop */
+  99:../src/gd32e23x_it.c ****     while(1) {
+ 126              		.loc 1 99 10 discriminator 1
+ 127 0004 FEE7     		b	.L9
+ 128              		.cfi_endproc
+ 129              	.LFE65:
+ 131              		.section	.rodata
+ 132              		.align	2
+ 133              	.LC0:
+ 134 0000 726F6D63 		.ascii	"romcode enum timeout, mcu ready to enter deepsleep\000"
+ 134      6F646520 
+ 134      656E756D 
+ 134      2074696D 
+ 134      656F7574 
+ 135 0033 00       		.align	2
+ 136              	.LC1:
+ 137 0034 74696D65 		.ascii	"timer tick reset\000"
+ 137      72207469 
+ 137      636B2072 
+ 137      65736574 
+ 137      00
+ 138 0045 000000   		.align	2
+ 139              	.LC2:
+ 140 0048 676C6F62 		.ascii	"global_sio_handle.sio_state:0x%x\012\000"
+ 140      616C5F73 
+ 140      696F5F68 
+ 140      616E646C 
+ 140      652E7369 
+ 141 006a 0000     		.align	2
+ 142              	.LC3:
+ 143 006c 676C6F62 		.ascii	"global_sio_handle.pkt_state:0x%x\012\000"
+ 143      616C5F73 
+ 143      696F5F68 
+ 143      616E646C 
+ 143      652E706B 
+ 144 008e 0000     		.align	2
+ 145              	.LC4:
+ 146 0090 676C6F62 		.ascii	"global_sio_handle.data_size:0x%x\012\000"
+ 146      616C5F73 
+ 146      696F5F68 
+ 146      616E646C 
+ 146      652E6461 
+ 147 00b2 0000     		.align	2
+ 148              	.LC5:
+ 149 00b4 676C6F62 		.ascii	"global_sio_handle.read_ptr buf\000"
+ 149      616C5F73 
+ 149      696F5F68 
+ 149      616E646C 
+ 149      652E7265 
+ 150              		.section	.text.SysTick_Handler,"ax",%progbits
+ 151              		.align	1
+ 152              		.global	SysTick_Handler
+ 153              		.syntax unified
+ 154              		.code	16
+ 155              		.thumb_func
+ 156              		.fpu softvfp
+ 158              	SysTick_Handler:
+ 159              	.LFB66:
+ 100:../src/gd32e23x_it.c ****     }
+ 101:../src/gd32e23x_it.c **** }
+ 102:../src/gd32e23x_it.c **** 
+ 103:../src/gd32e23x_it.c **** /*!
+ 104:../src/gd32e23x_it.c ****     \brief      this function handles SysTick exception
+ 105:../src/gd32e23x_it.c ****     \param[in]  none
+ 106:../src/gd32e23x_it.c ****     \param[out] none
+ 107:../src/gd32e23x_it.c ****     \retval     none
+ 108:../src/gd32e23x_it.c **** */
+ 109:../src/gd32e23x_it.c **** void SysTick_Handler(void)
+ 110:../src/gd32e23x_it.c **** {
+ 160              		.loc 1 110 1
+ 161              		.cfi_startproc
+ 162              		@ args = 0, pretend = 0, frame = 0
+ 163              		@ frame_needed = 1, uses_anonymous_args = 0
+ 164 0000 80B5     		push	{r7, lr}
+ 165              		.cfi_def_cfa_offset 8
+ 166              		.cfi_offset 7, -8
+ 167              		.cfi_offset 14, -4
+ 168 0002 00AF     		add	r7, sp, #0
+ 169              		.cfi_def_cfa_register 7
+ 111:../src/gd32e23x_it.c ****     delay_decrement();
+ 170              		.loc 1 111 5
+ 171 0004 FFF7FEFF 		bl	delay_decrement
+ 112:../src/gd32e23x_it.c ****     timer_handle.Timer_Count++;
+ 172              		.loc 1 112 17
+ 173 0008 40F20003 		movw	r3, #:lower16:timer_handle
+ 174 000c C0F20003 		movt	r3, #:upper16:timer_handle
+ 175 0010 5B68     		ldr	r3, [r3, #4]
+ 176              		.loc 1 112 29
+ 177 0012 5A1C     		adds	r2, r3, #1
+ 178 0014 40F20003 		movw	r3, #:lower16:timer_handle
+ 179 0018 C0F20003 		movt	r3, #:upper16:timer_handle
+ 180 001c 5A60     		str	r2, [r3, #4]
+ 113:../src/gd32e23x_it.c ****     check_key_press_during_boot();
+ 181              		.loc 1 113 5
+ 182 001e FFF7FEFF 		bl	check_key_press_during_boot
+ 114:../src/gd32e23x_it.c **** 
+ 115:../src/gd32e23x_it.c ****     if (timer_handle.Timer_Start_Flag) {
+ 183              		.loc 1 115 21
+ 184 0022 40F20003 		movw	r3, #:lower16:timer_handle
+ 185 0026 C0F20003 		movt	r3, #:upper16:timer_handle
+ 186 002a 1B78     		ldrb	r3, [r3]
+ 187              		.loc 1 115 8
+ 188 002c 002B     		cmp	r3, #0
+ 189 002e 6CD0     		beq	.L14
+ 116:../src/gd32e23x_it.c ****        if (timer_handle.Timer_Count >= timer_handle.timeout_time) {
+ 190              		.loc 1 116 24
+ 191 0030 40F20003 		movw	r3, #:lower16:timer_handle
+ 192 0034 C0F20003 		movt	r3, #:upper16:timer_handle
+ 193 0038 5A68     		ldr	r2, [r3, #4]
+ 194              		.loc 1 116 52
+ 195 003a 40F20003 		movw	r3, #:lower16:timer_handle
+ 196 003e C0F20003 		movt	r3, #:upper16:timer_handle
+ 197 0042 9B68     		ldr	r3, [r3, #8]
+ 198              		.loc 1 116 11
+ 199 0044 9A42     		cmp	r2, r3
+ 200 0046 60DB     		blt	.L14
+ 117:../src/gd32e23x_it.c ****             if (global_sio_handle.sio_state == BSL_UART_ENUM_FLAG) {
+ 201              		.loc 1 117 34
+ 202 0048 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 203 004c C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 204 0050 1B68     		ldr	r3, [r3]
+ 205              		.loc 1 117 16
+ 206 0052 832B     		cmp	r3, #131
+ 207 0054 07D1     		bne	.L12
+ 118:../src/gd32e23x_it.c ****                 printf("romcode enum timeout, mcu ready to enter deepsleep\n");
+ 208              		.loc 1 118 17
+ 209 0056 40F20003 		movw	r3, #:lower16:.LC0
+ 210 005a C0F20003 		movt	r3, #:upper16:.LC0
+ 211 005e 1800     		movs	r0, r3
+ 212 0060 FFF7FEFF 		bl	puts
+ 213 0064 4BE0     		b	.L13
+ 214              	.L12:
+ 119:../src/gd32e23x_it.c ****                 // mcu_enter_deepsleep();
+ 120:../src/gd32e23x_it.c ****             } else {
+ 121:../src/gd32e23x_it.c ****                 printf("timer tick reset\n");
+ 215              		.loc 1 121 17
+ 216 0066 40F20003 		movw	r3, #:lower16:.LC1
+ 217 006a C0F20003 		movt	r3, #:upper16:.LC1
+ 218 006e 1800     		movs	r0, r3
+ 219 0070 FFF7FEFF 		bl	puts
+ 122:../src/gd32e23x_it.c ****                 printf("global_sio_handle.sio_state:0x%x\n",global_sio_handle.sio_state);
+ 220              		.loc 1 122 17
+ 221 0074 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 222 0078 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 223 007c 1A68     		ldr	r2, [r3]
+ 224 007e 40F20003 		movw	r3, #:lower16:.LC2
+ 225 0082 C0F20003 		movt	r3, #:upper16:.LC2
+ 226 0086 1100     		movs	r1, r2
+ 227 0088 1800     		movs	r0, r3
+ 228 008a FFF7FEFF 		bl	printf
+ 123:../src/gd32e23x_it.c ****                 printf("global_sio_handle.pkt_state:0x%x\n", global_sio_handle.pkt_state);
+ 229              		.loc 1 123 79
+ 230 008e 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 231 0092 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 232 0096 1B79     		ldrb	r3, [r3, #4]
+ 233              		.loc 1 123 17
+ 234 0098 1A00     		movs	r2, r3
+ 235 009a 40F20003 		movw	r3, #:lower16:.LC3
+ 236 009e C0F20003 		movt	r3, #:upper16:.LC3
+ 237 00a2 1100     		movs	r1, r2
+ 238 00a4 1800     		movs	r0, r3
+ 239 00a6 FFF7FEFF 		bl	printf
+ 124:../src/gd32e23x_it.c ****                 printf("global_sio_handle.data_size:0x%x\n", global_sio_handle.data_size);
+ 240              		.loc 1 124 17
+ 241 00aa 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 242 00ae C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 243 00b2 1A69     		ldr	r2, [r3, #16]
+ 244 00b4 40F20003 		movw	r3, #:lower16:.LC4
+ 245 00b8 C0F20003 		movt	r3, #:upper16:.LC4
+ 246 00bc 1100     		movs	r1, r2
+ 247 00be 1800     		movs	r0, r3
+ 248 00c0 FFF7FEFF 		bl	printf
+ 125:../src/gd32e23x_it.c ****                 printf("global_sio_handle.read_ptr buf\n");
+ 249              		.loc 1 125 17
+ 250 00c4 40F20003 		movw	r3, #:lower16:.LC5
+ 251 00c8 C0F20003 		movt	r3, #:upper16:.LC5
+ 252 00cc 1800     		movs	r0, r3
+ 253 00ce FFF7FEFF 		bl	puts
+ 126:../src/gd32e23x_it.c ****                 hexdump(global_sio_handle.read_ptr, global_sio_handle.data_size);
+ 254              		.loc 1 126 17
+ 255 00d2 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 256 00d6 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 257 00da DA69     		ldr	r2, [r3, #28]
+ 258 00dc 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 259 00e0 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 260 00e4 1B69     		ldr	r3, [r3, #16]
+ 261 00e6 1900     		movs	r1, r3
+ 262 00e8 1000     		movs	r0, r2
+ 263 00ea FFF7FEFF 		bl	hexdump
+ 127:../src/gd32e23x_it.c ****                 global_sio_handle.sio_state = SPL_TRANSPORT_TIMEOUT;
+ 264              		.loc 1 127 45
+ 265 00ee 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 266 00f2 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 267 00f6 8622     		movs	r2, #134
+ 268 00f8 1A60     		str	r2, [r3]
+ 128:../src/gd32e23x_it.c ****                 MCU_Reset_Soc_Pbint();
+ 269              		.loc 1 128 17
+ 270 00fa FFF7FEFF 		bl	MCU_Reset_Soc_Pbint
+ 271              	.L13:
+ 129:../src/gd32e23x_it.c ****             }
+ 130:../src/gd32e23x_it.c ****             timer_handle.Timer_Start_Flag = 0;
+ 272              		.loc 1 130 43
+ 273 00fe 40F20003 		movw	r3, #:lower16:timer_handle
+ 274 0102 C0F20003 		movt	r3, #:upper16:timer_handle
+ 275 0106 0022     		movs	r2, #0
+ 276 0108 1A70     		strb	r2, [r3]
+ 277              	.L14:
+ 131:../src/gd32e23x_it.c ****        }
+ 132:../src/gd32e23x_it.c ****     }
+ 133:../src/gd32e23x_it.c **** }
+ 278              		.loc 1 133 1
+ 279 010a C046     		nop
+ 280 010c BD46     		mov	sp, r7
+ 281              		@ sp needed
+ 282 010e 80BD     		pop	{r7, pc}
+ 283              		.cfi_endproc
+ 284              	.LFE66:
+ 286              		.section	.text.USART0_IRQHandler,"ax",%progbits
+ 287              		.align	1
+ 288              		.global	USART0_IRQHandler
+ 289              		.syntax unified
+ 290              		.code	16
+ 291              		.thumb_func
+ 292              		.fpu softvfp
+ 294              	USART0_IRQHandler:
+ 295              	.LFB67:
+ 134:../src/gd32e23x_it.c **** 
+ 135:../src/gd32e23x_it.c **** void USART0_IRQHandler(void)
+ 136:../src/gd32e23x_it.c **** {
+ 296              		.loc 1 136 1
+ 297              		.cfi_startproc
+ 298              		@ args = 0, pretend = 0, frame = 8
+ 299              		@ frame_needed = 1, uses_anonymous_args = 0
+ 300 0000 90B5     		push	{r4, r7, lr}
+ 301              		.cfi_def_cfa_offset 12
+ 302              		.cfi_offset 4, -12
+ 303              		.cfi_offset 7, -8
+ 304              		.cfi_offset 14, -4
+ 305 0002 83B0     		sub	sp, sp, #12
+ 306              		.cfi_def_cfa_offset 24
+ 307 0004 00AF     		add	r7, sp, #0
+ 308              		.cfi_def_cfa_register 7
+ 137:../src/gd32e23x_it.c ****     uint16_t ch=0;
+ 309              		.loc 1 137 14
+ 310 0006 BB1D     		adds	r3, r7, #6
+ 311 0008 0022     		movs	r2, #0
+ 312 000a 1A80     		strh	r2, [r3]
+ 138:../src/gd32e23x_it.c ****     // uint8_t cnt=0;
+ 139:../src/gd32e23x_it.c **** 
+ 140:../src/gd32e23x_it.c ****     if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_RBNE)) {
+ 313              		.loc 1 140 17
+ 314 000c 0522     		movs	r2, #5
+ 315 000e C0F20572 		movt	r2, 1797
+ 316 0012 43F60003 		movw	r3, #14336
+ 317 0016 C4F20103 		movt	r3, 16385
+ 318 001a 1100     		movs	r1, r2
+ 319 001c 1800     		movs	r0, r3
+ 320 001e FFF7FEFF 		bl	usart_interrupt_flag_get
+ 321 0022 0300     		movs	r3, r0
+ 322              		.loc 1 140 7
+ 323 0024 5BB3     		cbz	r3, .L16
+ 141:../src/gd32e23x_it.c ****         /* receive data */
+ 142:../src/gd32e23x_it.c ****         // cnt=usart_receive_fifo_counter_number(EVAL_COM);
+ 143:../src/gd32e23x_it.c ****         ch=usart_data_receive(EVAL_COM);
+ 324              		.loc 1 143 12
+ 325 0026 BC1D     		adds	r4, r7, #6
+ 326 0028 43F60003 		movw	r3, #14336
+ 327 002c C4F20103 		movt	r3, 16385
+ 328 0030 1800     		movs	r0, r3
+ 329 0032 FFF7FEFF 		bl	usart_data_receive
+ 330 0036 0300     		movs	r3, r0
+ 331 0038 2380     		strh	r3, [r4]
+ 144:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_RBNE);
+ 332              		.loc 1 144 9
+ 333 003a 0522     		movs	r2, #5
+ 334 003c C0F20572 		movt	r2, 1797
+ 335 0040 43F60003 		movw	r3, #14336
+ 336 0044 C4F20103 		movt	r3, 16385
+ 337 0048 1100     		movs	r1, r2
+ 338 004a 1800     		movs	r0, r3
+ 339 004c FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 145:../src/gd32e23x_it.c ****         global_sio_handle.read_ptr[global_sio_handle.data_size++] = ch;
+ 340              		.loc 1 145 26
+ 341 0050 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 342 0054 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 343 0058 D969     		ldr	r1, [r3, #28]
+ 344              		.loc 1 145 53
+ 345 005a 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 346 005e C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 347 0062 1A69     		ldr	r2, [r3, #16]
+ 348              		.loc 1 145 63
+ 349 0064 501C     		adds	r0, r2, #1
+ 350 0066 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 351 006a C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 352 006e 1861     		str	r0, [r3, #16]
+ 353 0070 1300     		movs	r3, r2
+ 354              		.loc 1 145 35
+ 355 0072 CB18     		adds	r3, r1, r3
+ 356              		.loc 1 145 67
+ 357 0074 BA1D     		adds	r2, r7, #6
+ 358 0076 1288     		ldrh	r2, [r2]
+ 359 0078 D2B2     		uxtb	r2, r2
+ 360 007a 1A70     		strb	r2, [r3]
+ 146:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_IDLE)) {
+ 147:../src/gd32e23x_it.c ****        usart_interrupt_flag_clear(EVAL_COM,USART_INT_FLAG_IDLE);
+ 148:../src/gd32e23x_it.c ****        if(global_sio_handle.pkt_state == PKT_RECV) {
+ 149:../src/gd32e23x_it.c ****           global_sio_handle.sio_state = BSL_UART_RECIVE_FLAG;
+ 150:../src/gd32e23x_it.c ****           usart_interrupt_disable(EVAL_COM, USART_INT_IDLE);
+ 151:../src/gd32e23x_it.c ****           usart_interrupt_disable(EVAL_COM, USART_INT_RBNE);
+ 152:../src/gd32e23x_it.c ****        }
+ 153:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_WU)) {
+ 154:../src/gd32e23x_it.c ****         // printf("1\n");
+ 155:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_WU);
+ 156:../src/gd32e23x_it.c ****         usart_flag_clear(EVAL_COM, USART_FLAG_WU);
+ 157:../src/gd32e23x_it.c ****         global_sio_handle.sio_state = BSL_UART_WAKEUP_FLAG;
+ 158:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_AM)) {
+ 159:../src/gd32e23x_it.c ****         // printf("4\n");
+ 160:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_AM);
+ 161:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_PERR)) {
+ 162:../src/gd32e23x_it.c ****         // printf("5\n");
+ 163:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_PERR);
+ 164:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_RBNE_ORERR)) {
+ 165:../src/gd32e23x_it.c ****         // printf("8\n");
+ 166:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_RBNE_ORERR);
+ 167:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_ERR_NERR)) {
+ 168:../src/gd32e23x_it.c ****         // printf("11\n");
+ 169:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_ERR_NERR);
+ 170:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_ERR_ORERR)) {
+ 171:../src/gd32e23x_it.c ****         // printf("12\n");
+ 172:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_ERR_ORERR);
+ 173:../src/gd32e23x_it.c ****         usart_data_receive(EVAL_COM);
+ 174:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM,USART_INT_FLAG_RBNE);
+ 175:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_ERR_FERR)) {
+ 176:../src/gd32e23x_it.c ****         // printf("13\n");
+ 177:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_ERR_FERR);
+ 178:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_RFF)) {
+ 179:../src/gd32e23x_it.c ****         // printf("14\n");
+ 180:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM, USART_INT_FLAG_RFF);
+ 181:../src/gd32e23x_it.c ****     }
+ 182:../src/gd32e23x_it.c **** }
+ 361              		.loc 1 182 1
+ 362 007c 28E1     		b	.L26
+ 363              	.L16:
+ 146:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_IDLE)) {
+ 364              		.loc 1 146 24
+ 365 007e 0422     		movs	r2, #4
+ 366 0080 C0F20472 		movt	r2, 1796
+ 367 0084 43F60003 		movw	r3, #14336
+ 368 0088 C4F20103 		movt	r3, 16385
+ 369 008c 1100     		movs	r1, r2
+ 370 008e 1800     		movs	r0, r3
+ 371 0090 FFF7FEFF 		bl	usart_interrupt_flag_get
+ 372 0094 0300     		movs	r3, r0
+ 146:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_IDLE)) {
+ 373              		.loc 1 146 14
+ 374 0096 4BB3     		cbz	r3, .L18
+ 147:../src/gd32e23x_it.c ****        if(global_sio_handle.pkt_state == PKT_RECV) {
+ 375              		.loc 1 147 8
+ 376 0098 0422     		movs	r2, #4
+ 377 009a C0F20472 		movt	r2, 1796
+ 378 009e 43F60003 		movw	r3, #14336
+ 379 00a2 C4F20103 		movt	r3, 16385
+ 380 00a6 1100     		movs	r1, r2
+ 381 00a8 1800     		movs	r0, r3
+ 382 00aa FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 148:../src/gd32e23x_it.c ****           global_sio_handle.sio_state = BSL_UART_RECIVE_FLAG;
+ 383              		.loc 1 148 28
+ 384 00ae 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 385 00b2 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 386 00b6 1B79     		ldrb	r3, [r3, #4]
+ 148:../src/gd32e23x_it.c ****           global_sio_handle.sio_state = BSL_UART_RECIVE_FLAG;
+ 387              		.loc 1 148 10
+ 388 00b8 032B     		cmp	r3, #3
+ 389 00ba 00D0     		beq	.LCB257
+ 390 00bc 08E1     		b	.L26	@long jump
+ 391              	.LCB257:
+ 149:../src/gd32e23x_it.c ****           usart_interrupt_disable(EVAL_COM, USART_INT_IDLE);
+ 392              		.loc 1 149 39
+ 393 00be 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 394 00c2 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 395 00c6 8422     		movs	r2, #132
+ 396 00c8 1A60     		str	r2, [r3]
+ 150:../src/gd32e23x_it.c ****           usart_interrupt_disable(EVAL_COM, USART_INT_RBNE);
+ 397              		.loc 1 150 11
+ 398 00ca 43F60003 		movw	r3, #14336
+ 399 00ce C4F20103 		movt	r3, 16385
+ 400 00d2 0421     		movs	r1, #4
+ 401 00d4 1800     		movs	r0, r3
+ 402 00d6 FFF7FEFF 		bl	usart_interrupt_disable
+ 151:../src/gd32e23x_it.c ****        }
+ 403              		.loc 1 151 11
+ 404 00da 43F60003 		movw	r3, #14336
+ 405 00de C4F20103 		movt	r3, 16385
+ 406 00e2 0521     		movs	r1, #5
+ 407 00e4 1800     		movs	r0, r3
+ 408 00e6 FFF7FEFF 		bl	usart_interrupt_disable
+ 409              		.loc 1 182 1
+ 410 00ea F1E0     		b	.L26
+ 411              	.L18:
+ 153:../src/gd32e23x_it.c ****         // printf("1\n");
+ 412              		.loc 1 153 24
+ 413 00ec 40F21622 		movw	r2, #534
+ 414 00f0 C0F21472 		movt	r2, 1812
+ 415 00f4 43F60003 		movw	r3, #14336
+ 416 00f8 C4F20103 		movt	r3, 16385
+ 417 00fc 1100     		movs	r1, r2
+ 418 00fe 1800     		movs	r0, r3
+ 419 0100 FFF7FEFF 		bl	usart_interrupt_flag_get
+ 420 0104 0300     		movs	r3, r0
+ 153:../src/gd32e23x_it.c ****         // printf("1\n");
+ 421              		.loc 1 153 14
+ 422 0106 DBB1     		cbz	r3, .L19
+ 155:../src/gd32e23x_it.c ****         usart_flag_clear(EVAL_COM, USART_FLAG_WU);
+ 423              		.loc 1 155 9
+ 424 0108 40F21622 		movw	r2, #534
+ 425 010c C0F21472 		movt	r2, 1812
+ 426 0110 43F60003 		movw	r3, #14336
+ 427 0114 C4F20103 		movt	r3, 16385
+ 428 0118 1100     		movs	r1, r2
+ 429 011a 1800     		movs	r0, r3
+ 430 011c FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 156:../src/gd32e23x_it.c ****         global_sio_handle.sio_state = BSL_UART_WAKEUP_FLAG;
+ 431              		.loc 1 156 9
+ 432 0120 43F60003 		movw	r3, #14336
+ 433 0124 C4F20103 		movt	r3, 16385
+ 434 0128 40F21471 		movw	r1, #1812
+ 435 012c 1800     		movs	r0, r3
+ 436 012e FFF7FEFF 		bl	usart_flag_clear
+ 157:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_AM)) {
+ 437              		.loc 1 157 37
+ 438 0132 40F20003 		movw	r3, #:lower16:global_sio_handle
+ 439 0136 C0F20003 		movt	r3, #:upper16:global_sio_handle
+ 440 013a 8522     		movs	r2, #133
+ 441 013c 1A60     		str	r2, [r3]
+ 442              		.loc 1 182 1
+ 443 013e C7E0     		b	.L26
+ 444              	.L19:
+ 158:../src/gd32e23x_it.c ****         // printf("4\n");
+ 445              		.loc 1 158 24
+ 446 0140 0E22     		movs	r2, #14
+ 447 0142 C0F21172 		movt	r2, 1809
+ 448 0146 43F60003 		movw	r3, #14336
+ 449 014a C4F20103 		movt	r3, 16385
+ 450 014e 1100     		movs	r1, r2
+ 451 0150 1800     		movs	r0, r3
+ 452 0152 FFF7FEFF 		bl	usart_interrupt_flag_get
+ 453 0156 0300     		movs	r3, r0
+ 158:../src/gd32e23x_it.c ****         // printf("4\n");
+ 454              		.loc 1 158 14
+ 455 0158 5BB1     		cbz	r3, .L20
+ 160:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_PERR)) {
+ 456              		.loc 1 160 9
+ 457 015a 0E22     		movs	r2, #14
+ 458 015c C0F21172 		movt	r2, 1809
+ 459 0160 43F60003 		movw	r3, #14336
+ 460 0164 C4F20103 		movt	r3, 16385
+ 461 0168 1100     		movs	r1, r2
+ 462 016a 1800     		movs	r0, r3
+ 463 016c FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 464              		.loc 1 182 1
+ 465 0170 AEE0     		b	.L26
+ 466              	.L20:
+ 161:../src/gd32e23x_it.c ****         // printf("5\n");
+ 467              		.loc 1 161 24
+ 468 0172 0822     		movs	r2, #8
+ 469 0174 C0F20072 		movt	r2, 1792
+ 470 0178 43F60003 		movw	r3, #14336
+ 471 017c C4F20103 		movt	r3, 16385
+ 472 0180 1100     		movs	r1, r2
+ 473 0182 1800     		movs	r0, r3
+ 474 0184 FFF7FEFF 		bl	usart_interrupt_flag_get
+ 475 0188 0300     		movs	r3, r0
+ 161:../src/gd32e23x_it.c ****         // printf("5\n");
+ 476              		.loc 1 161 14
+ 477 018a 5BB1     		cbz	r3, .L21
+ 163:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_RBNE_ORERR)) {
+ 478              		.loc 1 163 9
+ 479 018c 0822     		movs	r2, #8
+ 480 018e C0F20072 		movt	r2, 1792
+ 481 0192 43F60003 		movw	r3, #14336
+ 482 0196 C4F20103 		movt	r3, 16385
+ 483 019a 1100     		movs	r1, r2
+ 484 019c 1800     		movs	r0, r3
+ 485 019e FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 486              		.loc 1 182 1
+ 487 01a2 95E0     		b	.L26
+ 488              	.L21:
+ 164:../src/gd32e23x_it.c ****         // printf("8\n");
+ 489              		.loc 1 164 24
+ 490 01a4 0522     		movs	r2, #5
+ 491 01a6 C0F20372 		movt	r2, 1795
+ 492 01aa 43F60003 		movw	r3, #14336
+ 493 01ae C4F20103 		movt	r3, 16385
+ 494 01b2 1100     		movs	r1, r2
+ 495 01b4 1800     		movs	r0, r3
+ 496 01b6 FFF7FEFF 		bl	usart_interrupt_flag_get
+ 497 01ba 0300     		movs	r3, r0
+ 164:../src/gd32e23x_it.c ****         // printf("8\n");
+ 498              		.loc 1 164 14
+ 499 01bc 5BB1     		cbz	r3, .L22
+ 166:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_ERR_NERR)) {
+ 500              		.loc 1 166 9
+ 501 01be 0522     		movs	r2, #5
+ 502 01c0 C0F20372 		movt	r2, 1795
+ 503 01c4 43F60003 		movw	r3, #14336
+ 504 01c8 C4F20103 		movt	r3, 16385
+ 505 01cc 1100     		movs	r1, r2
+ 506 01ce 1800     		movs	r0, r3
+ 507 01d0 FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 508              		.loc 1 182 1
+ 509 01d4 7CE0     		b	.L26
+ 510              	.L22:
+ 167:../src/gd32e23x_it.c ****         // printf("11\n");
+ 511              		.loc 1 167 24
+ 512 01d6 40F20022 		movw	r2, #512
+ 513 01da C0F20272 		movt	r2, 1794
+ 514 01de 43F60003 		movw	r3, #14336
+ 515 01e2 C4F20103 		movt	r3, 16385
+ 516 01e6 1100     		movs	r1, r2
+ 517 01e8 1800     		movs	r0, r3
+ 518 01ea FFF7FEFF 		bl	usart_interrupt_flag_get
+ 519 01ee 0300     		movs	r3, r0
+ 167:../src/gd32e23x_it.c ****         // printf("11\n");
+ 520              		.loc 1 167 14
+ 521 01f0 63B1     		cbz	r3, .L23
+ 169:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_ERR_ORERR)) {
+ 522              		.loc 1 169 9
+ 523 01f2 40F20022 		movw	r2, #512
+ 524 01f6 C0F20272 		movt	r2, 1794
+ 525 01fa 43F60003 		movw	r3, #14336
+ 526 01fe C4F20103 		movt	r3, 16385
+ 527 0202 1100     		movs	r1, r2
+ 528 0204 1800     		movs	r0, r3
+ 529 0206 FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 530              		.loc 1 182 1
+ 531 020a 61E0     		b	.L26
+ 532              	.L23:
+ 170:../src/gd32e23x_it.c ****         // printf("12\n");
+ 533              		.loc 1 170 24
+ 534 020c 40F20022 		movw	r2, #512
+ 535 0210 C0F20372 		movt	r2, 1795
+ 536 0214 43F60003 		movw	r3, #14336
+ 537 0218 C4F20103 		movt	r3, 16385
+ 538 021c 1100     		movs	r1, r2
+ 539 021e 1800     		movs	r0, r3
+ 540 0220 FFF7FEFF 		bl	usart_interrupt_flag_get
+ 541 0224 0300     		movs	r3, r0
+ 170:../src/gd32e23x_it.c ****         // printf("12\n");
+ 542              		.loc 1 170 14
+ 543 0226 F3B1     		cbz	r3, .L24
+ 172:../src/gd32e23x_it.c ****         usart_data_receive(EVAL_COM);
+ 544              		.loc 1 172 9
+ 545 0228 40F20022 		movw	r2, #512
+ 546 022c C0F20372 		movt	r2, 1795
+ 547 0230 43F60003 		movw	r3, #14336
+ 548 0234 C4F20103 		movt	r3, 16385
+ 549 0238 1100     		movs	r1, r2
+ 550 023a 1800     		movs	r0, r3
+ 551 023c FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 173:../src/gd32e23x_it.c ****         usart_interrupt_flag_clear(EVAL_COM,USART_INT_FLAG_RBNE);
+ 552              		.loc 1 173 9
+ 553 0240 43F60003 		movw	r3, #14336
+ 554 0244 C4F20103 		movt	r3, 16385
+ 555 0248 1800     		movs	r0, r3
+ 556 024a FFF7FEFF 		bl	usart_data_receive
+ 174:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_ERR_FERR)) {
+ 557              		.loc 1 174 9
+ 558 024e 0522     		movs	r2, #5
+ 559 0250 C0F20572 		movt	r2, 1797
+ 560 0254 43F60003 		movw	r3, #14336
+ 561 0258 C4F20103 		movt	r3, 16385
+ 562 025c 1100     		movs	r1, r2
+ 563 025e 1800     		movs	r0, r3
+ 564 0260 FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 565              		.loc 1 182 1
+ 566 0264 34E0     		b	.L26
+ 567              	.L24:
+ 175:../src/gd32e23x_it.c ****         // printf("13\n");
+ 568              		.loc 1 175 24
+ 569 0266 40F20022 		movw	r2, #512
+ 570 026a C0F20172 		movt	r2, 1793
+ 571 026e 43F60003 		movw	r3, #14336
+ 572 0272 C4F20103 		movt	r3, 16385
+ 573 0276 1100     		movs	r1, r2
+ 574 0278 1800     		movs	r0, r3
+ 575 027a FFF7FEFF 		bl	usart_interrupt_flag_get
+ 576 027e 0300     		movs	r3, r0
+ 175:../src/gd32e23x_it.c ****         // printf("13\n");
+ 577              		.loc 1 175 14
+ 578 0280 63B1     		cbz	r3, .L25
+ 177:../src/gd32e23x_it.c ****     } else if(RESET != usart_interrupt_flag_get(EVAL_COM, USART_INT_FLAG_RFF)) {
+ 579              		.loc 1 177 9
+ 580 0282 40F20022 		movw	r2, #512
+ 581 0286 C0F20172 		movt	r2, 1793
+ 582 028a 43F60003 		movw	r3, #14336
+ 583 028e C4F20103 		movt	r3, 16385
+ 584 0292 1100     		movs	r1, r2
+ 585 0294 1800     		movs	r0, r3
+ 586 0296 FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 587              		.loc 1 182 1
+ 588 029a 19E0     		b	.L26
+ 589              	.L25:
+ 178:../src/gd32e23x_it.c ****         // printf("14\n");
+ 590              		.loc 1 178 24
+ 591 029c 43F20942 		movw	r2, #13321
+ 592 02a0 C3F20F42 		movt	r2, 13327
+ 593 02a4 43F60003 		movw	r3, #14336
+ 594 02a8 C4F20103 		movt	r3, 16385
+ 595 02ac 1100     		movs	r1, r2
+ 596 02ae 1800     		movs	r0, r3
+ 597 02b0 FFF7FEFF 		bl	usart_interrupt_flag_get
+ 598 02b4 0300     		movs	r3, r0
+ 178:../src/gd32e23x_it.c ****         // printf("14\n");
+ 599              		.loc 1 178 14
+ 600 02b6 5BB1     		cbz	r3, .L26
+ 180:../src/gd32e23x_it.c ****     }
+ 601              		.loc 1 180 9
+ 602 02b8 43F20942 		movw	r2, #13321
+ 603 02bc C3F20F42 		movt	r2, 13327
+ 604 02c0 43F60003 		movw	r3, #14336
+ 605 02c4 C4F20103 		movt	r3, 16385
+ 606 02c8 1100     		movs	r1, r2
+ 607 02ca 1800     		movs	r0, r3
+ 608 02cc FFF7FEFF 		bl	usart_interrupt_flag_clear
+ 609              	.L26:
+ 610              		.loc 1 182 1
+ 611 02d0 C046     		nop
+ 612 02d2 BD46     		mov	sp, r7
+ 613 02d4 03B0     		add	sp, sp, #12
+ 614              		@ sp needed
+ 615 02d6 90BD     		pop	{r4, r7, pc}
+ 616              		.cfi_endproc
+ 617              	.LFE67:
+ 619              		.text
+ 620              	.Letext0:
+ 621              		.file 2 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 622              		.file 3 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 623              		.file 4 "../Firmware/CMSIS/GD/GD32E23x/Include/gd32e23x.h"
+ 624              		.file 5 "../Firmware/GD32E23x_standard_peripheral/Include/gd32e23x_usart.h"
+ 625              		.file 6 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 626              		.file 7 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 627              		.file 8 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 628              		.file 9 "d:\\software\\gd32embeddedbuilder_v1.5.6_rel\\tools\\gnu tools arm embedded\\xpack-arm-no
+ 629              		.file 10 "../Firmware/CMSIS/GD/GD32E23x/Include/system_gd32e23x.h"
+ 630              		.file 11 "../inc/Spi_nand_driver.h"
+ 631              		.file 12 "../inc/Process_Packet.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 gd32e23x_it.c
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:16     .text.NMI_Handler:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:24     .text.NMI_Handler:00000000 NMI_Handler
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:54     .text.HardFault_Handler:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:61     .text.HardFault_Handler:00000000 HardFault_Handler
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:80     .text.SVC_Handler:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:87     .text.SVC_Handler:00000000 SVC_Handler
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:106    .text.PendSV_Handler:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:113    .text.PendSV_Handler:00000000 PendSV_Handler
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:132    .rodata:00000000 $d
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:133    .rodata:00000000 .LC0
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:136    .rodata:00000034 .LC1
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:139    .rodata:00000048 .LC2
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:142    .rodata:0000006c .LC3
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:145    .rodata:00000090 .LC4
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:148    .rodata:000000b4 .LC5
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:151    .text.SysTick_Handler:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:158    .text.SysTick_Handler:00000000 SysTick_Handler
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:287    .text.USART0_IRQHandler:00000000 $t
+C:\Users\sen.he\AppData\Local\Temp\ccujWYTl.s:294    .text.USART0_IRQHandler:00000000 USART0_IRQHandler
+                           .group:00000000 wm4.0.590463c46bf1d553a4d8081ecba6952e
+                           .group:00000000 wm4.gd32e23x.h.39.0bf85d194b71a50de4fcad938c637dda
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cm23.h.64.de3bc139a6604757cb96382033d22ea4
+                           .group:00000000 wm4.cmsis_gcc.h.26.41038879cf168e2c536d47f29b7e8dd8
+                           .group:00000000 wm4.core_cm23.h.125.de61c9c922e4fe53a01469e1afefe964
+                           .group:00000000 wm4.system_gd32e23x.h.38.7a884860f7764c0ab5165a93f03201bb
+                           .group:00000000 wm4.gd32e23x.h.163.9acf0d7337f9fe4e45533e128df527f9
+                           .group:00000000 wm4.gd32e23x_adc.h.41.e37db1574230c817b545e8965349e4d7
+                           .group:00000000 wm4.gd32e23x_crc.h.36.279adb768307700338e007c7ed677511
+                           .group:00000000 wm4.gd32e23x_dbg.h.36.d33e52eaa928f5287aa06af215016669
+                           .group:00000000 wm4.gd32e23x_dma.h.36.526a5bad10d356aae73db43b8b6c8ac1
+                           .group:00000000 wm4.gd32e23x_exti.h.36.af0d6df8c0ce7b2677a9f89a98c409ce
+                           .group:00000000 wm4.gd32e23x_fmc.h.36.75bde762cab332c240661c238a094712
+                           .group:00000000 wm4.gd32e23x_gpio.h.36.795887d0586769fb622efbe77d569cda
+                           .group:00000000 wm4.gd32e23x_syscfg.h.36.01ade19f7155772b744fa54349aa8666
+                           .group:00000000 wm4.gd32e23x_i2c.h.36.e6cffa765f1652866ccb69e12f59470e
+                           .group:00000000 wm4.gd32e23x_fwdgt.h.36.2fcc8574db554a4bd9e84c5cd0b7ab23
+                           .group:00000000 wm4.gd32e23x_pmu.h.36.eca9453dd7794477bf31deebb1c6dd71
+                           .group:00000000 wm4.gd32e23x_rcu.h.36.5275b85972d8917a1d7fb8903e56792a
+                           .group:00000000 wm4.gd32e23x_rtc.h.36.83ced1869b0634048aca709e2e07b91d
+                           .group:00000000 wm4.gd32e23x_spi.h.36.3f2a16ec9ce43b99360e154caa44fc36
+                           .group:00000000 wm4.gd32e23x_timer.h.36.1a402a135f3e05d89798e4281e3b9d83
+                           .group:00000000 wm4.gd32e23x_usart.h.36.c2b993b4a3fc79395d2c6452b270c65c
+                           .group:00000000 wm4.gd32e23x_wwdgt.h.36.067f8fa16250ddb8196a2d3d5347a8d1
+                           .group:00000000 wm4.gd32e23x_misc.h.36.02bcf8ea2494d3a2286a92cdad908103
+                           .group:00000000 wm4.gd32e23x_cmp.h.36.0a60ec830a2d39bbe01854c1093a76e2
+                           .group:00000000 wm4.newlib.h.8.2aecb9f3b2dc9d2e83d06d10f0c6ed3e
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4.Spi_nand_driver.h.16.fadacb45494f178a00212993489e2bbe
+                           .group:00000000 wm4.Process_Packet.h.7.a9eceab0854ecc804cf185fbeb95b7f7
+                           .group:00000000 wm4.sprd_config.h.2.47b0c27560e1734ae8ad1b6bf5bcf6fc
+                           .group:00000000 wm4.stdbool.h.29.07dce69c3b78884144b7f7bd19483461
+                           .group:00000000 wm4.GPIO_init.h.5.99397d96470e7c2037f26a7431d9ab35
+                           .group:00000000 wm4.gd32e235c_eval.h.36.7720dfbe8e4c2198d21e3451d7585c3f
+
+UNDEFINED SYMBOLS
+syscfg_flag_get
+delay_decrement
+timer_handle
+check_key_press_during_boot
+global_sio_handle
+puts
+printf
+hexdump
+MCU_Reset_Soc_Pbint
+usart_interrupt_flag_get
+usart_data_receive
+usart_interrupt_flag_clear
+usart_interrupt_disable
+usart_flag_clear
