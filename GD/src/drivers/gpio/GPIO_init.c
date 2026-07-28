@@ -98,7 +98,7 @@ void check_key_press_during_boot(void)
 {
     uint32_t current_time = timer_handle.Timer_Count;
     if (detection_window_active) {
-        if (SET == gpio_input_bit_get(GPIOA, GPIO_PIN_13)) {
+        if (SET == gpio_input_bit_get(GPIOA, GPIO_PIN_8)) {
             if (!key_pressed) {
                 key_press_start_time = current_time;
                 key_pressed++;
