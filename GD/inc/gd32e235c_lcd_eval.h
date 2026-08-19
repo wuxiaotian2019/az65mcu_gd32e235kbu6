@@ -74,8 +74,19 @@ extern "C" {
 #define LCD_RST_SET     ((uint32_t)(GPIO_BOP(GPIOB) = GPIO_PIN_2))
 #define LCD_RST_CLR     ((uint32_t)(GPIO_BC(GPIOB) = GPIO_PIN_2))
 
-/* lcd init */
+/* LCD supplier detected by lcd_detect() */
+typedef enum {
+    LCD_TYPE_UNKNOWN = 0,   /* not detected yet / reserved */
+    LCD_TYPE_GC9309,        /* 1st source panel, LCD_ID pin = 0 */
+    LCD_TYPE_ST7789         /* 2nd source panel, LCD_ID pin = 1 */
+} lcd_type_t;
+
+/* lcd init with supplier auto-detection */
 void lcd_init(void);
+/* detect LCD supplier from hardware LCD_ID pin (PB4): 0=GC9309, 1=ST7789 */
+lcd_type_t lcd_detect(void);
+/* get the LCD type resolved during lcd_init() */
+lcd_type_t lcd_get_type(void);
 /* clear the lcd */
 void lcd_clear(uint16_t color);
 /* set the start display point of lcd */

@@ -36,6 +36,21 @@ OF SUCH DAMAGE.
 #include "gd32e235c_lcd_eval.h"
 #include "systick.h"
 
+/* ------------------------------------------------------------------------- */
+/* LCD supplier selection (GC9309 / ST7789M)                                 */
+/*                                                                           */
+/* The board has a dedicated LCD_ID strap pin wired to PB4:                  */
+/*   GC9309  (1st source)  -> PB4 = 0 (low)                                  */
+/*   ST7789M (2nd source)  -> PB4 = 1 (high)                                 */
+/* The LCD module ties this pin itself, so it is sampled as a plain GPIO     */
+/* input with no internal pull. No SPI read-back is needed.                  */
+/* ------------------------------------------------------------------------- */
+
+#define LCD_ID_GPIO                 GPIOB
+#define LCD_ID_PIN                  GPIO_PIN_4
+
+static lcd_type_t g_lcd_type = LCD_TYPE_UNKNOWN;
+
 static uint8_t spi_write_byte(uint32_t spi_periph, uint8_t byte);
 static void spi1_init(void);
 static void lcd_write_index(uint8_t index);
@@ -43,6 +58,9 @@ static void lcd_write_data(uint8_t data);
 
 static void lcd_write_data_16bit(uint8_t datah, uint8_t datal);
 static void lcd_reset(void);
+static void lcd_id_gpio_init(void);
+static void lcd_init_gc9309(void);
+static void lcd_init_st7789(void);
 
 
 /*!
@@ -169,20 +187,59 @@ static void lcd_reset(void)
     delay_1ms(120);
 }
 
-
 /*!
-    \brief      lcd init
+    \brief      configure the hardware LCD_ID pin (PB4) as GPIO input
+                the LCD module ties this pin low (GC9309) or high (ST7789M),
+                so no internal pull resistor is used
     \param[in]  none
     \param[out] none
     \retval     none
 */
-void lcd_init(void)
+static void lcd_id_gpio_init(void)
 {
-    spi1_init();
+    rcu_periph_clock_enable(RCU_GPIOB);
+    gpio_mode_set(LCD_ID_GPIO, GPIO_MODE_INPUT, GPIO_PUPD_NONE, LCD_ID_PIN);
+}
 
-    LCD_CS_CLR;
-    lcd_reset();
+/*!
+    \brief      detect the connected LCD supplier from the hardware LCD_ID pin
+                PB4 = 0 -> GC9309 (1st source)
+                PB4 = 1 -> ST7789M (2nd source)
+    \param[in]  none
+    \param[out] none
+    \retval     detected lcd type
+*/
+lcd_type_t lcd_detect(void)
+{
+    if(RESET == gpio_input_bit_get(LCD_ID_GPIO, LCD_ID_PIN)) {
+        g_lcd_type = LCD_TYPE_GC9309;
+    } else {
+        g_lcd_type = LCD_TYPE_ST7789;
+    }
 
+    return g_lcd_type;
+}
+
+/*!
+    \brief      get the LCD type resolved by the last lcd_detect() call
+    \param[in]  none
+    \param[out] none
+    \retval     current lcd type
+*/
+lcd_type_t lcd_get_type(void)
+{
+    return g_lcd_type;
+}
+
+
+/*!
+    \brief      lcd init sequence for GC9309
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+static void lcd_init_gc9309(void)
+{
     /* write the register address 0xCB*/
     lcd_write_index(0xfe);
 
@@ -359,6 +416,137 @@ void lcd_init(void)
     delay_1ms(10);
 
     LCD_CS_SET;
+}
+
+/*!
+    \brief      lcd init sequence for ST7789
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+static void lcd_init_st7789(void)
+{
+    /* exit sleep */
+    lcd_write_index(0x11);
+    delay_1ms(120);
+
+    lcd_write_index(0x36);
+    lcd_write_data(0x00);
+
+    lcd_write_index(0x3A);
+    lcd_write_data(0x05);
+
+    lcd_write_index(0xB2);
+    lcd_write_data(0x0C);
+    lcd_write_data(0x0C);
+    lcd_write_data(0x00);
+    lcd_write_data(0x33);
+    lcd_write_data(0x33);
+
+    lcd_write_index(0xB7);
+    lcd_write_data(0x55);
+
+    lcd_write_index(0xBB);
+    lcd_write_data(0x20);
+
+    lcd_write_index(0xC0);
+    lcd_write_data(0x2C);
+
+    lcd_write_index(0xC2);
+    lcd_write_data(0x01);
+
+    lcd_write_index(0xC3);
+    lcd_write_data(0x13);
+
+    lcd_write_index(0xC6);
+    lcd_write_data(0x12);
+
+    lcd_write_index(0xD0);
+    lcd_write_data(0xA7);
+
+    lcd_write_index(0xD0);
+    lcd_write_data(0xA4);
+    lcd_write_data(0xA1);
+
+    lcd_write_index(0xD6);
+    lcd_write_data(0xA1);
+
+    lcd_write_index(0xE0);
+    lcd_write_data(0xF0);
+    lcd_write_data(0x04);
+    lcd_write_data(0x07);
+    lcd_write_data(0x09);
+    lcd_write_data(0x08);
+    lcd_write_data(0x16);
+    lcd_write_data(0x26);
+    lcd_write_data(0x33);
+    lcd_write_data(0x3D);
+    lcd_write_data(0x39);
+    lcd_write_data(0x15);
+    lcd_write_data(0x13);
+    lcd_write_data(0x27);
+    lcd_write_data(0x2F);
+
+    lcd_write_index(0xE1);
+    lcd_write_data(0xF0);
+    lcd_write_data(0x02);
+    lcd_write_data(0x05);
+    lcd_write_data(0x07);
+    lcd_write_data(0x06);
+    lcd_write_data(0x01);
+    lcd_write_data(0x26);
+    lcd_write_data(0x33);
+    lcd_write_data(0x3D);
+    lcd_write_data(0x36);
+    lcd_write_data(0x13);
+    lcd_write_data(0x15);
+    lcd_write_data(0x28);
+    lcd_write_data(0x30);
+
+    lcd_write_index(0x35);
+    lcd_write_data(0x00);
+
+    lcd_write_index(0x21);
+
+    /* display on */
+    lcd_write_index(0x29);
+    lcd_write_index(0x2C);
+
+    LCD_CS_SET;
+}
+
+/*!
+    \brief      lcd init with supplier auto-detection
+                detect runs after hardware reset and before any panel init
+                command; the panel init sequence is selected by the result
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void lcd_init(void)
+{
+    spi1_init();
+    lcd_id_gpio_init();
+
+    LCD_CS_CLR;
+    lcd_reset();
+
+    /* supplier selected by the hardware LCD_ID pin (PB4), then run the
+       matching init sequence; CS stays low for the whole init as before */
+    switch(lcd_detect()) {
+    case LCD_TYPE_GC9309:
+        lcd_init_gc9309();
+        break;
+
+    case LCD_TYPE_ST7789:
+        lcd_init_st7789();
+        break;
+
+    default:
+        /* not reachable with a 2-state strap pin, kept for safety */
+        LCD_CS_SET;
+        break;
+    }
 }
 
 /*!
