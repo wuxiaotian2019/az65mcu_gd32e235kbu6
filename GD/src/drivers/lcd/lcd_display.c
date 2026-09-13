@@ -18,6 +18,9 @@ int lcd_display(void)
     */
     lcd_draw_image(0, (Y_MAX_PIXEL - 80) / 2, 240, 80, logo_buffer + 72);
 
+    /* turn on LCD backlight as soon as the first frame is ready */
+    lcd_backlight_on();
+
     printf("exit %s\n", __func__);
     return 0;
 }

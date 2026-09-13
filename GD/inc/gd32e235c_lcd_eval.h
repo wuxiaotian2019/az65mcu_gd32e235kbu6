@@ -74,6 +74,14 @@ extern "C" {
 #define LCD_RST_SET     ((uint32_t)(GPIO_BOP(GPIOB) = GPIO_PIN_2))
 #define LCD_RST_CLR     ((uint32_t)(GPIO_BC(GPIOB) = GPIO_PIN_2))
 
+/* PB5 backlight enable: wired in parallel with platform gpio111 to the
+   AW9364DNR EN pin (high = on, low = off) */
+#define LCD_BL_GPIO     GPIOB
+#define LCD_BL_PIN      GPIO_PIN_5
+#define LCD_BL_RCU      RCU_GPIOB
+#define LCD_BL_ON()     ((uint32_t)(GPIO_BOP(LCD_BL_GPIO) = LCD_BL_PIN))
+#define LCD_BL_OFF()    ((uint32_t)(GPIO_BC(LCD_BL_GPIO) = LCD_BL_PIN))
+
 /* LCD supplier detected by lcd_detect() */
 typedef enum {
     LCD_TYPE_UNKNOWN = 0,   /* not detected yet / reserved */
@@ -87,6 +95,10 @@ void lcd_init(void);
 lcd_type_t lcd_detect(void);
 /* get the LCD type resolved during lcd_init() */
 lcd_type_t lcd_get_type(void);
+/* init the GD-controlled LCD backlight enable pin (kept off until first frame) */
+void lcd_backlight_init(void);
+/* turn the LCD backlight on (call after the first frame is drawn) */
+void lcd_backlight_on(void);
 /* clear the lcd */
 void lcd_clear(uint16_t color);
 /* set the start display point of lcd */

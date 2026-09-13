@@ -202,6 +202,28 @@ static void lcd_id_gpio_init(void)
 }
 
 /*!
+    \brief      init the GD-controlled LCD backlight enable pin (kept OFF)
+    \note       PB5 is wired in parallel with platform gpio111 to the
+                AW9364DNR EN pin. Backlight stays off until the first frame
+                is drawn, then lcd_backlight_on() turns it on.
+*/
+void lcd_backlight_init(void)
+{
+    rcu_periph_clock_enable(LCD_BL_RCU);
+    gpio_mode_set(LCD_BL_GPIO, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, LCD_BL_PIN);
+    gpio_output_options_set(LCD_BL_GPIO, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, LCD_BL_PIN);
+    LCD_BL_OFF();   /* keep backlight off until image is ready */
+}
+
+/*!
+    \brief      turn the LCD backlight on
+*/
+void lcd_backlight_on(void)
+{
+    LCD_BL_ON();
+}
+
+/*!
     \brief      detect the connected LCD supplier from the hardware LCD_ID pin
                 PB4 = 0 -> GC9309 (1st source)
                 PB4 = 1 -> ST7789M (2nd source)
@@ -527,6 +549,7 @@ void lcd_init(void)
 {
     spi1_init();
     lcd_id_gpio_init();
+    lcd_backlight_init();   /* prepare PB5 (backlight EN), kept off */
 
     LCD_CS_CLR;
     lcd_reset();
@@ -1212,5 +1235,5 @@ void Set_Lcd_High_Resistance(void)
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOB);
     gpio_mode_set(GPIOA, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_mode_set(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4);
+    gpio_mode_set(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
 }
