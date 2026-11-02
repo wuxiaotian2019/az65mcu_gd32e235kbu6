@@ -1,10 +1,10 @@
 #ifndef _SPRD_CONFIG_H
 #define _SPRD_CONFIG_H
 
-/* boot once the key is held for KEYPRESS_CHECKTIME; lowered to 2s so a 2s
-   press is treated as a real power-on and no longer leaves the platform in a
-   flash-backlight-then-shut-down state */
-#define KEYPRESS_CHECKTIME  2000
+/* boot once the key is held for KEYPRESS_CHECKTIME; set to 3s after on-board
+   tuning so a 3s press is treated as a real power-on and no longer leaves the
+   platform in a flash-backlight-then-shut-down state */
+#define KEYPRESS_CHECKTIME  3000
 #define KEYPRESS_TIME  (KEYPRESS_CHECKTIME - 500)
 
 #define CONFIG_BAUDRATE    115200U
